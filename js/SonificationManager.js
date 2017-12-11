@@ -10,15 +10,22 @@ define( function( require ) {
   // modules
   var tambo = require( 'TAMBO/tambo' );
 
+  // Create the audio context that should be used by all sounds registered with the sonification manager.  This is done
+  // in order to limit the number of audio contexts that are created, since browsers generally only allow a limited
+  // number per tab.
+  var audioContext = new ( window.AudioContext || window.webkitAudioContext )();
+
   // NOTE: singleton pattern
   var SonificationManager = {
 
-    // This is the audio context the should be use by all sound generators that are controlled by the sonification
-    // manager.
-    audioContext: new ( window.AudioContext || window.webkitAudioContext )(),
+    /**
+     * @public (read-only)
+     */
+    audioContext: audioContext,
 
     registerSoundGenerator: function( soundGenerator ){
       console.log( 'registerSoundGenerator called' );
+      soundGenerator.connect( audioContext.destination );
     }
   };
 
