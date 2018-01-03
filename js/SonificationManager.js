@@ -2,6 +2,8 @@
 
 /**
  * singleton type that registers sound generators used for sonification
+ *
+ * TODO: It might make more sense to have this functionality in the base class of an audio view object.  Consider that.
  */
 
 define( function( require ) {
