@@ -36,7 +36,7 @@ define( function( require ) {
   }
 
   // NOTE: singleton pattern
-  var SonificationManager = {
+  var sonificationManager = {
 
     /**
      * @public (read-only)
@@ -131,7 +131,7 @@ define( function( require ) {
     }
   };
 
-  tambo.register( 'SonificationManager', SonificationManager );
+  tambo.register( 'sonificationManager', sonificationManager );
 
-  return SonificationManager;
+  return sonificationManager;
 } );
