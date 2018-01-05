@@ -11,6 +11,7 @@ define( function( require ) {
 
   // modules
   var tambo = require( 'TAMBO/tambo' );
+  var Multilink = require( 'AXON/Multilink' );
 
   // Create the audio context that should be used by all sounds registered with the sonification manager.  This is done
   // in order to limit the number of audio contexts that are created, since browsers generally only allow a limited
@@ -26,15 +27,6 @@ define( function( require ) {
   // object where the sound generators are stored with information about how to manage them
   var soundGeneratorInfo = {};
 
-  // helper function to update the enabled state of a sound generator
-  function updateSoundGeneratorEnabledState( sgInfo, resetInProgress, selectedScreenIndex, simVisible ){
-    sgInfo.soundGenerator.setEnabled(
-      simVisible &&
-      selectedScreenIndex === sgInfo.screenNumber &&
-      !( resetInProgress && sgInfo.disabledDuringReset )
-    );
-  }
-
   // NOTE: singleton pattern
   var sonificationManager = {
 
@@ -48,47 +40,27 @@ define( function( require ) {
      * @param {BooleanProperty} resetInProgressProperty
      * @param {NumberProperty} screenIndexProperty
      * @param {BooleanProperty} simVisibleProperty
+     * @param {StringProperty} sonificationLevelProperty
      * @public
      */
-    initialize: function( resetInProgressProperty, screenIndexProperty, simVisibleProperty ){
+    initialize: function( resetInProgressProperty, screenIndexProperty, simVisibleProperty, sonificationLevelProperty ){
 
       assert && assert( initialized, 'can only initialize once' );
 
-      // disable sound generators when a reset is in progress
-      resetInProgressProperty.lazyLink( function( resetInProgress ){
-        _.values( soundGeneratorInfo ).forEach( function( sgInfo ){
-          updateSoundGeneratorEnabledState(
-            sgInfo,
-            resetInProgress,
-            screenIndexProperty.get(),
-            simVisibleProperty.get()
-          );
-        } );
-      } );
-
-      // enable sound generation for the currently selected screen, disable others
-      screenIndexProperty.link( function( selectedScreen ){
-        _.values( soundGeneratorInfo ).forEach( function( sgInfo ){
-          updateSoundGeneratorEnabledState(
-            sgInfo,
-            resetInProgressProperty.get(),
-            selectedScreen,
-            simVisibleProperty.get()
-          );
-        } );
-      } );
-
-      // only allow sound generation when the sim is visible
-      simVisibleProperty.link( function( simVisible ){
-        _.values( soundGeneratorInfo ).forEach( function( sgInfo ){
-          updateSoundGeneratorEnabledState(
-            sgInfo,
-            resetInProgressProperty.get(),
-            screenIndexProperty.get(),
-            simVisible
-          );
-        } );
-      } );
+      // set up the multilink that will enable and disable sounds as the conditions in the sim change
+      this.soundControlMultilink = new Multilink(
+        [ resetInProgressProperty, screenIndexProperty, simVisibleProperty, sonificationLevelProperty ],
+        function( resetInProgress, screenIndex, simVisible, sonificationLevel ){
+          _.values( soundGeneratorInfo ).forEach( function( sgInfo ){
+            sgInfo.soundGenerator.setEnabled(
+              simVisible &&
+              screenIndex === sgInfo.screenNumber &&
+              !( resetInProgress && sgInfo.disabledDuringReset ) &&
+              sonificationLevel >= sgInfo.sonificationLevel
+            );
+          } );
+        }
+      );
 
       initialized = true;
     },
@@ -109,7 +81,12 @@ define( function( require ) {
       // default options
       options = _.extend( {
         connect: true,
-        disabledDuringReset: true
+        disabledDuringReset: true,
+
+        // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of
+        // the sonification level value for the sim.  Valid values are 1 for 'basic' and 2 for 'enhanced'.  Numeric
+        // values are used to enable the use of comparison operators.
+        sonificationLevel: 1
       }, options );
 
       // connect the sound generation to the audio context unless the options indicate otherwise
@@ -124,7 +101,8 @@ define( function( require ) {
       soundGeneratorInfo[ id ] = {
         soundGenerator: soundGenerator,
         screenNumber: screenNumber,
-        disabledDuringReset: options.disabledDuringReset
+        disabledDuringReset: options.disabledDuringReset,
+        sonificationLevel: options.sonificationLevel
       };
 
       return id;
