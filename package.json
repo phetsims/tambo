@@ -10,11 +10,6 @@
     "grunt": "~1.0.0"
   },
   "phet": {
-    "requirejsNamespace": "TAMBO",
-    "runnable": true,
-    "supportedBrands": [
-      "phet",
-      "adapted-from-phet"
-    ]
+    "requirejsNamespace": "TAMBO"
   }
 }
