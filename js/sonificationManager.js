@@ -23,6 +23,7 @@ define( function( require ) {
   // modules
   var tambo = require( 'TAMBO/tambo' );
   var Multilink = require( 'AXON/Multilink' );
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
 
   // constants
   var DEFAULT_REVERB_LEVEL = 0.2;
@@ -33,6 +34,9 @@ define( function( require ) {
   // in order to limit the number of audio contexts that are created, since browsers generally only allow a limited
   // number per tab.
   var audioContext = new ( window.AudioContext || window.webkitAudioContext )();
+
+  // flag that tracks whether sound generation of any kind is enabled
+  var enabledProperty = new BooleanProperty( true );
 
   // flag to track whether this singleton has been initialized
   var initialized = false;
@@ -106,12 +110,19 @@ define( function( require ) {
 
       assert && assert( initialized, 'can only call initialize once' );
       
-      // set up the multilink that will enable and disable sounds as the conditions in the sim change
+      // set up the multilink that will enable and disable the sound generators as the conditions in the sim change
       this.soundControlMultilink = new Multilink(
-        [ resetInProgressProperty, selectedScreenIndexProperty, simVisibleProperty, sonificationLevelProperty ],
-        function( resetInProgress, screenIndex, simVisible, sonificationLevel ){
+        [
+          enabledProperty,
+          resetInProgressProperty,
+          selectedScreenIndexProperty,
+          simVisibleProperty,
+          sonificationLevelProperty
+        ],
+        function( enabled, resetInProgress, screenIndex, simVisible, sonificationLevel ){
           _.values( soundGeneratorInfo ).forEach( function( sgInfo ){
             sgInfo.soundGenerator.setEnabled(
+              enabled &&
               simVisible &&
               screenIndex === sgInfo.screenNumber &&
               !( resetInProgress && sgInfo.disabledDuringReset ) &&
@@ -169,8 +180,27 @@ define( function( require ) {
     },
 
     /**
+     * set the overall enabled/disabled state for all sounds
+     * @param {boolean} enabled
+     * @public
+     */
+    setEnabled: function( enabled ){
+      enabledProperty.set( enabled );
+    },
+
+    /**
+     * get the overall enabled/disabled state for all sounds
+     * @returns {boolean}
+     * @public
+     */
+    getEnabled: function(){
+      return enabledProperty.get();
+    },
+
+    /**
      * set the master output level for sonification
      * @param {number} outputLevel - valid values from 0 through 1
+     * @public
      */
     setOutputLevel: function( outputLevel ){
 
