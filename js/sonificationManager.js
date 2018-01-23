@@ -119,14 +119,14 @@ define( function( require ) {
           simVisibleProperty,
           sonificationLevelProperty
         ],
-        function( enabled, resetInProgress, screenIndex, simVisible, sonificationLevel ){
+        function( soundsEnabled, resetInProgress, screenIndex, simVisible, sonificationLevel ){
           _.values( soundGeneratorInfo ).forEach( function( sgInfo ){
             sgInfo.soundGenerator.setEnabled(
-              enabled &&
+              soundsEnabled &&
               simVisible &&
               screenIndex === sgInfo.screenNumber &&
               !( resetInProgress && sgInfo.disabledDuringReset ) &&
-              sonificationLevel >= sgInfo.sonificationLevel
+              ( sonificationLevel === 'enhanced' || sgInfo.sonificationLevel === 'basic' )
             );
           } );
         }
@@ -154,9 +154,8 @@ define( function( require ) {
         disabledDuringReset: true,
 
         // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of
-        // the sonification level value for the sim.  Valid values are 1 for 'basic' and 2 for 'enhanced'.  Numeric
-        // values are used to enable the use of comparison operators.
-        sonificationLevel: 1
+        // the sonification level parameter for the sim.  Valid values are 'basic' or 'enhanced'.
+        sonificationLevel: 'basic'
       }, options );
 
       // connect the sound generation to the audio context unless the options indicate otherwise
