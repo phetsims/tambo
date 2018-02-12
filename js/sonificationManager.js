@@ -103,13 +103,13 @@ define( function( require ) {
      * @param {StringProperty} sonificationLevelProperty
      * @public
      */
-    initialize: function( resetInProgressProperty, 
-                          selectedScreenIndexProperty, 
-                          simVisibleProperty, 
-                          sonificationLevelProperty ){
+    initialize: function( resetInProgressProperty,
+                          selectedScreenIndexProperty,
+                          simVisibleProperty,
+                          sonificationLevelProperty ) {
 
       assert && assert( initialized, 'can only call initialize once' );
-      
+
       // set up the multilink that will enable and disable the sound generators as the conditions in the sim change
       this.soundControlMultilink = new Multilink(
         [
@@ -119,8 +119,8 @@ define( function( require ) {
           simVisibleProperty,
           sonificationLevelProperty
         ],
-        function( soundsEnabled, resetInProgress, screenIndex, simVisible, sonificationLevel ){
-          _.values( soundGeneratorInfo ).forEach( function( sgInfo ){
+        function( soundsEnabled, resetInProgress, screenIndex, simVisible, sonificationLevel ) {
+          _.values( soundGeneratorInfo ).forEach( function( sgInfo ) {
             sgInfo.soundGenerator.setEnabled(
               soundsEnabled &&
               simVisible &&
@@ -131,7 +131,7 @@ define( function( require ) {
           } );
         }
       );
-      
+
       initialized = true;
     },
 
@@ -143,7 +143,7 @@ define( function( require ) {
      * @param {Object} [options]
      * context, if this is not present the sound generator WILL be connected
      */
-    registerSoundGenerator: function( soundGenerator, screenNumber, options ){
+    registerSoundGenerator: function( soundGenerator, screenNumber, options ) {
 
       // make sure this has been initialized
       assert && assert( initialized, 'can\'t register sound generators prior to initialization' );
@@ -159,7 +159,7 @@ define( function( require ) {
       }, options );
 
       // connect the sound generation to the audio context unless the options indicate otherwise
-      if ( options.connect ){
+      if ( options.connect ) {
         soundGenerator.connect( convolver );
         soundGenerator.connect( dryGainNode );
       }
@@ -183,7 +183,7 @@ define( function( require ) {
      * @param {boolean} enabled
      * @public
      */
-    setEnabled: function( enabled ){
+    setEnabled: function( enabled ) {
       enabledProperty.set( enabled );
     },
 
@@ -192,7 +192,7 @@ define( function( require ) {
      * @returns {boolean}
      * @public
      */
-    getEnabled: function(){
+    getEnabled: function() {
       return enabledProperty.get();
     },
 
@@ -201,7 +201,7 @@ define( function( require ) {
      * @param {number} outputLevel - valid values from 0 through 1
      * @public
      */
-    setOutputLevel: function( outputLevel ){
+    setOutputLevel: function( outputLevel ) {
 
       // range check
       assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range' );
@@ -213,7 +213,7 @@ define( function( require ) {
      * get the current output level setting
      * @return {number}
      */
-    getOutputLevel: function(){
+    getOutputLevel: function() {
       return masterGainNode.gain.value;
     },
 
@@ -221,14 +221,14 @@ define( function( require ) {
      * set the amount of reverb
      * @param {number} reverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
      */
-    setReverbLevel: function( reverbLevel ){
-      assert && assert ( reverbLevel >= 0 && reverbLevel <= 1 );
+    setReverbLevel: function( reverbLevel ) {
+      assert && assert( reverbLevel >= 0 && reverbLevel <= 1 );
       var now = audioContext.currentTime;
       reverbGainNode.gain.setTargetAtTime( reverbLevel, now, TC_FOR_PARAM_CHANGES );
       dryGainNode.gain.setTargetAtTime( 1 - reverbLevel, now, TC_FOR_PARAM_CHANGES );
     },
 
-    getReverbLevel: function(){
+    getReverbLevel: function() {
       // TODO: Test if this works in all browser, add a var to track if not.
       return reverbGainNode.gain.value;
     }
