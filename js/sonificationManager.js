@@ -97,18 +97,40 @@ define( function( require ) {
 
     /**
      * initialize the sonification manager
+     * TODO: Document more thoroughly when and if the parameters are finalized
      * @param {BooleanProperty} resetInProgressProperty
      * @param {NumberProperty} selectedScreenIndexProperty
      * @param {BooleanProperty} simVisibleProperty
      * @param {StringProperty} sonificationLevelProperty
+     * @param {Object} options
      * @public
      */
     initialize: function( resetInProgressProperty,
                           selectedScreenIndexProperty,
                           simVisibleProperty,
-                          sonificationLevelProperty ) {
+                          sonificationLevelProperty,
+                          options
+                          ) {
 
       assert && assert( initialized, 'can only call initialize once' );
+
+      var self = this;
+
+      options = _.extend( {
+
+        // Classes that can be used to group sound generators together and control their volume as a group - the names
+        // can be anything that will work as a key for a JavaScript object, but initially we've chosen to use names
+        // with conventions similar to what is commonly seen for CSS classes.
+        classes: [ 'sim-specific', 'user-interface' ]
+
+      }, options );
+
+      // validate the options
+      assert && assert( typeof options.classes === 'object', 'unexpected type for options.classes' );
+      assert && assert(
+        _.every( options.classes, function( className ){ return typeof className === 'string'; } ),
+        'unexpected type for options.classes'
+      );
 
       // set up the multilink that will enable and disable the sound generators as the conditions in the sim change
       this.soundControlMultilink = new Multilink(
@@ -132,6 +154,16 @@ define( function( require ) {
         }
       );
 
+      // create the gain nodes for each of the classes and hook them up
+      this.gainNodesForClasses = {};
+      options.classes.forEach( function( className ){
+          var gainNode = audioContext.createGain();
+          gainNode.connect( convolver );
+          gainNode.connect( dryGainNode );
+          self.gainNodesForClasses[ className ] = gainNode;
+      } );
+
+      // set the flag that indicates that initialization is complete
       initialized = true;
     },
 
@@ -155,13 +187,27 @@ define( function( require ) {
 
         // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of
         // the sonification level parameter for the sim.  Valid values are 'basic' or 'enhanced'.
-        sonificationLevel: 'basic'
+        sonificationLevel: 'basic',
+
+        // class name for this sound, which can be used to group sounds together an control them as a group
+        className: null
       }, options );
 
-      // connect the sound generation to the audio context unless the options indicate otherwise
+      // validate the options
+      assert && assert(
+        !( options.connect === false && options.className ),
+        'must connect sound generator if it is in a class'
+      );
+
+      // connect the sound generation to an output path unless the options indicate otherwise
       if ( options.connect ) {
-        soundGenerator.connect( convolver );
-        soundGenerator.connect( dryGainNode );
+        if ( options.className === null ){
+          soundGenerator.connect( convolver );
+          soundGenerator.connect( dryGainNode );
+        }
+        else{
+          soundGenerator.connect( this.gainNodesForClasses[ options.className ] );
+        }
       }
 
       // create the registration ID for this sound generator
@@ -206,7 +252,7 @@ define( function( require ) {
       // range check
       assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range' );
 
-      masterGainNode.setValueAtTime( outputLevel, audioContext.currentTime );
+      masterGainNode.gain.setValueAtTime( outputLevel, audioContext.currentTime );
     },
 
     /**
@@ -215,6 +261,36 @@ define( function( require ) {
      */
     getOutputLevel: function() {
       return masterGainNode.gain.value;
+    },
+
+    /**
+     * set the output level for the specified class of sound generator
+     * @param {number} outputLevel - valid values from 0 through 1
+     * @param {String} className - name of class to which this invocation applies
+     * @public
+     */
+    setOutputLevelForClass: function( outputLevel, className ) {
+
+      // range check
+      assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range' );
+
+      // verify that the specified class exists
+      assert && assert( this.gainNodesForClasses[ className ], 'no class with name = ' + className );
+
+      this.gainNodesForClasses[ className ].setValueAtTime( outputLevel, audioContext.currentTime );
+    },
+
+    /**
+     * get the output level for the specified sound generator class
+     * @param {String} className - name of class to which this invocation applies
+     * @public
+     */
+    getOutputLevelForClass: function( className ) {
+
+      // verify that the specified class exists
+      assert && assert( this.gainNodesForClasses[ className ], 'no class with name = ' + className );
+
+      return this.gainNodesForClasses[ className ].value;
     },
 
     /**
