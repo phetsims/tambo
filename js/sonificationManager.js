@@ -265,11 +265,11 @@ define( function( require ) {
 
     /**
      * set the output level for the specified class of sound generator
-     * @param {number} outputLevel - valid values from 0 through 1
      * @param {String} className - name of class to which this invocation applies
+     * @param {number} outputLevel - valid values from 0 through 1
      * @public
      */
-    setOutputLevelForClass: function( outputLevel, className ) {
+    setOutputLevelForClass: function( className, outputLevel ) {
 
       // range check
       assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range' );
@@ -277,7 +277,7 @@ define( function( require ) {
       // verify that the specified class exists
       assert && assert( this.gainNodesForClasses[ className ], 'no class with name = ' + className );
 
-      this.gainNodesForClasses[ className ].setValueAtTime( outputLevel, audioContext.currentTime );
+      this.gainNodesForClasses[ className ].gain.setValueAtTime( outputLevel, audioContext.currentTime );
     },
 
     /**
