@@ -22,7 +22,8 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
 
   // constants
-  var SLIDER_MAX = 12;
+  var SLIDER_MAX = 5;
+  var NUM_TICK_MARKS = SLIDER_MAX + 1;
 
   /**
    * @constructor
@@ -39,7 +40,7 @@ define( function( require ) {
       new BooleanProperty( true ),
       new StringProperty( 'enhanced' )
     );
-    sonificationManager.setReverbLevel( 0.08 );
+    sonificationManager.setReverbLevel( 0 );
 
     // add a slider with snap-to-ticks behavior
     var discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
@@ -49,8 +50,8 @@ define( function( require ) {
         return Math.round( value );
       }
     } );
-    _.times( SLIDER_MAX, function( index ) {
-      discreteSlider.addMinorTick( index * ( SLIDER_MAX / ( SLIDER_MAX - 1 ) ) );
+    _.times( NUM_TICK_MARKS, function( index ) {
+      discreteSlider.addMinorTick( index  );
     } );
     this.addChild( discreteSlider );
 
