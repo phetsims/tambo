@@ -27,7 +27,7 @@ define( function( require ) {
 
   // constants
   var DEFAULT_REVERB_LEVEL = 0.2;
-  var IMPULSE_RESPONSE_FILE_PATH = '../../common/audio/CathedralRoom.mp3';
+  var IMPULSE_RESPONSE_FILE_PATH = './audio/cathedral-room-impulse-response.mp3';
   var TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
 
   // Create the audio context that should be used by all sonification manager instances .  This is done in order to

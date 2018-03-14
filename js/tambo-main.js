@@ -7,7 +7,8 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var SimLikeComponentsScreenView = require( 'TAMBO/demo/SimLikeComponentsScreenView' );
+  var DemoModel = require( 'TAMBO/demo/model-manipulation/model/DemoModel' );
+  var ModelManipulationScreenView = require( 'TAMBO/demo/model-manipulation/view/ModelManipulationScreenView' );
   var Property = require( 'AXON/Property' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Screen = require( 'JOIST/Screen' );
@@ -40,8 +41,8 @@ define( function( require ) {
 
       // sim-like components screen
       new Screen(
-        function(){ return {}; },
-        function() { return new SimLikeComponentsScreenView(); },
+        function(){ return new DemoModel(); },
+        function( model ) { return new ModelManipulationScreenView( model ); },
         {
           name: 'Sim-Like Components',
           backgroundColorProperty: new Property( '#f3fff3' ),
@@ -51,8 +52,8 @@ define( function( require ) {
 
       // UI-components screen
       new Screen(
-        function(){ return {}; },
-        function() { return new SimLikeComponentsScreenView(); },
+        function(){ return new DemoModel(); },
+        function( model ) { return new ModelManipulationScreenView( model ); },
         {
           name: 'UI Components',
           backgroundColorProperty: new Property( '#fff5ba' ),
