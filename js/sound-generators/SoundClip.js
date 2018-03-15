@@ -54,7 +54,11 @@ define( function( require ) {
     this.request.responseType = 'arraybuffer';
 
     function onError( err ) {
-      throw new Error( 'error loading sound ' + soundUrl + ', url: ' + ', err: ' );
+
+      // TODO: The throwing of the error is commented out, since this was having issues in built version, which perhaps
+      // isn't surprising since it's loading base64 in that case.
+      // throw new Error( 'error loading sound ' + soundUrl + ', url: ' + ', err: ' + err );
+      console.log( 'error loading sound ' + soundUrl + ', url: ' + ', err: ' + err );
     }
 
     // @private {function} - function to be invoked when sound buffer finishes loading
