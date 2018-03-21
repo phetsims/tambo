@@ -9,8 +9,10 @@ define( function( require ) {
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var DemoModel = require( 'TAMBO/demo/model-manipulation/model/DemoModel' );
+  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var ModelManipulationScreenView = require( 'TAMBO/demo/model-manipulation/view/ModelManipulationScreenView' );
   var Property = require( 'AXON/Property' );
+  var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Screen = require( 'JOIST/Screen' );
   var Sim = require( 'JOIST/Sim' );
@@ -35,13 +37,31 @@ define( function( require ) {
     new StringProperty( 'enhanced' )
   );
 
-  function createScreenIcon( color ) {
+  function createScreenIcon( color1, color2, gradientType ) {
+
+    var colorGradient;
+    if ( gradientType === 'radial' ) {
+      colorGradient = new RadialGradient(
+        Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width / 2,
+        Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height / 2,
+        0,
+        Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width / 2,
+        Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height / 2,
+        Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width * 0.67
+      ).addColorStop( 0, color1 ).addColorStop( 1, color2 );
+    }
+    else {
+      colorGradient = new LinearGradient( 0, 0, Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width, 0 )
+        .addColorStop( 0, color1 )
+        .addColorStop( 1, color2 );
+    }
+
     return new Rectangle(
       0,
       0,
       Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width,
       Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.height,
-      { fill: color }
+      { fill: colorGradient }
     );
   }
 
@@ -55,7 +75,7 @@ define( function( require ) {
         {
           name: 'Sim-Like Components',
           backgroundColorProperty: new Property( '#f3fff3' ),
-          homeScreenIcon: createScreenIcon( 'red' )
+          homeScreenIcon: createScreenIcon( '#a31515', '#b75e2a', 'radial' )
         }
       ),
 
@@ -66,7 +86,7 @@ define( function( require ) {
         {
           name: 'UI Components',
           backgroundColorProperty: new Property( '#fff5ba' ),
-          homeScreenIcon: createScreenIcon( 'blue' )
+          homeScreenIcon: createScreenIcon( '#71ddbf', '#8d49e5', 'linear' )
         }
       )
 
