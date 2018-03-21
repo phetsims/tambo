@@ -9,16 +9,13 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var HSlider = require( 'SUN/HSlider' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
   var Range = require( 'DOT/Range' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
   var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  var StringProperty = require( 'AXON/StringProperty' );
   var tambo = require( 'TAMBO/tambo' );
 
   // constants
@@ -33,14 +30,7 @@ define( function( require ) {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
     } );
 
-    var sonificationManager = new SonificationManager(
-      // TODO: These properties are essentially stubbed for now, should be populated with the real things
-      new BooleanProperty( false ),
-      new NumberProperty( 0 ),
-      new BooleanProperty( true ),
-      new StringProperty( 'enhanced' )
-    );
-    sonificationManager.setReverbLevel( 0 );
+    var sonificationManager = SonificationManager.getInstance();
 
     // add a slider with snap-to-ticks behavior
     var discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
@@ -59,11 +49,11 @@ define( function( require ) {
     var increaseClickSound = new SoundClip( './audio/slider-click-01.mp3', {
       audioContext: sonificationManager.audioContext
     } );
-    sonificationManager.registerSoundGenerator( increaseClickSound, 0 );
+    sonificationManager.addSoundGenerator( increaseClickSound, 0 );
     var decreaseClickSound = new SoundClip( './audio/slider-click-02.mp3', {
       audioContext: sonificationManager.audioContext
     } );
-    sonificationManager.registerSoundGenerator( decreaseClickSound, 0 );
+    sonificationManager.addSoundGenerator( decreaseClickSound, 0 );
     model.discreteValueProperty.lazyLink( function( newValue, oldValue ) {
       if ( newValue > oldValue ) {
         increaseClickSound.play();

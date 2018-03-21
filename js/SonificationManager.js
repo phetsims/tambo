@@ -5,15 +5,13 @@
  * such as:
  *  - master enable/disable
  *  - master gain control
- *  - enable/disable of sounds based on visibility of the browser tab in which the sim is running
+ *  - enable/disable of sounds based on visibility of an associated Scenery node
  *  - enabled/disable of sounds based on which tab is showing
  *  - muting of sounds during reset
  *  - master gain for sounds in general
  *  - enable/disable of sounds based on their assigned sonification level (e.g. "basic" or "enhanced")
  *  - gain control for sounds based on their assigned class, e.g. UI versus sim-specific sounds
  *  - a shared reverb unit to add some spatialization and make all sounds seem to originate with the same room
- *
- * TODO: It might make more sense to have this functionality in the base class of an audio view object.  Consider that.
  */
 
 define( function( require ) {
@@ -37,7 +35,6 @@ define( function( require ) {
   /**
    * TODO: Document fully once this has stabilized
    * @param {BooleanProperty} resetInProgressProperty
-   * @param {NumberProperty} selectedScreenIndexProperty
    * @param {BooleanProperty} simVisibleProperty
    * @param {StringProperty} sonificationLevelProperty
    * @param {Object} options
@@ -45,10 +42,14 @@ define( function( require ) {
    * @constructor
    */
   function SonificationManager( resetInProgressProperty,
-                                selectedScreenIndexProperty,
                                 simVisibleProperty,
                                 sonificationLevelProperty,
                                 options ) {
+
+    // singleton pattern - if already constructed, return the existing instance
+    if ( SonificationManager._instance ) {
+      return SonificationManager._instance;
+    }
 
     var self = this;
 
@@ -135,22 +136,23 @@ define( function( require ) {
       [
         this.enabledProperty,
         resetInProgressProperty,
-        selectedScreenIndexProperty,
         simVisibleProperty,
         sonificationLevelProperty
       ],
-      function( soundsEnabled, resetInProgress, screenIndex, simVisible, sonificationLevel ) {
+      function( soundsEnabled, resetInProgress, simVisible, sonificationLevel ) {
         _.values( self.soundGeneratorInfo ).forEach( function( sgInfo ) {
           sgInfo.soundGenerator.setEnabled(
             soundsEnabled &&
             simVisible &&
-            screenIndex === sgInfo.screenNumber &&
             !( resetInProgress && sgInfo.disabledDuringReset ) &&
             ( sonificationLevel === 'enhanced' || sgInfo.sonificationLevel === 'basic' )
           );
         } );
       }
     );
+
+    // @private {SonificationManager} - instance reference
+    SonificationManager._instance = this;
   }
 
   tambo.register( 'SonificationManager', SonificationManager );
@@ -167,7 +169,7 @@ define( function( require ) {
        * @param {Object} [options]
        * context, if this is not present the sound generator WILL be connected
        */
-      registerSoundGenerator: function( soundGenerator, screenNumber, options ) {
+      addSoundGenerator: function( soundGenerator, screenNumber, options ) {
 
         // default options
         options = _.extend( {
@@ -300,6 +302,46 @@ define( function( require ) {
     },
     {
       // statics
+
+      /**
+       * get the singleton instance
+       * @return {SonificationManager}
+       * @public
+       */
+      getInstance: function() {
+        assert && assert(
+          SonificationManager._instance,
+          'SonificationManager must be constructed before getting instance'
+        );
+        return SonificationManager._instance;
+      },
+      get instance() { return SonificationManager.getInstance(); },
+
+      /**
+       * create an instance - this is the preferred approach for creating the singleton instance, but calling the
+       * constructor works too
+       *
+       * for parameter descriptions, see the constructor
+       *
+       * @return {SonificationManager}
+       * @public
+       */
+      createInstance: function( resetInProgressProperty, simVisibleProperty, sonificationLevelProperty, options ) {
+        assert && assert( !SonificationManager._instance, 'SonificationManager was already created' );
+
+        // note that the instance property is set inside the constructor
+        return new SonificationManager(
+          resetInProgressProperty,
+          simVisibleProperty,
+          sonificationLevelProperty,
+          options
+        );
+      },
+
+      isCreated: function() {
+        return typeof SonificationManager._instance === 'object';
+      },
+
       AUDIO_CONTEXT: audioContext
     }
   );
