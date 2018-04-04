@@ -40,7 +40,6 @@ define( function( require ) {
       left: 100,
       top: 100,
       constrainValue: function( value ) {
-        console.log( 'value = ' + Math.round( value ) );
         return Math.round( value );
       },
       keyboardStep: 1
@@ -51,13 +50,9 @@ define( function( require ) {
     this.addChild( discreteSlider );
 
     // add a sound generator that will play a sound when the value controlled by the slider changes
-    var increaseClickSound = new SoundClip( './audio/slider-click-01.mp3', {
-      audioContext: sonificationManager.audioContext
-    } );
+    var increaseClickSound = new SoundClip( './audio/slider-click-01.mp3' );
     sonificationManager.addSoundGenerator( increaseClickSound );
-    var decreaseClickSound = new SoundClip( './audio/slider-click-02.mp3', {
-      audioContext: sonificationManager.audioContext
-    } );
+    var decreaseClickSound = new SoundClip( './audio/slider-click-02.mp3' );
     sonificationManager.addSoundGenerator( decreaseClickSound );
     model.discreteValueProperty.lazyLink( function( newValue, oldValue ) {
       if ( newValue > oldValue ) {
@@ -80,11 +75,7 @@ define( function( require ) {
     this.addChild( abSwitch );
 
     // add a looping sound that is turned on/off by a switch
-    var loopingSound = new SoundClip( './audio/charges-in-body-better.mp3', {
-      audioContext: sonificationManager.audioContext,
-      loop: true,
-      associatedViewNode: abSwitch
-    } );
+    var loopingSound = new SoundClip( './audio/charges-in-body-better.mp3' );
     sonificationManager.addSoundGenerator( loopingSound );
     model.loopOnProperty.link( function( loopOn ) {
 

@@ -11,6 +11,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var SonificationManager = require( 'TAMBO/SonificationManager' );
   var tambo = require( 'TAMBO/tambo' );
 
   // constants
@@ -25,13 +26,21 @@ define( function( require ) {
 
     options = _.extend( {
 
-      // the audio context can be supplied if desired, which is useful since there is a per-tab limit on these
-      audioContext: null,
-
       initialOutputLevel: 1,
       loop: false,
-      connectImmediately: false, // only set this to true if not using with SonificationManager
-      associatedViewNode: null
+
+      // A Scenery node that, if provided, must be visible in the display for the sound to be played.  This is generally
+      // used only for sounds that can play for long durations, such as a looping sound clip.
+      associatedViewNode: null,
+
+      // By default, the audio context created and used by the sonification manager is used, but this can be overridden
+      // if desired.  In general, this will only be done for testing.
+      audioContext: SonificationManager.instance.audioContext,
+
+      // This flag controls whether the output of this sound generator is immediately connected to the audio context
+      // destination.  This is useful for testing, but should not be done if this sound generator is being used in
+      // conjunction with the sonification manager.
+      connectImmediately: false
     }, options );
     this.options = options;
 
