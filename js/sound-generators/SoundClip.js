@@ -30,7 +30,8 @@ define( function( require ) {
 
       initialOutputLevel: 1,
       loop: false,
-      connectImmediately: false
+      connectImmediately: false, // only set this to true if not using with SonificationManager
+      associatedViewNode: null
     }, options );
     this.options = options;
 
@@ -94,6 +95,15 @@ define( function( require ) {
 
     // @private {number}
     this.outputLevel = options.initialOutputLevel;
+
+    // if a view node was specified, mute the sound if the node is not visible
+    // TODO: This doesn't work, waiting on some new capabilities in Scenery to enable
+    if ( options.associatedViewNode ) {
+      options.associatedViewNode.on( 'visibility', function( visible ) {
+        console.log( 'visible = ' + visible );
+      } );
+    }
+
   }
 
   tambo.register( 'SoundClip', SoundClip );

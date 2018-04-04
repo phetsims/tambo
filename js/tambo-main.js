@@ -8,17 +8,19 @@ define( function( require ) {
 
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var DemoModel = require( 'TAMBO/demo/model-manipulation/model/DemoModel' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
-  var ModelManipulationScreenView = require( 'TAMBO/demo/model-manipulation/view/ModelManipulationScreenView' );
   var Property = require( 'AXON/Property' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
   var Rectangle = require( 'SCENERY/nodes/Rectangle' );
   var Screen = require( 'JOIST/Screen' );
   var Sim = require( 'JOIST/Sim' );
   var SimLauncher = require( 'JOIST/SimLauncher' );
+  var SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
+  var SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
   var StringProperty = require( 'AXON/StringProperty' );
+  var UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
+  var UiComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UiComponentsScreenView' );
 
   // strings
   var tamboTitleString = require( 'string!TAMBO/tambo.title' );
@@ -70,8 +72,8 @@ define( function( require ) {
 
       // sim-like components screen
       new Screen(
-        function(){ return new DemoModel(); },
-        function( model ) { return new ModelManipulationScreenView( model ); },
+        function() { return new SimLikeComponentsModel(); },
+        function( model ) { return new SimLikeComponentsScreenView( model ); },
         {
           name: 'Sim-Like Components',
           backgroundColorProperty: new Property( '#f3fff3' ),
@@ -81,8 +83,8 @@ define( function( require ) {
 
       // UI-components screen
       new Screen(
-        function(){ return new DemoModel(); },
-        function( model ) { return new ModelManipulationScreenView( model ); },
+        function() { return new UiComponentsModel(); },
+        function( model ) { return new UiComponentsScreenView( model ); },
         {
           name: 'UI Components',
           backgroundColorProperty: new Property( '#fff5ba' ),

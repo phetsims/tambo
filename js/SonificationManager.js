@@ -165,11 +165,10 @@ define( function( require ) {
        * register the sound generator, which connects it to the output, puts it on the list of sound generators, and
        * creates and returns a unique ID
        * @param {Object} soundGenerator - TODO: make type more specific when a base class exists
-       * @param {number} screenNumber - the screen number with which this sound generator is associated
        * @param {Object} [options]
        * context, if this is not present the sound generator WILL be connected
        */
-      addSoundGenerator: function( soundGenerator, screenNumber, options ) {
+      addSoundGenerator: function( soundGenerator, options ) {
 
         // default options
         options = _.extend( {
@@ -207,7 +206,6 @@ define( function( require ) {
         // register the sound generator along with additional information about it
         this.soundGeneratorInfo[ id ] = {
           soundGenerator: soundGenerator,
-          screenNumber: screenNumber,
           disabledDuringReset: options.disabledDuringReset,
           sonificationLevel: options.sonificationLevel
         };
