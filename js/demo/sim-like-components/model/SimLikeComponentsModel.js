@@ -12,6 +12,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BoxOfBalls = require( 'TAMBO/demo/sim-like-components/model/BoxOfBalls' );
   var inherit = require( 'PHET_CORE/inherit' );
   var tambo = require( 'TAMBO/tambo' );
   var NumberProperty = require( 'AXON/NumberProperty' );
@@ -23,9 +24,17 @@ define( function( require ) {
 
     // @public {NumberProperty} - a property that is intended to be hooked up to a slider with discrete values
     this.discreteValueProperty = new NumberProperty( 0 );
+
+    // @public (read-only) {BoxOfBalls) - box containing bouncing balls, size empirically determined
+    this.boxOfBalls = new BoxOfBalls( 100, 60, 10 );
   }
 
   tambo.register( 'SimLikeComponentsModel', SimLikeComponentsModel );
 
-  return inherit( Object, SimLikeComponentsModel, {} );
+  return inherit( Object, SimLikeComponentsModel, {
+
+    step: function( dt ) {
+      this.boxOfBalls.step( dt );
+    }
+  } );
 } );

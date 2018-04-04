@@ -9,19 +9,43 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BallNode = require( 'TAMBO/demo/sim-like-components/view/BallNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  var Path = require( 'SCENERY/nodes/Path' );
   var ScreenView = require( 'JOIST/ScreenView' );
   // var SonificationManager = require( 'TAMBO/SonificationManager' );
   // var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var tambo = require( 'TAMBO/tambo' );
+  var Vector2 = require( 'DOT/Vector2' );
 
   /**
    * @constructor
    */
   function SimLikeComponentsScreenView( model ) {
+
+    var self = this;
+
     ScreenView.call( this, {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
+    } );
+
+    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+      Vector2.ZERO,
+      new Vector2( this.layoutBounds.width * 0.275, this.layoutBounds.height * 0.5 ),
+      2
+    );
+
+    var boxNode = new Path( modelViewTransform.modelToViewShape( model.boxOfBalls.box ), {
+      fill: 'white',
+      stroke: 'black'
+    } );
+    this.addChild( boxNode );
+
+    // TODO: handle balls coming and going
+    model.boxOfBalls.balls.forEach( function( ball ) {
+      self.addChild( new BallNode( ball, modelViewTransform ) );
     } );
   }
 
