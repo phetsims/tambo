@@ -15,6 +15,8 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var HSlider = require( 'SUN/HSlider' );
   var Range = require( 'DOT/Range' );
+  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
   var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
@@ -88,8 +90,17 @@ define( function( require ) {
       }
     } );
 
+    // add the reset all button
+    var resetAllButton = new ResetAllButton( {
+      right: this.layoutBounds.maxX - 20,
+      bottom: this.layoutBounds.maxY - 20,
+      listener: function() {
+        model.reset();
+      }
+    } );
+    this.addChild( resetAllButton );
+    sonificationManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
   }
-
 
   tambo.register( 'UiComponentsScreenView', UiComponentsScreenView );
 

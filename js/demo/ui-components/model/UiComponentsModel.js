@@ -25,9 +25,20 @@ define( function( require ) {
 
     // @public {BooleanProperty} - tracks whether the sound loop should be on
     this.loopOnProperty = new BooleanProperty( false );
+
+    // @public {BooleanProperty} - tracks whether a reset is happening
+    this.resetInProgressProperty = new BooleanProperty( false );
   }
 
   tambo.register( 'UiComponentsModel', UiComponentsModel );
 
-  return inherit( Object, UiComponentsModel, {} );
+  return inherit( Object, UiComponentsModel, {
+
+    reset: function() {
+      this.resetInProgressProperty.set( true );
+      this.discreteValueProperty.reset();
+      this.loopOnProperty.reset();
+      this.resetInProgressProperty.set( false );
+    }
+  } );
 } );
