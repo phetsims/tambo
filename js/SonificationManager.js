@@ -13,7 +13,6 @@
  *  - gain control for sounds based on their assigned class, e.g. UI versus sim-specific sounds
  *  - a shared reverb unit to add some spatialization and make all sounds seem to originate with the same room
  */
-
 define( function( require ) {
   'use strict';
 
