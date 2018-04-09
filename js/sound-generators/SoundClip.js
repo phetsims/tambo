@@ -11,6 +11,7 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
   var tambo = require( 'TAMBO/tambo' );
 
@@ -42,6 +43,7 @@ define( function( require ) {
       // conjunction with the sonification manager.
       connectImmediately: false
     }, options );
+
     this.options = options;
 
     // if the client didn't specify an audio context, create one
@@ -106,13 +108,20 @@ define( function( require ) {
     this.outputLevel = options.initialOutputLevel;
 
     // if a view node was specified, mute the sound if the node is not visible
-    // TODO: This doesn't work, waiting on some new capabilities in Scenery to enable
+    // TODO: Add dispose for this.
+    var nodeDisplayedProperty = null;
     if ( options.associatedViewNode ) {
-      options.associatedViewNode.on( 'visibility', function( visible ) {
-        console.log( 'visible = ' + visible );
+      nodeDisplayedProperty = new DisplayedProperty( options.associatedViewNode, phet.joist.display );
+      nodeDisplayedProperty.link( function( displayed ) {
+        self.setEnabled( displayed );
       } );
     }
 
+    this.disposeSoundClip = function() {
+      if ( nodeDisplayedProperty ) {
+        nodeDisplayedProperty.dispose();
+      }
+    };
   }
 
   tambo.register( 'SoundClip', SoundClip );
@@ -285,6 +294,10 @@ define( function( require ) {
         }
         this.enabled = enabled;
       }
+    },
+
+    dispose: function() {
+      this.disposeSoundClip();
     }
 
   } );

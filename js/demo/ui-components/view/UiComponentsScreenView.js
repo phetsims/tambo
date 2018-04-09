@@ -77,7 +77,10 @@ define( function( require ) {
     this.addChild( abSwitch );
 
     // add a looping sound that is turned on/off by a switch
-    var loopingSound = new SoundClip( './audio/charges-in-body-better.mp3', { loop: true } );
+    var loopingSound = new SoundClip( './audio/charges-in-body-better.mp3', {
+      loop: true,
+      associatedViewNode: abSwitch
+    } );
     sonificationManager.addSoundGenerator( loopingSound );
     model.loopOnProperty.link( function( loopOn ) {
 
