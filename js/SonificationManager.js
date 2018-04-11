@@ -18,6 +18,7 @@ define( function( require ) {
 
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
+  var StringProperty = require( 'AXON/StringProperty' );
   var inherit = require( 'PHET_CORE/inherit' );
   var Multilink = require( 'AXON/Multilink' );
   var tambo = require( 'TAMBO/tambo' );
@@ -34,12 +35,11 @@ define( function( require ) {
   /**
    * TODO: Document fully once this has stabilized
    * @param {BooleanProperty} simVisibleProperty
-   * @param {StringProperty} sonificationLevelProperty
    * @param {Object} options
    * @public
    * @constructor
    */
-  function SonificationManager( simVisibleProperty, sonificationLevelProperty, options ) {
+  function SonificationManager( simVisibleProperty, options ) {
 
     // singleton pattern - if already constructed, return the existing instance
     if ( SonificationManager._instance ) {
@@ -67,8 +67,11 @@ define( function( require ) {
     // @public (read-only) {AudioContext} - audio context to use for all audio operations
     this.audioContext = audioContext;
 
-    // @private {Property.<boolean>}} - flag that tracks whether sound generation of any kind is enabled
+    // @public {BooleanProperty} - flag that tracks whether sound generation of any kind is enabled
     this.enabledProperty = new BooleanProperty( true );
+
+    // @public {StringProperty} - the level setting, either 'basic' or 'enhanced'
+    this.levelProperty = new StringProperty( 'basic' );
 
     // @private {number} - next ID number value, used to assign a unique ID to each sound generator that is registered
     this.nextIdNumber = 1;
@@ -131,7 +134,7 @@ define( function( require ) {
       [
         this.enabledProperty,
         simVisibleProperty,
-        sonificationLevelProperty
+        this.levelProperty
       ],
       function( soundsEnabled, simVisible, sonificationLevel ) {
         _.values( self.soundGeneratorInfo ).forEach( function( sgInfo ) {
@@ -317,13 +320,12 @@ define( function( require ) {
        * @return {SonificationManager}
        * @public
        */
-      createInstance: function( simVisibleProperty, sonificationLevelProperty, options ) {
+      createInstance: function( simVisibleProperty, options ) {
         assert && assert( !SonificationManager._instance, 'SonificationManager was already created' );
 
         // note that the instance property is set inside the constructor
         return new SonificationManager(
           simVisibleProperty,
-          sonificationLevelProperty,
           options
         );
       },

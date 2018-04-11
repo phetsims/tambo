@@ -16,8 +16,8 @@ define( function( require ) {
   var SimLauncher = require( 'JOIST/SimLauncher' );
   var SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
   var SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
+  var SonificationControlsScreenView = require( 'TAMBO/demo/controls/view/SonificationControlsScreenView' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
-  var StringProperty = require( 'AXON/StringProperty' );
   var UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
   var UiComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UiComponentsScreenView' );
 
@@ -81,17 +81,24 @@ define( function( require ) {
           backgroundColorProperty: new Property( '#fff5ba' ),
           homeScreenIcon: createScreenIcon( '#71ddbf', '#8d49e5', 'linear' )
         }
-      )
+      ),
 
       // screen with global controls for sonification
-      // TODO: add this
+      new Screen(
+        function() { return {}; }, // no model needed, return a stub
+        function() { return new SonificationControlsScreenView(); },
+        {
+          name: 'Controls',
+          backgroundColorProperty: new Property( '#F0F8FF' ),
+          homeScreenIcon: createScreenIcon( '#ADFF2F', '#FFDAB9', 'radial' )
+        }
+      )
 
     ], simOptions ).start();
   } );
 
   // initialize the sonification manager
   SonificationManager.createInstance(
-    phet.joist.sim.browserTabVisibleProperty,
-    new StringProperty( 'enhanced' )
+    phet.joist.sim.browserTabVisibleProperty
   );
 } );
