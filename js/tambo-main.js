@@ -7,7 +7,6 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var LinearGradient = require( 'SCENERY/util/LinearGradient' );
   var Property = require( 'AXON/Property' );
   var RadialGradient = require( 'SCENERY/util/RadialGradient' );
@@ -30,14 +29,6 @@ define( function( require ) {
       leadDesign: 'John Blanco'
     }
   };
-
-  // initialize the sonification manager
-  SonificationManager.createInstance(
-    // TODO: These properties are essentially stubbed for now, should be populated with the real things
-    new BooleanProperty( false ),
-    new BooleanProperty( true ),
-    new StringProperty( 'enhanced' )
-  );
 
   function createScreenIcon( color1, color2, gradientType ) {
 
@@ -97,4 +88,10 @@ define( function( require ) {
 
     ], simOptions ).start();
   } );
+
+  // initialize the sonification manager
+  SonificationManager.createInstance(
+    phet.joist.sim.browserTabVisibleProperty,
+    new StringProperty( 'enhanced' )
+  );
 } );

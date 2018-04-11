@@ -33,17 +33,13 @@ define( function( require ) {
 
   /**
    * TODO: Document fully once this has stabilized
-   * @param {BooleanProperty} resetInProgressProperty
    * @param {BooleanProperty} simVisibleProperty
    * @param {StringProperty} sonificationLevelProperty
    * @param {Object} options
    * @public
    * @constructor
    */
-  function SonificationManager( resetInProgressProperty,
-                                simVisibleProperty,
-                                sonificationLevelProperty,
-                                options ) {
+  function SonificationManager( simVisibleProperty, sonificationLevelProperty, options ) {
 
     // singleton pattern - if already constructed, return the existing instance
     if ( SonificationManager._instance ) {
@@ -134,16 +130,14 @@ define( function( require ) {
     this.soundControlMultilink = new Multilink(
       [
         this.enabledProperty,
-        resetInProgressProperty,
         simVisibleProperty,
         sonificationLevelProperty
       ],
-      function( soundsEnabled, resetInProgress, simVisible, sonificationLevel ) {
+      function( soundsEnabled, simVisible, sonificationLevel ) {
         _.values( self.soundGeneratorInfo ).forEach( function( sgInfo ) {
           sgInfo.soundGenerator.setEnabled(
             soundsEnabled &&
             simVisible &&
-            !( resetInProgress && sgInfo.disabledDuringReset ) &&
             ( sonificationLevel === 'enhanced' || sgInfo.sonificationLevel === 'basic' )
           );
         } );
@@ -323,12 +317,11 @@ define( function( require ) {
        * @return {SonificationManager}
        * @public
        */
-      createInstance: function( resetInProgressProperty, simVisibleProperty, sonificationLevelProperty, options ) {
+      createInstance: function( simVisibleProperty, sonificationLevelProperty, options ) {
         assert && assert( !SonificationManager._instance, 'SonificationManager was already created' );
 
         // note that the instance property is set inside the constructor
         return new SonificationManager(
-          resetInProgressProperty,
           simVisibleProperty,
           sonificationLevelProperty,
           options
