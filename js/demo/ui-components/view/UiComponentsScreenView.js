@@ -109,15 +109,29 @@ define( function( require ) {
     sonificationManager.addSoundGenerator( marimbaSound );
     model.continuousValueProperty.lazyLink( function( newValue, oldValue ) {
 
-      // calculate the playback rate of the sound based on the property value
-      var playbackRate = Math.pow( 2, (newValue / SLIDER_MAX) * 3 ) / 3;
+      // TODO: Parts of the following code may eventually be moved to constants, but it is here for now to make it
+      // easier to grab this chunk of code and turn it into a standalone sound generator, which is the most likely
+      // scenario at the time of this writing
+      var numBins = 8;
+      var binSize = SLIDER_MAX / numBins;
 
-      var binSize = SLIDER_MAX / 10;
-      if ( Math.floor( oldValue / binSize ) !== Math.floor( newValue / binSize ) || newValue === 0 && oldValue !== 0 ) {
-        marimbaSound.setPlaybackSpeed( playbackRate );
-        marimbaSound.play();
+      function mapValueToBin( value ) {
+        return Math.min( Math.floor( value / binSize ), numBins - 1 );
       }
 
+      // Play the sound when certain threshold values are crossed or when a change occurs in the absence of mouse/touch
+      // interaction with the slider, which implies keyboard-driven interaction.
+      if ( !continuousSlider.thumbDragging ||
+           mapValueToBin( newValue ) !== mapValueToBin( oldValue ) ||
+           newValue === 0 && oldValue !== 0 ||
+           newValue === SLIDER_MAX && oldValue !== SLIDER_MAX ) {
+
+        // map the value to a playback rate
+        marimbaSound.setPlaybackSpeed( Math.pow( 2, newValue / SLIDER_MAX ) );
+
+        // play the sound
+        marimbaSound.play();
+      }
     } );
 
     // add the reset all button

@@ -40,6 +40,7 @@ define( function( require ) {
     reset: function() {
       this.resetInProgressProperty.set( true );
       this.discreteValueProperty.reset();
+      this.continuousValueProperty.reset();
       this.loopOnProperty.reset();
       this.resetInProgressProperty.set( false );
     }
