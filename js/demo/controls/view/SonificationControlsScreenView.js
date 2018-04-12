@@ -15,6 +15,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
+  var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
 
@@ -27,9 +28,11 @@ define( function( require ) {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
     } );
 
+    var sonificationManager = SonificationManager.getInstance();
+
     // add an AB switch that will select between 'basic' and 'enhanced' sonification
     var abSwitch = new ABSwitch(
-      SonificationManager.getInstance().levelProperty,
+      sonificationManager.levelProperty,
       'basic',
       new Text( 'basic' ),
       'enhanced',
@@ -37,6 +40,13 @@ define( function( require ) {
       { switchSize: new Dimension2( 40, 20 ), left: 100, top: 200 }
     );
     this.addChild( abSwitch );
+
+    // add the sound toggle button
+    var soundToggleButton = new SoundToggleButton( sonificationManager.enabledProperty, {
+      right: this.layoutBounds.maxX - 78.5,
+      centerY: this.layoutBounds.maxY - 44.5
+    } );
+    this.addChild( soundToggleButton );
   }
 
   tambo.register( 'SonificationControlsScreenView', SonificationControlsScreenView );

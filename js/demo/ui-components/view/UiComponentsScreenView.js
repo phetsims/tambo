@@ -19,6 +19,7 @@ define( function( require ) {
   var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
+  var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -72,11 +73,11 @@ define( function( require ) {
       new Text( 'Off' ),
       true,
       new Text( 'On' ),
-      { switchSize: new Dimension2( 40, 20 ), left: 100, top: 200 }
+      { switchSize: new Dimension2( 40, 20 ), centerX: discreteSlider.centerX, top: discreteSlider.bottom + 40 }
     );
     this.addChild( abSwitch );
 
-    // add a looping sound that is turned on/off by a switch
+    // add a looping sound that is turned on/off by the switch
     var loopingSound = new SoundClip( './audio/charges-in-body-better.mp3', {
       loop: true,
       associatedViewNode: abSwitch
@@ -93,6 +94,32 @@ define( function( require ) {
       }
     } );
 
+    // Add a slider with continuous behavior.  We create our own thumb node so that we can observe it.
+    var continuousSlider = new HSlider( model.continuousValueProperty, new Range( 0, SLIDER_MAX ), {
+      thumbFillEnabled: '#880000',
+      thumbFillHighlighted: '#aa0000',
+      left: discreteSlider.left,
+      top: abSwitch.bottom + 40
+    } );
+    this.addChild( continuousSlider );
+
+    // Play a sound when certain threshold values are crossed by the continuous property value, or when a change occurs
+    // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
+    var marimbaSound = new SoundClip( './audio/bright-marimba.mp3' );
+    sonificationManager.addSoundGenerator( marimbaSound );
+    model.continuousValueProperty.lazyLink( function( newValue, oldValue ) {
+
+      // calculate the playback rate of the sound based on the property value
+      var playbackRate = Math.pow( 2, (newValue / SLIDER_MAX) * 3 ) / 3;
+
+      var binSize = SLIDER_MAX / 10;
+      if ( Math.floor( oldValue / binSize ) !== Math.floor( newValue / binSize ) || newValue === 0 && oldValue !== 0 ) {
+        marimbaSound.setPlaybackSpeed( playbackRate );
+        marimbaSound.play();
+      }
+
+    } );
+
     // add the reset all button
     var resetAllButton = new ResetAllButton( {
       right: this.layoutBounds.maxX - 20,
@@ -103,6 +130,13 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
     sonificationManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
+
+    // add the sound toggle button
+    var soundToggleButton = new SoundToggleButton( sonificationManager.enabledProperty, {
+      right: resetAllButton.left - 10,
+      centerY: resetAllButton.centerY
+    } );
+    this.addChild( soundToggleButton );
   }
 
   tambo.register( 'UiComponentsScreenView', UiComponentsScreenView );

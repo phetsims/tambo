@@ -23,6 +23,9 @@ define( function( require ) {
     // @public {NumberProperty} - a property that is intended to be hooked up to a slider with discrete values
     this.discreteValueProperty = new NumberProperty( 0 );
 
+    // @public {NumberProperty} - a property that is intended to be hooked up to a slider with continuous values
+    this.continuousValueProperty = new NumberProperty( 0 );
+
     // @public {BooleanProperty} - tracks whether the sound loop should be on
     this.loopOnProperty = new BooleanProperty( false );
 

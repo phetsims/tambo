@@ -18,7 +18,7 @@ define( function( require ) {
   var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
-  // var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Vector2 = require( 'DOT/Vector2' );
 
@@ -63,6 +63,12 @@ define( function( require ) {
     this.addChild( resetAllButton );
     sonificationManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
 
+    // add the sound toggle button
+    var soundToggleButton = new SoundToggleButton( sonificationManager.enabledProperty, {
+      right: resetAllButton.left - 10,
+      centerY: resetAllButton.centerY
+    } );
+    this.addChild( soundToggleButton );
   }
 
   tambo.register( 'SimLikeComponentsScreenView', SimLikeComponentsScreenView );

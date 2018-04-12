@@ -1,4 +1,12 @@
 {
+  "bright-marimba": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Mike Winters (Georgia Tech) for use by PhET"
+  },
   "ceiling-floor-contact.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"
