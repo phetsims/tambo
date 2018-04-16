@@ -111,7 +111,7 @@ define( function( require ) {
 
       // TODO: Parts of the following code may eventually be moved to constants, but it is here for now to make it
       // easier to grab this chunk of code and turn it into a standalone sound generator, which is the most likely
-      // scenario at the time of this writing
+      // scenario at the time of this writing.
       var numBins = 8;
       var binSize = SLIDER_MAX / numBins;
 
