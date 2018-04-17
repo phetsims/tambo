@@ -15,20 +15,19 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
 
   // constants
-  var DEFAULT_TC = 0.015; // empirically determined to be fast but not cause clicks when applied to gain
+  var DEFAULT_TIME_CONSTANT = 0.015; // empirically determined to be fast but not cause clicks when applied to gain
 
   /**
    * @param {Object} options
    * @constructor
    */
-  function SoundClip( options ) {
+  function SoundGenerator( options ) {
 
     var self = this;
 
     options = _.extend( {
 
       initialOutputLevel: 1,
-      loop: false,
 
       // A Scenery node that, if provided, must be visible in the display for the sound to be played.  This is generally
       // used only for sounds that can play for long durations, such as a looping sound clip.
@@ -44,8 +43,8 @@ define( function( require ) {
       connectImmediately: false
     }, options );
 
-    // @private {Object}
-    this.options = options;
+    // @protected {AudioContext}
+    this.audioContext = options.audioContext;
 
     // @private {number}
     this._outputLevel = options.initialOutputLevel;
@@ -58,7 +57,7 @@ define( function( require ) {
     this.masterGainNode.gain.setTargetAtTime(
       this._outputLevel,
       this.audioContext.currentTime,
-      DEFAULT_TC
+      DEFAULT_TIME_CONSTANT
     );
 
     // if the option specifies immediate connection, connect the master gain node to the audio context destination
@@ -71,21 +70,21 @@ define( function( require ) {
     if ( options.associatedViewNode ) {
       nodeDisplayedProperty = new DisplayedProperty( options.associatedViewNode, phet.joist.display );
       nodeDisplayedProperty.link( function( displayed ) {
-        self.enabled = displayed;
+        self.setEnabled( displayed );
       } );
     }
 
     // @private {function} - interally used disposal function
-    this.disposeSoundClip = function() {
+    this.disposeSoundGenerator = function() {
       if ( nodeDisplayedProperty ) {
         nodeDisplayedProperty.dispose();
       }
     };
   }
 
-  tambo.register( 'SoundClip', SoundClip );
+  tambo.register( 'SoundGenerator', SoundGenerator );
 
-  return inherit( Object, SoundClip, {
+  return inherit( Object, SoundGenerator, {
 
     /**
      * connect the sound generator to an audio parameter
@@ -97,71 +96,64 @@ define( function( require ) {
     },
 
     /**
-     * set outputLevel of the playing sound
-     * @param {number} outputLevel - between 0 and 1.
+     * set output level of the sound generator
+     * @param {number} outputLevel - generally between 0 and 1, but doesn't have to be
      * @param {number} [timeConstant] - time constant for outputLevel change, see AudioParam.setTargetAtTime
      */
-    set outputLevel()
-:
+    setOutputLevel: function( outputLevel, timeConstant ) {
+      this._outputLevel = outputLevel;
+      if ( this._enabled ) {
+        this.masterGainNode.gain.setTargetAtTime(
+          outputLevel,
+          this.audioContext.currentTime,
+          timeConstant || DEFAULT_TIME_CONSTANT
+        );
+      }
+    },
 
-  function( outputLevel, timeConstant ) {
-    outputLevel = Math.max( 0, outputLevel );
-    outputLevel = Math.min( 1, outputLevel );
-    this.outputLevel = outputLevel;
-    if ( this.enabled ) {
-      this.masterGainNode.gain.setTargetAtTime(
-        outputLevel,
-        this.audioContext.currentTime,
-        timeConstant || DEFAULT_TC
-      );
-    }
-  }
+    /**
+     * get the current output level
+     * @return {number}
+     * @public
+     */
+    get outputLevel() {
+      return this._outputLevel;
+    },
 
-,
-
-  /**
-   * @return {number}
-   */
-  getOutputLevel: function() {
-    return this.outputLevel;
-  }
-,
-
-  /**
-   * Set this sound clip to be enabled or disabled.  This uses the master gain node so that if the sound is looping
-   * it can be easily re-enabled without having to restart the sound.
-   * @param {boolean} enabled
-   * @public
-   */
-  setEnabled: function( enabled ) {
-    if ( this.enabled !== enabled ) {
-      var now = this.audioContext.currentTime;
-      if ( this.options.loop ) {
-
-        // if this sound clip is a loop, just manipulate the output level so that it doesn't have to restart
+    /**
+     * Set this sound generator to be enabled or disabled.  Sets the gain of the master gain node to zero when disabled,
+     * other actions may be needed in subclasses.
+     * @param {boolean} enabled
+     * @public
+     * TODO: Need to handle multiple reasons why disabled, and only enable fully if thare are no reasons for it to be
+     * disabled.  Reasons that I (jbphet) can think of: reset in progress, associated node not visible, sim not visible...
+     */
+    setEnabled: function( enabled ) {
+      if ( this._enabled !== enabled ) {
+        var now = this.audioContext.currentTime;
         if ( enabled ) {
-          this.masterGainNode.gain.setTargetAtTime( this.outputLevel, now, DEFAULT_TC );
+          this.masterGainNode.gain.setTargetAtTime( this._outputLevel, now, DEFAULT_TIME_CONSTANT );
         }
         else {
-          this.masterGainNode.gain.setTargetAtTime( 0, now, DEFAULT_TC );
+          this.masterGainNode.gain.setTargetAtTime( 0, now, DEFAULT_TIME_CONSTANT );
         }
+        this._enabled = enabled;
       }
-      else {
-        this.stop();
-      }
-      this.enabled = enabled;
+    },
+
+    isEnabled: function() {
+      return this._enabled;
+    },
+
+    /**
+     * @public
+     */
+    dispose: function() {
+      this.disposeSoundGenerator();
     }
-  }
-,
+  }, {
 
-  /**
-   * @public
-   */
-  dispose: function() {
-    this.disposeSoundClip();
-  }
-
-} )
-  ;
-
+    // statics
+    DEFAULT_TIME_CONSTANT: DEFAULT_TIME_CONSTANT
+  } );
 } );

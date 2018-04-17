@@ -12,21 +12,28 @@ define( function( require ) {
   var ABSwitch = require( 'SUN/ABSwitch' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  var inherit = require( 'PHET_CORE/inherit' );
   var HSlider = require( 'SUN/HSlider' );
+  var inherit = require( 'PHET_CORE/inherit' );
+  var LoopingSoundClip = require( 'TAMBO/sound-generators/LoopingSoundClip' );
+  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var Range = require( 'DOT/Range' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
 
   // constants
   var SLIDER_MAX = 5;
   var NUM_TICK_MARKS = SLIDER_MAX + 1;
+
+  // audio
+  var chargesInBody = require( 'audio!TAMBO/charges-in-body-better.mp3' );
+  var marimbaSound = require( 'audio!TAMBO/bright-marimba.mp3' );
+  var sliderIncreaseClickSound = require( 'audio!TAMBO/slider-click-01.mp3' );
+  var sliderDecreaseClickSound = require( 'audio!TAMBO/slider-click-02.mp3' );
 
   /**
    * @constructor
@@ -53,9 +60,9 @@ define( function( require ) {
     this.addChild( discreteSlider );
 
     // add a sound generator that will play a sound when the value controlled by the slider changes
-    var increaseClickSound = new SoundClip( './audio/slider-click-01.mp3' );
+    var increaseClickSound = new OneShotSoundClip( sliderIncreaseClickSound );
     sonificationManager.addSoundGenerator( increaseClickSound );
-    var decreaseClickSound = new SoundClip( './audio/slider-click-02.mp3' );
+    var decreaseClickSound = new OneShotSoundClip( sliderDecreaseClickSound );
     sonificationManager.addSoundGenerator( decreaseClickSound );
     model.discreteValueProperty.lazyLink( function( newValue, oldValue ) {
       if ( newValue > oldValue ) {
@@ -78,18 +85,17 @@ define( function( require ) {
     this.addChild( abSwitch );
 
     // add a looping sound that is turned on/off by the switch
-    var loopingSound = new SoundClip( './audio/charges-in-body-better.mp3', {
-      loop: true,
+    var loopingSound = new LoopingSoundClip( chargesInBody, {
       associatedViewNode: abSwitch
     } );
     sonificationManager.addSoundGenerator( loopingSound );
     model.loopOnProperty.link( function( loopOn ) {
 
       // start the loop the first time the switch is set to the on position
-      if ( loopOn && !loopingSound.isPlaying() ) {
-        loopingSound.play();
+      if ( loopOn && !loopingSound.isPlaying ) {
+        loopingSound.start();
       }
-      else if ( !loopOn && loopingSound.isPlaying() ) {
+      else if ( !loopOn && loopingSound.isPlaying ) {
         loopingSound.stop();
       }
     } );
@@ -105,8 +111,8 @@ define( function( require ) {
 
     // Play a sound when certain threshold values are crossed by the continuous property value, or when a change occurs
     // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
-    var marimbaSound = new SoundClip( './audio/bright-marimba.mp3' );
-    sonificationManager.addSoundGenerator( marimbaSound );
+    var marimbaSoundGenerator = new OneShotSoundClip( marimbaSound );
+    sonificationManager.addSoundGenerator( marimbaSoundGenerator );
     model.continuousValueProperty.lazyLink( function( newValue, oldValue ) {
 
       // TODO: Parts of the following code may eventually be moved to constants, but it is here for now to make it
@@ -127,10 +133,10 @@ define( function( require ) {
            newValue === SLIDER_MAX && oldValue !== SLIDER_MAX ) {
 
         // map the value to a playback rate
-        marimbaSound.setPlaybackSpeed( Math.pow( 2, newValue / SLIDER_MAX ) );
+        marimbaSoundGenerator.setPlaybackRate( Math.pow( 2, newValue / SLIDER_MAX ) );
 
         // play the sound
-        marimbaSound.play();
+        marimbaSoundGenerator.play();
       }
     } );
 

@@ -10,8 +10,12 @@ define( function( require ) {
   var Circle = require( 'SCENERY/nodes/Circle' );
   var inherit = require( 'PHET_CORE/inherit' );
   var SonificationManager = require( 'TAMBO/SonificationManager' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var tambo = require( 'TAMBO/tambo' );
+
+  // audio
+  var wallContactSound = require( 'audio!TAMBO/wall-contact.mp3' );
+  var ceilingFloorContactSound = require( 'audio!TAMBO/ceiling-floor-contact.mp3' );
 
   /**
    * @param {Ball} ball - model of a ball
@@ -37,8 +41,8 @@ define( function( require ) {
     var sonificationManager = SonificationManager.instance;
 
     // @public (read-only) {SoundClip} - make these available so that the output level can be adjusted
-    this.wallContactSound = new SoundClip( './audio/wall-contact.mp3' );
-    this.ceilingFloorContactSound = new SoundClip( './audio/ceiling-floor-contact.mp3' );
+    this.wallContactSound = new OneShotSoundClip( wallContactSound );
+    this.ceilingFloorContactSound = new OneShotSoundClip( ceilingFloorContactSound );
 
     // add the sound generators
     sonificationManager.addSoundGenerator( this.wallContactSound );

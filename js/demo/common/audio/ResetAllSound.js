@@ -5,8 +5,11 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var tambo = require( 'TAMBO/tambo' );
+
+  // audio
+  var resetAllSound = require( 'audio!TAMBO/reset-all.mp3' );
 
   /**
    * @param {BooleanProperty} resetInProgressProperty
@@ -14,7 +17,7 @@ define( function( require ) {
    */
   function ResetAllSound( resetInProgressProperty ) {
     var self = this;
-    SoundClip.call( this, './audio/reset-all.mp3' );
+    OneShotSoundClip.call( this, resetAllSound );
     resetInProgressProperty.link( function( resetInProgress ) {
       if ( resetInProgress ) {
         self.play();
@@ -26,5 +29,5 @@ define( function( require ) {
 
   tambo.register( 'ResetAllSound', ResetAllSound );
 
-  return inherit( SoundClip, ResetAllSound );
+  return inherit( OneShotSoundClip, ResetAllSound );
 } );
