@@ -60,7 +60,6 @@ define( function( require ) {
       self.soundBuffer = decodedAudioData;
       self.loadCompleteAction && self.loadCompleteAction();
       self.loadCompleteAction = null;
-      options.additionalLoadCompleteAction();
     }
 
     function handleAudioDecodeError() {
