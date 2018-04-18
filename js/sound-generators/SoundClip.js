@@ -50,15 +50,27 @@ define( function( require ) {
       console.log( 'Warning: audio format not supported, sound will not be played.' );
     }
 
-    // @private {TODO-what is the type?} - sound data in a form that is ready to play with Web Audio
+    // @protected {AudioBufferSourceNode} - sound data in a form that is ready to play with Web Audio
     this.soundBuffer = null;
 
     // @protected {function} - function to be invoked when sound buffer finishes loading
     this.loadCompleteAction = null;
 
+    function handleDecodedAudioData( decodedAudioData ) {
+      self.soundBuffer = decodedAudioData;
+      self.loadCompleteAction && self.loadCompleteAction();
+      self.loadCompleteAction = null;
+      options.additionalLoadCompleteAction();
+    }
+
+    function handleAudioDecodeError() {
+
+      // not sure what else to do here, will need to figure it out if it happens
+      console.log( 'Error: Unable to decode audio data.' );
+    }
+
     // load the sound into memory
     if ( supportedFormatFound ) {
-      var arrayBuff;
 
       if ( soundInfo.base64 ) {
 
@@ -69,16 +81,8 @@ define( function( require ) {
         for ( var j = 0; j < byteArray.length; j++ ) {
           byteArray[ j ] = byteChars.charCodeAt( j ); // need check to make sure this cast doesn't give problems?
         }
-        arrayBuff = byteArray.buffer;
 
-        this.audioContext.decodeAudioData( arrayBuff,
-          function( audioData ) {
-            self.audioBuffer = audioData;
-          },
-          function() {
-            console.log( 'Error: Unable to decode audio data.' );
-          }
-        );
+        this.audioContext.decodeAudioData( byteArray.bufferBuffer, handleDecodedAudioData, handleAudioDecodeError );
       }
       else {
 
@@ -89,17 +93,10 @@ define( function( require ) {
         request.onload = function() {
 
           // decode the audio data asynchronously
-          self.audioContext.decodeAudioData( request.response,
-            function( buffer ) {
-              self.soundBuffer = buffer;
-              self.loadCompleteAction && self.loadCompleteAction();
-              self.loadCompleteAction = null;
-            },
-            function() { console.log( 'Error loading and decoding sound, sound name: ' + soundInfo.url ); }
-          );
+          self.audioContext.decodeAudioData( request.response, handleDecodedAudioData, handleAudioDecodeError );
         };
         request.onerror = function() {
-          console.log( 'Error occurred on attempt to load sound data.' );
+          console.log( 'Error occurred on attempt to obtain sound data.' );
         };
         request.send();
       }
