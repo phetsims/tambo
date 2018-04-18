@@ -14,7 +14,7 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var SonificationManager = require( 'TAMBO/SonificationManager' );
+  var sonificationManager = require( 'TAMBO/sonificationManager' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -28,11 +28,9 @@ define( function( require ) {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
     } );
 
-    var sonificationManager = SonificationManager.getInstance();
-
     // add an AB switch that will select between 'basic' and 'enhanced' sonification
     var abSwitch = new ABSwitch(
-      sonificationManager.levelProperty,
+      sonificationManager.sonificationLevelProperty,
       'basic',
       new Text( 'basic' ),
       'enhanced',

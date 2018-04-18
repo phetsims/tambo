@@ -20,7 +20,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var SonificationManager = require( 'TAMBO/SonificationManager' );
+  var sonificationManager = require( 'TAMBO/sonificationManager' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -42,8 +42,6 @@ define( function( require ) {
     ScreenView.call( this, {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
     } );
-
-    var sonificationManager = SonificationManager.getInstance();
 
     // add a slider with snap-to-ticks behavior
     var discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {

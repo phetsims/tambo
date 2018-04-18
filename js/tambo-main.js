@@ -17,7 +17,7 @@ define( function( require ) {
   var SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
   var SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
   var SonificationControlsScreenView = require( 'TAMBO/demo/controls/view/SonificationControlsScreenView' );
-  var SonificationManager = require( 'TAMBO/SonificationManager' );
+  var sonificationManager = require( 'TAMBO/sonificationManager' );
   var UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
   var UiComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UiComponentsScreenView' );
 
@@ -30,6 +30,7 @@ define( function( require ) {
     }
   };
 
+  // helper function to create screen icons that aren't too bland
   function createScreenIcon( color1, color2, gradientType ) {
 
     var colorGradient;
@@ -98,7 +99,7 @@ define( function( require ) {
   } );
 
   // initialize the sonification manager
-  SonificationManager.createInstance(
+  sonificationManager.initialize(
     phet.joist.sim.browserTabVisibleProperty
   );
 } );

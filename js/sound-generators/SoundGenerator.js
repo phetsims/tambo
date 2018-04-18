@@ -11,7 +11,7 @@ define( function( require ) {
   // modules
   var DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var SonificationManager = require( 'TAMBO/SonificationManager' );
+  var sonificationManager = require( 'TAMBO/sonificationManager' );
   var tambo = require( 'TAMBO/tambo' );
 
   // constants
@@ -35,7 +35,7 @@ define( function( require ) {
 
       // By default, the audio context created and used by the sonification manager is used, but this can be overridden
       // if desired.  In general, this will only be done for testing.
-      audioContext: SonificationManager.instance.audioContext,
+      audioContext: sonificationManager.AUDIO_CONTEXT,
 
       // This flag controls whether the output of this sound generator is immediately connected to the audio context
       // destination.  This is useful for testing, but should not be set to true if this sound generator is being used

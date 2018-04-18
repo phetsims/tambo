@@ -9,7 +9,7 @@ define( function( require ) {
 
   var Circle = require( 'SCENERY/nodes/Circle' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var SonificationManager = require( 'TAMBO/SonificationManager' );
+  var sonificationManager = require( 'TAMBO/sonificationManager' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var tambo = require( 'TAMBO/tambo' );
 
@@ -37,8 +37,6 @@ define( function( require ) {
     } );
 
     // add sounds
-
-    var sonificationManager = SonificationManager.instance;
 
     // @public (read-only) {SoundClip} - make these available so that the output level can be adjusted
     this.wallContactSound = new OneShotSoundClip( wallContactSound );

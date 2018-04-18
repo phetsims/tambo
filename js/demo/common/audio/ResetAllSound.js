@@ -24,7 +24,7 @@ define( function( require ) {
       }
     } );
 
-    // TODO: Need a dispose or this will leak memory if/when removed from SonificationManager
+    // TODO: Need a dispose or this will leak memory if/when removed from sonificationManager
   }
 
   tambo.register( 'ResetAllSound', ResetAllSound );
