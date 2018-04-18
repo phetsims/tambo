@@ -9,8 +9,10 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var ABSwitch = require( 'SUN/ABSwitch' );
   var BallNode = require( 'TAMBO/demo/sim-like-components/view/BallNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var Path = require( 'SCENERY/nodes/Path' );
@@ -20,6 +22,7 @@ define( function( require ) {
   var sonificationManager = require( 'TAMBO/sonificationManager' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
+  var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
 
   /**
@@ -55,6 +58,17 @@ define( function( require ) {
     model.boxOfBalls.balls.forEach( function( ball ) {
       self.addChild( new BallNode( ball, modelViewTransform ) );
     } );
+
+    // add a switch to turn ball motion on and off
+    var abSwitch = new ABSwitch(
+      model.ballsMovingProperty,
+      false,
+      new Text( 'Paused' ),
+      true,
+      new Text( 'Running' ),
+      { switchSize: new Dimension2( 40, 20 ), centerX: boxNode.centerX, top: boxNode.bottom + 40 }
+    );
+    this.addChild( abSwitch );
 
     // add the reset all button
     var resetAllButton = new ResetAllButton( {

@@ -31,8 +31,6 @@ define( function( require ) {
 
     // add a ball to start
     this.addRandomBall();
-
-
   }
 
   tambo.register( 'BoxOfBalls', BoxOfBalls );
@@ -84,6 +82,12 @@ define( function( require ) {
         if ( !ballVelocity.equals( newBallVelocity ) ) {
           ball.velocityProperty.set( newBallVelocity );
         }
+      } );
+    },
+
+    reset: function() {
+      this.balls.forEach( function( ball ) {
+        ball.reset();
       } );
     }
 

@@ -35,5 +35,11 @@ define( function( require ) {
 
   tambo.register( 'Ball', Ball );
 
-  return inherit( Object, Ball );
+  return inherit( Object, Ball, {
+
+    reset: function() {
+      this.positionProperty.reset();
+      this.velocityProperty.reset();
+    }
+  } );
 } );

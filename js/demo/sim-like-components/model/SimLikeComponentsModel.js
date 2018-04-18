@@ -16,18 +16,17 @@ define( function( require ) {
   var BoxOfBalls = require( 'TAMBO/demo/sim-like-components/model/BoxOfBalls' );
   var inherit = require( 'PHET_CORE/inherit' );
   var tambo = require( 'TAMBO/tambo' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
 
   /**
    * @constructor
    */
   function SimLikeComponentsModel() {
 
-    // @public {NumberProperty} - a property that is intended to be hooked up to a slider with discrete values
-    this.discreteValueProperty = new NumberProperty( 0 );
-
     // @public (read-only) {BoxOfBalls) - box containing bouncing balls, size empirically determined
     this.boxOfBalls = new BoxOfBalls( 100, 60, 10 );
+
+    // @public {BooleanProperty} - controls whether the balls are bouncing around in the box or still
+    this.ballsMovingProperty = new BooleanProperty( false );
 
     // @public {BooleanProperty} - tracks whether a reset is happening
     this.resetInProgressProperty = new BooleanProperty( false );
@@ -42,7 +41,9 @@ define( function( require ) {
      * @public
      */
     step: function( dt ) {
-      this.boxOfBalls.step( dt );
+      if ( this.ballsMovingProperty.get() ) {
+        this.boxOfBalls.step( dt );
+      }
     },
 
     /**
@@ -50,6 +51,8 @@ define( function( require ) {
      */
     reset: function() {
       this.resetInProgressProperty.set( true );
+      this.ballsMovingProperty.reset();
+      this.boxOfBalls.reset();
       this.resetInProgressProperty.set( false );
     }
 
