@@ -33,6 +33,12 @@ define( function( require ) {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
     } );
 
+    // TODO: The following is temporarily here until init of sonificationManager is moved into Sim.js.
+    sonificationManager.initialize(
+      phet.joist.sim.browserTabVisibleProperty
+    );
+
+    // set up the model view transform
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2( this.layoutBounds.width * 0.275, this.layoutBounds.height * 0.5 ),

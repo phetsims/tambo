@@ -23,6 +23,14 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris for use by PhET"
   },
+  "empty-apartment-bedroom-06.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "Public Domain Creative Commons",
+    "notes": "downloaded from http://www.openairlib.net/auralizationdb/content/empty-apartment-bedroom"
+  },
   "reset-all.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"

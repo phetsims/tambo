@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
   var SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
+  var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   var tambo = require( 'TAMBO/tambo' );
 
   /**
@@ -25,81 +26,26 @@ define( function( require ) {
     var self = this;
     SoundGenerator.call( this, options );
 
-    // parameter checking
-    assert && assert( typeof(soundInfo) === 'object' && (soundInfo.url || soundInfo.base64) );
-
-    var soundElement = document.createElement( 'audio' );
-    var supportedFormatFound = false;
-
-    // identify the audio format
-    var audioFormat;
-    if ( soundInfo.url ) {
-      audioFormat = 'audio/' + soundInfo.url.slice( soundInfo.url.lastIndexOf( '.' ) + 1,
-        soundInfo.url.lastIndexOf( '?' ) >= 0 ? soundInfo.url.lastIndexOf( '?' ) : soundInfo.url.length
-      );
-    }
-    else {
-      audioFormat = soundInfo.base64.slice( soundInfo.base64.indexOf( ':' ) + 1, soundInfo.base64.indexOf( ';' ) );
-    }
-
-    // determine whether this audio format is supported (doesn't exist for phantomjs, which is used in automated testing)
-    if ( soundElement.canPlayType && soundElement.canPlayType( audioFormat ) ) {
-      supportedFormatFound = true;
-    }
-    else {
-      console.log( 'Warning: audio format not supported, sound will not be played.' );
-    }
-
     // @protected {AudioBufferSourceNode} - sound data in a form that is ready to play with Web Audio
     this.soundBuffer = null;
 
     // @protected {function} - function to be invoked when sound buffer finishes loading
     this.loadCompleteAction = null;
 
-    function handleDecodedAudioData( decodedAudioData ) {
-      self.soundBuffer = decodedAudioData;
-      self.loadCompleteAction && self.loadCompleteAction();
-      self.loadCompleteAction = null;
-    }
-
-    function handleAudioDecodeError() {
-
-      // not sure what else to do here, will need to figure it out if it happens
-      console.log( 'Error: Unable to decode audio data.' );
-    }
-
-    // load the sound into memory
-    if ( supportedFormatFound ) {
-
-      if ( soundInfo.base64 ) {
-
-        // We're working with base64 data, so we need to decode it. The regular expression removes the mime header.
-        var soundData = (soundInfo.base64 ? soundInfo.base64 : this.sound.getAttribute( 'src' )).replace( new RegExp( '^.*,' ), '' );
-        var byteChars = window.atob( soundData );
-        var byteArray = new window.Uint8Array( byteChars.length );
-        for ( var j = 0; j < byteArray.length; j++ ) {
-          byteArray[ j ] = byteChars.charCodeAt( j ); // need check to make sure this cast doesn't give problems?
-        }
-
-        this.audioContext.decodeAudioData( byteArray.bufferBuffer, handleDecodedAudioData, handleAudioDecodeError );
+    // decode the audio data and place it in a sound buffer so it can be easily played
+    soundInfoDecoder.decode(
+      soundInfo,
+      this.audioContext,
+      function( decodedAudioData ) {
+        self.soundBuffer = decodedAudioData;
+        self.loadCompleteAction && self.loadCompleteAction();
+        self.loadCompleteAction = null;
+      },
+      function() {
+        // we haven't seen this happen, so for now a message is logged to the console and that's it
+        console.log( 'Error: Unable to decode audio data.' );
       }
-      else {
-
-        // load the sound via URL
-        var request = new XMLHttpRequest();
-        request.open( 'GET', soundInfo.url, true );
-        request.responseType = 'arraybuffer';
-        request.onload = function() {
-
-          // decode the audio data asynchronously
-          self.audioContext.decodeAudioData( request.response, handleDecodedAudioData, handleAudioDecodeError );
-        };
-        request.onerror = function() {
-          console.log( 'Error occurred on attempt to obtain sound data.' );
-        };
-        request.send();
-      }
-    }
+    );
 
     // @protected {number} - rate at which clip is being played back
     this.playbackRate = 1;

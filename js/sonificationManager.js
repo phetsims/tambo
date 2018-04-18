@@ -22,11 +22,14 @@ define( function( require ) {
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var StringProperty = require( 'AXON/StringProperty' );
   var Multilink = require( 'AXON/Multilink' );
+  var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   var tambo = require( 'TAMBO/tambo' );
+
+  // audio
+  var reverbImpulseResponse = require( 'audio!TAMBO/empty-apartment-bedroom-06.mp3' );
 
   // constants
   var DEFAULT_REVERB_LEVEL = 0.2;
-  var IMPULSE_RESPONSE_FILE_PATH = './audio/cathedral-room-impulse-response.mp3';
   var TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
 
   // Create the audio context that will be used by the sonification manager.
@@ -62,27 +65,18 @@ define( function( require ) {
   dryGainNode.gain.setValueAtTime( 1 - DEFAULT_REVERB_LEVEL, audioContext.currentTime );
   dryGainNode.connect( masterGainNode );
 
-  // load the reverb impulse response
-  // TODO: This should be migrated to use the audio plugin when we start using it in real sims.  It is not using it
-  // now to make things easier in the sonification wrappers.  If both continue to coexist, we may need to work out a
-  // way to make the audio plugin work in the sonification wrappers.
-  var request = new XMLHttpRequest();
-  request.open( 'GET', IMPULSE_RESPONSE_FILE_PATH, true );
-  request.responseType = 'arraybuffer';
-
-  // decode the sound asynchronously
-  request.onload = function() {
-    audioContext.decodeAudioData(
-      request.response,
-      function( buffer ) {
-        convolver.buffer = buffer;
-      },
-      function( err ) {
-        console.error( 'error loading impulse response ' + IMPULSE_RESPONSE_FILE_PATH + ', url: ' + ', err: ' );
-      }
-    );
-  };
-  request.send();
+  // load the reverb impulse response into the convolver
+  soundInfoDecoder.decode(
+    reverbImpulseResponse,
+    audioContext,
+    function( decodedAudioData ) {
+      convolver.buffer = decodedAudioData;
+    },
+    function() {
+      // we haven't seen this happen, so for now a message is logged to the console and that's it
+      console.log( 'Error: Unable to decode audio data.' );
+    }
+  );
 
   // create the gain nodes for each of the defined "classes" and hook them up, will be defined during init
   var gainNodesForClasses = {};

@@ -17,7 +17,6 @@ define( function( require ) {
   var SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
   var SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
   var SonificationControlsScreenView = require( 'TAMBO/demo/controls/view/SonificationControlsScreenView' );
-  var sonificationManager = require( 'TAMBO/sonificationManager' );
   var UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
   var UiComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UiComponentsScreenView' );
 
@@ -97,9 +96,4 @@ define( function( require ) {
 
     ], simOptions ).start();
   } );
-
-  // initialize the sonification manager
-  sonificationManager.initialize(
-    phet.joist.sim.browserTabVisibleProperty
-  );
 } );
