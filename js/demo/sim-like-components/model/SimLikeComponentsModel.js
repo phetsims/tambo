@@ -15,6 +15,7 @@ define( function( require ) {
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var BoxOfBalls = require( 'TAMBO/demo/sim-like-components/model/BoxOfBalls' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var NumberProperty = require( 'AXON/NumberProperty' );
   var tambo = require( 'TAMBO/tambo' );
 
   /**
@@ -27,6 +28,9 @@ define( function( require ) {
 
     // @public {BooleanProperty} - controls whether the balls are bouncing around in the box or still
     this.ballsMovingProperty = new BooleanProperty( false );
+
+    // @public {NumberProperty} - controls the number of balls in the box
+    this.numberOfBallsProperty = new NumberProperty( 1 );
 
     // @public {BooleanProperty} - tracks whether a reset is happening
     this.resetInProgressProperty = new BooleanProperty( false );

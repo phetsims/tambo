@@ -15,7 +15,10 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  var NumberSpinner = require( 'SUN/NumberSpinner' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var Property = require( 'AXON/Property' );
+  var Range = require( 'DOT/Range' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
   var ScreenView = require( 'JOIST/ScreenView' );
@@ -60,15 +63,34 @@ define( function( require ) {
     } );
 
     // add a switch to turn ball motion on and off
-    var abSwitch = new ABSwitch(
+    var ballsMovingSwitch = new ABSwitch(
       model.ballsMovingProperty,
       false,
       new Text( 'Paused' ),
       true,
       new Text( 'Running' ),
-      { switchSize: new Dimension2( 40, 20 ), centerX: boxNode.centerX, top: boxNode.bottom + 40 }
+      { switchSize: new Dimension2( 40, 20 ), centerX: boxNode.centerX, top: boxNode.bottom + 20 }
     );
-    this.addChild( abSwitch );
+    this.addChild( ballsMovingSwitch );
+
+    // add a number spinner for adding and removing balls
+    var ballCountSpinner = new NumberSpinner(
+      model.numberOfBallsProperty,
+      new Property( new Range( 1, 8 ) ),
+      {
+        arrowsPosition: 'bothBottom',
+        backgroundFill: '#cccccc',
+        backgroundStroke: 'green',
+        backgroundLineWidth: 3,
+        arrowButtonFill: 'lightblue',
+        arrowButtonStroke: 'blue',
+        arrowButtonLineWidth: 0.2,
+        valueAlign: 'center',
+        xMargin: 20,
+        centerX: ballsMovingSwitch.centerX,
+        top: ballsMovingSwitch.bottom + 20
+      } );
+    this.addChild( ballCountSpinner );
 
     // add the reset all button
     var resetAllButton = new ResetAllButton( {
