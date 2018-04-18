@@ -15,6 +15,19 @@ define( function( require ) {
   var Shape = require( 'KITE/Shape' );
   var Vector2 = require( 'DOT/Vector2' );
 
+  // constants
+  var BALL_RADIUS = 5;
+  var MIN_X_OR_Y_VELOCITY = 30;
+  var MAX_X_OR_Y_VELOCITY = 60;
+
+  // helper function
+  function createRandomColor() {
+    var r = Math.floor( phet.joist.random.nextDouble() * 256 );
+    var g = Math.floor( phet.joist.random.nextDouble() * 256 );
+    var b = Math.floor( phet.joist.random.nextDouble() * 256 );
+    return new Color( r, g, b );
+  }
+
   /**
    * @param {number} width - in centimeters
    * @param {number} height - in centimeters
@@ -28,9 +41,6 @@ define( function( require ) {
 
     // @public (read-only) {ObservableArray}
     this.balls = new ObservableArray();
-
-    // add a ball to start
-    this.addRandomBall();
   }
 
   tambo.register( 'BoxOfBalls', BoxOfBalls );
@@ -43,11 +53,21 @@ define( function( require ) {
      */
     addRandomBall: function() {
       this.balls.push( new Ball(
-        5,
-        new Color( '#aa0011' ),
-        new Vector2( this.box.bounds.width / 2, this.box.bounds.height / 2 ),
-        new Vector2( 50, 50 )
+        BALL_RADIUS,
+        createRandomColor(),
+        new Vector2(
+          BALL_RADIUS + (phet.joist.random.nextDouble() * (this.box.bounds.width - 2 * BALL_RADIUS)),
+          BALL_RADIUS + (phet.joist.random.nextDouble() * (this.box.bounds.height - 2 * BALL_RADIUS))
+        ),
+        new Vector2(
+          MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * (MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY),
+          MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * (MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY)
+        )
       ) );
+    },
+
+    removeABall: function() {
+      this.balls.pop();
     },
 
     /**
@@ -86,9 +106,7 @@ define( function( require ) {
     },
 
     reset: function() {
-      this.balls.forEach( function( ball ) {
-        ball.reset();
-      } );
+      this.balls.reset();
     }
 
   } );

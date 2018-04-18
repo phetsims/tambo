@@ -57,9 +57,20 @@ define( function( require ) {
     } );
     this.addChild( boxNode );
 
-    // TODO: handle balls coming and going
-    model.boxOfBalls.balls.forEach( function( ball ) {
-      self.addChild( new BallNode( ball, modelViewTransform ) );
+    model.boxOfBalls.balls.addItemAddedListener( function( addedBall ) {
+
+      var ballNode = new BallNode( addedBall, modelViewTransform );
+
+      self.addChild( ballNode );
+
+      // set up a listener to remove the nodes when the corresponding ball is removed from the model
+      model.boxOfBalls.balls.addItemRemovedListener( function removalListener( removedBall ) {
+        if ( removedBall === addedBall ) {
+          self.removeChild( ballNode );
+          ballNode.dispose();
+          model.boxOfBalls.balls.removeItemRemovedListener( removalListener );
+        }
+      } );
     } );
 
     // add a switch to turn ball motion on and off
@@ -76,7 +87,7 @@ define( function( require ) {
     // add a number spinner for adding and removing balls
     var ballCountSpinner = new NumberSpinner(
       model.numberOfBallsProperty,
-      new Property( new Range( 1, 8 ) ),
+      new Property( new Range( 0, 8 ) ),
       {
         arrowsPosition: 'bothBottom',
         backgroundFill: '#cccccc',

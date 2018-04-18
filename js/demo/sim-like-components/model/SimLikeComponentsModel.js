@@ -23,17 +23,34 @@ define( function( require ) {
    */
   function SimLikeComponentsModel() {
 
+    var self = this;
+
     // @public (read-only) {BoxOfBalls) - box containing bouncing balls, size empirically determined
     this.boxOfBalls = new BoxOfBalls( 100, 60, 10 );
+
+    // @public {NumberProperty} - controls the number of balls in the box
+    this.numberOfBallsProperty = new NumberProperty( 0 );
 
     // @public {BooleanProperty} - controls whether the balls are bouncing around in the box or still
     this.ballsMovingProperty = new BooleanProperty( false );
 
-    // @public {NumberProperty} - controls the number of balls in the box
-    this.numberOfBallsProperty = new NumberProperty( 1 );
-
     // @public {BooleanProperty} - tracks whether a reset is happening
     this.resetInProgressProperty = new BooleanProperty( false );
+
+    // add or remove balls as the count changes
+    this.numberOfBallsProperty.link( function( desiredNumberOfBalls ) {
+      var numberBallsInBox = self.boxOfBalls.balls.lengthProperty.get();
+      if ( desiredNumberOfBalls > numberBallsInBox ) {
+        _.times( desiredNumberOfBalls - numberBallsInBox, function() {
+          self.boxOfBalls.addRandomBall();
+        } );
+      }
+      else if ( desiredNumberOfBalls < numberBallsInBox ) {
+        _.times( numberBallsInBox - desiredNumberOfBalls, function() {
+          self.boxOfBalls.removeABall();
+        } );
+      }
+    } );
   }
 
   tambo.register( 'SimLikeComponentsModel', SimLikeComponentsModel );
@@ -55,8 +72,8 @@ define( function( require ) {
      */
     reset: function() {
       this.resetInProgressProperty.set( true );
+      this.numberOfBallsProperty.reset();
       this.ballsMovingProperty.reset();
-      this.boxOfBalls.reset();
       this.resetInProgressProperty.set( false );
     }
 
