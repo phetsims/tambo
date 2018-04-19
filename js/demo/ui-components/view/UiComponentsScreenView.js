@@ -14,6 +14,7 @@ define( function( require ) {
   var Dimension2 = require( 'DOT/Dimension2' );
   var HSlider = require( 'SUN/HSlider' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
   var LoopingSoundClip = require( 'TAMBO/sound-generators/LoopingSoundClip' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var Range = require( 'DOT/Range' );
@@ -111,6 +112,23 @@ define( function( require ) {
     // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
     var marimbaSoundGenerator = new OneShotSoundClip( marimbaSound );
     sonificationManager.addSoundGenerator( marimbaSoundGenerator );
+
+    // define a function that will play the marimba sound at a pitch value based on the continuous value property
+    function playSoundForContinuousValue() {
+      var playbackRate = Math.pow( 2, model.continuousValueProperty.get() / SLIDER_MAX );
+      marimbaSoundGenerator.setPlaybackRate( playbackRate );
+      marimbaSoundGenerator.play();
+    }
+
+    // add sound generation for changes that occur due to keyboard interaction
+    continuousSlider.addAccessibleInputListener( {
+      keydown: function( event ) {
+        if ( KeyboardUtil.isRangeKey( event.keyCode ) ) {
+          playSoundForContinuousValue();
+        }
+      }
+    } );
+
     model.continuousValueProperty.lazyLink( function( newValue, oldValue ) {
 
       // TODO: Parts of the following code may eventually be moved to constants, but it is here for now to make it
@@ -125,16 +143,12 @@ define( function( require ) {
 
       // Play the sound when certain threshold values are crossed or when a change occurs in the absence of mouse/touch
       // interaction with the slider, which implies keyboard-driven interaction.
-      if ( !continuousSlider.thumbDragging ||
-           mapValueToBin( newValue ) !== mapValueToBin( oldValue ) ||
-           newValue === 0 && oldValue !== 0 ||
-           newValue === SLIDER_MAX && oldValue !== SLIDER_MAX ) {
+      if ( continuousSlider.thumbDragging && (
+        mapValueToBin( newValue ) !== mapValueToBin( oldValue ) ||
+        newValue === 0 && oldValue !== 0 ||
+        newValue === SLIDER_MAX && oldValue !== SLIDER_MAX) ) {
 
-        // map the value to a playback rate
-        marimbaSoundGenerator.setPlaybackRate( Math.pow( 2, newValue / SLIDER_MAX ) );
-
-        // play the sound
-        marimbaSoundGenerator.play();
+        playSoundForContinuousValue();
       }
     } );
 
