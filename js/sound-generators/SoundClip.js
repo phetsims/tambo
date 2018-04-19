@@ -10,15 +10,20 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
+  var platform = require( 'PHET_CORE/platform' );
   var SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   var tambo = require( 'TAMBO/tambo' );
+
+  // audio
+  // var emptySound = require( 'audio!TAMBO/empty.mp3' );
+  var emptySound = require( 'audio!TAMBO/bright-marimba.mp3' );
 
   /**
    * @param {Object} soundInfo - An object that includes *either* a url that points to the sound to be played *or* a
    * base64-encoded version of the sound data.  The former is generally used when a sim is running in RequireJS mode,
    * the latter is used in built versions.
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    */
   function SoundClip( soundInfo, options ) {
@@ -53,7 +58,7 @@ define( function( require ) {
 
   tambo.register( 'SoundClip', SoundClip );
 
-  return inherit( SoundGenerator, SoundClip, {
+  inherit( SoundGenerator, SoundClip, {
 
     /**
      * play sound and change the speed as playback occurs
@@ -69,4 +74,22 @@ define( function( require ) {
       this.playbackRate = playbackRate;
     }
   } );
+
+  // Workaround for iOS+Safari: In this situation, we must play an audio file from a thread initiated by a user event
+  // such as touchstart before any sounds will play. This is not possible with scenery, since all scenery events are
+  // batched and dispatched from the animation loop.
+  //
+  // See http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
+  //
+  // Note: This requires the user to touch the screen before audio can be played.
+  if ( platform.mobileSafari ) {
+    var silence = new SoundClip( emptySound );
+    var playSilence = function() {
+      silence.play();
+      window.removeEventListener( 'touchstart', playSilence );
+    };
+    window.addEventListener( 'touchstart', playSilence );
+  }
+
+  return SoundClip;
 } );
