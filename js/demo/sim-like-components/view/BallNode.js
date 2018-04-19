@@ -1,8 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Particle, represented as a circle with a gradient.  This type does not
- * track a particle, use ParticleView for that.
+ * a Scenery node that represents a ball in the view
  */
 define( function( require ) {
   'use strict';

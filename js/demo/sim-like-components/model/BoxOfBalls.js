@@ -52,6 +52,12 @@ define( function( require ) {
      * @public
      */
     addRandomBall: function() {
+
+      var xVelocity = MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * (MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY);
+      xVelocity = phet.joist.random.nextBoolean() ? xVelocity : -xVelocity;
+      var yVelocity = MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * (MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY);
+      yVelocity = phet.joist.random.nextBoolean() ? yVelocity : -yVelocity;
+      var velocity = new Vector2( xVelocity, yVelocity );
       this.balls.push( new Ball(
         BALL_RADIUS,
         createRandomColor(),
@@ -59,10 +65,7 @@ define( function( require ) {
           BALL_RADIUS + (phet.joist.random.nextDouble() * (this.box.bounds.width - 2 * BALL_RADIUS)),
           BALL_RADIUS + (phet.joist.random.nextDouble() * (this.box.bounds.height - 2 * BALL_RADIUS))
         ),
-        new Vector2(
-          MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * (MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY),
-          MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * (MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY)
-        )
+        velocity
       ) );
     },
 
