@@ -45,17 +45,29 @@ define( function( require ) {
     sonificationManager.addSoundGenerator( this.wallContactSound );
     sonificationManager.addSoundGenerator( this.ceilingFloorContactSound );
 
-    ball.velocityProperty.lazyLink( function( newVelocity, oldVelocity ) {
-      if ( newVelocity.x === -oldVelocity.x ) {
+    // play bounces when the ball bounces
+    var bounceListener = function( bounceSurface ) {
+      if ( bounceSurface === 'left-wall' || bounceSurface === 'right-wall' ) {
         self.wallContactSound.play();
       }
-      if ( newVelocity.y === -oldVelocity.y ) {
+      else if ( bounceSurface === 'floor' || bounceSurface === 'ceiling' ) {
         self.ceilingFloorContactSound.play();
       }
-    } );
+    };
+    ball.bounceEmitter.addListener( bounceListener );
+
+    this.disposeBallNode = function() {
+      ball.bounceEmitter.removeListener( bounceListener );
+    };
   }
 
   tambo.register( 'BallNode', BallNode );
 
-  return inherit( Circle, BallNode );
+  return inherit( Circle, BallNode, {
+
+    dispose: function() {
+      this.disposeBallNode();
+      Circle.prototype.dispose.call( this );
+    }
+  } );
 } );
