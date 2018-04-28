@@ -44,8 +44,8 @@ define( function( require ) {
   // next ID number value, used to assign a unique ID to each sound generator that is registered
   var nextIdNumber = 1;
 
-  // object where the sound generators are stored along with information about how to manage them
-  var soundGeneratorInfo = {};
+  // array where the sound generators are stored along with information about how to manage them
+  var soundGeneratorInfoArray = [];
 
   // master gain node for all sounds managed by this sonification manager
   var masterGainNode = audioContext.createGain();
@@ -90,7 +90,7 @@ define( function( require ) {
   var sonificationManager = {
 
     /**
-     * initialize the sonificaiton manager, this function must be invoked before the sonification manager is used
+     * initialize the sonificaiton manager - this function must be invoked before the sonification manager is used
      * @param {BooleanProperty} simVisibleProperty
      * @param {Object} [options]
      */
@@ -128,7 +128,7 @@ define( function( require ) {
           sonificationLevelProperty
         ],
         function( enabled, simVisible, sonificationLevel ) {
-          _.values( soundGeneratorInfo ).forEach( function( sgInfo ) {
+          soundGeneratorInfoArray.forEach( function( sgInfo ) {
             sgInfo.soundGenerator.setEnabled(
               enabled &&
               simVisible &&
@@ -186,13 +186,42 @@ define( function( require ) {
       var id = 'sg-' + nextIdNumber++;
 
       // register the sound generator along with additional information about it
-      soundGeneratorInfo[ id ] = {
+      var soundGeneratorInfo = {
         soundGenerator: soundGenerator,
         disabledDuringReset: options.disabledDuringReset,
         sonificationLevel: options.sonificationLevel
       };
+      soundGeneratorInfoArray.push( soundGeneratorInfo );
 
       return id;
+    },
+
+    /**
+     * remove the specified sound generator
+     * @param {SoundGenerator} soundGenerator
+     * @public
+     */
+    removeSoundGenerator: function( soundGenerator ) {
+
+      // find the info object for this sound generator
+      var sgInfoObject = null;
+      for ( var i = 0; i < soundGeneratorInfoArray.length; i++ ) {
+        if ( soundGeneratorInfoArray[ i ].soundGenerator === soundGenerator ) {
+
+          // found it
+          sgInfoObject = soundGeneratorInfoArray[ i ];
+          break;
+        }
+      }
+
+      // make sure it is actually present on the list
+      assert && assert( sgInfoObject, 'unable to remove sound generator - not found' );
+
+      // disconnect the sound generator
+      // TODO - add disconnect
+
+      // remove the sound generator from the list
+      soundGeneratorInfoArray = _.without( soundGeneratorInfoArray, sgInfoObject );
     },
 
     /**

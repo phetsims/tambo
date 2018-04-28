@@ -58,6 +58,8 @@ define( function( require ) {
 
     this.disposeBallNode = function() {
       ball.bounceEmitter.removeListener( bounceListener );
+      sonificationManager.removeSoundGenerator( this.wallContactSound );
+      sonificationManager.removeSoundGenerator( this.ceilingFloorContactSound );
     };
   }
 
