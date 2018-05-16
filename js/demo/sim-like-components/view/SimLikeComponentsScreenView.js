@@ -17,6 +17,7 @@ define( function( require ) {
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   var NumberSpinner = require( 'SUN/NumberSpinner' );
   var Path = require( 'SCENERY/nodes/Path' );
+  var PitchedPopGenerator = require( 'TAMBO/sound-generators/PitchedPopGenerator' );
   var Property = require( 'AXON/Property' );
   var Range = require( 'DOT/Range' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -27,6 +28,9 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
   var Vector2 = require( 'DOT/Vector2' );
+
+  // constants
+  var MAX_BALLS = 8;
 
   /**
    * @constructor
@@ -51,16 +55,18 @@ define( function( require ) {
       2
     );
 
+    // add the box where the balls bounce around
     var boxNode = new Path( modelViewTransform.modelToViewShape( model.boxOfBalls.box ), {
       fill: 'white',
       stroke: 'black'
     } );
     this.addChild( boxNode );
 
+    // handle balls being added to or removed from the box
     model.boxOfBalls.balls.addItemAddedListener( function( addedBall ) {
 
+      // add a node that represents the ball
       var ballNode = new BallNode( addedBall, modelViewTransform );
-
       self.addChild( ballNode );
 
       // set up a listener to remove the nodes when the corresponding ball is removed from the model
@@ -71,6 +77,13 @@ define( function( require ) {
           model.boxOfBalls.balls.removeItemRemovedListener( removalListener );
         }
       } );
+    } );
+
+    // generate sound when balls are added or removed
+    var pitchedPopGenerator = new PitchedPopGenerator();
+    sonificationManager.addSoundGenerator( pitchedPopGenerator );
+    model.boxOfBalls.balls.lengthProperty.lazyLink( function( numBalls ) {
+      pitchedPopGenerator.playPop( numBalls / MAX_BALLS );
     } );
 
     // add a switch to turn ball motion on and off
@@ -87,7 +100,7 @@ define( function( require ) {
     // add a number spinner for adding and removing balls
     var ballCountSpinner = new NumberSpinner(
       model.numberOfBallsProperty,
-      new Property( new Range( 0, 8 ) ),
+      new Property( new Range( 0, MAX_BALLS ) ),
       {
         arrowsPosition: 'bothBottom',
         backgroundFill: '#cccccc',
