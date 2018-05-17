@@ -90,7 +90,7 @@ define( function( require ) {
   var sonificationManager = {
 
     /**
-     * initialize the sonificaiton manager - this function must be invoked before the sonification manager is used
+     * initialize the sonification manager - this function must be invoked before the sonification manager is used
      * @param {BooleanProperty} simVisibleProperty
      * @param {Object} [options]
      */
