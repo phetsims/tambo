@@ -11,7 +11,7 @@ define( function( require ) {
   // modules
   var DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var sonificationManager = require( 'TAMBO/sonificationManager' );
+  var phetAudioContext = require( 'TAMBO/phetAudioContext' );
   var tambo = require( 'TAMBO/tambo' );
 
   // constants
@@ -33,9 +33,9 @@ define( function( require ) {
       // used only for sounds that can play for long durations, such as a looping sound clip.
       associatedViewNode: null,
 
-      // By default, the audio context created and used by the sonification manager is used, but this can be overridden
-      // if desired.  In general, this will only be done for testing.
-      audioContext: sonificationManager.AUDIO_CONTEXT,
+      // By default, the shared audio context is used so that this sound can be registered with the sonification
+      // manager, but this can be overridden if desired.  In general, overriding will only be done for testing.
+      audioContext: phetAudioContext,
 
       // This flag controls whether the output of this sound generator is immediately connected to the audio context
       // destination.  This is useful for testing, but should not be set to true if this sound generator is being used

@@ -10,14 +10,9 @@ define( function( require ) {
 
   // modules
   var inherit = require( 'PHET_CORE/inherit' );
-  var platform = require( 'PHET_CORE/platform' );
   var SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   var tambo = require( 'TAMBO/tambo' );
-
-  // audio
-  // var emptySound = require( 'audio!TAMBO/empty.mp3' );
-  var emptySound = require( 'audio!TAMBO/bright-marimba.mp3' );
 
   /**
    * @param {Object} soundInfo - An object that includes *either* a url that points to the sound to be played *or* a
@@ -47,6 +42,7 @@ define( function( require ) {
         self.loadCompleteAction = null;
       },
       function() {
+
         // we haven't seen this happen, so for now a message is logged to the console and that's it
         console.log( 'Error: Unable to decode audio data.' );
       }
@@ -74,22 +70,6 @@ define( function( require ) {
       this.playbackRate = playbackRate;
     }
   } );
-
-  // Workaround for iOS+Safari: In this situation, we must play an audio file from a thread initiated by a user event
-  // such as touchstart before any sounds will play. This is not possible with scenery, since all scenery events are
-  // batched and dispatched from the animation loop.
-  //
-  // See http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
-  //
-  // Note: This requires the user to touch the screen before audio can be played.
-  if ( platform.mobileSafari ) {
-    var silence = new SoundClip( emptySound );
-    var playSilence = function() {
-      silence.play();
-      window.removeEventListener( 'touchstart', playSilence );
-    };
-    window.addEventListener( 'touchstart', playSilence );
-  }
 
   return SoundClip;
 } );
