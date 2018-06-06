@@ -87,7 +87,7 @@ define( function( require ) {
 
       assert && assert( relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range' );
 
-      if ( !this.isEnabled() ) {
+      if ( !this.fullyEnabled ) {
 
         // ignore the request
         return;

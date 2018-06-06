@@ -11,6 +11,9 @@
   },
   "phet": {
     "requirejsNamespace": "TAMBO",
+    "phetLibs": [
+      "vegas"
+    ],
     "runnable": true,
     "supportedBrands": [
       "phet",

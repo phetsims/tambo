@@ -15,10 +15,15 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
   var NumberProperty = require( 'AXON/NumberProperty' );
 
+  // constants
+  var BELL_SHOWN_TIME = 0.750; // in seconds
+
   /**
    * @constructor
    */
   function UiComponentsModel() {
+
+    var self = this;
 
     // @public {NumberProperty} - a property that is intended to be hooked up to a slider with discrete values
     this.discreteValueProperty = new NumberProperty( 0 );
@@ -29,6 +34,19 @@ define( function( require ) {
     // @public {BooleanProperty} - tracks whether the sound loop should be on
     this.loopOnProperty = new BooleanProperty( false );
 
+    // @public {BooleanProperty} - tracks whether the bell is visible
+    this.bellVisibleProperty = new BooleanProperty( false );
+
+    // @private {Number} - countdown timer used to hide the bell
+    this.bellVisibleTimer = 0;
+
+    // reload the countdown timer when the bell is set to be shown
+    this.bellVisibleProperty.link( function( visible ) {
+      if ( visible ) {
+        self.bellVisibleTimer = BELL_SHOWN_TIME;
+      }
+    } );
+
     // @public {BooleanProperty} - tracks whether a reset is happening
     this.resetInProgressProperty = new BooleanProperty( false );
   }
@@ -37,11 +55,32 @@ define( function( require ) {
 
   return inherit( Object, UiComponentsModel, {
 
+    /**
+     * step the model forward in time, generally called by the framework
+     * @param dt
+     */
+    step: function( dt ) {
+
+      // manage the bell visibility timer
+      if ( this.bellVisibleTimer > 0 ) {
+        this.bellVisibleTimer -= dt;
+        if ( this.bellVisibleTimer <= 0 ) {
+
+          // countdown complete, set visibility to false
+          this.bellVisibleProperty.set( false );
+        }
+      }
+    },
+
+    /**
+     * restore initial state
+     */
     reset: function() {
       this.resetInProgressProperty.set( true );
       this.discreteValueProperty.reset();
       this.continuousValueProperty.reset();
       this.loopOnProperty.reset();
+      this.bellVisibleProperty.reset();
       this.resetInProgressProperty.set( false );
     }
   } );

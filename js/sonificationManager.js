@@ -172,11 +172,12 @@ define( function( require ) {
         ],
         function( enabled, simVisible, sonificationLevel ) {
           soundGeneratorInfoArray.forEach( function( sgInfo ) {
-            sgInfo.soundGenerator.setEnabled(
-              enabled &&
-              simVisible &&
-              (sonificationLevel === 'enhanced' || sgInfo.sonificationLevel === 'basic')
-            );
+            console.log( 'warning: sound generator enabling temporarily bypassed = ' );
+            // sgInfo.soundGenerator.setEnabled(
+            //   enabled &&
+            //   simVisible &&
+            //   (sonificationLevel === 'enhanced' || sgInfo.sonificationLevel === 'basic')
+            // );
           } );
         }
       );

@@ -37,7 +37,7 @@ define( function( require ) {
      */
     start: function() {
 
-      if ( !this.isEnabled() ) {
+      if ( !this.fullyEnabled ) {
 
         // ignore the play request if not enabled
         return;

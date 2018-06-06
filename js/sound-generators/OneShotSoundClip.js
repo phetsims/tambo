@@ -39,7 +39,7 @@ define( function( require ) {
     play: function() {
 
       var self = this;
-      if ( this.isEnabled() ) {
+      if ( this.fullyEnabled ) {
 
         if ( this.soundBuffer ) {
 

@@ -9,8 +9,10 @@ define( function( require ) {
   'use strict';
 
   // modules
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var ObservableArray = require( 'AXON/ObservableArray' );
   var phetAudioContext = require( 'TAMBO/phetAudioContext' );
   var tambo = require( 'TAMBO/tambo' );
 
@@ -49,8 +51,57 @@ define( function( require ) {
     // @private {number}
     this._outputLevel = options.initialOutputLevel;
 
-    // @private {boolean}
-    this._enabled = true;
+    // @private {ObservableArray.<Object>} - A set of objects, each of which contains a boolean property and a flag
+    // that indicates whether the property should be considered 'inverted'.  All propoerties that are non-inverted
+    // have to have a value of true for this sound generator to produce sound, and all properties that are flagged as
+    // inverted have to be false for sound to be produced.  These objects should be added through methods only, please
+    // see the methods for more detail on what these look like.
+    this.enableControlObjects = new ObservableArray();
+
+    // @public (read-only) {BooleanProperty} - A property that tracks whether this sound generator is fully enabled,
+    // meaning that all the enable control properties are in a state indicating that sound can be produced.  This
+    // should only be updated in the listener function defined below, no where else.
+    this.fullyEnabledProperty = new BooleanProperty( true );
+
+    // listener that updates the state of fullyEnabledProperty when any of the enable control properties change
+    function updateFullyEnabledState() {
+
+      var allPositivesEnabled = true;
+      var noInvertedsEnabled = true;
+      self.enableControlObjects.forEach( function( enableControlObject ) {
+        if ( enableControlObject.inverted ) {
+          if ( enableControlObject.enableControlProperty.get() ) {
+            noInvertedsEnabled = false;
+          }
+        }
+        else {
+          if ( !enableControlObject.enableControlProperty.get() ) {
+            allPositivesEnabled = false;
+          }
+        }
+      } );
+
+      self.fullyEnabledProperty.set( allPositivesEnabled && noInvertedsEnabled );
+    }
+
+    // listen for new enable control properties and hook them up as they arrive
+    this.enableControlObjects.addItemAddedListener( function( addedItem ) {
+      addedItem.enableControlProperty.link( updateFullyEnabledState );
+      self.enableControlObjects.addItemRemovedListener( function checkAndRemove( removedItem ) {
+        if ( removedItem === addedItem ) {
+          removedItem.enableControlProperty.unlink( updateFullyEnabledState );
+          self.enableControlObjects.removeItemRemovedListener( checkAndRemove );
+        }
+      } );
+    } );
+
+    // @public (read-only) {BooleanProperty} - A property that tracks whether this sound generator is "locally enabled",
+    // which means that it is internally set to produce sound.  Setting this to true does not guarantee that sound will
+    // be produced, since other properties can all affect this, see fullyEnabledProperty.
+    this.locallyEnabledProperty = new BooleanProperty( true );
+
+    // add the local property to the list of enable controls
+    this.addEnableControlProperty( this.locallyEnabledProperty );
 
     // @protected {GainNode) - master gain control that will be used to control the volume of the sound
     this.masterGainNode = this.audioContext.createGain();
@@ -65,16 +116,27 @@ define( function( require ) {
       this.masterGainNode.connect( this.audioContext.destination );
     }
 
+    // turn down the gain to zero when not fully enabled
+    this.fullyEnabledProperty.link( function( fullyEnabled ) {
+      var now = self.audioContext.currentTime;
+      if ( fullyEnabled ) {
+        self.masterGainNode.gain.setTargetAtTime( self._outputLevel, now, DEFAULT_TIME_CONSTANT );
+      }
+      else {
+        self.masterGainNode.gain.setTargetAtTime( 0, now, DEFAULT_TIME_CONSTANT );
+      }
+    } );
+
     // if a view node was specified, mute the sound if the node is not visible
     var nodeDisplayedProperty = null;
     if ( options.associatedViewNode ) {
       nodeDisplayedProperty = new DisplayedProperty( options.associatedViewNode, phet.joist.display );
       nodeDisplayedProperty.link( function( displayed ) {
-        self.setEnabled( displayed );
+        self.locallyEnabled = displayed;
       } );
     }
 
-    // @private {function} - interally used disposal function
+    // @private {function} - internally used disposal function
     this.disposeSoundGenerator = function() {
       if ( nodeDisplayedProperty ) {
         nodeDisplayedProperty.dispose();
@@ -112,6 +174,38 @@ define( function( require ) {
     },
 
     /**
+     * add a property to the list of those used to control the enabled state of this sound generator
+     * @param {BooleanProperty} enableControlProperty
+     * @param {boolean} [inverted] - optional flag to indicate whether this property should be considered 'inverted',
+     * meaning that it must be false for sound production to occur (something like resetInProgressProperty is a good
+     * example of where this might be used).
+     */
+    addEnableControlProperty: function( enableControlProperty, inverted ) {
+
+      inverted = typeof inverted === 'undefined' ? false : inverted;
+      this.enableControlObjects.push( {
+        enableControlProperty: enableControlProperty,
+        inverted: inverted
+      } );
+    },
+
+    /**
+     * remove the provided enable control property from the list of those being used by this sound generator
+     * @param {BooleanProperty} enableControlProperty
+     */
+    removeEnableControlProperty: function( enableControlProperty ) {
+
+      var itemToRemove = null;
+      for ( var i = 0; i < this.enableControlObjects.length; i++ ) {
+        if ( this.enableControlObjects.get( i ).enableControlProperty === enableControlProperty ) {
+          itemToRemove = this.enableControlObjects.get( i );
+        }
+      }
+      assert && assert( itemToRemove !== null, 'attempt to remove enable control propert that is not preset' );
+      this.enableControlObjects.remove( itemToRemove );
+    },
+
+    /**
      * get the current output level
      * @return {number}
      * @public
@@ -121,28 +215,21 @@ define( function( require ) {
     },
 
     /**
-     * Set this sound generator to be enabled or disabled.  Sets the gain of the master gain node to zero when disabled,
-     * other actions may be needed in subclasses.
-     * @param {boolean} enabled
      * @public
-     * TODO: Need to handle multiple reasons why disabled, and only enable fully if thare are no reasons for it to be
-     * disabled.  Reasons that I (jbphet) can think of: reset in progress, associated node not visible, sim not visible...
      */
-    setEnabled: function( enabled ) {
-      if ( this._enabled !== enabled ) {
-        var now = this.audioContext.currentTime;
-        if ( enabled ) {
-          this.masterGainNode.gain.setTargetAtTime( this._outputLevel, now, DEFAULT_TIME_CONSTANT );
-        }
-        else {
-          this.masterGainNode.gain.setTargetAtTime( 0, now, DEFAULT_TIME_CONSTANT );
-        }
-        this._enabled = enabled;
-      }
+    get locallyEnabled() {
+      return this.locallyEnabledProperty.get();
+    },
+    set locallyEnabled( locallyEnabled ) {
+      this.locallyEnabledProperty.set( locallyEnabled );
     },
 
-    isEnabled: function() {
-      return this._enabled;
+    /**
+     * public
+     * @return {boolean}
+     */
+    get fullyEnabled() {
+      return this.fullyEnabledProperty.get();
     },
 
     /**

@@ -11,7 +11,9 @@ define( function( require ) {
   // modules
   var ABSwitch = require( 'SUN/ABSwitch' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var Checkbox = require( 'SUN/Checkbox' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var FontAwesomeNode = require( 'SUN/FontAwesomeNode' );
   var HSlider = require( 'SUN/HSlider' );
   var inherit = require( 'PHET_CORE/inherit' );
   var KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
@@ -25,6 +27,7 @@ define( function( require ) {
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
 
   // constants
   var SLIDER_MAX = 5;
@@ -32,6 +35,7 @@ define( function( require ) {
 
   // audio
   var chargesInBody = require( 'audio!TAMBO/charges-in-body-better.mp3' );
+  var dingSound = require( 'audio!VEGAS/ding.mp3' );
   var marimbaSound = require( 'audio!TAMBO/bright-marimba.mp3' );
   var sliderIncreaseClickSound = require( 'audio!TAMBO/slider-click-01.mp3' );
   var sliderDecreaseClickSound = require( 'audio!TAMBO/slider-click-02.mp3' );
@@ -146,11 +150,47 @@ define( function( require ) {
       if ( continuousSlider.thumbDragging && (
         mapValueToBin( newValue ) !== mapValueToBin( oldValue ) ||
         newValue === 0 && oldValue !== 0 ||
-        newValue === SLIDER_MAX && oldValue !== SLIDER_MAX) ) {
+        newValue === SLIDER_MAX && oldValue !== SLIDER_MAX ) ) {
 
         playSoundForContinuousValue();
       }
     } );
+
+    // add the button that will cause a bell to be shown for a time
+    var ringBellButton = new TextPushButton( 'Show Eye', {
+      left: discreteSlider.right + 40,
+      centerY: discreteSlider.centerY,
+      listener: function() {
+        model.bellVisibleProperty.set( true );
+      }
+    } );
+    this.addChild( ringBellButton );
+
+    // add the bell that will be shown for a time when the user indicates - note: I (jbphet) decided not to add a bell
+    // icon to FontAwesomeNode, since all nodes go into all sims, but it can be added if we decide we should
+    var bellNode = new FontAwesomeNode( 'eye_open', {
+      centerX: ringBellButton.centerX,
+      bottom: ringBellButton.top - 10,
+      maxWidth: 30
+    } );
+    this.addChild( bellNode );
+    model.bellVisibleProperty.linkAttribute( bellNode, 'visible' );
+
+    // make a sound when the bell appears
+    var ding = new OneShotSoundClip( dingSound );
+    sonificationManager.addSoundGenerator( ding );
+    model.bellVisibleProperty.link( function( visible ) {
+      if ( visible ) {
+        ding.play();
+      }
+    } );
+
+    // add a check box that controls whether the bell sound is played when the bell is shown
+    this.addChild( new Checkbox( new Text( 'Eye Sound' ), ding.locallyEnabledProperty, {
+      boxWidth: 12,
+      left: ringBellButton.right + 5,
+      centerY: ringBellButton.centerY
+    } ) );
 
     // add the reset all button
     var resetAllButton = new ResetAllButton( {
@@ -158,6 +198,7 @@ define( function( require ) {
       bottom: this.layoutBounds.maxY - 20,
       listener: function() {
         model.reset();
+        ding.locallyEnabledProperty.reset();
       }
     } );
     this.addChild( resetAllButton );
