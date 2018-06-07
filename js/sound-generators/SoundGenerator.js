@@ -10,7 +10,6 @@ define( function( require ) {
 
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ObservableArray = require( 'AXON/ObservableArray' );
   var phetAudioContext = require( 'TAMBO/phetAudioContext' );
@@ -30,10 +29,6 @@ define( function( require ) {
     options = _.extend( {
 
       initialOutputLevel: 1,
-
-      // A Scenery node that, if provided, must be visible in the display for the sound to be played.  This is generally
-      // used only for sounds that can play for long durations, such as a looping sound clip.
-      associatedViewNode: null,
 
       // By default, the shared audio context is used so that this sound can be registered with the sonification
       // manager, but this can be overridden if desired.  In general, overriding will only be done for testing.
@@ -127,20 +122,9 @@ define( function( require ) {
       }
     } );
 
-    // if a view node was specified, mute the sound if the node is not visible
-    var nodeDisplayedProperty = null;
-    if ( options.associatedViewNode ) {
-      nodeDisplayedProperty = new DisplayedProperty( options.associatedViewNode, phet.joist.display );
-      nodeDisplayedProperty.link( function( displayed ) {
-        self.locallyEnabled = displayed;
-      } );
-    }
-
     // @private {function} - internally used disposal function
     this.disposeSoundGenerator = function() {
-      if ( nodeDisplayedProperty ) {
-        nodeDisplayedProperty.dispose();
-      }
+      // TODO: Fill this in.
     };
   }
 

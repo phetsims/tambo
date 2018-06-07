@@ -21,6 +21,7 @@ define( function( require ) {
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Display = require( 'SCENERY/display/Display' );
+  var DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var phetAudioContext = require( 'TAMBO/phetAudioContext' );
   var platform = require( 'PHET_CORE/platform' );
@@ -200,6 +201,10 @@ define( function( require ) {
         // the sonification level parameter for the sim.  Valid values are 'basic' or 'enhanced'.
         sonificationLevel: 'basic',
 
+        // A Scenery node that, if provided, must be visible in the display for the sound generator to be enabled.  This
+        // is generally used only for sounds that can play for long durations, such as a looping sound clip.
+        associatedViewNode: null,
+
         // class name for this sound, which can be used to group sounds together an control them as a group
         className: null
       }, options );
@@ -224,7 +229,7 @@ define( function( require ) {
       // create the registration ID for this sound generator
       var id = 'sg-' + nextIdNumber++;
 
-      // register the sound generator along with additional information about it
+      // keep a record of the sound generator along with additional information about it
       var soundGeneratorInfo = {
         soundGenerator: soundGenerator,
         disabledDuringReset: options.disabledDuringReset,
@@ -235,6 +240,13 @@ define( function( require ) {
       // if this sound generator is only enabled in enhanced mode, add the enhanced mode property as an enable control
       if ( options.sonificationLevel === 'enhanced' ) {
         soundGenerator.addEnableControlProperty( enhancedLevelEnabled );
+      }
+
+      // if a view node was specified, create and pass in a boolean property that is true only when the node is displayed
+      if ( options.associatedViewNode ) {
+        soundGenerator.addEnableControlProperty(
+          new DisplayedProperty( options.associatedViewNode, phet.joist.display )
+        );
       }
 
       return id;
