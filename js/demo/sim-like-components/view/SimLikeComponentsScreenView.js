@@ -133,6 +133,9 @@ define( function( require ) {
       centerY: resetAllButton.centerY
     } );
     this.addChild( soundToggleButton );
+
+    // hook up the reset-in-progress property to the sonification manager so sounds can be muted during reset
+    sonificationManager.addResetInProgressProperty( model.resetInProgressProperty );
   }
 
   tambo.register( 'SimLikeComponentsScreenView', SimLikeComponentsScreenView );

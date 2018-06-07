@@ -90,6 +90,17 @@ define( function( require ) {
     }
   );
 
+  // list of reset-in-progress properties, one should be supplied for each screen
+  var resetInProgressProperties = [];
+
+  // a local reset-in-progress property that is true if any reset on any screen is in progress
+  var resetInProgressProperty = new BooleanProperty( false );
+
+  // TODO: temporary for testing
+  resetInProgressProperty.link( function( rip ) {
+    console.log( 'rip = ' + rip );
+  } );
+
   // @private {BooleanProperty} - a Property whose value is true when in enhance sonification mode, false when in basic
   var enhancedLevelEnabled = new BooleanProperty( false );
   sonificationLevelProperty.link( function( sonificationLevel ) {
@@ -98,9 +109,6 @@ define( function( require ) {
 
   // create the gain nodes for each of the defined "classes" and hook them up, will be defined during init
   var gainNodesForClasses = {};
-
-  // flag that tracks whether the sonification manager has been initialized
-  var initialized = false;
 
   // Below is some platform-specific code for handling some issues related to audio.  It may be possible to remove some
   // or all of this as Web Audio becomes more consistently implemented.
@@ -141,6 +149,9 @@ define( function( require ) {
       window.addEventListener( 'touchstart', playSilence, false );
     }
   }
+
+  // flag that tracks whether the sonification manager has been initialized
+  var initialized = false;
 
   /**
    * sonification manager object definition
@@ -397,7 +408,27 @@ define( function( require ) {
      * property that corresponds to the sonification level setting
      * @public (read-only)
      */
-    sonificationLevelProperty: sonificationLevelProperty
+    sonificationLevelProperty: sonificationLevelProperty,
+
+    /**
+     * add a property that indicates that a reset is in progress for a screen, should be called 1x per screen
+     * @param {BooleanProperty} resetProperty
+     */
+    addResetInProgressProperty: function( resetProperty ) {
+
+      // keep a reference
+      resetInProgressProperties.push( resetProperty );
+
+      // update the local, collective property that tracks whether any reset is in progress
+      resetProperty.link( function() {
+        var resetInProgress = _.some( resetInProgressProperties, function( ripp ) {
+          return ripp.value;
+        } );
+        resetInProgressProperty.set( resetInProgress );
+      } );
+
+      // no need to unhook anything since reset-in-progress properties are not expected to be removed
+    }
   };
 
   tambo.register( 'sonificationManager', sonificationManager );
