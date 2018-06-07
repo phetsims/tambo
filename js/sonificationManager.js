@@ -53,6 +53,15 @@ define( function( require ) {
   var masterGainNode = phetAudioContext.createGain();
   masterGainNode.connect( phetAudioContext.destination );
 
+  // output level for the master gain node when sonification is enabled
+  var masterOutputLevel = 1;
+
+  // hook up a listener that turns down the gain if sonification is disabled
+  enabledProperty.link( function( enabled ) {
+    var gain = enabled ? masterOutputLevel : 0;
+    masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+  } );
+
   // convolver node, which will be used to create the reverb effect
   var convolver = phetAudioContext.createConvolver();
 
@@ -270,7 +279,7 @@ define( function( require ) {
 
     /**
      * set the master output level for sonification
-     * @param {number} outputLevel - valid values from 0 through 1
+     * @param {number} outputLevel - valid values from 0 (min) through 1 (max)
      * @public
      */
     setOutputLevel: function( outputLevel ) {
@@ -278,7 +287,10 @@ define( function( require ) {
       // range check
       assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range' );
 
-      masterGainNode.gain.setValueAtTime( outputLevel, phetAudioContext.currentTime );
+      masterOutputLevel = outputLevel;
+      if ( enabledProperty.get() ) {
+        masterGainNode.gain.setTargetAtTime( outputLevel, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+      }
     },
 
     /**
@@ -286,7 +298,7 @@ define( function( require ) {
      * @return {number}
      */
     getOutputLevel: function() {
-      return masterGainNode.gain.value;
+      return masterOutputLevel;
     },
 
     /**
