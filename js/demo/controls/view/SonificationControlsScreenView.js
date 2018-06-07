@@ -13,11 +13,17 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var sonificationManager = require( 'TAMBO/sonificationManager' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
+  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+
+  // audio
+  var marimbaSound = require( 'audio!TAMBO/bright-marimba.mp3' );
+  var clickSound = require( 'audio!TAMBO/slider-click-01.mp3' );
 
   /**
    * @constructor
@@ -38,6 +44,28 @@ define( function( require ) {
       { switchSize: new Dimension2( 40, 20 ), left: 100, top: 200 }
     );
     this.addChild( abSwitch );
+
+    // create two one-shot sounds, one for basic mode and one for enhanced
+    var basicModeOneShotSound = new OneShotSoundClip( marimbaSound );
+    sonificationManager.addSoundGenerator( basicModeOneShotSound );
+    var enhancedModeOneShotSound = new OneShotSoundClip( clickSound );
+    sonificationManager.addSoundGenerator( enhancedModeOneShotSound, { sonificationLevel: 'enhanced' } );
+
+    // add a button to play a basic-mode sound
+    this.addChild( new TextPushButton( 'Play Basic-Level Sound', {
+      listener: function() { basicModeOneShotSound.play(); },
+      baseColor: '#aad6cc',
+      left: abSwitch.left,
+      top: abSwitch.bottom + 10
+    } ) );
+
+    // add button to play enhanced-mode sound
+    this.addChild( new TextPushButton( 'Play Enhanced-Level Sound', {
+      listener: function() { enhancedModeOneShotSound.play(); },
+      baseColor: '#DBB1CD',
+      left: abSwitch.left,
+      top: abSwitch.bottom + 40
+    } ) );
 
     // add the sound toggle button
     var soundToggleButton = new SoundToggleButton( sonificationManager.enabledProperty, {

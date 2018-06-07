@@ -21,7 +21,6 @@ define( function( require ) {
   // modules
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Display = require( 'SCENERY/display/Display' );
-  var Multilink = require( 'AXON/Multilink' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var phetAudioContext = require( 'TAMBO/phetAudioContext' );
   var platform = require( 'PHET_CORE/platform' );
@@ -89,6 +88,12 @@ define( function( require ) {
       console.log( 'Error: Unable to decode audio data.' );
     }
   );
+
+  // @private {BooleanProperty} - a Property whose value is true when in enhance sonification mode, false when in basic
+  var enhancedLevelEnabled = new BooleanProperty( false );
+  sonificationLevelProperty.link( function( sonificationLevel ) {
+    enhancedLevelEnabled.set( sonificationLevel === 'enhanced' );
+  } );
 
   // create the gain nodes for each of the defined "classes" and hook them up, will be defined during init
   var gainNodesForClasses = {};
@@ -172,25 +177,6 @@ define( function( require ) {
         gainNodesForClasses[ className ] = gainNode;
       } );
 
-      // set up the multilink that will enable and disable the sound generators as the conditions in the sim change
-      this.soundControlMultilink = new Multilink(
-        [
-          enabledProperty,
-          simVisibleProperty,
-          sonificationLevelProperty
-        ],
-        function( enabled, simVisible, sonificationLevel ) {
-          soundGeneratorInfoArray.forEach( function( sgInfo ) {
-            console.log( 'warning: sound generator enabling temporarily bypassed = ' );
-            // sgInfo.soundGenerator.setEnabled(
-            //   enabled &&
-            //   simVisible &&
-            //   (sonificationLevel === 'enhanced' || sgInfo.sonificationLevel === 'basic')
-            // );
-          } );
-        }
-      );
-
       initialized = true;
     },
 
@@ -220,7 +206,7 @@ define( function( require ) {
 
       // validate the options
       assert && assert(
-        !(options.connect === false && options.className),
+        !( options.connect === false && options.className ),
         'must connect sound generator if it is in a class'
       );
 
@@ -245,6 +231,11 @@ define( function( require ) {
         sonificationLevel: options.sonificationLevel
       };
       soundGeneratorInfoArray.push( soundGeneratorInfo );
+
+      // if this sound generator is only enabled in enhanced mode, add the enhanced mode property as an enable control
+      if ( options.sonificationLevel === 'enhanced' ) {
+        soundGenerator.addEnableControlProperty( enhancedLevelEnabled );
+      }
 
       return id;
     },
