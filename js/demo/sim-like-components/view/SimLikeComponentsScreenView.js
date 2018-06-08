@@ -81,7 +81,7 @@ define( function( require ) {
 
     // generate sound when balls are added or removed
     var pitchedPopGenerator = new PitchedPopGenerator();
-    sonificationManager.addSoundGenerator( pitchedPopGenerator );
+    sonificationManager.addSoundGenerator( pitchedPopGenerator, { disabledDuringReset: true } );
     model.boxOfBalls.balls.lengthProperty.lazyLink( function( numBalls ) {
       pitchedPopGenerator.playPop( numBalls / MAX_BALLS );
     } );

@@ -96,11 +96,6 @@ define( function( require ) {
   // a local reset-in-progress property that is true if any reset on any screen is in progress
   var resetInProgressProperty = new BooleanProperty( false );
 
-  // TODO: temporary for testing
-  resetInProgressProperty.link( function( rip ) {
-    console.log( 'rip = ' + rip );
-  } );
-
   // @private {BooleanProperty} - a Property whose value is true when in enhance sonification mode, false when in basic
   var enhancedLevelEnabled = new BooleanProperty( false );
   sonificationLevelProperty.link( function( sonificationLevel ) {
@@ -206,7 +201,7 @@ define( function( require ) {
       // default options
       options = _.extend( {
         connect: true,
-        disabledDuringReset: true,
+        disabledDuringReset: false,
 
         // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of
         // the sonification level parameter for the sim.  Valid values are 'basic' or 'enhanced'.
@@ -247,6 +242,11 @@ define( function( require ) {
         sonificationLevel: options.sonificationLevel
       };
       soundGeneratorInfoArray.push( soundGeneratorInfo );
+
+      // if this sound generator should be disabled during reset, add an "enable control" property to make that happen
+      if ( options.disabledDuringReset ) {
+        soundGenerator.addEnableControlProperty( resetInProgressProperty, true );
+      }
 
       // if this sound generator is only enabled in enhanced mode, add the enhanced mode property as an enable control
       if ( options.sonificationLevel === 'enhanced' ) {

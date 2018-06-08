@@ -66,7 +66,7 @@ define( function( require ) {
     var increaseClickSound = new OneShotSoundClip( sliderIncreaseClickSound );
     sonificationManager.addSoundGenerator( increaseClickSound );
     var decreaseClickSound = new OneShotSoundClip( sliderDecreaseClickSound );
-    sonificationManager.addSoundGenerator( decreaseClickSound );
+    sonificationManager.addSoundGenerator( decreaseClickSound, { disabledDuringReset: true } );
     model.discreteValueProperty.lazyLink( function( newValue, oldValue ) {
       if ( newValue > oldValue ) {
         increaseClickSound.play();
