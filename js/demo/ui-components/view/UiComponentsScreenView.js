@@ -13,8 +13,8 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var Checkbox = require( 'SUN/Checkbox' );
   var Dimension2 = require( 'DOT/Dimension2' );
-  var FontAwesomeNode = require( 'SUN/FontAwesomeNode' );
   var HSlider = require( 'SUN/HSlider' );
+  var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
   var LoopingSoundClip = require( 'TAMBO/sound-generators/LoopingSoundClip' );
@@ -32,6 +32,9 @@ define( function( require ) {
   // constants
   var SLIDER_MAX = 5;
   var NUM_TICK_MARKS = SLIDER_MAX + 1;
+
+  // images
+  var lightningImage = require( 'image!TAMBO/lightning.png' );
 
   // audio
   var chargesInBody = require( 'audio!TAMBO/charges-in-body-better.mp3' );
@@ -154,40 +157,39 @@ define( function( require ) {
       }
     } );
 
-    // add the button that will cause a bell to be shown for a time
-    var ringBellButton = new TextPushButton( 'Show Eye', {
+    // add the button that will cause a lightening bolt to be shown for a time
+    var fireLightningButton = new TextPushButton( 'Lightning', {
       left: discreteSlider.right + 40,
       centerY: discreteSlider.centerY,
       listener: function() {
-        model.bellVisibleProperty.set( true );
+        model.lightningBoltVisibleProperty.set( true );
       }
     } );
-    this.addChild( ringBellButton );
+    this.addChild( fireLightningButton );
 
-    // add the bell that will be shown for a time when the user indicates - note: I (jbphet) decided not to add a bell
-    // icon to FontAwesomeNode, since all nodes go into all sims, but it can be added if we decide we should
-    var bellNode = new FontAwesomeNode( 'eye_open', {
-      centerX: ringBellButton.centerX,
-      bottom: ringBellButton.top - 10,
-      maxWidth: 30
+    // add the lightning bolt that will be shown for a time when the user indicates
+    var lightningNode = new Image( lightningImage, {
+      left: fireLightningButton.left,
+      top: fireLightningButton.bottom,
+      maxHeight: 40
     } );
-    this.addChild( bellNode );
-    model.bellVisibleProperty.linkAttribute( bellNode, 'visible' );
+    this.addChild( lightningNode );
+    model.lightningBoltVisibleProperty.linkAttribute( lightningNode, 'visible' );
 
-    // make a sound when the bell appears
+    // make a sound when the lightning bolt appears
     var ding = new OneShotSoundClip( dingSound );
     sonificationManager.addSoundGenerator( ding );
-    model.bellVisibleProperty.link( function( visible ) {
+    model.lightningBoltVisibleProperty.link( function( visible ) {
       if ( visible ) {
         ding.play();
       }
     } );
 
-    // add a check box that controls whether the bell sound is played when the bell is shown
-    this.addChild( new Checkbox( new Text( 'Eye Sound' ), ding.locallyEnabledProperty, {
+    // add a check box that controls whether the thunder sound is played when the lightning bolt is shown
+    this.addChild( new Checkbox( new Text( 'Thunder' ), ding.locallyEnabledProperty, {
       boxWidth: 12,
-      left: ringBellButton.right + 5,
-      centerY: ringBellButton.centerY
+      left: fireLightningButton.right + 5,
+      centerY: fireLightningButton.centerY
     } ) );
 
     // add the reset all button

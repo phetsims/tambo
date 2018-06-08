@@ -34,16 +34,16 @@ define( function( require ) {
     // @public {BooleanProperty} - tracks whether the sound loop should be on
     this.loopOnProperty = new BooleanProperty( false );
 
-    // @public {BooleanProperty} - tracks whether the bell is visible
-    this.bellVisibleProperty = new BooleanProperty( false );
+    // @public {BooleanProperty} - tracks whether the lightning bolt is visible
+    this.lightningBoltVisibleProperty = new BooleanProperty( false );
 
-    // @private {Number} - countdown timer used to hide the bell
-    this.bellVisibleTimer = 0;
+    // @private {Number} - countdown timer used to hide the lightning bolt
+    this.lightningBoltVisibleTimer = 0;
 
-    // reload the countdown timer when the bell is set to be shown
-    this.bellVisibleProperty.link( function( visible ) {
+    // reload the countdown timer when the lightning bolt is set to be shown
+    this.lightningBoltVisibleProperty.link( function( visible ) {
       if ( visible ) {
-        self.bellVisibleTimer = BELL_SHOWN_TIME;
+        self.lightningBoltVisibleTimer = BELL_SHOWN_TIME;
       }
     } );
 
@@ -61,13 +61,13 @@ define( function( require ) {
      */
     step: function( dt ) {
 
-      // manage the bell visibility timer
-      if ( this.bellVisibleTimer > 0 ) {
-        this.bellVisibleTimer -= dt;
-        if ( this.bellVisibleTimer <= 0 ) {
+      // manage the lightning visibility timer
+      if ( this.lightningBoltVisibleTimer > 0 ) {
+        this.lightningBoltVisibleTimer -= dt;
+        if ( this.lightningBoltVisibleTimer <= 0 ) {
 
           // countdown complete, set visibility to false
-          this.bellVisibleProperty.set( false );
+          this.lightningBoltVisibleProperty.set( false );
         }
       }
     },
@@ -80,7 +80,7 @@ define( function( require ) {
       this.discreteValueProperty.reset();
       this.continuousValueProperty.reset();
       this.loopOnProperty.reset();
-      this.bellVisibleProperty.reset();
+      this.lightningBoltVisibleProperty.reset();
       this.resetInProgressProperty.set( false );
     }
   } );
