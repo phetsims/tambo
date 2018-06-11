@@ -38,8 +38,12 @@ define( function( require ) {
     // add sounds
 
     // @public (read-only) {SoundClip} - make these available so that the output level can be adjusted
-    this.wallContactSound = new OneShotSoundClip( wallContactSound );
-    this.ceilingFloorContactSound = new OneShotSoundClip( ceilingFloorContactSound );
+    this.wallContactSound = new OneShotSoundClip( wallContactSound, {
+      initialOutputLevel: 0.3
+    } );
+    this.ceilingFloorContactSound = new OneShotSoundClip( ceilingFloorContactSound, {
+      initialOutputLevel: 0.3
+    } );
 
     // add the sound generators
     sonificationManager.addSoundGenerator( this.wallContactSound );
