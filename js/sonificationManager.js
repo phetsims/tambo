@@ -25,6 +25,7 @@ define( function( require ) {
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var phetAudioContext = require( 'TAMBO/phetAudioContext' );
   var platform = require( 'PHET_CORE/platform' );
+  var Property = require( 'AXON/Property' );
   var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   var StringProperty = require( 'AXON/StringProperty' );
   var tambo = require( 'TAMBO/tambo' );
@@ -55,12 +56,6 @@ define( function( require ) {
 
   // output level for the master gain node when sonification is enabled
   var masterOutputLevel = 1;
-
-  // hook up a listener that turns down the gain if sonification is disabled
-  enabledProperty.link( function( enabled ) {
-    var gain = enabled ? masterOutputLevel : 0;
-    masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
-  } );
 
   // convolver node, which will be used to create the reverb effect
   var convolver = phetAudioContext.createConvolver();
@@ -183,6 +178,15 @@ define( function( require ) {
         gainNode.connect( dryGainNode );
         gainNodesForClasses[ className ] = gainNode;
       } );
+
+      // hook up a listener that turns down the gain if sonification is disabled or the sim isn't visible
+      Property.multilink(
+        [ this.enabledProperty, simVisibleProperty ],
+        function( enabled, simVisible ) {
+          var gain = enabled && simVisible ? masterOutputLevel : 0;
+          masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+        }
+      );
 
       initialized = true;
     },
