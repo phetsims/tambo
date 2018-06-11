@@ -38,10 +38,10 @@ define( function( require ) {
 
   // audio
   var chargesInBody = require( 'audio!TAMBO/charges-in-body-better.mp3' );
-  var dingSound = require( 'audio!VEGAS/ding.mp3' );
   var marimbaSound = require( 'audio!TAMBO/bright-marimba.mp3' );
   var sliderIncreaseClickSound = require( 'audio!TAMBO/slider-click-01.mp3' );
   var sliderDecreaseClickSound = require( 'audio!TAMBO/slider-click-02.mp3' );
+  var thunderSound = require( 'audio!TAMBO/thunder.mp3' );
 
   /**
    * @constructor
@@ -167,6 +167,11 @@ define( function( require ) {
     } );
     this.addChild( fireLightningButton );
 
+    // disable button while lightning is visible
+    model.lightningBoltVisibleProperty.link( function( lightningBoltVisible ) {
+      fireLightningButton.enabled = !lightningBoltVisible;
+    } );
+
     // add the lightning bolt that will be shown for a time when the user indicates
     var lightningNode = new Image( lightningImage, {
       left: fireLightningButton.left,
@@ -177,16 +182,16 @@ define( function( require ) {
     model.lightningBoltVisibleProperty.linkAttribute( lightningNode, 'visible' );
 
     // make a sound when the lightning bolt appears
-    var ding = new OneShotSoundClip( dingSound );
-    sonificationManager.addSoundGenerator( ding );
+    var thunder = new OneShotSoundClip( thunderSound );
+    sonificationManager.addSoundGenerator( thunder );
     model.lightningBoltVisibleProperty.link( function( visible ) {
       if ( visible ) {
-        ding.play();
+        thunder.play();
       }
     } );
 
     // add a check box that controls whether the thunder sound is played when the lightning bolt is shown
-    this.addChild( new Checkbox( new Text( 'Thunder' ), ding.locallyEnabledProperty, {
+    this.addChild( new Checkbox( new Text( 'Thunder' ), thunder.locallyEnabledProperty, {
       boxWidth: 12,
       left: fireLightningButton.right + 5,
       centerY: fireLightningButton.centerY
@@ -198,7 +203,7 @@ define( function( require ) {
       bottom: this.layoutBounds.maxY - 20,
       listener: function() {
         model.reset();
-        ding.locallyEnabledProperty.reset();
+        thunder.locallyEnabledProperty.reset();
       }
     } );
     this.addChild( resetAllButton );
