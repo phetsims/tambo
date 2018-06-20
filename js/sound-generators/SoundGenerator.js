@@ -46,46 +46,31 @@ define( function( require ) {
     // @private {number}
     this._outputLevel = options.initialOutputLevel;
 
-    // @private {ObservableArray.<Object>} - A set of objects, each of which contains a boolean property and a flag
-    // that indicates whether the property should be considered 'inverted'.  All propoerties that are non-inverted
-    // have to have a value of true for this sound generator to produce sound, and all properties that are flagged as
-    // inverted have to be false for sound to be produced.  These objects should be added through methods only, please
-    // see the methods for more detail on what these look like.
-    this.enableControlObjects = new ObservableArray();
+    // @private {ObservableArray.<BooleanProperty>} - A set of boolean properties that collectively control whether the
+    // sound generator is enabled.  All of these must be true in order for the sound generator to be able "fully
+    // enabled", meaning that it will produce sound.
+    this.enableControlProperties = new ObservableArray();
 
     // @public (read-only) {BooleanProperty} - A property that tracks whether this sound generator is fully enabled,
     // meaning that all the enable control properties are in a state indicating that sound can be produced.  This
     // should only be updated in the listener function defined below, no where else.
     this.fullyEnabledProperty = new BooleanProperty( true );
 
-    // listener that updates the state of fullyEnabledProperty when any of the enable control properties change
+    // listener that updates the state of fullyEnabledProperty
     function updateFullyEnabledState() {
-
-      var allPositivesEnabled = true;
-      var noInvertedsEnabled = true;
-      self.enableControlObjects.forEach( function( enableControlObject ) {
-        if ( enableControlObject.inverted ) {
-          if ( enableControlObject.enableControlProperty.get() ) {
-            noInvertedsEnabled = false;
-          }
-        }
-        else {
-          if ( !enableControlObject.enableControlProperty.get() ) {
-            allPositivesEnabled = false;
-          }
-        }
-      } );
-
-      self.fullyEnabledProperty.set( allPositivesEnabled && noInvertedsEnabled );
+      self.fullyEnabledProperty.set( _.every(
+        self.enableControlProperties.getArray(),
+        function( enableControlProperty ) { return enableControlProperty.value; }
+      ) );
     }
 
     // listen for new enable control properties and hook them up as they arrive
-    this.enableControlObjects.addItemAddedListener( function( addedItem ) {
-      addedItem.enableControlProperty.link( updateFullyEnabledState );
-      self.enableControlObjects.addItemRemovedListener( function checkAndRemove( removedItem ) {
+    this.enableControlProperties.addItemAddedListener( function( addedItem ) {
+      addedItem.link( updateFullyEnabledState );
+      self.enableControlProperties.addItemRemovedListener( function checkAndRemove( removedItem ) {
         if ( removedItem === addedItem ) {
-          removedItem.enableControlProperty.unlink( updateFullyEnabledState );
-          self.enableControlObjects.removeItemRemovedListener( checkAndRemove );
+          removedItem.unlink( updateFullyEnabledState );
+          self.enableControlProperties.removeItemRemovedListener( checkAndRemove );
         }
       } );
     } );
@@ -160,17 +145,9 @@ define( function( require ) {
     /**
      * add a property to the list of those used to control the enabled state of this sound generator
      * @param {BooleanProperty} enableControlProperty
-     * @param {boolean} [inverted] - optional flag to indicate whether this property should be considered 'inverted',
-     * meaning that it must be false for sound production to occur (something like resetInProgressProperty is a good
-     * example of where this might be used).
      */
-    addEnableControlProperty: function( enableControlProperty, inverted ) {
-
-      inverted = typeof inverted === 'undefined' ? false : inverted;
-      this.enableControlObjects.push( {
-        enableControlProperty: enableControlProperty,
-        inverted: inverted
-      } );
+    addEnableControlProperty: function( enableControlProperty ) {
+      this.enableControlProperties.push( enableControlProperty );
     },
 
     /**
@@ -178,15 +155,7 @@ define( function( require ) {
      * @param {BooleanProperty} enableControlProperty
      */
     removeEnableControlProperty: function( enableControlProperty ) {
-
-      var itemToRemove = null;
-      for ( var i = 0; i < this.enableControlObjects.length; i++ ) {
-        if ( this.enableControlObjects.get( i ).enableControlProperty === enableControlProperty ) {
-          itemToRemove = this.enableControlObjects.get( i );
-        }
-      }
-      assert && assert( itemToRemove !== null, 'attempt to remove enable control propert that is not preset' );
-      this.enableControlObjects.remove( itemToRemove );
+      this.enableControlProperties.remove( enableControlProperty );
     },
 
     /**

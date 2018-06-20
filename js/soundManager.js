@@ -88,8 +88,9 @@ define( function( require ) {
   // list of reset-in-progress properties, one should be supplied for each screen
   var resetInProgressProperties = [];
 
-  // a local reset-in-progress property that is true if any reset on any screen is in progress
-  var resetInProgressProperty = new BooleanProperty( false );
+  // a local property that is true when no resets are happening (which would presumably be most of the time) and goes
+  // false when a reset is in progress
+  var noResetInProgressProperty = new BooleanProperty( true );
 
   // @private {BooleanProperty} - a Property whose value is true when in enhance sonification mode, false when in basic
   var enhancedLevelEnabled = new BooleanProperty( false );
@@ -249,7 +250,7 @@ define( function( require ) {
 
       // if this sound generator should be disabled during reset, add an "enable control" property to make that happen
       if ( options.disabledDuringReset ) {
-        soundGenerator.addEnableControlProperty( resetInProgressProperty, true );
+        soundGenerator.addEnableControlProperty( noResetInProgressProperty );
       }
 
       // if this sound generator is only enabled in enhanced mode, add the enhanced mode property as an enable control
@@ -428,7 +429,7 @@ define( function( require ) {
         var resetInProgress = _.some( resetInProgressProperties, function( ripp ) {
           return ripp.value;
         } );
-        resetInProgressProperty.set( resetInProgress );
+        noResetInProgressProperty.set( !resetInProgress );
       } );
 
       // no need to unhook anything since reset-in-progress properties are not expected to be removed
