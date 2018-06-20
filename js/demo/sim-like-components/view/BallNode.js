@@ -8,7 +8,7 @@ define( function( require ) {
 
   var Circle = require( 'SCENERY/nodes/Circle' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var sonificationManager = require( 'TAMBO/sonificationManager' );
+  var soundManager = require( 'TAMBO/soundManager' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var tambo = require( 'TAMBO/tambo' );
 
@@ -46,8 +46,8 @@ define( function( require ) {
     } );
 
     // add the sound generators
-    sonificationManager.addSoundGenerator( this.wallContactSound );
-    sonificationManager.addSoundGenerator( this.ceilingFloorContactSound );
+    soundManager.addSoundGenerator( this.wallContactSound );
+    soundManager.addSoundGenerator( this.ceilingFloorContactSound );
 
     // play bounces when the ball bounces
     var bounceListener = function( bounceSurface ) {
@@ -62,8 +62,8 @@ define( function( require ) {
 
     this.disposeBallNode = function() {
       ball.bounceEmitter.removeListener( bounceListener );
-      sonificationManager.removeSoundGenerator( this.wallContactSound );
-      sonificationManager.removeSoundGenerator( this.ceilingFloorContactSound );
+      soundManager.removeSoundGenerator( this.wallContactSound );
+      soundManager.removeSoundGenerator( this.ceilingFloorContactSound );
     };
   }
 

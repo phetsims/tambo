@@ -23,7 +23,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var sonificationManager = require( 'TAMBO/sonificationManager' );
+  var soundManager = require( 'TAMBO/soundManager' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -43,8 +43,8 @@ define( function( require ) {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
     } );
 
-    // TODO: The following is temporarily here until init of sonificationManager is moved into Sim.js.
-    sonificationManager.initialize(
+    // TODO: The following is temporarily here until init of soundManager is moved into Sim.js.
+    soundManager.initialize(
       phet.joist.sim.browserTabVisibleProperty
     );
 
@@ -81,7 +81,7 @@ define( function( require ) {
 
     // generate sound when balls are added or removed
     var pitchedPopGenerator = new PitchedPopGenerator();
-    sonificationManager.addSoundGenerator( pitchedPopGenerator, { disabledDuringReset: true } );
+    soundManager.addSoundGenerator( pitchedPopGenerator, { disabledDuringReset: true } );
     model.boxOfBalls.balls.lengthProperty.lazyLink( function( numBalls ) {
       pitchedPopGenerator.playPop( numBalls / MAX_BALLS );
     } );
@@ -125,17 +125,17 @@ define( function( require ) {
       }
     } );
     this.addChild( resetAllButton );
-    sonificationManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
+    soundManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
 
     // add the sound toggle button
-    var soundToggleButton = new SoundToggleButton( sonificationManager.enabledProperty, {
+    var soundToggleButton = new SoundToggleButton( soundManager.enabledProperty, {
       right: resetAllButton.left - 10,
       centerY: resetAllButton.centerY
     } );
     this.addChild( soundToggleButton );
 
     // hook up the reset-in-progress property to the sonification manager so sounds can be muted during reset
-    sonificationManager.addResetInProgressProperty( model.resetInProgressProperty );
+    soundManager.addResetInProgressProperty( model.resetInProgressProperty );
   }
 
   tambo.register( 'SimLikeComponentsScreenView', SimLikeComponentsScreenView );

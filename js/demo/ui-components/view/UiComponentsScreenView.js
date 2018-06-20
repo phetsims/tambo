@@ -23,7 +23,7 @@ define( function( require ) {
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var sonificationManager = require( 'TAMBO/sonificationManager' );
+  var soundManager = require( 'TAMBO/soundManager' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -67,9 +67,9 @@ define( function( require ) {
 
     // add a sound generator that will play a sound when the value controlled by the slider changes
     var increaseClickSound = new OneShotSoundClip( sliderIncreaseClickSound );
-    sonificationManager.addSoundGenerator( increaseClickSound );
+    soundManager.addSoundGenerator( increaseClickSound );
     var decreaseClickSound = new OneShotSoundClip( sliderDecreaseClickSound );
-    sonificationManager.addSoundGenerator( decreaseClickSound, { disabledDuringReset: true } );
+    soundManager.addSoundGenerator( decreaseClickSound, { disabledDuringReset: true } );
     model.discreteValueProperty.lazyLink( function( newValue, oldValue ) {
       if ( newValue > oldValue ) {
         increaseClickSound.play();
@@ -92,7 +92,7 @@ define( function( require ) {
 
     // add a looping sound that is turned on/off by the switch
     var loopingSound = new LoopingSoundClip( chargesInBody );
-    sonificationManager.addSoundGenerator( loopingSound, { associatedViewNode: abSwitch } );
+    soundManager.addSoundGenerator( loopingSound, { associatedViewNode: abSwitch } );
     model.loopOnProperty.link( function( loopOn ) {
 
       // start the loop the first time the switch is set to the on position
@@ -116,7 +116,7 @@ define( function( require ) {
     // Play a sound when certain threshold values are crossed by the continuous property value, or when a change occurs
     // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
     var marimbaSoundGenerator = new OneShotSoundClip( marimbaSound );
-    sonificationManager.addSoundGenerator( marimbaSoundGenerator );
+    soundManager.addSoundGenerator( marimbaSoundGenerator );
 
     // define a function that will play the marimba sound at a pitch value based on the continuous value property
     function playSoundForContinuousValue() {
@@ -183,7 +183,7 @@ define( function( require ) {
 
     // make a sound when the lightning bolt appears
     var thunder = new OneShotSoundClip( thunderSound );
-    sonificationManager.addSoundGenerator( thunder );
+    soundManager.addSoundGenerator( thunder );
     model.lightningBoltVisibleProperty.link( function( visible ) {
       if ( visible ) {
         thunder.play();
@@ -207,17 +207,17 @@ define( function( require ) {
       }
     } );
     this.addChild( resetAllButton );
-    sonificationManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
+    soundManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
 
     // add the sound toggle button
-    var soundToggleButton = new SoundToggleButton( sonificationManager.enabledProperty, {
+    var soundToggleButton = new SoundToggleButton( soundManager.enabledProperty, {
       right: resetAllButton.left - 10,
       centerY: resetAllButton.centerY
     } );
     this.addChild( soundToggleButton );
 
     // hook up the reset-in-progress property to the sonification manager so sounds can be muted during reset
-    sonificationManager.addResetInProgressProperty( model.resetInProgressProperty );
+    soundManager.addResetInProgressProperty( model.resetInProgressProperty );
   }
 
   tambo.register( 'UiComponentsScreenView', UiComponentsScreenView );

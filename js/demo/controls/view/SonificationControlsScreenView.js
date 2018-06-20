@@ -15,7 +15,7 @@ define( function( require ) {
   var inherit = require( 'PHET_CORE/inherit' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var ScreenView = require( 'JOIST/ScreenView' );
-  var sonificationManager = require( 'TAMBO/sonificationManager' );
+  var soundManager = require( 'TAMBO/soundManager' );
   var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -36,7 +36,7 @@ define( function( require ) {
 
     // add an AB switch that will select between 'basic' and 'enhanced' sonification
     var abSwitch = new ABSwitch(
-      sonificationManager.sonificationLevelProperty,
+      soundManager.sonificationLevelProperty,
       'basic',
       new Text( 'basic' ),
       'enhanced',
@@ -47,9 +47,9 @@ define( function( require ) {
 
     // create two one-shot sounds, one for basic mode and one for enhanced
     var basicModeOneShotSound = new OneShotSoundClip( marimbaSound );
-    sonificationManager.addSoundGenerator( basicModeOneShotSound );
+    soundManager.addSoundGenerator( basicModeOneShotSound );
     var enhancedModeOneShotSound = new OneShotSoundClip( clickSound );
-    sonificationManager.addSoundGenerator( enhancedModeOneShotSound, { sonificationLevel: 'enhanced' } );
+    soundManager.addSoundGenerator( enhancedModeOneShotSound, { sonificationLevel: 'enhanced' } );
 
     // add a button to play a basic-mode sound
     this.addChild( new TextPushButton( 'Play Basic-Level Sound', {
@@ -68,7 +68,7 @@ define( function( require ) {
     } ) );
 
     // add the sound toggle button
-    var soundToggleButton = new SoundToggleButton( sonificationManager.enabledProperty, {
+    var soundToggleButton = new SoundToggleButton( soundManager.enabledProperty, {
       right: this.layoutBounds.maxX - 78.5,
       centerY: this.layoutBounds.maxY - 44.5
     } );

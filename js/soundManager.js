@@ -146,7 +146,7 @@ define( function( require ) {
   /**
    * sonification manager object definition
    */
-  var sonificationManager = {
+  var soundManager = {
 
     /**
      * initialize the sonification manager - this function must be invoked before the sonification manager is used
@@ -435,7 +435,7 @@ define( function( require ) {
     }
   };
 
-  tambo.register( 'sonificationManager', sonificationManager );
+  tambo.register( 'soundManager', soundManager );
 
-  return sonificationManager;
+  return soundManager;
 } );
