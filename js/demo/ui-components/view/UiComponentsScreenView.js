@@ -10,15 +10,19 @@ define( function( require ) {
 
   // modules
   var ABSwitch = require( 'SUN/ABSwitch' );
+  var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Checkbox = require( 'SUN/Checkbox' );
   var Dimension2 = require( 'DOT/Dimension2' );
+  var HBox = require( 'SCENERY/nodes/HBox' );
   var HSlider = require( 'SUN/HSlider' );
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
   var LoopingSoundClip = require( 'TAMBO/sound-generators/LoopingSoundClip' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
+  var Panel = require( 'SUN/Panel' );
+  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Range = require( 'DOT/Range' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
@@ -28,10 +32,12 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  var VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
   var SLIDER_MAX = 5;
   var NUM_TICK_MARKS = SLIDER_MAX + 1;
+  var CHECK_BOX_SIZE = 12;
 
   // images
   var lightningImage = require( 'image!TAMBO/lightning.png' );
@@ -157,45 +163,77 @@ define( function( require ) {
       }
     } );
 
-    // add the button that will cause a lightening bolt to be shown for a time
+    // add the button that will cause a lightening bolt to be shown
     var fireLightningButton = new TextPushButton( 'Lightning', {
-      left: discreteSlider.right + 40,
-      centerY: discreteSlider.centerY,
       listener: function() {
         model.lightningBoltVisibleProperty.set( true );
       }
     } );
-    this.addChild( fireLightningButton );
 
     // disable button while lightning is visible
     model.lightningBoltVisibleProperty.link( function( lightningBoltVisible ) {
       fireLightningButton.enabled = !lightningBoltVisible;
     } );
 
-    // add the lightning bolt that will be shown for a time when the user indicates
-    var lightningNode = new Image( lightningImage, {
-      left: fireLightningButton.left,
-      top: fireLightningButton.bottom,
-      maxHeight: 40
-    } );
-    this.addChild( lightningNode );
-    model.lightningBoltVisibleProperty.linkAttribute( lightningNode, 'visible' );
-
-    // make a sound when the lightning bolt appears
-    var thunder = new OneShotSoundClip( thunderSound );
-    soundManager.addSoundGenerator( thunder );
+    // add a sound generator for thunderSoundGenerator
+    var thunderSoundGenerator = new OneShotSoundClip( thunderSound );
+    soundManager.addSoundGenerator( thunderSoundGenerator );
     model.lightningBoltVisibleProperty.link( function( visible ) {
       if ( visible ) {
-        thunder.play();
+        thunderSoundGenerator.play();
       }
     } );
 
-    // add a check box that controls whether the thunder sound is played when the lightning bolt is shown
-    this.addChild( new Checkbox( new Text( 'Thunder' ), thunder.locallyEnabledProperty, {
-      boxWidth: 12,
-      left: fireLightningButton.right + 5,
-      centerY: fireLightningButton.centerY
-    } ) );
+    // a check box that controls whether the thunderSoundGenerator sound is locally enabled
+    var thunderEnabledCheckbox = new Checkbox(
+      new Text( 'Enabled' ),
+      thunderSoundGenerator.locallyEnabledProperty,
+      { boxWidth: CHECK_BOX_SIZE }
+    );
+
+    // a check box that controls whether the thunderSoundGenerator sound can be initiated when disabled
+    var initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundGenerator.initiateWhenDisabled );
+    initiateThunderWhenDisabledProperty.linkAttribute( thunderSoundGenerator, 'initiateWhenDisabled' );
+    var initiateThunderWhenDisabledCheckbox = new Checkbox(
+      new Text( 'Initiate when disabled' ),
+      initiateThunderWhenDisabledProperty,
+      { boxWidth: CHECK_BOX_SIZE }
+    );
+
+    // create a set of controls for the thunderSoundGenerator
+    var thunderControl = new VBox( {
+      children: [
+        new Text( 'Thunder: ', { font: new PhetFont( 12 ) } ),
+        thunderEnabledCheckbox,
+        initiateThunderWhenDisabledCheckbox
+      ],
+      align: 'left',
+      spacing: 5
+    } );
+
+    // add a panel where thunderSoundGenerator and lightning are controlled
+    var lightningControlPanel = new Panel(
+      new HBox( { children: [ fireLightningButton, thunderControl ], spacing: 10, align: 'top' } ),
+      {
+        fill: '#FCFBE3',
+        left: discreteSlider.right + 20,
+        top: discreteSlider.top
+      }
+    );
+
+    // add the lightning bolt that will appear when commanded by the user (and make him/her feel like Zeus)
+    var lightningBoltNode = new Image( lightningImage, {
+      left: lightningControlPanel.left + 20,
+      top: lightningControlPanel.bottom - 3,
+      maxHeight: 50
+    } );
+
+    // add in order for desired layering
+    this.addChild( lightningBoltNode );
+    this.addChild( lightningControlPanel );
+
+    // only show the lightening when the model indicates - this is done after the panel is created so the layout works
+    model.lightningBoltVisibleProperty.linkAttribute( lightningBoltNode, 'visible' );
 
     // add the reset all button
     var resetAllButton = new ResetAllButton( {
@@ -203,7 +241,7 @@ define( function( require ) {
       bottom: this.layoutBounds.maxY - 20,
       listener: function() {
         model.reset();
-        thunder.locallyEnabledProperty.reset();
+        thunderSoundGenerator.locallyEnabledProperty.reset();
       }
     } );
     this.addChild( resetAllButton );

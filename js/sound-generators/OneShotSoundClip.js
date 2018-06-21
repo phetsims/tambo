@@ -22,10 +22,22 @@ define( function( require ) {
    */
   function OneShotSoundClip( soundInfo, options ) {
 
-    SoundClip.call( this, soundInfo, options );
+    options = _.extend( {
+
+      // This option controls whether sound generation can be initiated when this sound generator is disabled.  This
+      // is useful when a sound is long, so if the user does something that generally would cause a sound, but sound
+      // is disable, and they immediately re-enable it, the "tail" of this sound would be heard.
+      initiateWhenDisabled: true
+
+    }, options );
 
     // a list of active source buffers, used so that this clip can be played again before previous play finishes
     this.activeSources = [];
+
+    // @public {boolean} - see description in options above
+    this.initiateWhenDisabled = options.initiateWhenDisabled;
+
+    SoundClip.call( this, soundInfo, options );
   }
 
   tambo.register( 'OneShotSoundClip', OneShotSoundClip );
@@ -39,7 +51,7 @@ define( function( require ) {
     play: function() {
 
       var self = this;
-      if ( this.fullyEnabled ) {
+      if ( this.initiateWhenDisabled || this.fullyEnabled ) {
 
         if ( this.soundBuffer ) {
 
