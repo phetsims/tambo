@@ -177,7 +177,7 @@ define( function( require ) {
 
     // add a sound generator for thunderSoundGenerator
     var thunderSoundGenerator = new OneShotSoundClip( thunderSound );
-    soundManager.addSoundGenerator( thunderSoundGenerator );
+    soundManager.addSoundGenerator( thunderSoundGenerator, { disabledDuringReset: true } );
     model.lightningBoltVisibleProperty.link( function( visible ) {
       if ( visible ) {
         thunderSoundGenerator.play();

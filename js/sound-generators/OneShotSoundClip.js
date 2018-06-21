@@ -22,6 +22,8 @@ define( function( require ) {
    */
   function OneShotSoundClip( soundInfo, options ) {
 
+    var self = this;
+
     options = _.extend( {
 
       // This option controls whether sound generation can be initiated when this sound generator is disabled.  This
@@ -31,13 +33,21 @@ define( function( require ) {
 
     }, options );
 
-    // a list of active source buffers, used so that this clip can be played again before previous play finishes
+    SoundClip.call( this, soundInfo, options );
+
+    // @private {AudioBufferSourceNode[]} - a list of active source buffers, used so that this clip can be played again
+    // before previous play finishes
     this.activeSources = [];
 
     // @public {boolean} - see description in options above
     this.initiateWhenDisabled = options.initiateWhenDisabled;
 
-    SoundClip.call( this, soundInfo, options );
+    // listen to the property that indicates whether we are fully enabled and stop the sound when it goes false
+    this.fullyEnabledProperty.lazyLink( function( fullyEnabled ) {
+      if ( !fullyEnabled ) {
+        self.stop();
+      }
+    } );
   }
 
   tambo.register( 'OneShotSoundClip', OneShotSoundClip );
@@ -82,14 +92,15 @@ define( function( require ) {
     },
 
     /**
-     * stop playing the sound - usage of this is pretty rare for a one-shot sound
+     * stop playing the sound
      */
     stop: function() {
       if ( this.soundBuffer ) {
         this.activeSources.forEach( function( source ) {
           source.stop();
         } );
-        this.activeSources = [];
+        // TODO: Is this needed, or does onended get fired, making this unnecessary?
+        this.activeSources.splice( 0, this.activeSources.length );
       }
       else {
 
