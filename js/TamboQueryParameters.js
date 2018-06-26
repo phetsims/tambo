@@ -14,7 +14,20 @@ define( function( require ) {
   var TamboQueryParameters = QueryStringMachine.getAll( {
 
     // use the stubbed audio context regardless of whether support exists for Web Audio
-    forceStubbedAudioContext: { type: 'flag' }
+    forceStubbedAudioContext: { type: 'flag' },
+
+    // control the initial sonification level (user can change later)
+    initialSonificationLevel: {
+      type: 'string',
+      defaultValue: 'basic'
+    },
+
+    // turn sound on or off at startup (user can change later)
+    soundInitiallyEnabled: {
+      type: 'boolean',
+      defaultValue: true
+    }
+
   } );
 
   tambo.register( 'TamboQueryParameters', TamboQueryParameters );

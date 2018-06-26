@@ -29,6 +29,7 @@ define( function( require ) {
   var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   var StringProperty = require( 'AXON/StringProperty' );
   var tambo = require( 'TAMBO/tambo' );
+  var TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
 
   // audio
   var reverbImpulseResponse = require( 'audio!TAMBO/empty-apartment-bedroom-06.mp3' );
@@ -37,12 +38,15 @@ define( function( require ) {
   // constants
   var DEFAULT_REVERB_LEVEL = 0.2;
   var TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
+  var SOUND_INITIALLY_ENABLED = TamboQueryParameters.soundInitiallyEnabled;
+  var INITIAL_SONIFICATION_LEVEL = TamboQueryParameters.initialSonificationLevel;
+
 
   // flag that tracks whether sound generation of any kind is enabled
-  var enabledProperty = new BooleanProperty( true );
+  var enabledProperty = new BooleanProperty( SOUND_INITIALLY_ENABLED );
 
   // the level setting, either 'basic' or 'enhanced'
-  var sonificationLevelProperty = new StringProperty( 'basic' );
+  var sonificationLevelProperty = new StringProperty( INITIAL_SONIFICATION_LEVEL );
 
   // next ID number value, used to assign a unique ID to each sound generator that is registered
   var nextIdNumber = 1;
@@ -247,6 +251,9 @@ define( function( require ) {
         sonificationLevel: options.sonificationLevel
       };
       soundGeneratorInfoArray.push( soundGeneratorInfo );
+
+      // add the global enable property to the list of properties that enable this sound generator
+      soundGenerator.addEnableControlProperty( enabledProperty );
 
       // if this sound generator should be disabled during reset, add an "enable control" property to make that happen
       if ( options.disabledDuringReset ) {
