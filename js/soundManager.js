@@ -27,7 +27,6 @@ define( function( require ) {
   var platform = require( 'PHET_CORE/platform' );
   var Property = require( 'AXON/Property' );
   var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
-  var StringProperty = require( 'AXON/StringProperty' );
   var tambo = require( 'TAMBO/tambo' );
   var TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
 
