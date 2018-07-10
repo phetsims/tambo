@@ -103,8 +103,8 @@ define( function( require ) {
     ], simOptions ).start();
 
     // TODO: The following is temporarily here until init of soundManager is permanently moved into Sim.js.
-    soundManager.initialize(
-      phet.joist.sim.browserTabVisibleProperty
-    );
+    if ( !soundManager.isInitialized() ) {
+      soundManager.initialize( phet.joist.sim.browserTabVisibleProperty );
+    }
   } );
 } );

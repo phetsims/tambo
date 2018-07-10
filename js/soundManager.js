@@ -39,13 +39,13 @@ define( function( require ) {
   var DEFAULT_REVERB_LEVEL = 0.2;
   var TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
   var SOUND_INITIALLY_ENABLED = TamboQueryParameters.soundInitiallyEnabled;
-  var INITIAL_SONIFICATION_LEVEL = TamboQueryParameters.initialSonificationLevel;
+  var ENHANCED_SOUND_INITIALLY_ENABLED = TamboQueryParameters.enhancedSoundEnabled;
 
   // flag that tracks whether sound generation of any kind is enabled
   var enabledProperty = new BooleanProperty( SOUND_INITIALLY_ENABLED );
 
-  // the level setting, either 'basic' or 'enhanced'
-  var sonificationLevelProperty = new StringProperty( INITIAL_SONIFICATION_LEVEL );
+  // flag that tracks whether just basic or basic+enhanced sounds are enabled
+  var enhancedSoundEnabledProperty = new BooleanProperty( ENHANCED_SOUND_INITIALLY_ENABLED );
 
   // next ID number value, used to assign a unique ID to each sound generator that is registered
   var nextIdNumber = 1;
@@ -94,12 +94,6 @@ define( function( require ) {
   // a local property that is true when no resets are happening (which would presumably be most of the time) and goes
   // false when a reset is in progress
   var noResetInProgressProperty = new BooleanProperty( true );
-
-  // @private {BooleanProperty} - a Property whose value is true when in enhance sonification mode, false when in basic
-  var enhancedLevelEnabled = new BooleanProperty( false );
-  sonificationLevelProperty.link( function( sonificationLevel ) {
-    enhancedLevelEnabled.set( sonificationLevel === 'enhanced' );
-  } );
 
   // create the gain nodes for each of the defined "classes" and hook them up, will be defined during init
   var gainNodesForClasses = {};
@@ -159,6 +153,8 @@ define( function( require ) {
      */
     initialize: function( simVisibleProperty, options ) {
 
+      assert && assert( !initialized, 'can\'t initialize the sound manager more than once' );
+
       options = _.extend( {
 
         // Classes that can be used to group sound generators together and control their volume as a group - the names
@@ -193,6 +189,17 @@ define( function( require ) {
       );
 
       initialized = true;
+    },
+
+    /**
+     * get a value that indicates whether the sound manager has been initialized
+     * TODO: This was added when the global controls in joist were not yet on master, and was necessary to allow the
+     * demo sim to run, and may not be needed in the long term.  Added 7/10/2018, if not in use a month or two after
+     * that, remove it.
+     * @return {boolean}
+     */
+    isInitialized: function() {
+      return initialized;
     },
 
     /**
@@ -261,7 +268,7 @@ define( function( require ) {
 
       // if this sound generator is only enabled in enhanced mode, add the enhanced mode property as an enable control
       if ( options.sonificationLevel === 'enhanced' ) {
-        soundGenerator.addEnableControlProperty( enhancedLevelEnabled );
+        soundGenerator.addEnableControlProperty( enhancedSoundEnabledProperty );
       }
 
       // if a view node was specified, create and pass in a boolean property that is true only when the node is displayed
@@ -404,7 +411,7 @@ define( function( require ) {
      */
     set sonificationLevel( sonificationLevel ) {
       assert && assert( sonificationLevel === 'basic' || sonificationLevel === 'enhanced' );
-      sonificationLevelProperty.set( sonificationLevel );
+      enhancedSoundEnabledProperty.set( sonificationLevel === 'enhanced' );
     },
 
     /**
@@ -412,14 +419,14 @@ define( function( require ) {
      * @returns {string}
      */
     get sonificationLevel() {
-      return sonificationLevelProperty.get();
+      return enhancedSoundEnabledProperty.get() ? 'enhanced' : 'basic';
     },
 
     /**
      * property that corresponds to the sonification level setting
      * @public (read-only)
      */
-    sonificationLevelProperty: sonificationLevelProperty,
+    enhancedSoundEnabledProperty: enhancedSoundEnabledProperty,
 
     /**
      * add a property that indicates that a reset is in progress for a screen, should be called 1x per screen

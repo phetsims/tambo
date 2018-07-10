@@ -36,10 +36,10 @@ define( function( require ) {
 
     // add an AB switch that will select between 'basic' and 'enhanced' sonification
     var abSwitch = new ABSwitch(
-      soundManager.sonificationLevelProperty,
-      'basic',
+      soundManager.enhancedSoundEnabledProperty,
+      false,
       new Text( 'basic' ),
-      'enhanced',
+      true,
       new Text( 'enhanced' ),
       { switchSize: new Dimension2( 40, 20 ), left: 100, top: 200 }
     );
