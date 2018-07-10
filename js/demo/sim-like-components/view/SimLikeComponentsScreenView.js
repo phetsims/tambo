@@ -43,11 +43,6 @@ define( function( require ) {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
     } );
 
-    // TODO: The following is temporarily here until init of soundManager is moved into Sim.js.
-    soundManager.initialize(
-      phet.joist.sim.browserTabVisibleProperty
-    );
-
     // set up the model view transform
     var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,

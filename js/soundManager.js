@@ -41,7 +41,6 @@ define( function( require ) {
   var SOUND_INITIALLY_ENABLED = TamboQueryParameters.soundInitiallyEnabled;
   var INITIAL_SONIFICATION_LEVEL = TamboQueryParameters.initialSonificationLevel;
 
-
   // flag that tracks whether sound generation of any kind is enabled
   var enabledProperty = new BooleanProperty( SOUND_INITIALLY_ENABLED );
 

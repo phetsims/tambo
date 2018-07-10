@@ -17,16 +17,22 @@ define( function( require ) {
   var SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
   var SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
   var SonificationControlsScreenView = require( 'TAMBO/demo/controls/view/SonificationControlsScreenView' );
+  var soundManager = require( 'TAMBO/soundManager' );
+  var TamboKeyboardHelpContent = require( 'TAMBO/demo/TamboKeyboardHelpContent' );
   var UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
   var UiComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UiComponentsScreenView' );
 
   // strings
   var tamboTitleString = require( 'string!TAMBO/tambo.title' );
 
+  // set up the simulation options
+  var keyboardHelpContent = new TamboKeyboardHelpContent();
   var simOptions = {
     credits: {
       leadDesign: 'John Blanco'
-    }
+    },
+    soundManager: soundManager,
+    keyboardHelpNode: keyboardHelpContent
   };
 
   // helper function to create screen icons that aren't too bland
@@ -95,5 +101,10 @@ define( function( require ) {
       )
 
     ], simOptions ).start();
+
+    // TODO: The following is temporarily here until init of soundManager is permanently moved into Sim.js.
+    soundManager.initialize(
+      phet.joist.sim.browserTabVisibleProperty
+    );
   } );
 } );
