@@ -28,7 +28,6 @@ define( function( require ) {
   var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var soundManager = require( 'TAMBO/soundManager' );
-  var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
@@ -246,13 +245,6 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
     soundManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
-
-    // add the sound toggle button
-    var soundToggleButton = new SoundToggleButton( soundManager.enabledProperty, {
-      right: resetAllButton.left - 10,
-      centerY: resetAllButton.centerY
-    } );
-    this.addChild( soundToggleButton );
 
     // hook up the reset-in-progress property to the sonification manager so sounds can be muted during reset
     soundManager.addResetInProgressProperty( model.resetInProgressProperty );

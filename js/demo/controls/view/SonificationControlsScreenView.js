@@ -16,7 +16,6 @@ define( function( require ) {
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var soundManager = require( 'TAMBO/soundManager' );
-  var SoundToggleButton = require( 'SCENERY_PHET/buttons/SoundToggleButton' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
@@ -66,13 +65,6 @@ define( function( require ) {
       left: abSwitch.left,
       top: abSwitch.bottom + 40
     } ) );
-
-    // add the sound toggle button
-    var soundToggleButton = new SoundToggleButton( soundManager.enabledProperty, {
-      right: this.layoutBounds.maxX - 78.5,
-      centerY: this.layoutBounds.maxY - 44.5
-    } );
-    this.addChild( soundToggleButton );
   }
 
   tambo.register( 'SonificationControlsScreenView', SonificationControlsScreenView );
