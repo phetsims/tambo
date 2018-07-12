@@ -12,6 +12,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
+  var RemoveAndDisposeTestPanel = require( 'TAMBO/demo/controls/view/RemoveAndDisposeTestPanel' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var soundManager = require( 'TAMBO/soundManager' );
   var tambo = require( 'TAMBO/tambo' );
@@ -41,7 +42,7 @@ define( function( require ) {
       listener: function() { basicModeOneShotSound.play(); },
       baseColor: '#aad6cc',
       left: this.layoutBounds.left + 20,
-      top: this.layoutBounds.centerY
+      top: this.layoutBounds.height * 0.33
     } );
     this.addChild( playBasicSoundButton );
 
@@ -51,6 +52,12 @@ define( function( require ) {
       baseColor: '#DBB1CD',
       left: playBasicSoundButton.left,
       top: playBasicSoundButton.bottom + 10
+    } ) );
+
+    // add a panel with controls that allow testing of add, remove, and dispose of sound generator
+    this.addChild( new RemoveAndDisposeTestPanel( {
+      left: playBasicSoundButton.right + 50,
+      top: playBasicSoundButton.top
     } ) );
   }
 
