@@ -19,8 +19,8 @@ define( function( require ) {
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
 
   // audio
-  var marimbaSound = require( 'audio!TAMBO/bright-marimba.mp3' );
-  var clickSound = require( 'audio!TAMBO/slider-click-01.mp3' );
+  var loonCall = require( 'audio!TAMBO/loon-call.mp3' );
+  var rhodesChord = require( 'audio!TAMBO/rhodes-chord.mp3' );
 
   /**
    * @constructor
@@ -32,9 +32,9 @@ define( function( require ) {
     } );
 
     // create two one-shot sounds, one for basic mode and one for enhanced
-    var basicModeOneShotSound = new OneShotSoundClip( marimbaSound );
+    var basicModeOneShotSound = new OneShotSoundClip( loonCall );
     soundManager.addSoundGenerator( basicModeOneShotSound );
-    var enhancedModeOneShotSound = new OneShotSoundClip( clickSound );
+    var enhancedModeOneShotSound = new OneShotSoundClip( rhodesChord );
     soundManager.addSoundGenerator( enhancedModeOneShotSound, { sonificationLevel: 'enhanced' } );
 
     // add a button to play a basic-mode sound

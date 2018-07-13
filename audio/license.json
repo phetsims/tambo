@@ -1,4 +1,12 @@
 {
+  "bird-call.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco (PhET)"
+  },
   "bright-marimba.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"
@@ -23,6 +31,14 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris for use by PhET"
   },
+  "crickets-loop.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco (PhET)"
+  },
   "empty.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"
@@ -39,6 +55,14 @@
     "license": "Public Domain Creative Commons",
     "notes": "downloaded from http://www.openairlib.net/auralizationdb/content/empty-apartment-bedroom"
   },
+  "loon-call.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco (PhET)"
+  },
   "reset-all.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"
@@ -46,6 +70,14 @@
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris for use by PhET"
+  },
+  "rhodes-chord.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco (PhET)"
   },
   "slider-click-01.mp3": {
     "text": [
