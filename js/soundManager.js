@@ -206,11 +206,14 @@ define( function( require ) {
      * creates and returns a unique ID
      * @param {SoundGenerator} soundGenerator
      * @param {Object} [options]
-     * @returns {string} - unique ID of sound generator
+     * @returns {string|null} - unique ID of sound generator, null if add not allowed
      */
     addSoundGenerator: function( soundGenerator, options ) {
 
-      assert && assert( initialized, 'sound generators cannot be added until initialization has been done' );
+      if ( !initialized ) {
+        console.warn( 'an attempt was made to add a sound generator to an uninitialized sound manager, ignoring (sound will not be created)' );
+        return null;
+      }
 
       // default options
       options = _.extend( {
