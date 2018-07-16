@@ -11,7 +11,7 @@
  *  - master gain for sounds in general
  *  - enable/disable of sounds based on their assigned sonification level (e.g. "basic" or "enhanced")
  *  - gain control for sounds based on their assigned class, e.g. UI versus sim-specific sounds
- *  - a shared reverb unit to add some spatialization and make all sounds seem to originate with the same room
+ *  - a shared reverb unit to add some spatialization and make all sounds seem to originate with the same space
  *
  *  The singleton object must be initialized before sound generators can be added.
  */
@@ -52,40 +52,8 @@ define( function( require ) {
   // array where the sound generators are stored along with information about how to manage them
   var soundGeneratorInfoArray = [];
 
-  // master gain node for all sounds managed by this sonification manager
-  var masterGainNode = phetAudioContext.createGain();
-  masterGainNode.connect( phetAudioContext.destination );
-
   // output level for the master gain node when sonification is enabled
   var masterOutputLevel = 1;
-
-  // convolver node, which will be used to create the reverb effect
-  var convolver = phetAudioContext.createConvolver();
-
-  // gain node that will control the reverb level
-  var reverbGainNode = phetAudioContext.createGain();
-  reverbGainNode.connect( masterGainNode );
-  reverbGainNode.gain.setValueAtTime( DEFAULT_REVERB_LEVEL, phetAudioContext.currentTime );
-  convolver.connect( reverbGainNode );
-
-  // dry (non-reverbed) portion of the output
-  var dryGainNode = phetAudioContext.createGain();
-  dryGainNode.gain.setValueAtTime( 1 - DEFAULT_REVERB_LEVEL, phetAudioContext.currentTime );
-  dryGainNode.connect( masterGainNode );
-
-  // load the reverb impulse response into the convolver
-  soundInfoDecoder.decode(
-    reverbImpulseResponse,
-    phetAudioContext,
-    function( decodedAudioData ) {
-      convolver.buffer = decodedAudioData;
-    },
-    function() {
-
-      // we haven't seen this happen, so for now a message is logged to the console and that's it
-      console.log( 'Error: Unable to decode audio data.' );
-    }
-  );
 
   // list of reset-in-progress properties, one should be supplied for each screen
   var resetInProgressProperties = [];
@@ -94,48 +62,8 @@ define( function( require ) {
   // false when a reset is in progress
   var noResetInProgressProperty = new BooleanProperty( true );
 
-  // create the gain nodes for each of the defined "classes" and hook them up, will be defined during init
+  // gain nodes for each of the defined "classes", will be defined during init
   var gainNodesForClasses = {};
-
-  // Below is some platform-specific code for handling some issues related to audio.  It may be possible to remove some
-  // or all of this as Web Audio becomes more consistently implemented.
-  if ( phetAudioContext ) {
-
-    if ( !platform.mobileSafari ) {
-
-      // In some browsers the audio context is not allowed to run before the user interacts with the simulation.  The
-      // motivation for this is to prevent auto-play of sound (mostly videos) when users land on websites, but it ends
-      // up preventing PhET sims from being able to play sound.  To deal with this, we add a listener that can check the
-      // state of the audio context and "resume" it if necessary when the user starts interacting with the sim.  See
-      // https://github.com/phetsims/vibe/issues/32 and https://github.com/phetsims/tambo/issues/9 for more information.
-      if ( phetAudioContext.state !== 'running' ) {
-
-        Display.userGestureEmitter.addListener( function resumeAudioContext() {
-          if ( phetAudioContext.state !== 'running' ) {
-
-            // the audio context isn't running, so tell it to resume
-            phetAudioContext.resume().catch( function( err ) {
-              assert && assert( false, 'error when trying to resume audio context, err = ' + err );
-            } );
-          }
-          Display.userGestureEmitter.removeListener( resumeAudioContext ); // only do this once
-        } );
-      }
-    }
-    else {
-
-      // There is a different issue for audio on iOS+Safari: On this platform, we must play an audio file from a thread
-      // initiated by a user event such as touchstart before any sounds will play.  This requires the user to touch the
-      // screen before audio can be played. See
-      // http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
-      var silence = new OneShotSoundClip( empty, { connectImmediately: true } );
-      var playSilence = function() {
-        silence.play();
-        window.removeEventListener( 'touchstart', playSilence, false );
-      };
-      window.addEventListener( 'touchstart', playSilence, false );
-    }
-  }
 
   // flag that tracks whether the sonification manager has been initialized
   var initialized = false;
@@ -146,13 +74,14 @@ define( function( require ) {
   var soundManager = {
 
     /**
-     * initialize the sonification manager - this function must be invoked before the sonification manager is used
+     * initialize the sonification manager - this function must be invoked before any sound generators can be added
      * @param {BooleanProperty} simVisibleProperty
      * @param {Object} [options]
      */
     initialize: function( simVisibleProperty, options ) {
 
       assert && assert( !initialized, 'can\'t initialize the sound manager more than once' );
+      var self = this;
 
       options = _.extend( {
 
@@ -170,11 +99,43 @@ define( function( require ) {
         'unexpected type for options.classes'
       );
 
+      // create the master gain node for all sounds managed by this sonification manager
+      this.masterGainNode = phetAudioContext.createGain();
+      this.masterGainNode.connect( phetAudioContext.destination );
+
+      // convolver node, which will be used to create the reverb effect
+      this.convolver = phetAudioContext.createConvolver();
+
+      // gain node that will control the reverb level
+      this.reverbGainNode = phetAudioContext.createGain();
+      this.reverbGainNode.connect( this.masterGainNode );
+      this.reverbGainNode.gain.setValueAtTime( DEFAULT_REVERB_LEVEL, phetAudioContext.currentTime );
+      this.convolver.connect( this.reverbGainNode );
+
+      // dry (non-reverbed) portion of the output
+      this.dryGainNode = phetAudioContext.createGain();
+      this.dryGainNode.gain.setValueAtTime( 1 - DEFAULT_REVERB_LEVEL, phetAudioContext.currentTime );
+      this.dryGainNode.connect( this.masterGainNode );
+
+      // load the reverb impulse response into the convolver
+      soundInfoDecoder.decode(
+        reverbImpulseResponse,
+        phetAudioContext,
+        function( decodedAudioData ) {
+          self.convolver.buffer = decodedAudioData;
+        },
+        function() {
+
+          // we haven't seen this happen, so for now a message is logged to the console and that's it
+          console.log( 'Error: Unable to decode audio data.' );
+        }
+      );
+
       // create and hook up gain nodes for each of the defined classes
       options.classes.forEach( function( className ) {
         var gainNode = phetAudioContext.createGain();
-        gainNode.connect( convolver );
-        gainNode.connect( dryGainNode );
+        gainNode.connect( self.convolver );
+        gainNode.connect( self.dryGainNode );
         gainNodesForClasses[ className ] = gainNode;
       } );
 
@@ -183,9 +144,50 @@ define( function( require ) {
         [ this.enabledProperty, simVisibleProperty ],
         function( enabled, simVisible ) {
           var gain = enabled && simVisible ? masterOutputLevel : 0;
-          masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+          self.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
         }
       );
+
+      // Below is some platform-specific code for handling some issues related to audio.  It may be possible to remove
+      // some or all of this as Web Audio becomes more consistently implemented.
+      if ( phetAudioContext ) {
+
+        if ( !platform.mobileSafari ) {
+
+          // In some browsers the audio context is not allowed to run before the user interacts with the simulation.
+          // The motivation for this is to prevent auto-play of sound (mostly videos) when users land on websites, but
+          // it ends up preventing PhET sims from being able to play sound.  To deal with this, we add a listener that
+          // can check the state of the audio context and "resume" it if necessary when the user starts interacting with
+          // the sim.  See https://github.com/phetsims/vibe/issues/32 and https://github.com/phetsims/tambo/issues/9 for
+          // more information.
+          if ( phetAudioContext.state !== 'running' ) {
+
+            Display.userGestureEmitter.addListener( function resumeAudioContext() {
+              if ( phetAudioContext.state !== 'running' ) {
+
+                // the audio context isn't running, so tell it to resume
+                phetAudioContext.resume().catch( function( err ) {
+                  assert && assert( false, 'error when trying to resume audio context, err = ' + err );
+                } );
+              }
+              Display.userGestureEmitter.removeListener( resumeAudioContext ); // only do this once
+            } );
+          }
+        }
+        else {
+
+          // There is a different issue for audio on iOS+Safari: On this platform, we must play an audio file from a
+          // thread initiated by a user event such as touchstart before any sounds will play.  This requires the user to
+          // touch the screen before audio can be played. See
+          // http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
+          var silence = new OneShotSoundClip( empty, { connectImmediately: true } );
+          var playSilence = function() {
+            silence.play();
+            window.removeEventListener( 'touchstart', playSilence, false );
+          };
+          window.addEventListener( 'touchstart', playSilence, false );
+        }
+      }
 
       initialized = true;
     },
@@ -241,8 +243,8 @@ define( function( require ) {
       // connect the sound generator to an output path unless the options indicate otherwise
       if ( options.connect ) {
         if ( options.className === null ) {
-          soundGenerator.connect( convolver );
-          soundGenerator.connect( dryGainNode );
+          soundGenerator.connect( this.convolver );
+          soundGenerator.connect( this.dryGainNode );
         }
         else {
           soundGenerator.connect( gainNodesForClasses[ options.className ] );
@@ -323,7 +325,7 @@ define( function( require ) {
 
       masterOutputLevel = outputLevel;
       if ( enabledProperty.get() ) {
-        masterGainNode.gain.setTargetAtTime( outputLevel, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+        this.masterGainNode.gain.setTargetAtTime( outputLevel, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
       }
     },
 
@@ -376,13 +378,13 @@ define( function( require ) {
     setReverbLevel: function( reverbLevel ) {
       assert && assert( reverbLevel >= 0 && reverbLevel <= 1 );
       var now = phetAudioContext.currentTime;
-      reverbGainNode.gain.setTargetAtTime( reverbLevel, now, TC_FOR_PARAM_CHANGES );
-      dryGainNode.gain.setTargetAtTime( 1 - reverbLevel, now, TC_FOR_PARAM_CHANGES );
+      this.reverbGainNode.gain.setTargetAtTime( reverbLevel, now, TC_FOR_PARAM_CHANGES );
+      this.dryGainNode.gain.setTargetAtTime( 1 - reverbLevel, now, TC_FOR_PARAM_CHANGES );
     },
 
     getReverbLevel: function() {
       // TODO: Test if this works in all browser, add a var to track if not.
-      return reverbGainNode.gain.value;
+      return this.reverbGainNode.gain.value;
     },
 
     /**
