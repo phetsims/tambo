@@ -30,6 +30,9 @@ define( function( require ) {
   var TOTAL_ADDED_TEMPLATE = 'Total Added: {{numSoundGenerators}}';
   var ADD_BUTTON_COLOR = '#C0D890';
 
+  // TODO: temp for surviving CT
+  var FAKE_SG_COUNT = 0;
+
   // audio
   var sliderIncreaseClickSound = require( 'audio!TAMBO/slider-click-01.mp3' );
 
@@ -42,10 +45,20 @@ define( function( require ) {
       }
     },
     recordedLoop: {
-      comboBoxName: 'Recorded loop'
+      comboBoxName: 'Recorded loop',
+      createSoundGenerator: function() {
+        // TODO: this is stubbed, needs to be filled in
+        console.warn( 'stubbed function called, this will have no effect' );
+        return ( FAKE_SG_COUNT++ );
+      }
     },
     synthesizedSound: {
-      comboBoxName: 'Synthesized sound'
+      comboBoxName: 'Synthesized sound',
+      createSoundGenerator: function() {
+        // TODO: this is stubbed, needs to be filled in
+        console.warn( 'stubbed function called, this will have no effect' );
+        return ( FAKE_SG_COUNT++ );
+      }
     }
   };
 
