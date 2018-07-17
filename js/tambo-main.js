@@ -16,7 +16,7 @@ define( function( require ) {
   var SimLauncher = require( 'JOIST/SimLauncher' );
   var SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
   var SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
-  var SonificationControlsScreenView = require( 'TAMBO/demo/controls/view/SonificationControlsScreenView' );
+  var TestingScreenView = require( 'TAMBO/demo/testing/view/TestingScreenView' );
   var soundManager = require( 'TAMBO/soundManager' );
   var TamboKeyboardHelpContent = require( 'TAMBO/demo/TamboKeyboardHelpContent' );
   var UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
@@ -92,9 +92,9 @@ define( function( require ) {
       // screen with global controls for sonification
       new Screen(
         function() { return {}; }, // no model needed, return a stub
-        function() { return new SonificationControlsScreenView(); },
+        function() { return new TestingScreenView(); },
         {
-          name: 'Controls',
+          name: 'Testing',
           backgroundColorProperty: new Property( '#F0F8FF' ),
           homeScreenIcon: createScreenIcon( '#ADFF2F', '#FFDAB9', 'radial' )
         }

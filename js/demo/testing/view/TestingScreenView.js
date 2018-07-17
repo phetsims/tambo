@@ -12,7 +12,7 @@ define( function( require ) {
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
-  var RemoveAndDisposeTestPanel = require( 'TAMBO/demo/controls/view/RemoveAndDisposeTestPanel' );
+  var RemoveAndDisposeTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeTestPanel' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var soundManager = require( 'TAMBO/soundManager' );
   var tambo = require( 'TAMBO/tambo' );
@@ -25,7 +25,7 @@ define( function( require ) {
   /**
    * @constructor
    */
-  function SonificationControlsScreenView() {
+  function TestingScreenView() {
 
     ScreenView.call( this, {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
@@ -61,7 +61,7 @@ define( function( require ) {
     } ) );
   }
 
-  tambo.register( 'SonificationControlsScreenView', SonificationControlsScreenView );
+  tambo.register( 'TestingScreenView', TestingScreenView );
 
-  return inherit( ScreenView, SonificationControlsScreenView );
+  return inherit( ScreenView, TestingScreenView );
 } );
