@@ -217,6 +217,12 @@ define( function( require ) {
         return null;
       }
 
+      // verify that this is not a duplicate addition
+      var duplicateAdd = _.some( soundGeneratorInfoArray, function( sgInfo ) {
+        return sgInfo.soundGenerator === soundGenerator;
+      } );
+      assert && assert( !duplicateAdd, 'can\'t add the same sound generator twice' );
+
       // default options
       options = _.extend( {
         connect: true,

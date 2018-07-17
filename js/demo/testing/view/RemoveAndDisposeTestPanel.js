@@ -192,8 +192,8 @@ define( function( require ) {
 
     // listen for removal of sound generators from the observable array and remove them from the sound manager
     soundGenerators.addItemRemovedListener( function( removedSoundGenerator ) {
-      console.log( 'sound generator removed, id = ' + removedSoundGenerator.id );
-      console.log( 'REMOVAL IS STUBBED AND DOES NOT DO ANYTHING' );
+      soundManager.removeSoundGenerator( removedSoundGenerator );
+      removedSoundGenerator.dispose();
     } );
 
     // add everything to a vertical box
