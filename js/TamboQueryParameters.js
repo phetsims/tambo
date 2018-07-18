@@ -2,6 +2,7 @@
 
 /**
  * Query parameters supported by this simulation.
+ * REVIEW: This documentation is incorrect.
  *
  * @author Aadish Gupta
  */
@@ -10,6 +11,8 @@ define( function( require ) {
 
   // modules
   var tambo = require( 'TAMBO/tambo' );
+
+  // REVIEW: Tambo query parameters should be in initialize-globals
 
   var TamboQueryParameters = QueryStringMachine.getAll( {
 
@@ -23,6 +26,7 @@ define( function( require ) {
     },
 
     // control whether enhanced sound mode is initially enabled (user can change later)
+    // REVIEW: there is a discrepancy between this query string key and the preceding one
     enhancedSoundEnabled: {
       type: 'boolean',
       defaultValue: false
