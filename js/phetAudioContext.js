@@ -23,7 +23,7 @@ define( function( require ) {
 
   // Define a stubbed audio context that can be used in cases where browsers don't support Web Audio.  This was created
   // manually by identifying what portions of the Web Audio API was being used in tambo and adding those methods and
-  // properties. This may need to be updated periodically as tambo evolves.  See
+  // properties. This may need to be updated periodically as tambo and our usage of sound evolves.  See
   // https://github.com/phetsims/tambo/issues/10.
   var STUBBED_AUDIO_CONTEXT = {
 
