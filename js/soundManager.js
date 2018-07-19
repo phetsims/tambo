@@ -37,8 +37,8 @@ define( function( require ) {
   // constants
   var DEFAULT_REVERB_LEVEL = 0.2;
   var TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
-  var SOUND_INITIALLY_ENABLED = TamboQueryParameters.soundInitiallyEnabled;
-  var ENHANCED_SOUND_INITIALLY_ENABLED = TamboQueryParameters.enhancedSoundEnabled;
+  var SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.soundInitiallyEnabled;
+  var ENHANCED_SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.enhancedSoundInitiallyEnabled;
 
   // flag that tracks whether sound generation of any kind is enabled
   var enabledProperty = new BooleanProperty( SOUND_INITIALLY_ENABLED );
