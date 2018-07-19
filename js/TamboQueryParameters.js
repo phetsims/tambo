@@ -2,9 +2,8 @@
 
 /**
  * Query parameters supported by this simulation.
- * REVIEW: This documentation is incorrect.
  *
- * @author Aadish Gupta
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';
