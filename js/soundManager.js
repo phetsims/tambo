@@ -28,7 +28,6 @@ define( function( require ) {
   var Property = require( 'AXON/Property' );
   var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   var tambo = require( 'TAMBO/tambo' );
-  var TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
 
   // audio
   var reverbImpulseResponse = require( 'audio!TAMBO/empty-apartment-bedroom-06.mp3' );

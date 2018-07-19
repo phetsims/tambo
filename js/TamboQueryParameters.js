@@ -16,7 +16,7 @@ define( function( require ) {
   var TamboQueryParameters = QueryStringMachine.getAll( {
 
     // use the stubbed audio context regardless of whether support exists for Web Audio
-    forceStubbedAudioContext: { type: 'flag' },
+    forceStubbedAudioContext: { type: 'flag' }
   } );
 
   tambo.register( 'TamboQueryParameters', TamboQueryParameters );
