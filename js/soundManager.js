@@ -297,6 +297,11 @@ define( function( require ) {
      */
     removeSoundGenerator: function( soundGenerator ) {
 
+      if ( !initialized ) {
+        console.warn( 'an attempt was made to remove a sound generator from an uninitialized sound manager, ignoring' );
+        return null;
+      }
+
       // find the info object for this sound generator
       var sgInfoObject = null;
       for ( var i = 0; i < soundGeneratorInfoArray.length; i++ ) {
