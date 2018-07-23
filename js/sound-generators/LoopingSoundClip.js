@@ -32,16 +32,12 @@ define( function( require ) {
   return inherit( SoundClip, LoopingSoundClip, {
 
     /**
-     * start playing the loop, restarts it if it's already running
+     * Start playing the loop, restarts it if it's already running.  This will start the loop regardless of whether
+     * this sound generator is fully enabled and counts on the output gain stage to prevent it from being audible when
+     * disabled.
      * @public
      */
     start: function() {
-
-      if ( !this.fullyEnabled ) {
-
-        // ignore the play request if not enabled
-        return;
-      }
 
       var self = this;
 
