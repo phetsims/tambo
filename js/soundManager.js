@@ -316,8 +316,18 @@ define( function( require ) {
       // make sure it is actually present on the list
       assert && assert( sgInfoObject, 'unable to remove sound generator - not found' );
 
-      // disconnect the sound generator
-      // TODO - add disconnect
+      // disconnect the sound generator from any nodes to which it may be connected
+      if ( soundGenerator.isConnectedTo( this.convolver ) ) {
+        soundGenerator.disconnect( this.convolver );
+      }
+      if ( soundGenerator.isConnectedTo( this.dryGainNode ) ) {
+        soundGenerator.disconnect( this.dryGainNode );
+      }
+      _.values( gainNodesForClasses ).forEach( function( gainNode ) {
+        if ( soundGenerator.isConnectedTo( gainNode ) ) {
+          soundGenerator.disconnect( gainNode );
+        }
+      } );
 
       // remove the sound generator from the list
       soundGeneratorInfoArray = _.without( soundGeneratorInfoArray, sgInfoObject );

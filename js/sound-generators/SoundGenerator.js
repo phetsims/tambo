@@ -46,6 +46,9 @@ define( function( require ) {
     // @private {number}
     this._outputLevel = options.initialOutputLevel;
 
+    // @private AudioParam[] - a list of all audio nodes to which this sound generator is connected
+    this.connectionList = [];
+
     // @private {ObservableArray.<BooleanProperty>} - A set of boolean properties that collectively control whether the
     // sound generator is enabled.  All of these must be true in order for the sound generator to be able "fully
     // enabled", meaning that it will produce sound.
@@ -109,7 +112,9 @@ define( function( require ) {
 
     // @private {function} - internally used disposal function
     this.disposeSoundGenerator = function() {
-      // TODO: Fill this in.
+
+      // clearing this observable array should cause the properties within it to be unlinked
+      self.enableControlProperties.clear();
     };
   }
 
@@ -124,6 +129,30 @@ define( function( require ) {
      */
     connect: function( audioParam ) {
       this.masterGainNode.connect( audioParam );
+
+      // Track this sound generator's connections.  This is necessary because Web Audio doesn't support checking which
+      // nodes are connected to which, and we need this information when disconnecting.
+      this.connectionList.push( audioParam );
+    },
+
+    /**
+     * disconnect the sound generator from an audio parameter
+     * @param {AudioParam} audioParam
+     * @public
+     */
+    disconnect: function( audioParam ) {
+      this.masterGainNode.disconnect( audioParam );
+      this.connectionList = _.without( this.connectionList, audioParam );
+    },
+
+    /**
+     * test if this sound generator is connected to the provided audio param
+     * @param {AudioParam} audioParam
+     * @returns {boolean}
+     * @public
+     */
+    isConnectedTo: function( audioParam ) {
+      return this.connectionList.indexOf( audioParam ) >= 0;
     },
 
     /**
