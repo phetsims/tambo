@@ -141,15 +141,16 @@ define( function( require ) {
 
     // create a horizontal box with an indicator for the number of sound generators added and a button to remove them all
     var totalAddedIndicator = new Text( TOTAL_ADDED_TEMPLATE, { font: new PhetFont( 14 ) } );
+    var removeAllSoundGeneratorsButton = new TextPushButton( 'Remove All', {
+      font: BUTTON_FONT,
+      listener: function() {
+        soundGenerators.clear();
+      }
+    } );
     var showTotalHBox = new HBox( {
       children: [
         totalAddedIndicator,
-        new TextPushButton( 'Remove All', {
-          font: BUTTON_FONT,
-          listener: function() {
-            soundGenerators.clear();
-          }
-        } )
+        removeAllSoundGeneratorsButton
       ],
       spacing: 10
     } );
@@ -188,6 +189,7 @@ define( function( require ) {
         numSoundGenerators: numSGs
       } );
       testLastAddedSGButton.enabled = numSGs > 0;
+      removeAllSoundGeneratorsButton.enabled = numSGs > 0;
     } );
 
     // listen for removal of sound generators from the observable array and remove them from the sound manager
