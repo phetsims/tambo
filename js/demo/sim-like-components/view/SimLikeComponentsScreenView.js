@@ -12,6 +12,7 @@ define( function( require ) {
   var ABSwitch = require( 'SUN/ABSwitch' );
   var BallNode = require( 'TAMBO/demo/sim-like-components/view/BallNode' );
   var Bounds2 = require( 'DOT/Bounds2' );
+  var DerivedProperty = require( 'AXON/DerivedProperty' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var inherit = require( 'PHET_CORE/inherit' );
   var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
@@ -73,9 +74,19 @@ define( function( require ) {
       } );
     } );
 
+    // create an inverted version of the reset-in-progress property, used to mute sounds during reset
+    var resetNotInProgressProperty = new DerivedProperty(
+      [ model.resetInProgressProperty ],
+      function( resetInProgress ) {
+        return !resetInProgress;
+      }
+    );
+
     // generate sound when balls are added or removed
-    var pitchedPopGenerator = new PitchedPopGenerator();
-    soundManager.addSoundGenerator( pitchedPopGenerator, { disabledDuringReset: true } );
+    var pitchedPopGenerator = new PitchedPopGenerator( {
+      initialEnableControlProperties: [ resetNotInProgressProperty ]
+    } );
+    soundManager.addSoundGenerator( pitchedPopGenerator );
     model.boxOfBalls.balls.lengthProperty.lazyLink( function( numBalls ) {
       pitchedPopGenerator.playPop( numBalls / MAX_BALLS );
     } );
@@ -120,9 +131,6 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
     soundManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
-
-    // hook up the reset-in-progress property to the sonification manager so sounds can be muted during reset
-    soundManager.addResetInProgressProperty( model.resetInProgressProperty );
   }
 
   tambo.register( 'SimLikeComponentsScreenView', SimLikeComponentsScreenView );

@@ -28,8 +28,8 @@ define( function( require ) {
 
       // This option controls whether sound generation can be initiated when this sound generator is disabled.  This
       // is useful when a sound is long, so if the user does something that generally would cause a sound, but sound
-      // is disable, and they immediately re-enable it, the "tail" of this sound would be heard.
-      initiateWhenDisabled: true
+      // is disabled, and they immediately re-enable it, the "tail" of this sound would be heard.
+      initiateWhenDisabled: false
 
     }, options );
 

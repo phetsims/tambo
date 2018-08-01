@@ -13,6 +13,7 @@ define( function( require ) {
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Bounds2 = require( 'DOT/Bounds2' );
   var Checkbox = require( 'SUN/Checkbox' );
+  var DerivedProperty = require( 'AXON/DerivedProperty' );
   var Dimension2 = require( 'DOT/Dimension2' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HSlider = require( 'SUN/HSlider' );
@@ -70,11 +71,21 @@ define( function( require ) {
     } );
     this.addChild( discreteSlider );
 
+    // create an inverted version of the reset-in-progress property, used to mute sounds during reset
+    var resetNotInProgressProperty = new DerivedProperty(
+      [ model.resetInProgressProperty ],
+      function( resetInProgress ) {
+        return !resetInProgress;
+      }
+    );
+
     // add a sound generator that will play a sound when the value controlled by the slider changes
     var increaseClickSound = new OneShotSoundClip( sliderIncreaseClickSound );
     soundManager.addSoundGenerator( increaseClickSound );
-    var decreaseClickSound = new OneShotSoundClip( sliderDecreaseClickSound );
-    soundManager.addSoundGenerator( decreaseClickSound, { disabledDuringReset: true } );
+    var decreaseClickSound = new OneShotSoundClip( sliderDecreaseClickSound, {
+      initialEnableControlProperties: [ resetNotInProgressProperty ]
+    } );
+    soundManager.addSoundGenerator( decreaseClickSound );
     model.discreteValueProperty.lazyLink( function( newValue, oldValue ) {
       if ( newValue > oldValue ) {
         increaseClickSound.play();
@@ -175,8 +186,11 @@ define( function( require ) {
     } );
 
     // add a sound generator for thunderSoundGenerator
-    var thunderSoundGenerator = new OneShotSoundClip( thunderSound );
-    soundManager.addSoundGenerator( thunderSoundGenerator, { disabledDuringReset: true } );
+    var thunderSoundGenerator = new OneShotSoundClip( thunderSound, {
+      initialEnableControlProperties: [ resetNotInProgressProperty ],
+      initiateWhenDisabled: true
+    } );
+    soundManager.addSoundGenerator( thunderSoundGenerator );
     model.lightningBoltVisibleProperty.link( function( visible ) {
       if ( visible ) {
         thunderSoundGenerator.play();
@@ -245,9 +259,6 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
     soundManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
-
-    // hook up the reset-in-progress property to the sonification manager so sounds can be muted during reset
-    soundManager.addResetInProgressProperty( model.resetInProgressProperty );
   }
 
   tambo.register( 'UiComponentsScreenView', UiComponentsScreenView );

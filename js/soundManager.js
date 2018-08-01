@@ -7,7 +7,6 @@
  *  - master gain control
  *  - enable/disable of sounds based on visibility of an associated Scenery node
  *  - enabled/disable of sounds based on which tab is showing
- *  - muting of sounds during reset
  *  - master gain for sounds in general
  *  - enable/disable of sounds based on their assigned sonification level (e.g. "basic" or "enhanced")
  *  - gain control for sounds based on their assigned class, e.g. UI versus sim-specific sounds
@@ -53,13 +52,6 @@ define( function( require ) {
 
   // output level for the master gain node when sonification is enabled
   var masterOutputLevel = 1;
-
-  // list of reset-in-progress properties, one should be supplied for each screen
-  var resetInProgressProperties = [];
-
-  // a local property that is true when no resets are happening (which would presumably be most of the time) and goes
-  // false when a reset is in progress
-  var noResetInProgressProperty = new BooleanProperty( true );
 
   // gain nodes for each of the defined "classes", will be defined during init
   var gainNodesForClasses = {};
@@ -225,7 +217,6 @@ define( function( require ) {
       // default options
       options = _.extend( {
         connect: true,
-        disabledDuringReset: false,
 
         // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of
         // the sonification level parameter for the sim.  Valid values are 'basic' or 'enhanced'.
@@ -262,18 +253,12 @@ define( function( require ) {
       // keep a record of the sound generator along with additional information about it
       var soundGeneratorInfo = {
         soundGenerator: soundGenerator,
-        disabledDuringReset: options.disabledDuringReset,
         sonificationLevel: options.sonificationLevel
       };
       soundGeneratorInfoArray.push( soundGeneratorInfo );
 
       // add the global enable property to the list of properties that enable this sound generator
       soundGenerator.addEnableControlProperty( enabledProperty );
-
-      // if this sound generator should be disabled during reset, add an "enable control" property to make that happen
-      if ( options.disabledDuringReset ) {
-        soundGenerator.addEnableControlProperty( noResetInProgressProperty );
-      }
 
       // if this sound generator is only enabled in enhanced mode, add the enhanced mode property as an enable control
       if ( options.sonificationLevel === 'enhanced' ) {
@@ -450,27 +435,7 @@ define( function( require ) {
      * property that corresponds to the sonification level setting
      * @public (read-only)
      */
-    enhancedSoundEnabledProperty: enhancedSoundEnabledProperty,
-
-    /**
-     * add a property that indicates that a reset is in progress for a screen, should be called 1x per screen
-     * @param {BooleanProperty} resetProperty
-     */
-    addResetInProgressProperty: function( resetProperty ) {
-
-      // keep a reference
-      resetInProgressProperties.push( resetProperty );
-
-      // update the local, collective property that tracks whether any reset is in progress
-      resetProperty.link( function() {
-        var resetInProgress = _.some( resetInProgressProperties, function( ripp ) {
-          return ripp.value;
-        } );
-        noResetInProgressProperty.set( !resetInProgress );
-      } );
-
-      // no need to unhook anything since reset-in-progress properties are not expected to be removed
-    }
+    enhancedSoundEnabledProperty: enhancedSoundEnabledProperty
   };
 
   tambo.register( 'soundManager', soundManager );

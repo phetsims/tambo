@@ -37,7 +37,10 @@ define( function( require ) {
       // This flag controls whether the output of this sound generator is immediately connected to the audio context
       // destination.  This is useful for testing, but should not be set to true if this sound generator is being used
       // in conjunction with the sonification manager.
-      connectImmediately: false
+      connectImmediately: false,
+
+      // initial set of properties that will be hooked to this sound generator's enabled state
+      initialEnableControlProperties: []
     }, options );
 
     // @protected {AudioContext}
@@ -76,6 +79,11 @@ define( function( require ) {
           self.enableControlProperties.removeItemRemovedListener( checkAndRemove );
         }
       } );
+    } );
+
+    // add any enable control properties that were provided in the options object
+    options.initialEnableControlProperties.forEach( function( enableControlProperty ) {
+      self.addEnableControlProperty( enableControlProperty );
     } );
 
     // @public (read-only) {BooleanProperty} - A property that tracks whether this sound generator is "locally enabled",
