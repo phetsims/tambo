@@ -39,7 +39,8 @@ define( function( require ) {
       // in conjunction with the sonification manager.
       connectImmediately: false,
 
-      // initial set of properties that will be hooked to this sound generator's enabled state
+      // An initial set of properties that will be hooked to this sound generator's enabled state, more can be added
+      // later via methods if needed.
       enableControlProperties: []
     }, options );
 
