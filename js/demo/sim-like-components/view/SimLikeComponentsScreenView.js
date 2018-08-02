@@ -84,7 +84,7 @@ define( function( require ) {
 
     // generate sound when balls are added or removed
     var pitchedPopGenerator = new PitchedPopGenerator( {
-      initialEnableControlProperties: [ resetNotInProgressProperty ]
+      enableControlProperties: [ resetNotInProgressProperty ]
     } );
     soundManager.addSoundGenerator( pitchedPopGenerator );
     model.boxOfBalls.balls.lengthProperty.lazyLink( function( numBalls ) {

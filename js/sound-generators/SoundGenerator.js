@@ -40,7 +40,7 @@ define( function( require ) {
       connectImmediately: false,
 
       // initial set of properties that will be hooked to this sound generator's enabled state
-      initialEnableControlProperties: []
+      enableControlProperties: []
     }, options );
 
     // @protected {AudioContext}
@@ -82,7 +82,7 @@ define( function( require ) {
     } );
 
     // add any enable control properties that were provided in the options object
-    options.initialEnableControlProperties.forEach( function( enableControlProperty ) {
+    options.enableControlProperties.forEach( function( enableControlProperty ) {
       self.addEnableControlProperty( enableControlProperty );
     } );
 

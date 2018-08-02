@@ -81,11 +81,11 @@ define( function( require ) {
 
     // add sound generators that will play a sound when the value controlled by the slider changes
     var increaseClickSound = new OneShotSoundClip( sliderIncreaseClickSound, {
-      initialEnableControlProperties: [ resetNotInProgressProperty ]
+      enableControlProperties: [ resetNotInProgressProperty ]
     } );
     soundManager.addSoundGenerator( increaseClickSound );
     var decreaseClickSound = new OneShotSoundClip( sliderDecreaseClickSound, {
-      initialEnableControlProperties: [ resetNotInProgressProperty ]
+      enableControlProperties: [ resetNotInProgressProperty ]
     } );
     soundManager.addSoundGenerator( decreaseClickSound );
     model.discreteValueProperty.lazyLink( function( newValue, oldValue ) {
@@ -189,7 +189,7 @@ define( function( require ) {
 
     // add a sound generator for thunderSoundGenerator
     var thunderSoundGenerator = new OneShotSoundClip( thunderSound, {
-      initialEnableControlProperties: [ resetNotInProgressProperty ],
+      enableControlProperties: [ resetNotInProgressProperty ],
       initiateWhenDisabled: true
     } );
     soundManager.addSoundGenerator( thunderSoundGenerator );
