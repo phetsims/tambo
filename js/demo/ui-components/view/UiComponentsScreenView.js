@@ -79,8 +79,10 @@ define( function( require ) {
       }
     );
 
-    // add a sound generator that will play a sound when the value controlled by the slider changes
-    var increaseClickSound = new OneShotSoundClip( sliderIncreaseClickSound );
+    // add sound generators that will play a sound when the value controlled by the slider changes
+    var increaseClickSound = new OneShotSoundClip( sliderIncreaseClickSound, {
+      initialEnableControlProperties: [ resetNotInProgressProperty ]
+    } );
     soundManager.addSoundGenerator( increaseClickSound );
     var decreaseClickSound = new OneShotSoundClip( sliderDecreaseClickSound, {
       initialEnableControlProperties: [ resetNotInProgressProperty ]
