@@ -32,7 +32,9 @@ define( function( require ) {
       leadDesign: 'John Blanco'
     },
     soundManager: soundManager,
-    keyboardHelpNode: keyboardHelpContent
+    keyboardHelpNode: keyboardHelpContent,
+    tambo: true,
+    supportsEnhancedSound: true
   };
 
   // helper function to create screen icons that aren't too bland
