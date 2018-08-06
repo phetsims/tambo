@@ -22,6 +22,12 @@ define( function( require ) {
   var loonCall = require( 'audio!TAMBO/loon-call.mp3' );
   var rhodesChord = require( 'audio!TAMBO/rhodes-chord.mp3' );
 
+  // The following code segment is for testing the size of audio files in built versions of a simulation.  To use,
+  // uncomment to desired line and perform a build, and compare the size to other configurations.
+
+  // var encodingTestAudio = require( 'audio!TAMBO/loon-call.mp3' );
+  var encodingTestAudio = null;
+
   /**
    * @constructor
    */
@@ -47,11 +53,34 @@ define( function( require ) {
     this.addChild( playBasicSoundButton );
 
     // add button to play enhanced-mode sound
-    this.addChild( new TextPushButton( 'Play Enhanced-Level Sound', {
+    var playEnhancedSoundButton = new TextPushButton( 'Play Enhanced-Level Sound', {
       listener: function() { enhancedModeOneShotSound.play(); },
       baseColor: '#DBB1CD',
       left: playBasicSoundButton.left,
       top: playBasicSoundButton.bottom + 10
+    } );
+    this.addChild( playEnhancedSoundButton );
+
+    // create two one-shot sounds, one for basic mode and one for enhanced
+    var encodingTestSound = null;
+    if ( encodingTestAudio ) {
+      encodingTestSound = new OneShotSoundClip( encodingTestAudio );
+      soundManager.addSoundGenerator( encodingTestSound );
+    }
+
+    // add a button to play the sound used to test sizes of sounds
+    this.addChild( new TextPushButton( 'Play Encoding Test Sound', {
+      listener: function() {
+        if ( encodingTestSound ) {
+          encodingTestSound.play();
+        }
+        else {
+          console.log( 'no encoding test sound loading, no sound will be played' );
+        }
+      },
+      baseColor: '#ffe4e1',
+      left: playEnhancedSoundButton.left,
+      top: playEnhancedSoundButton.bottom + 10
     } ) );
 
     // add a panel with controls that allow testing of add, remove, and dispose of sound generator
