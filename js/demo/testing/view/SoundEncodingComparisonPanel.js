@@ -22,12 +22,14 @@ define( function( require ) {
   var soundManager = require( 'TAMBO/soundManager' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
   var BUTTON_FONT = new PhetFont( 14 );
   var COMBO_BOX_FONT = new PhetFont( 12 );
+  var PLAY_COLOR = '#66FF8C';
+  var STOP_COLOR = '#FF4D4D';
 
   // audio - these are defined in an object to simplify the process of adding or removing sounds to this panel
   var sounds = [
@@ -195,7 +197,7 @@ define( function( require ) {
     }, options );
 
     // informational text that goes at the top of the panel
-    var infoText = new Text( 'Select sound and encoding, use button(s) to play', {
+    var infoText = new Text( 'Select sound and encoding, use button to play', {
       font: new PhetFont( { size: 14, weight: 'bold' } )
     } );
 
@@ -258,10 +260,15 @@ define( function( require ) {
       } );
     } );
 
+    // label for sound control button
+    var soundControlButtonLabel = new Text( 'Play', {
+      font: BUTTON_FONT
+    } );
+
     // button used to play sounds
-    var playButton = new TextPushButton( 'Play', {
-      font: BUTTON_FONT,
-      baseColor: '#66FF8C',
+    var soundControlButton = new RectangularPushButton( {
+      content: soundControlButtonLabel,
+      baseColor: PLAY_COLOR,
       listener: function() {
         var sound = sounds[ selectedSoundIndexProperty.value ];
         var soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
@@ -272,7 +279,16 @@ define( function( require ) {
 
         // play or start the sound
         if ( sound.loop ) {
-          soundGenerator.start();
+          if ( soundGenerator.isPlaying ) {
+            soundGenerator.stop();
+            soundControlButtonLabel.text = 'Play';
+            soundControlButton.baseColor = PLAY_COLOR;
+          }
+          else {
+            soundGenerator.start();
+            soundControlButtonLabel.text = 'Stop';
+            soundControlButton.baseColor = STOP_COLOR;
+          }
         }
         else {
           soundGenerator.play();
@@ -280,53 +296,55 @@ define( function( require ) {
       }
     } );
 
-    // button used to stop sounds, only visible when looping sound clips selected
-    var stopButton = new TextPushButton( 'Stop', {
-      font: BUTTON_FONT,
-      baseColor: '#FF4D4D',
-      listener: function() {
-        var sound = sounds[ selectedSoundIndexProperty.value ];
-        var soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
-
-        // This is to make it clear that different sound generators are being selected, since it is sometimes hard to
-        // tell when just listening.
-        console.log( 'selected sound generator ID = ' + soundManager.getSoundGeneratorId( soundGenerator ) );
-
-        assert( soundGenerator.stop, 'this sound generator has no stop function, this listener should not be called' );
-        soundGenerator.stop();
-      }
-    } );
-
-    // create an HBox with one button for one shot sounds and two buttons for looping sounds
-    var buttonHBox = new HBox( {
-      children: [ playButton ],
-      spacing: 25
-    } );
+    // TODO: The handling of the sound generator and button state can be consolidated and improved, I (jbphet) was in a rush
 
     // update the UI state based on the attributes of the selected sound
-    selectedSoundIndexProperty.link( function( selectedSoundIndex ) {
+    selectedSoundIndexProperty.link( function( selectedSoundIndex, previouslySelectedSoundIndex ) {
 
       // make sure the correct encoding selector is being shown
-      selectedEncodingProperty.reset();
       encodingSelectorParentNode.removeAllChildren();
       encodingSelectorParentNode.addChild( encodingSelectionComboBoxes[ selectedSoundIndex ] );
 
-      // make sure the appropriate buttons are shown
-      if ( sounds[ selectedSoundIndex ].loop ) {
-        if ( !buttonHBox.hasChild( stopButton ) ) {
-          buttonHBox.addChild( stopButton );
+      // make sure the control button is in a good state
+      soundControlButtonLabel.text = 'Play';
+      soundControlButton.baseColor = PLAY_COLOR;
+
+      // make sure anything that was playing is stopped
+      if ( previouslySelectedSoundIndex !== null ) {
+        var sound = sounds[ previouslySelectedSoundIndex ];
+        if ( sound.loop ) {
+          var soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
+          if ( soundGenerator.isPlaying ) {
+            soundGenerator.stop();
+            soundControlButtonLabel.text = 'Play';
+            soundControlButton.baseColor = PLAY_COLOR;
+          }
         }
       }
-      else {
-        if ( buttonHBox.hasChild( stopButton ) ) {
-          buttonHBox.removeChild( stopButton );
+
+      // go to default encoding
+      selectedEncodingProperty.reset();
+    } );
+
+    selectedEncodingProperty.link( function( newSelection, oldSelection ) {
+
+      // make sure anything that was playing is stopped
+      if ( oldSelection !== null ) {
+        var sound = sounds[ selectedSoundIndexProperty.value ];
+        if ( sound.loop ) {
+          var soundGenerator = sound.encodings[ oldSelection ].soundGenerator;
+          if ( soundGenerator.isPlaying ) {
+            soundGenerator.stop();
+            soundControlButtonLabel.text = 'Play';
+            soundControlButton.baseColor = PLAY_COLOR;
+          }
         }
       }
     } );
 
     // add everything to a vertical box
     var rootVBox = new VBox( {
-      children: [ infoText, soundAndEncodingSelectorNode, buttonHBox ],
+      children: [ infoText, soundAndEncodingSelectorNode, soundControlButton ],
       spacing: 14
     } );
 
