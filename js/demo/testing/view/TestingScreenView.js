@@ -14,6 +14,7 @@ define( function( require ) {
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var RemoveAndDisposeTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeTestPanel' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var SoundEncodingComparisonPanel = require( 'TAMBO/demo/testing/view/SoundEncodingComparisonPanel' );
   var soundManager = require( 'TAMBO/soundManager' );
   var tambo = require( 'TAMBO/tambo' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
@@ -21,12 +22,6 @@ define( function( require ) {
   // audio
   var loonCall = require( 'audio!TAMBO/loon-call.mp3' );
   var rhodesChord = require( 'audio!TAMBO/rhodes-chord.mp3' );
-
-  // The following code segment is for testing the size of audio files in built versions of a simulation.  To use,
-  // uncomment to desired line and perform a build, and compare the size to other configurations.
-
-  // var encodingTestAudio = require( 'audio!TAMBO/loon-call.mp3' );
-  var encodingTestAudio = null;
 
   /**
    * @constructor
@@ -48,7 +43,7 @@ define( function( require ) {
       listener: function() { basicModeOneShotSound.play(); },
       baseColor: '#aad6cc',
       left: this.layoutBounds.left + 20,
-      top: this.layoutBounds.height * 0.33
+      top: this.layoutBounds.top + 20
     } );
     this.addChild( playBasicSoundButton );
 
@@ -61,32 +56,17 @@ define( function( require ) {
     } );
     this.addChild( playEnhancedSoundButton );
 
-    // create two one-shot sounds, one for basic mode and one for enhanced
-    var encodingTestSound = null;
-    if ( encodingTestAudio ) {
-      encodingTestSound = new OneShotSoundClip( encodingTestAudio );
-      soundManager.addSoundGenerator( encodingTestSound );
-    }
-
-    // add a button to play the sound used to test sizes of sounds
-    this.addChild( new TextPushButton( 'Play Encoding Test Sound', {
-      listener: function() {
-        if ( encodingTestSound ) {
-          encodingTestSound.play();
-        }
-        else {
-          console.log( 'no encoding test sound loading, no sound will be played' );
-        }
-      },
-      baseColor: '#ffe4e1',
-      left: playEnhancedSoundButton.left,
-      top: playEnhancedSoundButton.bottom + 10
-    } ) );
+    // add a panel that will allow the user to compare sounds with different encodings
+    var soundComparisonPanel = new SoundEncodingComparisonPanel( this, {
+      left: playBasicSoundButton.right + 50,
+      top: playBasicSoundButton.top
+    } );
+    this.addChild( soundComparisonPanel );
 
     // add a panel with controls that allow testing of add, remove, and dispose of sound generator
     this.addChild( new RemoveAndDisposeTestPanel( {
-      left: playBasicSoundButton.right + 50,
-      top: playBasicSoundButton.top
+      left: soundComparisonPanel.left,
+      top: soundComparisonPanel.bottom + 20
     } ) );
   }
 

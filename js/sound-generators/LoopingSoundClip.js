@@ -16,7 +16,7 @@ define( function( require ) {
   /**
    * @param {Object} soundInfo - An object that includes *either* a url that points to the sound to be played *or* a
    * base64-encoded version of the sound data.  The former is generally used when a sim is running in RequireJS mode,
-   * the latter is used in built versions.
+   * the latter is used in built versions.  This is the format of the object returned by the audio plugin.
    * @param {Object} options
    * @constructor
    */
