@@ -128,8 +128,56 @@ define( function( require ) {
           soundGenerator: null // filled in during construction
         }
       ]
-    }
+    },
 
+    {
+      soundName: 'Charges Loop',
+      loop: true,
+      encodings: [
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '96 kbps',
+          audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-96-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '64 kbps',
+          audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-64-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '48 kbps',
+          audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-48-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '24 kbps',
+          audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-24-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '16 kbps',
+          audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-16-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '8 kbps',
+          audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-8-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        }
+      ]
+    }
 
   ];
 
@@ -197,13 +245,6 @@ define( function( require ) {
       spacing: 4
     } );
 
-    // update the encoding selector based on the selected sound
-    selectedSoundIndexProperty.link( function( selectedSoundIndex ) {
-      selectedEncodingProperty.reset();
-      encodingSelectorParentNode.removeAllChildren();
-      encodingSelectorParentNode.addChild( encodingSelectionComboBoxes[ selectedSoundIndex ] );
-    } );
-
     // create and register sound generators for each sound and encoding
     sounds.forEach( function( soundDescriptor ) {
       soundDescriptor.encodings.forEach( function( encoding ) {
@@ -220,21 +261,67 @@ define( function( require ) {
     // button used to play sounds
     var playButton = new TextPushButton( 'Play', {
       font: BUTTON_FONT,
+      baseColor: '#66FF8C',
       listener: function() {
-        var soundGenerator =
-          sounds[ selectedSoundIndexProperty.value ].encodings[ selectedEncodingProperty.value ].soundGenerator;
-        console.log( 'soundManager.getSoundGeneratorId( soundGenerator) = ' + soundManager.getSoundGeneratorId( soundGenerator ) );
-        soundGenerator.play();
+        var sound = sounds[ selectedSoundIndexProperty.value ];
+        var soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
+
+        // This is to make it clear that different sound generators are being selected, since it is sometimes hard to
+        // tell when just listening.
+        console.log( 'selected sound generator ID = ' + soundManager.getSoundGeneratorId( soundGenerator ) );
+
+        // play or start the sound
+        if ( sound.loop ) {
+          soundGenerator.start();
+        }
+        else {
+          soundGenerator.play();
+        }
       }
     } );
 
     // button used to stop sounds, only visible when looping sound clips selected
-    // TODO: create this button
+    var stopButton = new TextPushButton( 'Stop', {
+      font: BUTTON_FONT,
+      baseColor: '#FF4D4D',
+      listener: function() {
+        var sound = sounds[ selectedSoundIndexProperty.value ];
+        var soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
+
+        // This is to make it clear that different sound generators are being selected, since it is sometimes hard to
+        // tell when just listening.
+        console.log( 'selected sound generator ID = ' + soundManager.getSoundGeneratorId( soundGenerator ) );
+
+        assert( soundGenerator.stop, 'this sound generator has no stop function, this listener should not be called' );
+        soundGenerator.stop();
+      }
+    } );
 
     // create an HBox with one button for one shot sounds and two buttons for looping sounds
     var buttonHBox = new HBox( {
       children: [ playButton ],
-      spacing: 5
+      spacing: 25
+    } );
+
+    // update the UI state based on the attributes of the selected sound
+    selectedSoundIndexProperty.link( function( selectedSoundIndex ) {
+
+      // make sure the correct encoding selector is being shown
+      selectedEncodingProperty.reset();
+      encodingSelectorParentNode.removeAllChildren();
+      encodingSelectorParentNode.addChild( encodingSelectionComboBoxes[ selectedSoundIndex ] );
+
+      // make sure the appropriate buttons are shown
+      if ( sounds[ selectedSoundIndex ].loop ) {
+        if ( !buttonHBox.hasChild( stopButton ) ) {
+          buttonHBox.addChild( stopButton );
+        }
+      }
+      else {
+        if ( buttonHBox.hasChild( stopButton ) ) {
+          buttonHBox.removeChild( stopButton );
+        }
+      }
     } );
 
     // add everything to a vertical box
