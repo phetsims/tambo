@@ -45,8 +45,36 @@ define( function( require ) {
         {
           stereo: true,
           format: 'mp3',
+          rate: '64 kbps',
+          audio: require( 'audio!TAMBO/20180213_Bright_Marimba-64-kbps-stereo.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: true,
+          format: 'mp3',
           rate: '48 kbps',
           audio: require( 'audio!TAMBO/20180213_Bright_Marimba-48-kbps-stereo.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: true,
+          format: 'mp3',
+          rate: '24 kbps',
+          audio: require( 'audio!TAMBO/20180213_Bright_Marimba-24-kbps-stereo.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: true,
+          format: 'mp3',
+          rate: '16 kbps',
+          audio: require( 'audio!TAMBO/20180213_Bright_Marimba-16-kbps-stereo.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: true,
+          format: 'mp3',
+          rate: '8 kbps',
+          audio: require( 'audio!TAMBO/20180213_Bright_Marimba-8-kbps-stereo.mp3' ),
           soundGenerator: null // filled in during construction
         }
       ]
