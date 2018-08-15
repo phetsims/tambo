@@ -253,7 +253,8 @@ define( function( require ) {
       // keep a record of the sound generator along with additional information about it
       var soundGeneratorInfo = {
         soundGenerator: soundGenerator,
-        sonificationLevel: options.sonificationLevel
+        sonificationLevel: options.sonificationLevel,
+        id: id
       };
       soundGeneratorInfoArray.push( soundGeneratorInfo );
 
@@ -429,6 +430,21 @@ define( function( require ) {
      */
     get sonificationLevel() {
       return enhancedSoundEnabledProperty.get() ? 'enhanced' : 'basic';
+    },
+
+    /**
+     * get the ID for a sound generator, null if the provided sound generator isn't registered
+     * @param {SoundGenerator) soundGenerator
+     * @return {string}
+     */
+    getSoundGeneratorId: function( soundGenerator ) {
+      var id = null;
+      soundGeneratorInfoArray.forEach( function( soundGeneratorInfo ) {
+        if ( soundGeneratorInfo.soundGenerator === soundGenerator ) {
+          id = soundGeneratorInfo.id;
+        }
+      } );
+      return id;
     },
 
     /**

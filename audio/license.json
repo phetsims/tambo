@@ -1,4 +1,100 @@
 {
+  "07_Button_Reset_All_v3-8-kbps-mono.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris for PhET"
+  },
+  "07_Button_Reset_All_v3-16-kbps-mono.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris for PhET"
+  },
+  "07_Button_Reset_All_v3-24-kbps-mono.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris for PhET"
+  },
+  "07_Button_Reset_All_v3-48-kbps-mono.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris for PhET"
+  },
+  "07_Button_Reset_All_v3-64-kbps-mono.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris for PhET"
+  },
+  "07_Button_Reset_All_v3-128-kbps-mono.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris for PhET"
+  },
+  "20180213_Bright_Marimba-128-kbps-stereo.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Mike Winters of Georgia Tech for PhET"
+  },
+  "20180213_Bright_Marimba-64-kbps-stereo.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Mike Winters of Georgia Tech for PhET"
+  },
+  "20180213_Bright_Marimba-48-kbps-stereo.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Mike Winters of Georgia Tech for PhET"
+  },
+  "20180213_Bright_Marimba-24-kbps-stereo.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Mike Winters of Georgia Tech for PhET"
+  },
+  "20180213_Bright_Marimba-16-kbps-stereo.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Mike Winters of Georgia Tech for PhET"
+  },
+  "20180213_Bright_Marimba-8-kbps-stereo.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Mike Winters of Georgia Tech for PhET"
+  },
   "bird-call.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"
@@ -102,54 +198,6 @@
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
     "notes": "see https://freesound.org/people/InspectorJ/sounds/360328/, note that author says no need to credit for non-commercial projects"
-  },
-  "20180213_Bright_Marimba-128-kbps-stereo.mp3": {
-    "text": [
-      "CC-BY"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech and supplied to PhET"
-  },
-  "20180213_Bright_Marimba-64-kbps-stereo.mp3": {
-    "text": [
-      "CC-BY"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech and supplied to PhET"
-  },
-  "20180213_Bright_Marimba-48-kbps-stereo.mp3": {
-    "text": [
-      "CC-BY"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech and supplied to PhET"
-  },
-  "20180213_Bright_Marimba-24-kbps-stereo.mp3": {
-    "text": [
-      "CC-BY"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech and supplied to PhET"
-  },
-  "20180213_Bright_Marimba-16-kbps-stereo.mp3": {
-    "text": [
-      "CC-BY"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech and supplied to PhET"
-  },
-  "20180213_Bright_Marimba-8-kbps-stereo.mp3": {
-    "text": [
-      "CC-BY"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech and supplied to PhET"
   },
   "wall-contact.mp3": {
     "text": [

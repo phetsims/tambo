@@ -14,6 +14,7 @@ define( function( require ) {
   var HStrut = require( 'SCENERY/nodes/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
   var LoopingSoundClip = require( 'TAMBO/sound-generators/LoopingSoundClip' );
+  var Node = require( 'SCENERY/nodes/Node' );
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -78,7 +79,57 @@ define( function( require ) {
           soundGenerator: null // filled in during construction
         }
       ]
+    },
+
+    {
+      soundName: 'Reset All',
+      loop: false,
+      encodings: [
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '128 kbps',
+          audio: require( 'audio!TAMBO/07_Button_Reset_All_v3-128-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '64 kbps',
+          audio: require( 'audio!TAMBO/07_Button_Reset_All_v3-64-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '48 kbps',
+          audio: require( 'audio!TAMBO/07_Button_Reset_All_v3-48-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '24 kbps',
+          audio: require( 'audio!TAMBO/07_Button_Reset_All_v3-24-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '16 kbps',
+          audio: require( 'audio!TAMBO/07_Button_Reset_All_v3-16-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        },
+        {
+          stereo: false,
+          format: 'mp3',
+          rate: '8 kbps',
+          audio: require( 'audio!TAMBO/07_Button_Reset_All_v3-8-kbps-mono.mp3' ),
+          soundGenerator: null // filled in during construction
+        }
+      ]
     }
+
 
   ];
 
@@ -131,6 +182,9 @@ define( function( require ) {
     var selectedSoundIndexProperty = new Property( 0 );
     var soundSelectorComboBox = new ComboBox( soundSelectorComboBoxItems, selectedSoundIndexProperty, listParent );
 
+    // the encoding selector combo boxes get changed around based on which sound is selected - this is the parent node
+    var encodingSelectorParentNode = new Node();
+
     // create a node that will contain the combo boxes for selecting the sound and the encoding
     var soundAndEncodingSelectorNode = new HBox( {
       children: [
@@ -138,9 +192,16 @@ define( function( require ) {
         soundSelectorComboBox,
         new HStrut( 5 ),
         new Text( 'Encoding:', { font: new PhetFont( 14 ) } ),
-        encodingSelectionComboBoxes[ selectedEncodingProperty.value ]
+        encodingSelectorParentNode
       ],
       spacing: 4
+    } );
+
+    // update the encoding selector based on the selected sound
+    selectedSoundIndexProperty.link( function( selectedSoundIndex ) {
+      selectedEncodingProperty.reset();
+      encodingSelectorParentNode.removeAllChildren();
+      encodingSelectorParentNode.addChild( encodingSelectionComboBoxes[ selectedSoundIndex ] );
     } );
 
     // create and register sound generators for each sound and encoding
@@ -162,6 +223,7 @@ define( function( require ) {
       listener: function() {
         var soundGenerator =
           sounds[ selectedSoundIndexProperty.value ].encodings[ selectedEncodingProperty.value ].soundGenerator;
+        console.log( 'soundManager.getSoundGeneratorId( soundGenerator) = ' + soundManager.getSoundGeneratorId( soundGenerator ) );
         soundGenerator.play();
       }
     } );
