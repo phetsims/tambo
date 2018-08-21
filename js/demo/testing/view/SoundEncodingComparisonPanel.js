@@ -139,8 +139,8 @@ define( function( require ) {
         {
           stereo: false,
           format: 'mp3',
-          rate: '96 kbps',
-          audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-96-kbps-mono.mp3' ),
+          rate: '128 kbps',
+          audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-128-kbps-mono.mp3' ),
           soundGenerator: null // filled in during construction
         },
         {
@@ -154,6 +154,7 @@ define( function( require ) {
           stereo: false,
           format: 'mp3',
           rate: '48 kbps',
+          leaderTrimAmount: 0.035,
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-48-kbps-mono.mp3' ),
           soundGenerator: null // filled in during construction
         },
@@ -162,6 +163,7 @@ define( function( require ) {
           format: 'mp3',
           rate: '24 kbps',
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-24-kbps-mono.mp3' ),
+          leaderTrimAmount: 0.047,
           soundGenerator: null // filled in during construction
         },
         {
@@ -169,6 +171,7 @@ define( function( require ) {
           format: 'mp3',
           rate: '16 kbps',
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-16-kbps-mono.mp3' ),
+          leaderTrimAmount: 0.047,
           soundGenerator: null // filled in during construction
         },
         {
@@ -176,11 +179,11 @@ define( function( require ) {
           format: 'mp3',
           rate: '8 kbps',
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-8-kbps-mono.mp3' ),
+          leaderTrimAmount: 0.047,
           soundGenerator: null // filled in during construction
         }
       ]
     }
-
   ];
 
   /**
@@ -251,7 +254,9 @@ define( function( require ) {
     sounds.forEach( function( soundDescriptor ) {
       soundDescriptor.encodings.forEach( function( encoding ) {
         if ( soundDescriptor.loop ) {
-          encoding.soundGenerator = new LoopingSoundClip( encoding.audio );
+          encoding.soundGenerator = new LoopingSoundClip( encoding.audio, {
+            leaderTrimAmount: encoding.leaderTrimAmount || 0
+          } );
         }
         else {
           encoding.soundGenerator = new OneShotSoundClip( encoding.audio );

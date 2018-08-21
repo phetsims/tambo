@@ -1,7 +1,7 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * abstract base class for a sound generator that uses recorded sounds
+ * abstract base type for a sound generator that uses recorded sounds
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -24,6 +24,17 @@ define( function( require ) {
   function SoundClip( soundInfo, options ) {
 
     var self = this;
+
+    options = _.extend( {
+
+      // In seconds.  This option can be used to trim the beginning, or 'leader' portion, of a sound file.  This is
+      // mostly useful for loops, since many MP3 encoders insert silence at the front of an encoded file, which leads to
+      // an audible gap when the loop starts over (see https://github.com/phetsims/tambo/issues/30).  The value should
+      // be determined by examining the encoded sound file in an audio editor and determine how much of the leader
+      // consists of silence.  For files encoded using Audacity and the LAME encoder, a value around 0.47 (seconds) has
+      // generally worked well.
+      leaderTrimAmount: 0
+    }, options );
     SoundGenerator.call( this, options );
 
     // @protected {AudioBufferSourceNode} - sound data in a form that is ready to play with Web Audio
@@ -37,7 +48,35 @@ define( function( require ) {
       soundInfo,
       this.audioContext,
       function( decodedAudioData ) {
-        self.soundBuffer = decodedAudioData;
+
+        // If specified, trim the beginning of the decoded audio data.  This is generally done to remove silence, see
+        // the option description above for more information.
+        if ( options.leaderTrimAmount > 0 ) {
+
+          var channelData = decodedAudioData.getChannelData( 0 );
+          var startIndex = Math.round( options.leaderTrimAmount * decodedAudioData.sampleRate );
+
+          // create a new audio buffer where the trimmed data will go
+          var trimmedAudioBuffer = self.audioContext.createBuffer(
+            decodedAudioData.numberOfChannels,
+            decodedAudioData.length - startIndex,
+            decodedAudioData.sampleRate
+          );
+
+          // copy the data from the originally decoding into the trimmed buffer
+          for ( var channel = 0; channel < trimmedAudioBuffer.numberOfChannels; channel++ ) {
+            var soundDataBuffer = trimmedAudioBuffer.getChannelData( channel );
+            for ( var i = 0; i < trimmedAudioBuffer.length; i++ ) {
+              soundDataBuffer[ i ] = channelData[ i + startIndex ];
+            }
+          }
+          self.soundBuffer = trimmedAudioBuffer;
+        }
+        else {
+          self.soundBuffer = decodedAudioData;
+        }
+
+        // perform the "load complete" actions, if any
         self.loadCompleteAction && self.loadCompleteAction();
         self.loadCompleteAction = null;
       },
