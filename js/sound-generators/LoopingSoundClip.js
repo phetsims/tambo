@@ -21,11 +21,26 @@ define( function( require ) {
    * @constructor
    */
   function LoopingSoundClip( soundInfo, options ) {
+
+    options = _.extend( {
+
+      // Options that can be used to control the start and endpoints of the loop.  The loopStart value is often set to
+      // a non-zero value when using an MP3 sound encoded using Audacity, since the LAME (their name, not mine) encoder
+      // that they use inserts silence, see https://github.com/phetsims/tambo/issues/30.
+      loopStart: 0,
+      loopEnd: null
+    }, options );
     SoundClip.call( this, soundInfo, options );
 
     // @private {GainNode} - a gain node that is used to prevent clicks when stopping the loop
     this.localGainNode = this.audioContext.createGain();
     this.localGainNode.connect( this.masterGainNode );
+
+    // @private - options needed for controlling the loop
+    this.loopStart = options.loopStart;
+    if ( options.loopEnd !== null ) {
+      this.loopEnd = options.loopEnd;
+    }
 
     // @private {boolean}
     this._isPlaying = false;
@@ -59,6 +74,13 @@ define( function( require ) {
         this.loopBufferSource.connect( this.localGainNode );
         this.loopBufferSource.loop = true;
         this.loopBufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
+        this.loopBufferSource.loopStart = this.loopStart;
+        if ( this.loopEnd ) {
+          this.loopBufferSource.loopEnd = this.loopEnd;
+        }
+        else {
+          this.loopBufferSource.loopEnd = this.soundBuffer.length / this.soundBuffer.sampleRate;
+        }
         this.loopBufferSource.start( now );
         this._isPlaying = true;
       }
