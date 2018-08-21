@@ -23,6 +23,10 @@ define( function( require ) {
   function LoopingSoundClip( soundInfo, options ) {
     SoundClip.call( this, soundInfo, options );
 
+    // @private {GainNode} - a gain node that is used to prevent clicks when stopping the loop
+    this.localGainNode = this.audioContext.createGain();
+    this.localGainNode.connect( this.masterGainNode );
+
     // @private {boolean}
     this._isPlaying = false;
   }
@@ -43,13 +47,17 @@ define( function( require ) {
 
       if ( this.soundBuffer ) {
 
+        var now = this.audioContext.currentTime;
+
+        // make sure gain is set to unity value
+        this.localGainNode.gain.setValueAtTime( 1, now );
+
         // TODO: Do we really need to do all of this every time to play the sound, or can some of it be set up in constructor?
         // @private {AudioBufferSourceNode}
         this.loopBufferSource = this.audioContext.createBufferSource();
         this.loopBufferSource.buffer = this.soundBuffer;
-        this.loopBufferSource.connect( this.masterGainNode );
+        this.loopBufferSource.connect( this.localGainNode );
         this.loopBufferSource.loop = true;
-        var now = this.audioContext.currentTime;
         this.loopBufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
         this.loopBufferSource.start( now );
         this._isPlaying = true;
@@ -68,7 +76,13 @@ define( function( require ) {
      */
     stop: function() {
       if ( this.soundBuffer ) {
-        this.loopBufferSource.stop();
+
+        // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
+        // down the gain as quickly as possible without causing a click. The values for the time constant and stop time
+        // were empirically determined.
+        var now = this.audioContext.currentTime;
+        this.localGainNode.gain.setTargetAtTime( 0, now, 0.01 );
+        this.loopBufferSource.stop( now + 0.1 );
         this._isPlaying = false;
       }
       else {
