@@ -19,11 +19,10 @@ define( function( require ) {
   var soundInfoDecoder = {
 
     /**
-     * TODO: finish doc when this has stabilized
-     * @param soundInfo
-     * @param audioContext
-     * @param onSuccess
-     * @param onError
+     * @param {Object} soundInfo - an object that contains either a URL for a sound resource or a base64 encoded sound
+     * @param {AudioContext} audioContext - a Web Audio audio context that will be used to decode the audio data
+     * @param {function} onSuccess
+     * @param {function} onError
      */
     decode: function( soundInfo, audioContext, onSuccess, onError ) {
 

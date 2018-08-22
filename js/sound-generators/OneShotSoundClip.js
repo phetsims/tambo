@@ -65,11 +65,17 @@ define( function( require ) {
 
         if ( this.soundBuffer ) {
 
-          // TODO: Do we really need to do all of this every time to play the sound, or can some of it be set up in constructor?
+          // create an audio buffer source node and hook it up to the previously decoded data
           var source = this.audioContext.createBufferSource();
           source.buffer = this.soundBuffer;
+
+          // connect this source node to the master output
           source.connect( this.masterGainNode );
+
+          // add this to the list of active sources so that it can be stopped if necessary
           this.activeSources.push( source );
+
+          // add a handler for when the sound finishes playing
           source.onended = function() {
 
             // remove the source from the list of active sources
@@ -78,6 +84,8 @@ define( function( require ) {
               self.activeSources.splice( indexOfSource );
             }
           };
+
+          // set the playback rate and start playback
           var now = this.audioContext.currentTime;
           source.playbackRate.setValueAtTime( this.playbackRate, now );
           source.start( now );

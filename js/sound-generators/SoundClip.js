@@ -27,7 +27,7 @@ define( function( require ) {
 
     SoundGenerator.call( this, options );
 
-    // @protected {AudioBufferSourceNode} - sound data in a form that is ready to play with Web Audio
+    // @protected {AudioBuffer} - sound data in a form that is ready to play with Web Audio
     this.soundBuffer = null;
 
     // @protected {function} - function to be invoked when sound buffer finishes loading
