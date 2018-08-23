@@ -50,6 +50,7 @@ define( function( require ) {
       logUnimplementedWarning();
       return {
         connect: silentStub,
+        disconnect: silentStub,
         gain: {
           cancelScheduledValues: silentStub,
           setTargetAtTime: silentStub,
