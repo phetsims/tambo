@@ -169,13 +169,17 @@ define( function( require ) {
         }
         else if ( mostRecentlyAddedSoundGenerator instanceof LoopingSoundClip ) {
 
-          // play the loop for a fixed time and then stop, but make sure the sound generator wasn't removed in the interim
-          mostRecentlyAddedSoundGenerator.start();
-          Timer.setTimeout( function() {
-            if ( soundGenerators.contains( mostRecentlyAddedSoundGenerator ) ) {
-              mostRecentlyAddedSoundGenerator.stop();
-            }
-          }, 3000 );
+          if ( !mostRecentlyAddedSoundGenerator.isPlaying ) {
+
+            // play the loop for a fixed time and then stop, but make sure the sound generator wasn't removed in the
+            // interim
+            mostRecentlyAddedSoundGenerator.start();
+            Timer.setTimeout( function() {
+              if ( soundGenerators.contains( mostRecentlyAddedSoundGenerator ) ) {
+                mostRecentlyAddedSoundGenerator.stop();
+              }
+            }, 3000 );
+          }
         }
         else if ( mostRecentlyAddedSoundGenerator instanceof PitchedPopGenerator ) {
           mostRecentlyAddedSoundGenerator.playPop( phet.joist.random.nextDouble() );

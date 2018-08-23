@@ -62,27 +62,30 @@ define( function( require ) {
 
       if ( this.soundBuffer ) {
 
-        var now = this.audioContext.currentTime;
+        // ignore the request to play if already playing
+        if ( !this._isPlaying ) {
+          var now = this.audioContext.currentTime;
 
-        // make sure gain is set to unity value
-        this.localGainNode.gain.setValueAtTime( 1, now );
+          // make sure gain is set to unity value
+          this.localGainNode.gain.setValueAtTime( 1, now );
 
-        // TODO: Do we really need to do all of this every time to play the sound, or can some of it be set up in constructor?
-        // @private {AudioBufferSourceNode}
-        this.loopBufferSource = this.audioContext.createBufferSource();
-        this.loopBufferSource.buffer = this.soundBuffer;
-        this.loopBufferSource.connect( this.localGainNode );
-        this.loopBufferSource.loop = true;
-        this.loopBufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
-        this.loopBufferSource.loopStart = this.loopStart;
-        if ( this.loopEnd ) {
-          this.loopBufferSource.loopEnd = this.loopEnd;
+          // TODO: Do we really need to do all of this every time to play the sound, or can some of it be set up in constructor?
+          // @private {AudioBufferSourceNode}
+          this.loopBufferSource = this.audioContext.createBufferSource();
+          this.loopBufferSource.buffer = this.soundBuffer;
+          this.loopBufferSource.connect( this.localGainNode );
+          this.loopBufferSource.loop = true;
+          this.loopBufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
+          this.loopBufferSource.loopStart = this.loopStart;
+          if ( this.loopEnd ) {
+            this.loopBufferSource.loopEnd = this.loopEnd;
+          }
+          else {
+            this.loopBufferSource.loopEnd = this.soundBuffer.length / this.soundBuffer.sampleRate;
+          }
+          this.loopBufferSource.start( now );
+          this._isPlaying = true;
         }
-        else {
-          this.loopBufferSource.loopEnd = this.soundBuffer.length / this.soundBuffer.sampleRate;
-        }
-        this.loopBufferSource.start( now );
-        this._isPlaying = true;
       }
       else {
 
