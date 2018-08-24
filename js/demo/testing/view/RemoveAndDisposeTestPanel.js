@@ -55,7 +55,7 @@ define( function( require ) {
     synthesizedSound: {
       comboBoxName: 'Synthesized sound',
       createSoundGenerator: function() {
-        return new PitchedPopGenerator();
+        return new PitchedPopGenerator( { numPopGenerators: 2 } );
       }
     }
   };

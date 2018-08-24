@@ -191,13 +191,13 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "required for iOS+Safari workaround, created by John Blanco"
   },
-  "empty-apartment-bedroom-06.mp3": {
+  "empty_apartment_bedroom_06_resampled.mp3": {
     "text": [
       "obtained from www.openairlib.net"
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "Public Domain Creative Commons",
-    "notes": "downloaded from http://www.openairlib.net/auralizationdb/content/empty-apartment-bedroom"
+    "notes": "downloaded from http://www.openairlib.net/auralizationdb/content/empty-apartment-bedroom, resampled to 44.1 kHz"
   },
   "loon-call.mp3": {
     "text": [

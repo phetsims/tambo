@@ -29,7 +29,7 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
 
   // audio
-  var reverbImpulseResponse = require( 'audio!TAMBO/empty-apartment-bedroom-06.mp3' );
+  var reverbImpulseResponse = require( 'audio!TAMBO/empty_apartment_bedroom_06_resampled.mp3' );
   var empty = require( 'audio!TAMBO/empty.mp3' );
 
   // constants
