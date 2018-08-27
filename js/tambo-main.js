@@ -33,7 +33,7 @@ define( function( require ) {
     },
     soundManager: soundManager,
     keyboardHelpNode: keyboardHelpContent,
-    tambo: true,
+    supportsSound: true,
     supportsEnhancedSound: true
   };
 
