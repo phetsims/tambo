@@ -56,9 +56,13 @@ define( function( require ) {
 
     /**
      * function to start playing of the sound
+     * @param {number} [delay] - optional delay parameter
      * @public
      */
-    play: function() {
+    play: function( delay ) {
+
+      // default delay is zero
+      delay = typeof delay === 'undefined' ? 0 : delay;
 
       var self = this;
       if ( this.initiateWhenDisabled || this.fullyEnabled ) {
@@ -88,7 +92,7 @@ define( function( require ) {
           // set the playback rate and start playback
           var now = this.audioContext.currentTime;
           source.playbackRate.setValueAtTime( this.playbackRate, now );
-          source.start( now );
+          source.start( now + delay );
         }
         else {
 
