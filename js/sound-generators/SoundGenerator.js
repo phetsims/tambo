@@ -171,7 +171,7 @@ define( function( require ) {
      */
     setOutputLevel: function( outputLevel, timeConstant ) {
       this._outputLevel = outputLevel;
-      if ( this._enabled ) {
+      if ( this.fullyEnabledProperty.value ) {
         this.masterGainNode.gain.setTargetAtTime(
           outputLevel,
           this.audioContext.currentTime,
