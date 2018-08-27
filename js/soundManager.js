@@ -33,7 +33,7 @@ define( function( require ) {
   var empty = require( 'audio!TAMBO/empty.mp3' );
 
   // constants
-  var DEFAULT_REVERB_LEVEL = 0.2;
+  var DEFAULT_REVERB_LEVEL = 0.1;
   var TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
   var SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.soundInitiallyEnabled;
   var ENHANCED_SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.enhancedSoundInitiallyEnabled;
