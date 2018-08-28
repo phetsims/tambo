@@ -31,8 +31,7 @@ define( function( require ) {
       // the range of pitches that this pop generator will produce, in Hz
       pitchRange: new Range( 220, 660 ),
 
-      // the number of pop generators to create and pool, use more if generatoring lots of pops close together, less
-      // if not
+      // the number of pop generators to create and pool, use more if generating lots of pops close together, less if not
       numPopGenerators: DEFAULT_NUM_POP_GENERATORS
     }, options );
 
