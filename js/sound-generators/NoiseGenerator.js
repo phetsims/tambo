@@ -163,7 +163,11 @@ define( function( require ) {
 
   inherit( SoundGenerator, NoiseGenerator, {
 
-    start: function() {
+    /**
+     * start the noise source
+     * @param {number} [time] - optional audio context time at which this should be started
+     */
+    start: function( time ) {
 
       // only do something if not already playing, otherwise ignore this request
       if ( !this.isPlaying ) {
@@ -180,16 +184,20 @@ define( function( require ) {
         this.noiseSource.buffer = this.noiseBuffer;
         this.noiseSource.loop = true;
         this.noiseSource.connect( this.noiseSourceConnectionPoint );
-        this.noiseSource.start( 0 );
+        this.noiseSource.start( time );
         this.isPlaying = true;
       }
     },
 
-    stop: function() {
+    /**
+     * stop the noise source
+     * @param {number} [time] - optional audio context time at which this should be stopped
+     */
+    stop: function( time ) {
 
       // only stop if playing, otherwise ignore
       if ( this.isPlaying ) {
-        this.noiseSource.stop();
+        this.noiseSource.stop( time );
         this.noiseSource.disconnect( this.noiseSourceConnectionPoint );
         this.noiseSource = null;
         this.isPlaying = false;

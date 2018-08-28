@@ -170,12 +170,13 @@ define( function( require ) {
      * @param {number} [timeConstant] - time constant for outputLevel change, see AudioParam.setTargetAtTime
      */
     setOutputLevel: function( outputLevel, timeConstant ) {
+      timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TIME_CONSTANT : timeConstant;
       this._outputLevel = outputLevel;
       if ( this.fullyEnabledProperty.value ) {
         this.masterGainNode.gain.setTargetAtTime(
           outputLevel,
           this.audioContext.currentTime,
-          timeConstant || DEFAULT_TIME_CONSTANT
+          timeConstant
         );
       }
     },
