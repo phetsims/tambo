@@ -109,7 +109,7 @@ define( function( require ) {
     this.addChild( abSwitch );
 
     // add a looping sound that is turned on/off by the switch
-    var loopingSound = new LoopingSoundClip( chargesInBody );
+    var loopingSound = new LoopingSoundClip( chargesInBody, { autoDetectLoopBounds: true } );
     soundManager.addSoundGenerator( loopingSound, { associatedViewNode: abSwitch } );
     model.loopOnProperty.link( function( loopOn ) {
 

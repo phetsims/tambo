@@ -22,25 +22,11 @@ define( function( require ) {
    */
   function LoopingSoundClip( soundInfo, options ) {
 
-    options = _.extend( {
-
-      // Options that can be used to control the start and endpoints of the loop.  The loopStart value is often set to
-      // a non-zero value when using an MP3 sound encoded using Audacity, since the LAME (their name, not mine) encoder
-      // that they use inserts silence, see https://github.com/phetsims/tambo/issues/30.
-      loopStart: 0,
-      loopEnd: null
-    }, options );
     SoundClip.call( this, soundInfo, options );
 
     // @private {GainNode} - a gain node that is used to prevent clicks when stopping the loop
     this.localGainNode = this.audioContext.createGain();
     this.localGainNode.connect( this.masterGainNode );
-
-    // @private - options needed for controlling the loop
-    this.loopStart = options.loopStart;
-    if ( options.loopEnd !== null ) {
-      this.loopEnd = options.loopEnd;
-    }
 
     // @private {boolean}
     this._isPlaying = false;
@@ -69,7 +55,7 @@ define( function( require ) {
           // make sure gain is set to unity value
           this.localGainNode.gain.setValueAtTime( 1, now );
 
-          // TODO: Do we really need to do all of this every time to play the sound, or can some of it be set up in constructor?
+          // create the audio buffer source node and connect it to the loop data
           // @private {AudioBufferSourceNode}
           this.loopBufferSource = this.audioContext.createBufferSource();
           this.loopBufferSource.buffer = this.soundBuffer;
@@ -80,9 +66,9 @@ define( function( require ) {
           if ( this.loopEnd ) {
             this.loopBufferSource.loopEnd = this.loopEnd;
           }
-          else {
-            this.loopBufferSource.loopEnd = this.soundBuffer.length / this.soundBuffer.sampleRate;
-          }
+          // else {
+          //   this.loopBufferSource.loopEnd = this.soundBuffer.length / this.soundBuffer.sampleRate;
+          // }
           this.loopBufferSource.start( now );
           this._isPlaying = true;
         }

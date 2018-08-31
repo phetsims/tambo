@@ -18,7 +18,6 @@ define( function( require ) {
   var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var platform = require( 'PHET_CORE/platform' );
   var Property = require( 'AXON/Property' );
   var soundManager = require( 'TAMBO/soundManager' );
   var tambo = require( 'TAMBO/tambo' );
@@ -31,23 +30,6 @@ define( function( require ) {
   var COMBO_BOX_FONT = new PhetFont( 12 );
   var PLAY_COLOR = '#66FF8C';
   var STOP_COLOR = '#FF4D4D';
-
-
-  // TODO: below is some very unfortunate platform-specific code that compensates for differences in how the various
-  // browsers currently handle loopStart values.
-  var DEFAULT_MP3_LOOP_START;
-  if ( platform.edge ) {
-    DEFAULT_MP3_LOOP_START = 0.3;
-  }
-  else if ( platform.firefox ) {
-    DEFAULT_MP3_LOOP_START = 0.3;
-  }
-  else if ( platform.safari ) {
-    DEFAULT_MP3_LOOP_START = 0.0;
-  }
-  else {
-    DEFAULT_MP3_LOOP_START = 0.47;
-  }
 
   // audio - these are defined in an object to simplify the process of adding or removing sounds to this panel
   var sounds = [
@@ -159,7 +141,6 @@ define( function( require ) {
           format: 'mp3',
           rate: '128 kbps',
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-128-kbps-mono.mp3' ),
-          loopStart: DEFAULT_MP3_LOOP_START,
           soundGenerator: null // filled in during construction
         },
         {
@@ -167,7 +148,6 @@ define( function( require ) {
           format: 'mp3',
           rate: '64 kbps',
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-64-kbps-mono.mp3' ),
-          loopStart: DEFAULT_MP3_LOOP_START,
           soundGenerator: null // filled in during construction
         },
         {
@@ -175,7 +155,6 @@ define( function( require ) {
           format: 'mp3',
           rate: '48 kbps',
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-48-kbps-mono.mp3' ),
-          loopStart: DEFAULT_MP3_LOOP_START,
           soundGenerator: null // filled in during construction
         },
         {
@@ -183,7 +162,6 @@ define( function( require ) {
           format: 'mp3',
           rate: '24 kbps',
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-24-kbps-mono.mp3' ),
-          loopStart: DEFAULT_MP3_LOOP_START,
           soundGenerator: null // filled in during construction
         },
         {
@@ -191,7 +169,6 @@ define( function( require ) {
           format: 'mp3',
           rate: '16 kbps',
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-16-kbps-mono.mp3' ),
-          loopStart: DEFAULT_MP3_LOOP_START,
           soundGenerator: null // filled in during construction
         },
         {
@@ -199,7 +176,6 @@ define( function( require ) {
           format: 'mp3',
           rate: '8 kbps',
           audio: require( 'audio!TAMBO/Charges_In_Body_Better_Loop-8-kbps-mono.mp3' ),
-          loopStart: DEFAULT_MP3_LOOP_START,
           soundGenerator: null // filled in during construction
         }
       ]
@@ -275,7 +251,7 @@ define( function( require ) {
       soundDescriptor.encodings.forEach( function( encoding ) {
         if ( soundDescriptor.loop ) {
           encoding.soundGenerator = new LoopingSoundClip( encoding.audio, {
-            loopStart: encoding.loopStart || 0
+            autoDetectLoopBounds: true
           } );
         }
         else {
