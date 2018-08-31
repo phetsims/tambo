@@ -21,7 +21,7 @@ define( function( require ) {
   // generate sound should start and end.  Its value was determined through experimentation on a single loop
   // (charges-in-body) at a number of different encodings.  It may need to be refined over time as we add new loops.  Or
   // it may work great forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
-  var AUDIO_DATA_THRESHOLD = 0.001;
+  var AUDIO_DATA_THRESHOLD = 0.01;
 
   /**
    * @param {Object} soundInfo - An object that includes *either* a url that points to the sound to be played *or* a
