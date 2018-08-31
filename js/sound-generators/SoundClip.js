@@ -87,14 +87,14 @@ define( function( require ) {
     // initialize some variable that will be used to analyze the data
     var dataLength = soundClip.soundBuffer.length;
     var data = soundClip.soundBuffer.getChannelData( 0 );
-    var index;
+    var dataIndex;
 
     // find the first occurrence of the threshold that is trending in the up direction
     var startThresholdIndex = 0;
     var found = false;
-    for ( index = 0; index < dataLength - 1 && !found; index++ ) {
-      if ( data[ index ] > AUDIO_DATA_THRESHOLD && data[ index + 1 ] > data[ index ] ) {
-        startThresholdIndex = index;
+    for ( dataIndex = 0; dataIndex < dataLength - 1 && !found; dataIndex++ ) {
+      if ( data[ dataIndex ] > AUDIO_DATA_THRESHOLD && data[ dataIndex + 1 ] > data[ dataIndex ] ) {
+        startThresholdIndex = dataIndex;
         found = true;
       }
     }
@@ -103,9 +103,9 @@ define( function( require ) {
     // work backwards from the first threshold found to find the first zero or zero crossing
     var loopStartIndex = 0;
     found = false;
-    for ( index = startThresholdIndex; index > 0 && !found; index-- ) {
-      if ( data[ index ] <= 0 ) {
-        loopStartIndex = index;
+    for ( dataIndex = startThresholdIndex; dataIndex > 0 && !found; dataIndex-- ) {
+      if ( data[ dataIndex ] <= 0 ) {
+        loopStartIndex = dataIndex;
         found = true;
       }
     }
@@ -114,9 +114,9 @@ define( function( require ) {
     // detect and log the peaks in the pre-start data, useful for determining what the threshold value should be
     var maxPreStartPeak = 0;
     var minPreStartPeak = 0;
-    for ( index = 0; index < loopStartIndex; index++ ) {
-      maxPreStartPeak = Math.max( maxPreStartPeak, data[ index ] );
-      minPreStartPeak = Math.min( minPreStartPeak, data[ index ] );
+    for ( dataIndex = 0; dataIndex < loopStartIndex; dataIndex++ ) {
+      maxPreStartPeak = Math.max( maxPreStartPeak, data[ dataIndex ] );
+      minPreStartPeak = Math.min( minPreStartPeak, data[ dataIndex ] );
     }
     logLoopAnalysisInfo( 'maxPreStartPeak = ' + maxPreStartPeak );
     logLoopAnalysisInfo( 'minPreStartPeak = ' + minPreStartPeak );
@@ -124,9 +124,9 @@ define( function( require ) {
     // work backwards from the end of the data to find the first negative occurance of the threshold
     var endThresholdIndex = dataLength - 1;
     found = false;
-    for ( index = dataLength - 1; index > 0 && !found; index-- ) {
-      if ( data[ index ] <= -AUDIO_DATA_THRESHOLD && data[ index - 1 ] < data[ index ] ) {
-        endThresholdIndex = index;
+    for ( dataIndex = dataLength - 1; dataIndex > 0 && !found; dataIndex-- ) {
+      if ( data[ dataIndex ] <= -AUDIO_DATA_THRESHOLD && data[ dataIndex - 1 ] < data[ dataIndex ] ) {
+        endThresholdIndex = dataIndex;
         found = true;
       }
     }
@@ -136,9 +136,9 @@ define( function( require ) {
     // work forward from the end threshold to find a zero or zero crossing that can work as the end of the loop
     var loopEndIndex = endThresholdIndex;
     found = false;
-    for ( index = endThresholdIndex; index < dataLength - 1 && !found; index++ ) {
-      if ( data[ index + 1 ] >= 0 ) {
-        loopEndIndex = index;
+    for ( dataIndex = endThresholdIndex; dataIndex < dataLength - 1 && !found; dataIndex++ ) {
+      if ( data[ dataIndex + 1 ] >= 0 ) {
+        loopEndIndex = dataIndex;
         found = true;
       }
     }
@@ -147,9 +147,9 @@ define( function( require ) {
     // detect and log the peaks in the post-end data, useful for determining what the threshold value should be
     var maxPostEndPeak = 0;
     var minPostEndPeak = 0;
-    for ( index = loopEndIndex; index < dataLength; index++ ) {
-      maxPostEndPeak = Math.max( maxPostEndPeak, data[ index ] );
-      minPostEndPeak = Math.min( minPostEndPeak, data[ index ] );
+    for ( dataIndex = loopEndIndex; dataIndex < dataLength; dataIndex++ ) {
+      maxPostEndPeak = Math.max( maxPostEndPeak, data[ dataIndex ] );
+      minPostEndPeak = Math.min( minPostEndPeak, data[ dataIndex ] );
     }
     logLoopAnalysisInfo( 'maxPostEndPeak = ' + maxPostEndPeak );
     logLoopAnalysisInfo( 'minPostEndPeak = ' + minPostEndPeak );
