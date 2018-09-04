@@ -34,7 +34,7 @@ define( function( require ) {
 
     var self = this;
 
-    _.extend( {
+    options = _.extend( {
       autoDetectLoopBounds: false
     }, options );
     SoundGenerator.call( this, options );
