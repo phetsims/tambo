@@ -25,7 +25,7 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var Timer = require( 'PHET_CORE/Timer' );
+  var timer = require( 'PHET_CORE/timer' );
   var VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
@@ -174,7 +174,7 @@ define( function( require ) {
             // play the loop for a fixed time and then stop, but make sure the sound generator wasn't removed in the
             // interim
             mostRecentlyAddedSoundGenerator.start();
-            Timer.setTimeout( function() {
+            timer.setTimeout( function() {
               if ( soundGenerators.contains( mostRecentlyAddedSoundGenerator ) ) {
                 mostRecentlyAddedSoundGenerator.stop();
               }
