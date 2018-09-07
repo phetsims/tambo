@@ -182,6 +182,9 @@ define( function( require ) {
       if ( this.source ) {
         this.source.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
       }
+      else if ( this.loopBufferSource ) {
+        this.loopBufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
+      }
       this.playbackRate = playbackRate;
     }
   } );
