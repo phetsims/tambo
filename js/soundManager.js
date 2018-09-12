@@ -33,7 +33,7 @@ define( function( require ) {
   var empty = require( 'audio!TAMBO/empty.mp3' );
 
   // constants
-  var DEFAULT_REVERB_LEVEL = 0.1;
+  var DEFAULT_REVERB_LEVEL = 0.02;
   var TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
   var SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.soundInitiallyEnabled;
   var ENHANCED_SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.enhancedSoundInitiallyEnabled;
@@ -389,7 +389,7 @@ define( function( require ) {
     },
 
     getReverbLevel: function() {
-      // TODO: Test if this works in all browser, add a var to track if not.
+      // TODO: Test if this works in all browsers, add a var to track if not.
       return this.reverbGainNode.gain.value;
     },
 
