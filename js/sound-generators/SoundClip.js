@@ -20,8 +20,8 @@ define( function( require ) {
   // This threshold is used for analyzing the decoded sound data for where a loop that is intended to continuously
   // generate sound should start and end.  Its value was determined through experimentation on a single loop
   // (charges-in-body) at a number of different encodings.  It may need to be refined over time as we add new loops.  Or
-  // it may work great forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
-  var AUDIO_DATA_THRESHOLD = 0.01;
+  // it may work perfectly forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
+  var AUDIO_DATA_THRESHOLD = 0.05;
 
   /**
    * @param {Object} soundInfo - An object that includes *either* a url that points to the sound to be played *or* a
@@ -104,8 +104,9 @@ define( function( require ) {
     var loopStartIndex = 0;
     found = false;
     for ( dataIndex = startThresholdIndex; dataIndex > 0 && !found; dataIndex-- ) {
-      if ( data[ dataIndex ] <= 0 ) {
-        loopStartIndex = dataIndex;
+      var value = data[ dataIndex ];
+      if ( value <= 0 ) {
+        loopStartIndex = value === 0 ? dataIndex : dataIndex + 1;
         found = true;
       }
     }
