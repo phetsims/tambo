@@ -184,17 +184,6 @@ define( function( require ) {
     },
 
     /**
-     * get a value that indicates whether the sound manager has been initialized
-     * TODO: This was added when the global controls in joist were not yet on master, and was necessary to allow the
-     * demo sim to run, and may not be needed in the long term.  Added 7/10/2018, if not in use a month or two after
-     * that, remove it.
-     * @return {boolean}
-     */
-    isInitialized: function() {
-      return initialized;
-    },
-
-    /**
      * register a sound generator, which connects it to the output, puts it on the list of sound generators, and
      * creates and returns a unique ID
      * @param {SoundGenerator} soundGenerator

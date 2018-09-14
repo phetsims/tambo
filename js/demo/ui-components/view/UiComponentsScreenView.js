@@ -25,7 +25,7 @@ define( function( require ) {
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Range = require( 'DOT/Range' );
   var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var ResetAllSound = require( 'TAMBO/demo/common/audio/ResetAllSound' );
+  var ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
   var ScreenView = require( 'JOIST/ScreenView' );
   var soundManager = require( 'TAMBO/soundManager' );
   var tambo = require( 'TAMBO/tambo' );
@@ -258,7 +258,7 @@ define( function( require ) {
       }
     } );
     this.addChild( resetAllButton );
-    soundManager.addSoundGenerator( new ResetAllSound( model.resetInProgressProperty ) );
+    soundManager.addSoundGenerator( new ResetAllSoundGenerator( model.resetInProgressProperty ) );
   }
 
   tambo.register( 'UiComponentsScreenView', UiComponentsScreenView );
