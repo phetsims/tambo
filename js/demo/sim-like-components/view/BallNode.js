@@ -8,8 +8,8 @@ define( function( require ) {
 
   var Circle = require( 'SCENERY/nodes/Circle' );
   var inherit = require( 'PHET_CORE/inherit' );
+  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var soundManager = require( 'TAMBO/soundManager' );
-  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var tambo = require( 'TAMBO/tambo' );
 
   // audio
@@ -38,10 +38,10 @@ define( function( require ) {
     // add sounds
 
     // @public (read-only) {SoundClip} - make these available so that the output level can be adjusted
-    this.wallContactSound = new OneShotSoundClip( wallContactSound, {
+    this.wallContactSound = new SoundClip( wallContactSound, {
       initialOutputLevel: 0.3
     } );
-    this.ceilingFloorContactSound = new OneShotSoundClip( ceilingFloorContactSound, {
+    this.ceilingFloorContactSound = new SoundClip( ceilingFloorContactSound, {
       initialOutputLevel: 0.3
     } );
 
@@ -62,6 +62,7 @@ define( function( require ) {
 
     this.disposeBallNode = function() {
       ball.bounceEmitter.removeListener( bounceListener );
+      self.wallContactSound.stop();
       soundManager.removeSoundGenerator( this.wallContactSound );
       soundManager.removeSoundGenerator( this.ceilingFloorContactSound );
     };

@@ -12,14 +12,13 @@ define( function( require ) {
   var ComboBox = require( 'SUN/ComboBox' );
   var HBox = require( 'SCENERY/nodes/HBox' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var LoopingSoundClip = require( 'TAMBO/sound-generators/LoopingSoundClip' );
   var Node = require( 'SCENERY/nodes/Node' );
   var ObservableArray = require( 'AXON/ObservableArray' );
-  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var PitchedPopGenerator = require( 'TAMBO/sound-generators/PitchedPopGenerator' );
   var Property = require( 'AXON/Property' );
+  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var soundManager = require( 'TAMBO/soundManager' );
   var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
   var tambo = require( 'TAMBO/tambo' );
@@ -43,13 +42,13 @@ define( function( require ) {
     recordedOneShot: {
       comboBoxName: 'Recorded one shot',
       createSoundGenerator: function() {
-        return new OneShotSoundClip( birdCallSound );
+        return new SoundClip( birdCallSound );
       }
     },
     recordedLoop: {
       comboBoxName: 'Recorded loop',
       createSoundGenerator: function() {
-        return new LoopingSoundClip( cricketsSound );
+        return new SoundClip( cricketsSound, { loop: true } );
       }
     },
     synthesizedSound: {
@@ -162,23 +161,26 @@ define( function( require ) {
       listener: function() {
         var mostRecentlyAddedSoundGenerator = soundGenerators.get( soundGenerators.length - 1 );
 
-        // Play the most recently added SG based on its type.  This approach isn't great, but it works well enough for
-        // test code.
-        if ( mostRecentlyAddedSoundGenerator instanceof OneShotSoundClip ) {
-          mostRecentlyAddedSoundGenerator.play();
-        }
-        else if ( mostRecentlyAddedSoundGenerator instanceof LoopingSoundClip ) {
+        if ( mostRecentlyAddedSoundGenerator instanceof SoundClip ) {
+          if ( mostRecentlyAddedSoundGenerator.loop ) {
 
-          if ( !mostRecentlyAddedSoundGenerator.isPlaying ) {
+            // only start the loop if not already playing
+            if ( !mostRecentlyAddedSoundGenerator.isPlaying ) {
 
-            // play the loop for a fixed time and then stop, but make sure the sound generator wasn't removed in the
-            // interim
-            mostRecentlyAddedSoundGenerator.start();
-            timer.setTimeout( function() {
-              if ( soundGenerators.contains( mostRecentlyAddedSoundGenerator ) ) {
-                mostRecentlyAddedSoundGenerator.stop();
-              }
-            }, 3000 );
+              // play the loop for a fixed time and then stop, but make sure the sound generator wasn't removed in the
+              // interim
+              mostRecentlyAddedSoundGenerator.play();
+              timer.setTimeout( function() {
+                if ( soundGenerators.contains( mostRecentlyAddedSoundGenerator ) ) {
+                  mostRecentlyAddedSoundGenerator.stop();
+                }
+              }, 3000 );
+            }
+          }
+          else {
+
+            // play one-shot sounds whenever the button is pressed
+            mostRecentlyAddedSoundGenerator.play();
           }
         }
         else if ( mostRecentlyAddedSoundGenerator instanceof PitchedPopGenerator ) {

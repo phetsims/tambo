@@ -20,8 +20,7 @@ define( function( require ) {
   var Image = require( 'SCENERY/nodes/Image' );
   var inherit = require( 'PHET_CORE/inherit' );
   var KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
-  var LoopingSoundClip = require( 'TAMBO/sound-generators/LoopingSoundClip' );
-  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
+  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Range = require( 'DOT/Range' );
@@ -80,11 +79,10 @@ define( function( require ) {
     );
 
     // add sound generators that will play a sound when the value controlled by the slider changes
-    var increaseClickSound = new OneShotSoundClip( sliderIncreaseClickSound, {
-      enableControlProperties: [ resetNotInProgressProperty ]
-    } );
+    var increaseClickSound = new SoundClip( sliderIncreaseClickSound );
     soundManager.addSoundGenerator( increaseClickSound );
-    var decreaseClickSound = new OneShotSoundClip( sliderDecreaseClickSound, {
+    var decreaseClickSound = new SoundClip( sliderDecreaseClickSound, {
+      initiateWhenDisabled: false,
       enableControlProperties: [ resetNotInProgressProperty ]
     } );
     soundManager.addSoundGenerator( decreaseClickSound );
@@ -109,13 +107,13 @@ define( function( require ) {
     this.addChild( abSwitch );
 
     // add a looping sound that is turned on/off by the switch
-    var loopingSound = new LoopingSoundClip( chargesInBody, { autoDetectLoopBounds: true } );
+    var loopingSound = new SoundClip( chargesInBody, { loop: true } );
     soundManager.addSoundGenerator( loopingSound, { associatedViewNode: abSwitch } );
     model.loopOnProperty.link( function( loopOn ) {
 
       // start the loop the first time the switch is set to the on position
       if ( loopOn && !loopingSound.isPlaying ) {
-        loopingSound.start();
+        loopingSound.play();
       }
       else if ( !loopOn && loopingSound.isPlaying ) {
         loopingSound.stop();
@@ -133,7 +131,7 @@ define( function( require ) {
 
     // Play a sound when certain threshold values are crossed by the continuous property value, or when a change occurs
     // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
-    var marimbaSoundGenerator = new OneShotSoundClip( marimbaSound );
+    var marimbaSoundGenerator = new SoundClip( marimbaSound );
     soundManager.addSoundGenerator( marimbaSoundGenerator );
 
     // define a function that will play the marimba sound at a pitch value based on the continuous value property
@@ -188,7 +186,7 @@ define( function( require ) {
     } );
 
     // add a sound generator for thunderSoundGenerator
-    var thunderSoundGenerator = new OneShotSoundClip( thunderSound, {
+    var thunderSoundGenerator = new SoundClip( thunderSound, {
       enableControlProperties: [ resetNotInProgressProperty ],
       initiateWhenDisabled: true
     } );

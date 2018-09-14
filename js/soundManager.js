@@ -21,10 +21,10 @@ define( function( require ) {
   var BooleanProperty = require( 'AXON/BooleanProperty' );
   var Display = require( 'SCENERY/display/Display' );
   var DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
-  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var phetAudioContext = require( 'TAMBO/phetAudioContext' );
   var platform = require( 'PHET_CORE/platform' );
   var Property = require( 'AXON/Property' );
+  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   var tambo = require( 'TAMBO/tambo' );
 
@@ -171,7 +171,7 @@ define( function( require ) {
           // thread initiated by a user event such as touchstart before any sounds will play.  This requires the user to
           // touch the screen before audio can be played. See
           // http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
-          var silence = new OneShotSoundClip( empty, { connectImmediately: true } );
+          var silence = new SoundClip( empty, { connectImmediately: true } );
           var playSilence = function() {
             silence.play();
             window.removeEventListener( 'touchstart', playSilence, false );

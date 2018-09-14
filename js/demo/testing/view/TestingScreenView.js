@@ -11,9 +11,9 @@ define( function( require ) {
   // modules
   var Bounds2 = require( 'DOT/Bounds2' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var RemoveAndDisposeTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeTestPanel' );
   var ScreenView = require( 'JOIST/ScreenView' );
+  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var SoundEncodingComparisonPanel = require( 'TAMBO/demo/testing/view/SoundEncodingComparisonPanel' );
   var soundManager = require( 'TAMBO/soundManager' );
   var tambo = require( 'TAMBO/tambo' );
@@ -33,9 +33,9 @@ define( function( require ) {
     } );
 
     // create two one-shot sounds, one for basic mode and one for enhanced
-    var basicModeOneShotSound = new OneShotSoundClip( loonCall );
+    var basicModeOneShotSound = new SoundClip( loonCall );
     soundManager.addSoundGenerator( basicModeOneShotSound );
-    var enhancedModeOneShotSound = new OneShotSoundClip( rhodesChord );
+    var enhancedModeOneShotSound = new SoundClip( rhodesChord );
     soundManager.addSoundGenerator( enhancedModeOneShotSound, { sonificationLevel: 'enhanced' } );
 
     // add a button to play a basic-mode sound

@@ -13,12 +13,11 @@ define( function( require ) {
   var HBox = require( 'SCENERY/nodes/HBox' );
   var HStrut = require( 'SCENERY/nodes/HStrut' );
   var inherit = require( 'PHET_CORE/inherit' );
-  var LoopingSoundClip = require( 'TAMBO/sound-generators/LoopingSoundClip' );
   var Node = require( 'SCENERY/nodes/Node' );
-  var OneShotSoundClip = require( 'TAMBO/sound-generators/OneShotSoundClip' );
   var Panel = require( 'SUN/Panel' );
   var PhetFont = require( 'SCENERY_PHET/PhetFont' );
   var Property = require( 'AXON/Property' );
+  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var soundManager = require( 'TAMBO/soundManager' );
   var tambo = require( 'TAMBO/tambo' );
   var Text = require( 'SCENERY/nodes/Text' );
@@ -250,12 +249,13 @@ define( function( require ) {
     sounds.forEach( function( soundDescriptor ) {
       soundDescriptor.encodings.forEach( function( encoding ) {
         if ( soundDescriptor.loop ) {
-          encoding.soundGenerator = new LoopingSoundClip( encoding.audio, {
-            autoDetectLoopBounds: true
+          encoding.soundGenerator = new SoundClip( encoding.audio, {
+            loop: true,
+            trimSilence: true
           } );
         }
         else {
-          encoding.soundGenerator = new OneShotSoundClip( encoding.audio );
+          encoding.soundGenerator = new SoundClip( encoding.audio );
         }
         soundManager.addSoundGenerator( encoding.soundGenerator );
       } );
@@ -286,7 +286,7 @@ define( function( require ) {
             soundControlButton.baseColor = PLAY_COLOR;
           }
           else {
-            soundGenerator.start();
+            soundGenerator.play();
             soundControlButtonLabel.text = 'Stop';
             soundControlButton.baseColor = STOP_COLOR;
           }
