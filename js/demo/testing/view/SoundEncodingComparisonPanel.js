@@ -297,8 +297,6 @@ define( function( require ) {
       }
     } );
 
-    // TODO: The handling of the sound generator and button state can be consolidated and improved, I (jbphet) was in a rush
-
     // update the UI state based on the attributes of the selected sound
     selectedSoundIndexProperty.link( function( selectedSoundIndex, previouslySelectedSoundIndex ) {
 
