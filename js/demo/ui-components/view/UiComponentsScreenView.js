@@ -37,6 +37,8 @@ define( function( require ) {
   var SLIDER_MAX = 5;
   var NUM_TICK_MARKS = SLIDER_MAX + 1;
   var CHECK_BOX_SIZE = 12;
+  var NUM_BINS_FOR_CONTINUOUS_SLIDER = 8;
+  var BIN_SIZE_FOR_CONTINUOUS_SLIDER = SLIDER_MAX / NUM_BINS_FOR_CONTINUOUS_SLIDER;
 
   // images
   var lightningImage = require( 'image!TAMBO/lightning.png' );
@@ -152,14 +154,8 @@ define( function( require ) {
 
     model.continuousValueProperty.lazyLink( function( newValue, oldValue ) {
 
-      // TODO: Parts of the following code may eventually be moved to constants, but it is here for now to make it
-      // easier to grab this chunk of code and turn it into a standalone sound generator, which is the most likely
-      // scenario at the time of this writing.
-      var numBins = 8;
-      var binSize = SLIDER_MAX / numBins;
-
       function mapValueToBin( value ) {
-        return Math.min( Math.floor( value / binSize ), numBins - 1 );
+        return Math.min( Math.floor( value / BIN_SIZE_FOR_CONTINUOUS_SLIDER ), NUM_BINS_FOR_CONTINUOUS_SLIDER - 1 );
       }
 
       // Play the sound when certain threshold values are crossed or when a change occurs in the absence of mouse/touch

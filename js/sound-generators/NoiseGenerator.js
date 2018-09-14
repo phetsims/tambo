@@ -171,15 +171,6 @@ define( function( require ) {
 
       // only do something if not already playing, otherwise ignore this request
       if ( !this.isPlaying ) {
-
-        // TODO: Test code - this worked, so the buffer must not be right
-        // this.noiseSource = this.audioContext.createOscillator();
-        // this.noiseSource.type = 'square';
-        // this.noiseSource.frequency.setValueAtTime( 440, this.audioContext.currentTime ); // value in hertz
-        // this.noiseSource.connect( this.noiseSourceConnectionPoint );
-        // this.noiseSource.start();
-
-        //======================
         this.noiseSource = this.audioContext.createBufferSource();
         this.noiseSource.buffer = this.noiseBuffer;
         this.noiseSource.loop = true;
