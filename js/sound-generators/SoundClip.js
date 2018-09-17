@@ -213,7 +213,7 @@ define( function( require ) {
     var loopStartIndexes = [];
     var loopEndIndexes = [];
 
-    // TODO: Need to do for all channels
+    // analyze each channel of the sound data
     for ( var channelNumber = 0; channelNumber < audioBuffer.numberOfChannels; channelNumber++ ) {
 
       // initialize some variables that will be used to analyze the data
