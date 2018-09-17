@@ -87,7 +87,9 @@ define( function( require ) {
         self.audioBuffer = decodedAudioData;
 
         if ( options.trimSilence ) {
-          autoSetLoopPoints( self );
+          var loopBoundsInfo = detectLoopBounds( decodedAudioData );
+          self.loopStart = loopBoundsInfo.loopStart;
+          self.loopEnd = loopBoundsInfo.loopEnd;
         }
 
         // perform the "load complete" actions, if any
@@ -116,23 +118,16 @@ define( function( require ) {
   }
 
   /**
-   * helper function that sets the start and end points for looping based on where the sound data starts and ends
-   * {SoundClip} soundClip
+   * helper function to find the point at which a sound starts given a threshold and a buffer of sound data
    */
-  function autoSetLoopPoints( soundClip ) {
-    logLoopAnalysisInfo( '------------- analyzing buffer data --------------------' );
-
-    // TODO: Need to do for all channels
-    // initialize some variables that will be used to analyze the data
-    var dataLength = soundClip.audioBuffer.length;
-    var data = soundClip.audioBuffer.getChannelData( 0 );
-    var dataIndex;
+  function findSoundStartIndex( soundData, length, threshold ) {
 
     // find the first occurrence of the threshold that is trending in the up direction
     var startThresholdIndex = 0;
+    var dataIndex;
     var found = false;
-    for ( dataIndex = 0; dataIndex < dataLength - 1 && !found; dataIndex++ ) {
-      if ( data[ dataIndex ] > AUDIO_DATA_THRESHOLD && data[ dataIndex + 1 ] > data[ dataIndex ] ) {
+    for ( dataIndex = 0; dataIndex < length - 1 && !found; dataIndex++ ) {
+      if ( soundData[ dataIndex ] > threshold && soundData[ dataIndex + 1 ] > soundData[ dataIndex ] ) {
         startThresholdIndex = dataIndex;
         found = true;
       }
@@ -140,32 +135,41 @@ define( function( require ) {
     logLoopAnalysisInfo( 'startThresholdIndex = ' + startThresholdIndex );
 
     // work backwards from the first threshold found to find the first zero or zero crossing
-    var loopStartIndex = 0;
+    var soundStartIndex = 0;
     found = false;
     for ( dataIndex = startThresholdIndex; dataIndex > 0 && !found; dataIndex-- ) {
-      var value = data[ dataIndex ];
+      var value = soundData[ dataIndex ];
       if ( value <= 0 ) {
-        loopStartIndex = value === 0 ? dataIndex : dataIndex + 1;
+        soundStartIndex = value === 0 ? dataIndex : dataIndex + 1;
         found = true;
       }
     }
-    logLoopAnalysisInfo( 'loopStartIndex = ' + loopStartIndex );
+    logLoopAnalysisInfo( 'soundStartIndex = ' + soundStartIndex );
 
     // detect and log the peaks in the pre-start data, useful for determining what the threshold value should be
     var maxPreStartPeak = 0;
     var minPreStartPeak = 0;
-    for ( dataIndex = 0; dataIndex < loopStartIndex; dataIndex++ ) {
-      maxPreStartPeak = Math.max( maxPreStartPeak, data[ dataIndex ] );
-      minPreStartPeak = Math.min( minPreStartPeak, data[ dataIndex ] );
+    for ( dataIndex = 0; dataIndex < soundStartIndex; dataIndex++ ) {
+      maxPreStartPeak = Math.max( maxPreStartPeak, soundData[ dataIndex ] );
+      minPreStartPeak = Math.min( minPreStartPeak, soundData[ dataIndex ] );
     }
     logLoopAnalysisInfo( 'maxPreStartPeak = ' + maxPreStartPeak );
     logLoopAnalysisInfo( 'minPreStartPeak = ' + minPreStartPeak );
 
+    return soundStartIndex;
+  }
+
+  /**
+   * helper function to find the point at which a sound ends given a threshold and a buffer of sound data
+   */
+  function findSoundEndIndex( soundData, length, threshold ) {
+
     // work backwards from the end of the data to find the first negative occurance of the threshold
-    var endThresholdIndex = dataLength - 1;
-    found = false;
-    for ( dataIndex = dataLength - 1; dataIndex > 0 && !found; dataIndex-- ) {
-      if ( data[ dataIndex ] <= -AUDIO_DATA_THRESHOLD && data[ dataIndex - 1 ] < data[ dataIndex ] ) {
+    var endThresholdIndex = length - 1;
+    var found = false;
+    var dataIndex;
+    for ( dataIndex = length - 1; dataIndex > 0 && !found; dataIndex-- ) {
+      if ( soundData[ dataIndex ] <= -threshold && soundData[ dataIndex - 1 ] < soundData[ dataIndex ] ) {
         endThresholdIndex = dataIndex;
         found = true;
       }
@@ -174,33 +178,66 @@ define( function( require ) {
     logLoopAnalysisInfo( 'endThresholdIndex = ' + endThresholdIndex );
 
     // work forward from the end threshold to find a zero or zero crossing that can work as the end of the loop
-    var loopEndIndex = endThresholdIndex;
+    var soundEndIndex = endThresholdIndex;
     found = false;
-    for ( dataIndex = endThresholdIndex; dataIndex < dataLength - 1 && !found; dataIndex++ ) {
-      if ( data[ dataIndex + 1 ] >= 0 ) {
-        loopEndIndex = dataIndex;
+    for ( dataIndex = endThresholdIndex; dataIndex < length - 1 && !found; dataIndex++ ) {
+      if ( soundData[ dataIndex + 1 ] >= 0 ) {
+        soundEndIndex = dataIndex;
         found = true;
       }
     }
-    logLoopAnalysisInfo( 'loopEndIndex = ' + loopEndIndex );
+    logLoopAnalysisInfo( 'soundEndIndex = ' + soundEndIndex );
 
     // detect and log the peaks in the post-end data, useful for determining what the threshold value should be
     var maxPostEndPeak = 0;
     var minPostEndPeak = 0;
-    for ( dataIndex = loopEndIndex; dataIndex < dataLength; dataIndex++ ) {
-      maxPostEndPeak = Math.max( maxPostEndPeak, data[ dataIndex ] );
-      minPostEndPeak = Math.min( minPostEndPeak, data[ dataIndex ] );
+    for ( dataIndex = soundEndIndex; dataIndex < length; dataIndex++ ) {
+      maxPostEndPeak = Math.max( maxPostEndPeak, soundData[ dataIndex ] );
+      minPostEndPeak = Math.min( minPostEndPeak, soundData[ dataIndex ] );
     }
     logLoopAnalysisInfo( 'maxPostEndPeak = ' + maxPostEndPeak );
     logLoopAnalysisInfo( 'minPostEndPeak = ' + minPostEndPeak );
 
-    // set the loop start and end points based on what was detected
-    var sampleRate = soundClip.audioBuffer.sampleRate;
-    soundClip.loopStart = loopStartIndex / sampleRate;
-    soundClip.loopEnd = loopEndIndex / sampleRate;
+    return soundEndIndex;
   }
 
-  // function that only logs if the appropriate query param is enabled
+  /**
+   * helper function that sets the start and end points for looping based on where the sound data starts and ends
+   * {AudioBuffer} soundClip
+   * @returns {Object} - an object with values for loopStart and loopEnd
+   */
+  function detectLoopBounds( audioBuffer ) {
+    logLoopAnalysisInfo( '------------- entered detectLoopBounds --------------------' );
+
+    var soundDataLength = audioBuffer.length;
+    var loopStartIndexes = [];
+    var loopEndIndexes = [];
+
+    // TODO: Need to do for all channels
+    for ( var channelNumber = 0; channelNumber < audioBuffer.numberOfChannels; channelNumber++ ) {
+
+      // initialize some variables that will be used to analyze the data
+      var soundData = audioBuffer.getChannelData( channelNumber );
+
+      // find a good point for the loop to start
+      loopStartIndexes[ channelNumber ] = findSoundStartIndex( soundData, soundDataLength, AUDIO_DATA_THRESHOLD );
+
+      // find a good point for the loop to end
+      loopEndIndexes[ channelNumber ] = findSoundEndIndex( soundData, soundDataLength, AUDIO_DATA_THRESHOLD );
+    }
+
+    // return an object with values for where the loop should start and end
+    var sampleRate = audioBuffer.sampleRate;
+    return {
+      loopStart: _.min( loopStartIndexes ) / sampleRate,
+      loopEnd: _.max( loopEndIndexes ) / sampleRate
+    };
+  }
+
+  /**
+   * helper function for logging sound analysis information if said logging is enabled, useful for debugging
+   * @param string
+   */
   function logLoopAnalysisInfo( string ) {
     if ( TamboQueryParameters.logLoopAnalysisInfo ) {
       console.log( string );
