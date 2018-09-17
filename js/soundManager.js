@@ -53,6 +53,9 @@ define( function( require ) {
   // output level for the master gain node when sonification is enabled
   var masterOutputLevel = 1;
 
+  // reverb level, needed because some browsers don't support reading of gain values
+  var _reverbLevel = DEFAULT_REVERB_LEVEL;
+
   // gain nodes for each of the defined "classes", will be defined during init
   var gainNodesForClasses = {};
 
@@ -100,12 +103,12 @@ define( function( require ) {
       // gain node that will control the reverb level
       this.reverbGainNode = phetAudioContext.createGain();
       this.reverbGainNode.connect( this.masterGainNode );
-      this.reverbGainNode.gain.setValueAtTime( DEFAULT_REVERB_LEVEL, phetAudioContext.currentTime );
+      this.reverbGainNode.gain.setValueAtTime( _reverbLevel, phetAudioContext.currentTime );
       this.convolver.connect( this.reverbGainNode );
 
       // dry (non-reverbed) portion of the output
       this.dryGainNode = phetAudioContext.createGain();
-      this.dryGainNode.gain.setValueAtTime( 1 - DEFAULT_REVERB_LEVEL, phetAudioContext.currentTime );
+      this.dryGainNode.gain.setValueAtTime( 1 - _reverbLevel, phetAudioContext.currentTime );
       this.dryGainNode.connect( this.masterGainNode );
 
       // load the reverb impulse response into the convolver
@@ -323,6 +326,9 @@ define( function( require ) {
         this.masterGainNode.gain.setTargetAtTime( outputLevel, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
       }
     },
+    set outputLevel( outputLevel ) {
+      this.setOutputLevel( outputLevel );
+    },
 
     /**
      * get the current output level setting
@@ -330,6 +336,9 @@ define( function( require ) {
      */
     getOutputLevel: function() {
       return masterOutputLevel;
+    },
+    get outputLevel() {
+      return this.getOutputLevel();
     },
 
     /**
@@ -368,18 +377,24 @@ define( function( require ) {
 
     /**
      * set the amount of reverb
-     * @param {number} reverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
+     * @param {number} newReverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
      */
-    setReverbLevel: function( reverbLevel ) {
-      assert && assert( reverbLevel >= 0 && reverbLevel <= 1 );
+    setReverbLevel: function( newReverbLevel ) {
+      assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1 );
       var now = phetAudioContext.currentTime;
-      this.reverbGainNode.gain.setTargetAtTime( reverbLevel, now, TC_FOR_PARAM_CHANGES );
-      this.dryGainNode.gain.setTargetAtTime( 1 - reverbLevel, now, TC_FOR_PARAM_CHANGES );
+      this.reverbGainNode.gain.setTargetAtTime( newReverbLevel, now, TC_FOR_PARAM_CHANGES );
+      this.dryGainNode.gain.setTargetAtTime( 1 - newReverbLevel, now, TC_FOR_PARAM_CHANGES );
+      _reverbLevel = newReverbLevel;
+    },
+    set reverbLevel( reverbLevel ) {
+      this.setReverbLevel( reverbLevel );
     },
 
     getReverbLevel: function() {
-      // TODO: Test if this works in all browsers, add a var to track if not.
-      return this.reverbGainNode.gain.value;
+      return _reverbLevel;
+    },
+    get reverbLevel() {
+      return this.getReverbLevel();
     },
 
     /**

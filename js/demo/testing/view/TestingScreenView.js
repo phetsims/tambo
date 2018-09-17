@@ -68,6 +68,8 @@ define( function( require ) {
       left: soundComparisonPanel.left,
       top: soundComparisonPanel.bottom + 20
     } ) );
+
+    alert( soundManager.getReverbLevel() );
   }
 
   tambo.register( 'TestingScreenView', TestingScreenView );
