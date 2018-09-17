@@ -52,7 +52,7 @@ define( function( require ) {
     SoundGenerator.call( this, options );
 
     // options checking
-    assert( !options.loop || options.initiateWhenDisabled, 'initiateWhenDisabled can\'t be false for loops' );
+    assert && assert( !options.loop || options.initiateWhenDisabled, 'initiateWhenDisabled must be true for loops' );
 
     // @private {boolean} - flag that controls whether this is a one-shot or loop sound
     this.loop = options.loop;
@@ -123,7 +123,7 @@ define( function( require ) {
     logLoopAnalysisInfo( '------------- analyzing buffer data --------------------' );
 
     // TODO: Need to do for all channels
-    // initialize some variable that will be used to analyze the data
+    // initialize some variables that will be used to analyze the data
     var dataLength = soundClip.audioBuffer.length;
     var data = soundClip.audioBuffer.getChannelData( 0 );
     var dataIndex;
