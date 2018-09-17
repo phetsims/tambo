@@ -13,8 +13,8 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
 
   // audio
-  var wallContactSound = require( 'audio!TAMBO/wall-contact.mp3' );
-  var ceilingFloorContactSound = require( 'audio!TAMBO/ceiling-floor-contact.mp3' );
+  var wallContactSound = require( 'sound!TAMBO/wall-contact.mp3' );
+  var ceilingFloorContactSound = require( 'sound!TAMBO/ceiling-floor-contact.mp3' );
 
   /**
    * @param {Ball} ball - model of a ball

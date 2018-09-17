@@ -44,11 +44,11 @@ define( function( require ) {
   var lightningImage = require( 'image!TAMBO/lightning.png' );
 
   // audio
-  var chargesInBody = require( 'audio!TAMBO/charges-in-body-better.mp3' );
-  var marimbaSound = require( 'audio!TAMBO/bright-marimba.mp3' );
-  var sliderIncreaseClickSound = require( 'audio!TAMBO/slider-click-01.mp3' );
-  var sliderDecreaseClickSound = require( 'audio!TAMBO/slider-click-02.mp3' );
-  var thunderSound = require( 'audio!TAMBO/thunder.mp3' );
+  var chargesInBody = require( 'sound!TAMBO/charges-in-body-better.mp3' );
+  var marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
+  var sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
+  var sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
+  var thunderSound = require( 'sound!TAMBO/thunder.mp3' );
 
   /**
    * @constructor

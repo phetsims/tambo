@@ -34,8 +34,8 @@ define( function( require ) {
   var ADD_BUTTON_COLOR = '#C0D890';
 
   // audio
-  var birdCallSound = require( 'audio!TAMBO/bird-call.mp3' );
-  var cricketsSound = require( 'audio!TAMBO/crickets-loop.mp3' );
+  var birdCallSound = require( 'sound!TAMBO/bird-call.mp3' );
+  var cricketsSound = require( 'sound!TAMBO/crickets-loop.mp3' );
 
   // info needed for selecting and using different sound generators from the combo box
   var SOUND_GENERATOR_INFO = {

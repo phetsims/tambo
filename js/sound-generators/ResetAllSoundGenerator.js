@@ -9,7 +9,7 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
 
   // audio
-  var resetAllSound = require( 'audio!TAMBO/reset-all.mp3' );
+  var resetAllSound = require( 'sound!TAMBO/reset-all.mp3' );
 
   /**
    * @param {BooleanProperty} resetInProgressProperty

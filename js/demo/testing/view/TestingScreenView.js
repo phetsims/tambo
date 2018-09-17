@@ -20,8 +20,8 @@ define( function( require ) {
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
 
   // audio
-  var loonCall = require( 'audio!TAMBO/loon-call.mp3' );
-  var rhodesChord = require( 'audio!TAMBO/rhodes-chord.mp3' );
+  var loonCall = require( 'sound!TAMBO/loon-call.mp3' );
+  var rhodesChord = require( 'sound!TAMBO/rhodes-chord.mp3' );
 
   /**
    * @constructor
