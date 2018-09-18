@@ -1,8 +1,10 @@
 // Copyright 2018, University of Colorado Boulder
 
 /**
- * Utility object that provides a method for decoding soundInfo objects.  These objects are how PhET specifies audio,
- * and generally provide either a URL to a sound or a base64 encoded audio string.
+ * Utility object that provides a method for decoding soundInfo objects.  This is intended to simplify the process of
+ * decoding audio that is provided through the sound plugin created and used by PhET.  The objects provided by the sound
+ * plugin generally provide either a URL to a sound or a base64 encoded audio string, and the code in this file can
+ * handle either format.
  */
 define( function( require ) {
   'use strict';

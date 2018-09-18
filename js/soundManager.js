@@ -6,8 +6,6 @@
  *  - master enable/disable
  *  - master gain control
  *  - enable/disable of sounds based on visibility of an associated Scenery node
- *  - enabled/disable of sounds based on which tab is showing
- *  - master gain for sounds in general
  *  - enable/disable of sounds based on their assigned sonification level (e.g. "basic" or "enhanced")
  *  - gain control for sounds based on their assigned class, e.g. UI versus sim-specific sounds
  *  - a shared reverb unit to add some spatialization and make all sounds seem to originate with the same space
@@ -41,7 +39,7 @@ define( function( require ) {
   // flag that tracks whether sound generation of any kind is enabled
   var enabledProperty = new BooleanProperty( SOUND_INITIALLY_ENABLED );
 
-  // flag that tracks whether just basic or basic+enhanced sounds are enabled
+  // flag that tracks whether enhanced sounds are enabled (basic sounds are always enabled if sound generation is)
   var enhancedSoundEnabledProperty = new BooleanProperty( ENHANCED_SOUND_INITIALLY_ENABLED );
 
   // next ID number value, used to assign a unique ID to each sound generator that is registered
@@ -187,8 +185,9 @@ define( function( require ) {
     },
 
     /**
-     * register a sound generator, which connects it to the output, puts it on the list of sound generators, and
-     * creates and returns a unique ID
+     * add a sound generator, which connects it to the audio path, puts it on the list of sound generators, and creates
+     * and
+     * returns a unique ID
      * @param {SoundGenerator} soundGenerator
      * @param {Object} [options]
      * @returns {string|null} - unique ID of sound generator, null if add not allowed
@@ -196,7 +195,7 @@ define( function( require ) {
     addSoundGenerator: function( soundGenerator, options ) {
 
       if ( !initialized ) {
-        console.warn( 'an attempt was made to add a sound generator to an uninitialized sound manager, ignoring (sound will not be created)' );
+        console.warn( 'an attempt was made to add a sound generator to an uninitialized sound manager, ignoring (sound will not be produced)' );
         return null;
       }
 

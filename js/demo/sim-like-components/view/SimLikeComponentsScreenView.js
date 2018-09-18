@@ -34,6 +34,7 @@ define( function( require ) {
 
   /**
    * @constructor
+   * @param {SimLikeComponentsModel} model
    */
   function SimLikeComponentsScreenView( model ) {
 

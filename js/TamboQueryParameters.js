@@ -11,8 +11,6 @@ define( function( require ) {
   // modules
   var tambo = require( 'TAMBO/tambo' );
 
-  // REVIEW: Tambo query parameters should be in initialize-globals
-
   var TamboQueryParameters = QueryStringMachine.getAll( {
 
     // Use the stubbed audio context regardless of whether support exists for Web Audio.  This is useful for testing in
