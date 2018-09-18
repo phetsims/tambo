@@ -12,7 +12,7 @@ define( function( require ) {
   var soundManager = require( 'TAMBO/soundManager' );
   var tambo = require( 'TAMBO/tambo' );
 
-  // audio
+  // sounds
   var wallContactSound = require( 'sound!TAMBO/wall-contact.mp3' );
   var ceilingFloorContactSound = require( 'sound!TAMBO/ceiling-floor-contact.mp3' );
 

@@ -30,7 +30,7 @@ define( function( require ) {
   var PLAY_COLOR = '#66FF8C';
   var STOP_COLOR = '#FF4D4D';
 
-  // audio - these are defined in an object to simplify the process of adding or removing sounds to this panel
+  // sounds - these are defined in an object to simplify the process of adding or removing sounds to this panel
   var sounds = [
 
     {

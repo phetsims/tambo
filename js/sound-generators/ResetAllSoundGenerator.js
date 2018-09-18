@@ -8,7 +8,7 @@ define( function( require ) {
   var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   var tambo = require( 'TAMBO/tambo' );
 
-  // audio
+  // sounds
   var resetAllSound = require( 'sound!TAMBO/reset-all.mp3' );
 
   /**

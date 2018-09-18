@@ -43,7 +43,7 @@ define( function( require ) {
   // images
   var lightningImage = require( 'image!TAMBO/lightning.png' );
 
-  // audio
+  // sounds
   var chargesInBodySound = require( 'sound!TAMBO/charges-in-body-better.mp3' );
   var marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
   var sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );

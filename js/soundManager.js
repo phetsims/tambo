@@ -28,7 +28,7 @@ define( function( require ) {
   var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   var tambo = require( 'TAMBO/tambo' );
 
-  // audio
+  // sounds
   var reverbImpulseResponse = require( 'sound!TAMBO/empty_apartment_bedroom_06_resampled.mp3' );
   var emptySound = require( 'sound!TAMBO/empty.mp3' );
 

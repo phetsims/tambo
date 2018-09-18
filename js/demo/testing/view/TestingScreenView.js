@@ -19,7 +19,7 @@ define( function( require ) {
   var tambo = require( 'TAMBO/tambo' );
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
 
-  // audio
+  // sounds
   var loonCallSound = require( 'sound!TAMBO/loon-call.mp3' );
   var rhodesChordSound = require( 'sound!TAMBO/rhodes-chord.mp3' );
 

@@ -33,7 +33,7 @@ define( function( require ) {
   var TOTAL_ADDED_TEMPLATE = 'Total Added: {{numSoundGenerators}}';
   var ADD_BUTTON_COLOR = '#C0D890';
 
-  // audio
+  // sounds
   var birdCallSound = require( 'sound!TAMBO/bird-call.mp3' );
   var cricketsSound = require( 'sound!TAMBO/crickets-loop.mp3' );
 
