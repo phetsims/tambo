@@ -36,7 +36,7 @@ define( function( require ) {
     // @public (read-only) {Emitter} - emitter that fires when the ball bounces, indicates surface on which it bounced
     this.bounceEmitter = new Emitter();
 
-    // monitor the velocity property and fire the emitter when a bounce occurs
+    // monitor the velocity Property and fire the emitter when a bounce occurs
     this.velocityProperty.lazyLink( ( newVelocity, oldVelocity ) => {
 
       // check for wall bounce

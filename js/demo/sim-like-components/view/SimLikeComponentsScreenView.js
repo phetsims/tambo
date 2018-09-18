@@ -75,7 +75,7 @@ define( function( require ) {
       } );
     } );
 
-    // create an inverted version of the reset-in-progress property, used to mute sounds during reset
+    // create an inverted version of the reset-in-progress Property, used to mute sounds during reset
     const resetNotInProgressProperty = new DerivedProperty(
       [ model.resetInProgressProperty ],
       function( resetInProgress ) {

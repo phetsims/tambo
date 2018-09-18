@@ -112,7 +112,7 @@ define( function( require ) {
     // @private {boolean} - flag that tracks whether the sound is being played
     this._isPlaying = false;
 
-    // listen to the property that indicates whether we are fully enabled and stop one-shot sounds when it goes false
+    // listen to the Property that indicates whether we are fully enabled and stop one-shot sounds when it goes false
     this.fullyEnabledProperty.lazyLink( fullyEnabled => {
       if ( !this.loop && !fullyEnabled ) {
         this.stop();

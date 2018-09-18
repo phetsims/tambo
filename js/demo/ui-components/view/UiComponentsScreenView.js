@@ -72,7 +72,7 @@ define( function( require ) {
     } );
     this.addChild( discreteSlider );
 
-    // create an inverted version of the reset-in-progress property, used to mute sounds during reset
+    // create an inverted version of the reset-in-progress Property, used to mute sounds during reset
     const resetNotInProgressProperty = new DerivedProperty(
       [ model.resetInProgressProperty ],
       function( resetInProgress ) {
@@ -131,12 +131,12 @@ define( function( require ) {
     } );
     this.addChild( continuousSlider );
 
-    // Play a sound when certain threshold values are crossed by the continuous property value, or when a change occurs
+    // Play a sound when certain threshold values are crossed by the continuous Property value, or when a change occurs
     // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
     const marimbaSoundClip = new SoundClip( marimbaSound );
     soundManager.addSoundGenerator( marimbaSoundClip );
 
-    // define a function that will play the marimba sound at a pitch value based on the continuous value property
+    // define a function that will play the marimba sound at a pitch value based on the continuous value Property
     function playSoundForContinuousValue() {
       const playbackRate = Math.pow( 2, model.continuousValueProperty.get() / SLIDER_MAX );
       marimbaSoundClip.setPlaybackRate( playbackRate );

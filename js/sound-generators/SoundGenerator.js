@@ -44,7 +44,7 @@ define( function( require ) {
       connectImmediately: false,
 
       //REVIEW type expression needed, {BooleanProperty[]} ?
-      // An initial set of properties that will be hooked to this sound generator's enabled state, more can be added
+      // An initial set of Properties that will be hooked to this sound generator's enabled state, more can be added
       // later via methods if needed.
       enableControlProperties: []
     }, options );
@@ -61,14 +61,14 @@ define( function( require ) {
     // @private {AudioParam[]} - a list of all audio nodes to which this sound generator is connected
     this.connectionList = [];
 
-    // @private {ObservableArray.<BooleanProperty>} - A set of boolean properties that collectively control whether the
+    // @private {ObservableArray.<BooleanProperty>} - A set of boolean Properties that collectively control whether the
     // sound generator is enabled.  All of these must be true in order for the sound generator to be "fully
     // enabled", meaning that it will produce sound.
     this.enableControlProperties = new ObservableArray();
 
     //REVIEW this is marked read-only but is set by subclass SoundClip
-    // @public (read-only) {BooleanProperty} - A property that tracks whether this sound generator is fully enabled,
-    // meaning that all the enable control properties are in a state indicating that sound can be produced.  This
+    // @public (read-only) {BooleanProperty} - A Property that tracks whether this sound generator is fully enabled,
+    // meaning that all the enable control Properties are in a state indicating that sound can be produced.  This
     // should only be updated in the listener function defined below, no where else.
     this.fullyEnabledProperty = new BooleanProperty( true );
 
@@ -80,7 +80,7 @@ define( function( require ) {
       ) );
     }
 
-    // listen for new enable control properties and hook them up as they arrive
+    // listen for new enable control Properties and hook them up as they arrive
     this.enableControlProperties.addItemAddedListener( addedItem => {
       //REVIEW verify that addedItem is a BooleanProperty?
       addedItem.link( updateFullyEnabledState );
@@ -92,17 +92,17 @@ define( function( require ) {
       } );
     } );
 
-    // add any enable control properties that were provided in the options object
+    // add any enable control Properties that were provided in the options object
     options.enableControlProperties.forEach( enableControlProperty => {
       self.addEnableControlProperty( enableControlProperty );
     } );
 
-    // @public (read-only) {BooleanProperty} - A property that tracks whether this sound generator is "locally enabled",
+    // @public (read-only) {BooleanProperty} - A Property that tracks whether this sound generator is "locally enabled",
     // which means that it is internally set to produce sound.  Setting this to true does not guarantee that sound will
-    // be produced, since other properties can all affect this, see fullyEnabledProperty.
+    // be produced, since other Properties can all affect this, see fullyEnabledProperty.
     this.locallyEnabledProperty = new BooleanProperty( true );
 
-    // add the local property to the list of enable controls
+    // add the local Property to the list of enable controls
     this.addEnableControlProperty( this.locallyEnabledProperty );
 
     // @protected {GainNode) - master gain control that will be used to control the volume of the sound
@@ -135,7 +135,7 @@ define( function( require ) {
     // @private {function} - internally used disposal function
     this.disposeSoundGenerator = function() {
 
-      // clearing this observable array should cause the properties within it to be unlinked
+      // clearing this observable array should cause the Properties within it to be unlinked
       self.enableControlProperties.clear();
     };
   }
@@ -195,7 +195,7 @@ define( function( require ) {
     },
 
     /**
-     * add a property to the list of those used to control the enabled state of this sound generator
+     * add a Property to the list of those used to control the enabled state of this sound generator
      * @param {BooleanProperty} enableControlProperty
      */
     addEnableControlProperty: function( enableControlProperty ) {
@@ -203,7 +203,7 @@ define( function( require ) {
     },
 
     /**
-     * remove a property from the list of those used to control the enabled state of this sound generator
+     * remove a Property from the list of those used to control the enabled state of this sound generator
      * @param {BooleanProperty} enableControlProperty
      */
     removeEnableControlProperty: function( enableControlProperty ) {

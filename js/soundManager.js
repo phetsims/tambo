@@ -267,15 +267,15 @@ define( function( require ) {
       };
       soundGeneratorInfoArray.push( soundGeneratorInfo );
 
-      // add the global enable property to the list of properties that enable this sound generator
+      // add the global enable Property to the list of Properties that enable this sound generator
       soundGenerator.addEnableControlProperty( enabledProperty );
 
-      // if this sound generator is only enabled in enhanced mode, add the enhanced mode property as an enable control
+      // if this sound generator is only enabled in enhanced mode, add the enhanced mode Property as an enable control
       if ( options.sonificationLevel === 'enhanced' ) {
         soundGenerator.addEnableControlProperty( enhancedSoundEnabledProperty );
       }
 
-      // if a view node was specified, create and pass in a boolean property that is true only when the node is displayed
+      // if a view node was specified, create and pass in a boolean Property that is true only when the node is displayed
       if ( options.associatedViewNode ) {
         soundGenerator.addEnableControlProperty(
           new DisplayedProperty( options.associatedViewNode, phet.joist.display )
@@ -441,7 +441,7 @@ define( function( require ) {
     //REVIEW Consider relocating earlier in the source code, since this.enabledProperty is referenced in initialize.
     //REVIEW With a singleton, I think it's clearer to define fields before functions.
     /**
-     * property that corresponds to the enabled state setting
+     * Property that corresponds to the enabled state setting
      * @public (read-only)
      */
     enabledProperty: enabledProperty,
@@ -481,7 +481,7 @@ define( function( require ) {
 
     //REVIEW Same comment as enabledProperty above, define fields before functions in singletons.
     /**
-     * property that corresponds to the sonification level setting
+     * Property that corresponds to the sonification level setting
      * @public (read-only)
      */
     enhancedSoundEnabledProperty: enhancedSoundEnabledProperty
