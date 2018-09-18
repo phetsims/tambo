@@ -16,9 +16,9 @@ define( function( require ) {
   const SimLauncher = require( 'JOIST/SimLauncher' );
   const SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
   const SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
-  const TestingScreenView = require( 'TAMBO/demo/testing/view/TestingScreenView' );
   const soundManager = require( 'TAMBO/soundManager' );
   const TamboKeyboardHelpContent = require( 'TAMBO/demo/TamboKeyboardHelpContent' );
+  const TestingScreenView = require( 'TAMBO/demo/testing/view/TestingScreenView' );
   const UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
   const UiComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UiComponentsScreenView' );
 
