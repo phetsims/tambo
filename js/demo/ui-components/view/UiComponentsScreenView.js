@@ -9,46 +9,46 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var ABSwitch = require( 'SUN/ABSwitch' );
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var Checkbox = require( 'SUN/Checkbox' );
-  var DerivedProperty = require( 'AXON/DerivedProperty' );
-  var Dimension2 = require( 'DOT/Dimension2' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var HSlider = require( 'SUN/HSlider' );
-  var Image = require( 'SCENERY/nodes/Image' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  var Panel = require( 'SUN/Panel' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Range = require( 'DOT/Range' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var soundManager = require( 'TAMBO/soundManager' );
-  var tambo = require( 'TAMBO/tambo' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const ABSwitch = require( 'SUN/ABSwitch' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const Checkbox = require( 'SUN/Checkbox' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const Dimension2 = require( 'DOT/Dimension2' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const HSlider = require( 'SUN/HSlider' );
+  const Image = require( 'SCENERY/nodes/Image' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  const Panel = require( 'SUN/Panel' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Range = require( 'DOT/Range' );
+  const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
+  const ScreenView = require( 'JOIST/ScreenView' );
+  const soundManager = require( 'TAMBO/soundManager' );
+  const tambo = require( 'TAMBO/tambo' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
-  var SLIDER_MAX = 5;
-  var NUM_TICK_MARKS = SLIDER_MAX + 1;
-  var CHECK_BOX_SIZE = 12;
-  var NUM_BINS_FOR_CONTINUOUS_SLIDER = 8;
-  var BIN_SIZE_FOR_CONTINUOUS_SLIDER = SLIDER_MAX / NUM_BINS_FOR_CONTINUOUS_SLIDER;
+  const SLIDER_MAX = 5;
+  const NUM_TICK_MARKS = SLIDER_MAX + 1;
+  const CHECK_BOX_SIZE = 12;
+  const NUM_BINS_FOR_CONTINUOUS_SLIDER = 8;
+  const BIN_SIZE_FOR_CONTINUOUS_SLIDER = SLIDER_MAX / NUM_BINS_FOR_CONTINUOUS_SLIDER;
 
   // images
-  var lightningImage = require( 'image!TAMBO/lightning.png' );
+  const lightningImage = require( 'image!TAMBO/lightning.png' );
 
   // sounds
-  var chargesInBodySound = require( 'sound!TAMBO/charges-in-body-better.mp3' );
-  var marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
-  var sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
-  var sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
-  var thunderSound = require( 'sound!TAMBO/thunder.mp3' );
+  const chargesInBodySound = require( 'sound!TAMBO/charges-in-body-better.mp3' );
+  const marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
+  const sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
+  const sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
+  const thunderSound = require( 'sound!TAMBO/thunder.mp3' );
 
   /**
    * @constructor
@@ -59,7 +59,7 @@ define( function( require ) {
     } );
 
     // add a slider with snap-to-ticks behavior
-    var discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
+    const discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
       left: 100,
       top: 100,
       constrainValue: function( value ) {
@@ -73,7 +73,7 @@ define( function( require ) {
     this.addChild( discreteSlider );
 
     // create an inverted version of the reset-in-progress property, used to mute sounds during reset
-    var resetNotInProgressProperty = new DerivedProperty(
+    const resetNotInProgressProperty = new DerivedProperty(
       [ model.resetInProgressProperty ],
       function( resetInProgress ) {
         return !resetInProgress;
@@ -81,14 +81,14 @@ define( function( require ) {
     );
 
     // add sound generators that will play a sound when the value controlled by the slider changes
-    var sliderIncreaseClickSoundClip = new SoundClip( sliderIncreaseClickSound );
+    const sliderIncreaseClickSoundClip = new SoundClip( sliderIncreaseClickSound );
     soundManager.addSoundGenerator( sliderIncreaseClickSoundClip );
-    var sliderDecreaseClickSoundClip = new SoundClip( sliderDecreaseClickSound, {
+    const sliderDecreaseClickSoundClip = new SoundClip( sliderDecreaseClickSound, {
       initiateWhenDisabled: false,
       enableControlProperties: [ resetNotInProgressProperty ]
     } );
     soundManager.addSoundGenerator( sliderDecreaseClickSoundClip );
-    model.discreteValueProperty.lazyLink( function( newValue, oldValue ) {
+    model.discreteValueProperty.lazyLink( ( newValue, oldValue ) => {
       if ( newValue > oldValue ) {
         sliderIncreaseClickSoundClip.play();
       }
@@ -98,7 +98,7 @@ define( function( require ) {
     } );
 
     // add an AB switch that will turn on/off a looping sound
-    var abSwitch = new ABSwitch(
+    const abSwitch = new ABSwitch(
       model.loopOnProperty,
       false,
       new Text( 'Off' ),
@@ -109,9 +109,9 @@ define( function( require ) {
     this.addChild( abSwitch );
 
     // add a looping sound that is turned on/off by the switch
-    var chargesInBodySoundClip = new SoundClip( chargesInBodySound, { loop: true } );
+    const chargesInBodySoundClip = new SoundClip( chargesInBodySound, { loop: true } );
     soundManager.addSoundGenerator( chargesInBodySoundClip, { associatedViewNode: abSwitch } );
-    model.loopOnProperty.link( function( loopOn ) {
+    model.loopOnProperty.link( loopOn => {
 
       // start the loop the first time the switch is set to the on position
       if ( loopOn && !chargesInBodySoundClip.isPlaying ) {
@@ -123,7 +123,7 @@ define( function( require ) {
     } );
 
     // Add a slider with continuous behavior.  We create our own thumb node so that we can observe it.
-    var continuousSlider = new HSlider( model.continuousValueProperty, new Range( 0, SLIDER_MAX ), {
+    const continuousSlider = new HSlider( model.continuousValueProperty, new Range( 0, SLIDER_MAX ), {
       thumbFillEnabled: '#880000',
       thumbFillHighlighted: '#aa0000',
       left: discreteSlider.left,
@@ -133,12 +133,12 @@ define( function( require ) {
 
     // Play a sound when certain threshold values are crossed by the continuous property value, or when a change occurs
     // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
-    var marimbaSoundClip = new SoundClip( marimbaSound );
+    const marimbaSoundClip = new SoundClip( marimbaSound );
     soundManager.addSoundGenerator( marimbaSoundClip );
 
     // define a function that will play the marimba sound at a pitch value based on the continuous value property
     function playSoundForContinuousValue() {
-      var playbackRate = Math.pow( 2, model.continuousValueProperty.get() / SLIDER_MAX );
+      const playbackRate = Math.pow( 2, model.continuousValueProperty.get() / SLIDER_MAX );
       marimbaSoundClip.setPlaybackRate( playbackRate );
       marimbaSoundClip.play();
     }
@@ -152,7 +152,7 @@ define( function( require ) {
       }
     } );
 
-    model.continuousValueProperty.lazyLink( function( newValue, oldValue ) {
+    model.continuousValueProperty.lazyLink( ( newValue, oldValue ) => {
 
       function mapValueToBin( value ) {
         return Math.min( Math.floor( value / BIN_SIZE_FOR_CONTINUOUS_SLIDER ), NUM_BINS_FOR_CONTINUOUS_SLIDER - 1 );
@@ -170,47 +170,47 @@ define( function( require ) {
     } );
 
     // add the button that will cause a lightening bolt to be shown
-    var fireLightningButton = new TextPushButton( 'Lightning', {
+    const fireLightningButton = new TextPushButton( 'Lightning', {
       listener: function() {
         model.lightningBoltVisibleProperty.set( true );
       }
     } );
 
     // disable button while lightning is visible
-    model.lightningBoltVisibleProperty.link( function( lightningBoltVisible ) {
+    model.lightningBoltVisibleProperty.link( lightningBoltVisible => {
       fireLightningButton.enabled = !lightningBoltVisible;
     } );
 
     // add a sound generator for thunder
-    var thunderSoundClip = new SoundClip( thunderSound, {
+    const thunderSoundClip = new SoundClip( thunderSound, {
       enableControlProperties: [ resetNotInProgressProperty ],
       initiateWhenDisabled: true
     } );
     soundManager.addSoundGenerator( thunderSoundClip );
-    model.lightningBoltVisibleProperty.link( function( visible ) {
+    model.lightningBoltVisibleProperty.link( visible => {
       if ( visible ) {
         thunderSoundClip.play();
       }
     } );
 
     // a check box that controls whether the thunderSoundClip sound is locally enabled
-    var thunderEnabledCheckbox = new Checkbox(
+    const thunderEnabledCheckbox = new Checkbox(
       new Text( 'Enabled' ),
       thunderSoundClip.locallyEnabledProperty,
       { boxWidth: CHECK_BOX_SIZE }
     );
 
     // a check box that controls whether the thunderSoundClip sound can be initiated when disabled
-    var initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundClip.initiateWhenDisabled );
+    const initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundClip.initiateWhenDisabled );
     initiateThunderWhenDisabledProperty.linkAttribute( thunderSoundClip, 'initiateWhenDisabled' );
-    var initiateThunderWhenDisabledCheckbox = new Checkbox(
+    const initiateThunderWhenDisabledCheckbox = new Checkbox(
       new Text( 'Initiate when disabled' ),
       initiateThunderWhenDisabledProperty,
       { boxWidth: CHECK_BOX_SIZE }
     );
 
     // create a set of controls for the thunderSoundClip
-    var thunderControl = new VBox( {
+    const thunderControl = new VBox( {
       children: [
         new Text( 'Thunder: ', { font: new PhetFont( 12 ) } ),
         thunderEnabledCheckbox,
@@ -221,7 +221,7 @@ define( function( require ) {
     } );
 
     // add a panel where thunderSoundClip and lightning are controlled
-    var lightningControlPanel = new Panel(
+    const lightningControlPanel = new Panel(
       new HBox( { children: [ fireLightningButton, thunderControl ], spacing: 10, align: 'top' } ),
       {
         fill: '#FCFBE3',
@@ -231,7 +231,7 @@ define( function( require ) {
     );
 
     // add the lightning bolt that will appear when commanded by the user (and make him/her feel like Zeus)
-    var lightningBoltNode = new Image( lightningImage, {
+    const lightningBoltNode = new Image( lightningImage, {
       left: lightningControlPanel.left + 20,
       top: lightningControlPanel.bottom - 3,
       maxHeight: 50
@@ -245,7 +245,7 @@ define( function( require ) {
     model.lightningBoltVisibleProperty.linkAttribute( lightningBoltNode, 'visible' );
 
     // add the reset all button
-    var resetAllButton = new ResetAllButton( {
+    const resetAllButton = new ResetAllButton( {
       right: this.layoutBounds.maxX - 20,
       bottom: this.layoutBounds.maxY - 20,
       listener: function() {

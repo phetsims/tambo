@@ -9,28 +9,28 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var ABSwitch = require( 'SUN/ABSwitch' );
-  var BallNode = require( 'TAMBO/demo/sim-like-components/view/BallNode' );
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var DerivedProperty = require( 'AXON/DerivedProperty' );
-  var Dimension2 = require( 'DOT/Dimension2' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
-  var NumberSpinner = require( 'SUN/NumberSpinner' );
-  var Path = require( 'SCENERY/nodes/Path' );
-  var PitchedPopGenerator = require( 'TAMBO/sound-generators/PitchedPopGenerator' );
-  var Property = require( 'AXON/Property' );
-  var Range = require( 'DOT/Range' );
-  var ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  var ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var soundManager = require( 'TAMBO/soundManager' );
-  var tambo = require( 'TAMBO/tambo' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var Vector2 = require( 'DOT/Vector2' );
+  const ABSwitch = require( 'SUN/ABSwitch' );
+  const BallNode = require( 'TAMBO/demo/sim-like-components/view/BallNode' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const DerivedProperty = require( 'AXON/DerivedProperty' );
+  const Dimension2 = require( 'DOT/Dimension2' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  const NumberSpinner = require( 'SUN/NumberSpinner' );
+  const Path = require( 'SCENERY/nodes/Path' );
+  const PitchedPopGenerator = require( 'TAMBO/sound-generators/PitchedPopGenerator' );
+  const Property = require( 'AXON/Property' );
+  const Range = require( 'DOT/Range' );
+  const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
+  const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
+  const ScreenView = require( 'JOIST/ScreenView' );
+  const soundManager = require( 'TAMBO/soundManager' );
+  const tambo = require( 'TAMBO/tambo' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  var MAX_BALLS = 8;
+  const MAX_BALLS = 8;
 
   /**
    * @constructor
@@ -38,32 +38,32 @@ define( function( require ) {
    */
   function SimLikeComponentsScreenView( model ) {
 
-    var self = this;
+    const self = this;
 
     ScreenView.call( this, {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
     } );
 
     // set up the model view transform
-    var modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
+    const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
       Vector2.ZERO,
       new Vector2( this.layoutBounds.width * 0.275, this.layoutBounds.height * 0.5 ),
       2
     );
 
     // add the box where the balls bounce around
-    var boxNode = new Path( modelViewTransform.modelToViewShape( model.boxOfBalls.box ), {
+    const boxNode = new Path( modelViewTransform.modelToViewShape( model.boxOfBalls.box ), {
       fill: 'white',
       stroke: 'black'
     } );
     this.addChild( boxNode );
 
     // handle balls being added to or removed from the box
-    model.boxOfBalls.balls.addItemAddedListener( function( addedBall ) {
+    model.boxOfBalls.balls.addItemAddedListener( addedBall => {
 
       // add a node that represents the ball
-      var ballNode = new BallNode( addedBall, modelViewTransform );
-      self.addChild( ballNode );
+      const ballNode = new BallNode( addedBall, modelViewTransform );
+      this.addChild( ballNode );
 
       // set up a listener to remove the nodes when the corresponding ball is removed from the model
       model.boxOfBalls.balls.addItemRemovedListener( function removalListener( removedBall ) {
@@ -76,7 +76,7 @@ define( function( require ) {
     } );
 
     // create an inverted version of the reset-in-progress property, used to mute sounds during reset
-    var resetNotInProgressProperty = new DerivedProperty(
+    const resetNotInProgressProperty = new DerivedProperty(
       [ model.resetInProgressProperty ],
       function( resetInProgress ) {
         return !resetInProgress;
@@ -84,16 +84,16 @@ define( function( require ) {
     );
 
     // generate sound when balls are added or removed
-    var pitchedPopGenerator = new PitchedPopGenerator( {
+    const pitchedPopGenerator = new PitchedPopGenerator( {
       enableControlProperties: [ resetNotInProgressProperty ]
     } );
     soundManager.addSoundGenerator( pitchedPopGenerator );
-    model.boxOfBalls.balls.lengthProperty.lazyLink( function( numBalls ) {
+    model.boxOfBalls.balls.lengthProperty.lazyLink( numBalls => {
       pitchedPopGenerator.playPop( numBalls / MAX_BALLS );
     } );
 
     // add a switch to turn ball motion on and off
-    var ballsMovingSwitch = new ABSwitch(
+    const ballsMovingSwitch = new ABSwitch(
       model.ballsMovingProperty,
       false,
       new Text( 'Paused' ),
@@ -104,7 +104,7 @@ define( function( require ) {
     this.addChild( ballsMovingSwitch );
 
     // add a number spinner for adding and removing balls
-    var ballCountSpinner = new NumberSpinner(
+    const ballCountSpinner = new NumberSpinner(
       model.numberOfBallsProperty,
       new Property( new Range( 0, MAX_BALLS ) ),
       {
@@ -123,7 +123,7 @@ define( function( require ) {
     this.addChild( ballCountSpinner );
 
     // add the reset all button
-    var resetAllButton = new ResetAllButton( {
+    const resetAllButton = new ResetAllButton( {
       right: this.layoutBounds.maxX - 20,
       bottom: this.layoutBounds.maxY - 20,
       listener: function() {

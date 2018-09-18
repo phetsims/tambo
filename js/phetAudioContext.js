@@ -8,11 +8,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var tambo = require( 'TAMBO/tambo' );
-  var TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
+  const tambo = require( 'TAMBO/tambo' );
+  const TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
 
   // constants
-  var FORCE_STUBBED_AUDIO_CONTEXT = TamboQueryParameters.forceStubbedAudioContext; // used for testing, see below
+  const FORCE_STUBBED_AUDIO_CONTEXT = TamboQueryParameters.forceStubbedAudioContext; // used for testing, see below
 
   // helper function for logging warnings
   function logUnimplementedWarning() {
@@ -26,7 +26,7 @@ define( function( require ) {
   // manually by identifying what portions of the Web Audio API were being used in tambo and adding those methods and
   // properties. This may need to be updated periodically as tambo and our usage of Web Audio evolves.  See
   // https://github.com/phetsims/tambo/issues/10.
-  var STUBBED_AUDIO_CONTEXT = {
+  const STUBBED_AUDIO_CONTEXT = {
 
     // methods and properties are in alphabetical order, please maintain this for ease of maintenance
 
@@ -78,7 +78,7 @@ define( function( require ) {
   };
 
   // create a Web Audio context
-  var phetAudioContext = null;
+  let phetAudioContext = null;
   if ( window.AudioContext && !FORCE_STUBBED_AUDIO_CONTEXT ) {
     phetAudioContext = new window.AudioContext();
   }

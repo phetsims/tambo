@@ -9,36 +9,36 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var ComboBox = require( 'SUN/ComboBox' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var Panel = require( 'SUN/Panel' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var PitchedPopGenerator = require( 'TAMBO/sound-generators/PitchedPopGenerator' );
-  var Property = require( 'AXON/Property' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  var soundManager = require( 'TAMBO/soundManager' );
-  var StringUtils = require( 'PHETCOMMON/util/StringUtils' );
-  var tambo = require( 'TAMBO/tambo' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  var timer = require( 'PHET_CORE/timer' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const ComboBox = require( 'SUN/ComboBox' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const Panel = require( 'SUN/Panel' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const PitchedPopGenerator = require( 'TAMBO/sound-generators/PitchedPopGenerator' );
+  const Property = require( 'AXON/Property' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  const soundManager = require( 'TAMBO/soundManager' );
+  const StringUtils = require( 'PHETCOMMON/util/StringUtils' );
+  const tambo = require( 'TAMBO/tambo' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  const timer = require( 'PHET_CORE/timer' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
-  var BUTTON_FONT = new PhetFont( 14 );
-  var COMBO_BOX_FONT = new PhetFont( 12 );
-  var TOTAL_ADDED_TEMPLATE = 'Total Added: {{numSoundGenerators}}';
-  var ADD_BUTTON_COLOR = '#C0D890';
+  const BUTTON_FONT = new PhetFont( 14 );
+  const COMBO_BOX_FONT = new PhetFont( 12 );
+  const TOTAL_ADDED_TEMPLATE = 'Total Added: {{numSoundGenerators}}';
+  const ADD_BUTTON_COLOR = '#C0D890';
 
   // sounds
-  var birdCallSound = require( 'sound!TAMBO/bird-call.mp3' );
-  var cricketsSound = require( 'sound!TAMBO/crickets-loop.mp3' );
+  const birdCallSound = require( 'sound!TAMBO/bird-call.mp3' );
+  const cricketsSound = require( 'sound!TAMBO/crickets-loop.mp3' );
 
   // info needed for selecting and using different sound generators from the combo box
-  var SOUND_GENERATOR_INFO = {
+  const SOUND_GENERATOR_INFO = {
     recordedOneShot: {
       comboBoxName: 'Recorded one shot',
       createSoundGenerator: function() {
@@ -72,29 +72,29 @@ define( function( require ) {
     }, options );
 
     // array of sound generators that have been added and not yet removed and disposed
-    var soundGenerators = new ObservableArray();
+    const soundGenerators = new ObservableArray();
 
     // node where the content goes, needed so that ComboBox will have a good place to put its list
-    var panelContentNode = new Node();
+    const panelContentNode = new Node();
 
     // informational text that goes at the top of the panel
-    var infoText = new Text( 'Test addition, removal, and disposal of sound generators', {
+    const infoText = new Text( 'Test addition, removal, and disposal of sound generators', {
       font: new PhetFont( { size: 14, weight: 'bold' } )
     } );
 
     // create the combo box for selecting the type of sound generator to add
-    var comboBoxItems = [];
-    _.keys( SOUND_GENERATOR_INFO ).forEach( function( soundGeneratorKey ) {
+    const comboBoxItems = [];
+    _.keys( SOUND_GENERATOR_INFO ).forEach( soundGeneratorKey => {
       comboBoxItems.push( ComboBox.createItem(
         new Text( SOUND_GENERATOR_INFO[ soundGeneratorKey ].comboBoxName, { font: COMBO_BOX_FONT } ),
         soundGeneratorKey
       ) );
     } );
-    var selectedSoundGeneratorTypeProperty = new Property( comboBoxItems[ 0 ].value );
-    var comboBox = new ComboBox( comboBoxItems, selectedSoundGeneratorTypeProperty, panelContentNode, {
+    const selectedSoundGeneratorTypeProperty = new Property( comboBoxItems[ 0 ].value );
+    const comboBox = new ComboBox( comboBoxItems, selectedSoundGeneratorTypeProperty, panelContentNode, {
       buttonFill: 'rgb( 218, 236, 255 )'
     } );
-    var sgSelectorNode = new HBox( {
+    const sgSelectorNode = new HBox( {
       children: [
         new Text( 'SG type to add:', { font: new PhetFont( 14 ) } ),
         comboBox
@@ -104,14 +104,14 @@ define( function( require ) {
 
     function addSoundGenerators( numToAdd ) {
       _.times( numToAdd, function() {
-        var soundGenerator = SOUND_GENERATOR_INFO[ selectedSoundGeneratorTypeProperty.value ].createSoundGenerator();
+        const soundGenerator = SOUND_GENERATOR_INFO[ selectedSoundGeneratorTypeProperty.value ].createSoundGenerator();
         soundManager.addSoundGenerator( soundGenerator );
         soundGenerators.push( soundGenerator );
       } );
     }
 
     // create a horizontal set of buttons for adding sound generators at different orders of magnitude
-    var addButtonHBox = new HBox( {
+    const addButtonHBox = new HBox( {
       children: [
         new TextPushButton( 'Add 1', {
           baseColor: ADD_BUTTON_COLOR,
@@ -139,14 +139,14 @@ define( function( require ) {
     } );
 
     // create a horizontal box with an indicator for the number of sound generators added and a button to remove them all
-    var totalAddedIndicator = new Text( TOTAL_ADDED_TEMPLATE, { font: new PhetFont( 14 ) } );
-    var removeAllSoundGeneratorsButton = new TextPushButton( 'Remove All', {
+    const totalAddedIndicator = new Text( TOTAL_ADDED_TEMPLATE, { font: new PhetFont( 14 ) } );
+    const removeAllSoundGeneratorsButton = new TextPushButton( 'Remove All', {
       font: BUTTON_FONT,
       listener: function() {
         soundGenerators.clear();
       }
     } );
-    var showTotalHBox = new HBox( {
+    const showTotalHBox = new HBox( {
       children: [
         totalAddedIndicator,
         removeAllSoundGeneratorsButton
@@ -155,11 +155,11 @@ define( function( require ) {
     } );
 
     // create a button that will test the most recently added sound generator
-    var testLastAddedSGButton = new TextPushButton( 'Test last added SG', {
+    const testLastAddedSGButton = new TextPushButton( 'Test last added SG', {
       font: BUTTON_FONT,
       baseColor: '#BABFFF',
       listener: function() {
-        var mostRecentlyAddedSoundGenerator = soundGenerators.get( soundGenerators.length - 1 );
+        const mostRecentlyAddedSoundGenerator = soundGenerators.get( soundGenerators.length - 1 );
 
         if ( mostRecentlyAddedSoundGenerator instanceof SoundClip ) {
           if ( mostRecentlyAddedSoundGenerator.loop ) {
@@ -190,7 +190,7 @@ define( function( require ) {
     } );
 
     // update the total added indicator when the total changes, also the state of the "Remove All" button
-    soundGenerators.lengthProperty.link( function( numSGs ) {
+    soundGenerators.lengthProperty.link( numSGs => {
       totalAddedIndicator.text = StringUtils.fillIn( TOTAL_ADDED_TEMPLATE, {
         numSoundGenerators: numSGs
       } );
@@ -199,13 +199,13 @@ define( function( require ) {
     } );
 
     // listen for removal of sound generators from the observable array and remove them from the sound manager
-    soundGenerators.addItemRemovedListener( function( removedSoundGenerator ) {
+    soundGenerators.addItemRemovedListener( removedSoundGenerator => {
       soundManager.removeSoundGenerator( removedSoundGenerator );
       removedSoundGenerator.dispose();
     } );
 
     // add everything to a vertical box
-    var rootVBox = new VBox( {
+    const rootVBox = new VBox( {
       children: [ infoText, sgSelectorNode, addButtonHBox, showTotalHBox, testLastAddedSGButton ],
       spacing: 14
     } );

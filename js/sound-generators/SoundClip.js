@@ -9,11 +9,11 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
-  var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
-  var tambo = require( 'TAMBO/tambo' );
-  var TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
+  const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
+  const tambo = require( 'TAMBO/tambo' );
+  const TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
 
   // constants
 
@@ -21,7 +21,7 @@ define( function( require ) {
   // generate sound should start and end.  Its value was determined through experimentation on a single loop
   // (charges-in-body) at a number of different encodings.  It may need to be refined over time as we add new loops.  Or
   // it may work perfectly forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
-  var AUDIO_DATA_THRESHOLD = 0.05;
+  const AUDIO_DATA_THRESHOLD = 0.05;
 
   /**
    * @param {Object} soundInfo - An object that includes *either* a url that points to the sound to be played *or* a
@@ -31,8 +31,6 @@ define( function( require ) {
    * @constructor
    */
   function SoundClip( soundInfo, options ) {
-
-    var self = this;
 
     options = _.extend( {
 
@@ -82,21 +80,21 @@ define( function( require ) {
     soundInfoDecoder.decode(
       soundInfo,
       this.audioContext,
-      function( decodedAudioData ) {
+      decodedAudioData => {
 
-        self.audioBuffer = decodedAudioData;
+        this.audioBuffer = decodedAudioData;
 
         if ( options.trimSilence ) {
-          var loopBoundsInfo = detectLoopBounds( decodedAudioData );
-          self.loopStart = loopBoundsInfo.loopStart;
-          self.loopEnd = loopBoundsInfo.loopEnd;
+          const loopBoundsInfo = detectLoopBounds( decodedAudioData );
+          this.loopStart = loopBoundsInfo.loopStart;
+          this.loopEnd = loopBoundsInfo.loopEnd;
         }
 
         // perform the "load complete" actions, if any
-        self.loadCompleteAction && self.loadCompleteAction();
-        self.loadCompleteAction = null;
+        this.loadCompleteAction && this.loadCompleteAction();
+        this.loadCompleteAction = null;
       },
-      function() {
+      () => {
 
         // we haven't seen this happen, so for now a message is logged to the console and that's it
         console.log( 'Error: Unable to decode audio data.' );
@@ -110,9 +108,9 @@ define( function( require ) {
     this._isPlaying = false;
 
     // listen to the property that indicates whether we are fully enabled and stop one-shot sounds when it goes false
-    this.fullyEnabledProperty.lazyLink( function( fullyEnabled ) {
-      if ( !self.loop && !fullyEnabled ) {
-        self.stop();
+    this.fullyEnabledProperty.lazyLink( fullyEnabled => {
+      if ( !this.loop && !fullyEnabled ) {
+        this.stop();
       }
     } );
   }
@@ -123,9 +121,9 @@ define( function( require ) {
   function findSoundStartIndex( soundData, length, threshold ) {
 
     // find the first occurrence of the threshold that is trending in the up direction
-    var startThresholdIndex = 0;
-    var dataIndex;
-    var found = false;
+    let startThresholdIndex = 0;
+    let dataIndex;
+    let found = false;
     for ( dataIndex = 0; dataIndex < length - 1 && !found; dataIndex++ ) {
       if ( soundData[ dataIndex ] > threshold && soundData[ dataIndex + 1 ] > soundData[ dataIndex ] ) {
         startThresholdIndex = dataIndex;
@@ -135,10 +133,10 @@ define( function( require ) {
     logLoopAnalysisInfo( 'startThresholdIndex = ' + startThresholdIndex );
 
     // work backwards from the first threshold found to find the first zero or zero crossing
-    var soundStartIndex = 0;
+    let soundStartIndex = 0;
     found = false;
     for ( dataIndex = startThresholdIndex; dataIndex > 0 && !found; dataIndex-- ) {
-      var value = soundData[ dataIndex ];
+      let value = soundData[ dataIndex ];
       if ( value <= 0 ) {
         soundStartIndex = value === 0 ? dataIndex : dataIndex + 1;
         found = true;
@@ -147,8 +145,8 @@ define( function( require ) {
     logLoopAnalysisInfo( 'soundStartIndex = ' + soundStartIndex );
 
     // detect and log the peaks in the pre-start data, useful for determining what the threshold value should be
-    var maxPreStartPeak = 0;
-    var minPreStartPeak = 0;
+    let maxPreStartPeak = 0;
+    let minPreStartPeak = 0;
     for ( dataIndex = 0; dataIndex < soundStartIndex; dataIndex++ ) {
       maxPreStartPeak = Math.max( maxPreStartPeak, soundData[ dataIndex ] );
       minPreStartPeak = Math.min( minPreStartPeak, soundData[ dataIndex ] );
@@ -165,9 +163,9 @@ define( function( require ) {
   function findSoundEndIndex( soundData, length, threshold ) {
 
     // work backwards from the end of the data to find the first negative occurance of the threshold
-    var endThresholdIndex = length - 1;
-    var found = false;
-    var dataIndex;
+    let endThresholdIndex = length - 1;
+    let found = false;
+    let dataIndex;
     for ( dataIndex = length - 1; dataIndex > 0 && !found; dataIndex-- ) {
       if ( soundData[ dataIndex ] <= -threshold && soundData[ dataIndex - 1 ] < soundData[ dataIndex ] ) {
         endThresholdIndex = dataIndex;
@@ -178,7 +176,7 @@ define( function( require ) {
     logLoopAnalysisInfo( 'endThresholdIndex = ' + endThresholdIndex );
 
     // work forward from the end threshold to find a zero or zero crossing that can work as the end of the loop
-    var soundEndIndex = endThresholdIndex;
+    let soundEndIndex = endThresholdIndex;
     found = false;
     for ( dataIndex = endThresholdIndex; dataIndex < length - 1 && !found; dataIndex++ ) {
       if ( soundData[ dataIndex + 1 ] >= 0 ) {
@@ -189,8 +187,8 @@ define( function( require ) {
     logLoopAnalysisInfo( 'soundEndIndex = ' + soundEndIndex );
 
     // detect and log the peaks in the post-end data, useful for determining what the threshold value should be
-    var maxPostEndPeak = 0;
-    var minPostEndPeak = 0;
+    let maxPostEndPeak = 0;
+    let minPostEndPeak = 0;
     for ( dataIndex = soundEndIndex; dataIndex < length; dataIndex++ ) {
       maxPostEndPeak = Math.max( maxPostEndPeak, soundData[ dataIndex ] );
       minPostEndPeak = Math.min( minPostEndPeak, soundData[ dataIndex ] );
@@ -209,15 +207,15 @@ define( function( require ) {
   function detectLoopBounds( audioBuffer ) {
     logLoopAnalysisInfo( '------------- entered detectLoopBounds --------------------' );
 
-    var soundDataLength = audioBuffer.length;
-    var loopStartIndexes = [];
-    var loopEndIndexes = [];
+    let soundDataLength = audioBuffer.length;
+    let loopStartIndexes = [];
+    let loopEndIndexes = [];
 
     // analyze each channel of the sound data
-    for ( var channelNumber = 0; channelNumber < audioBuffer.numberOfChannels; channelNumber++ ) {
+    for ( let channelNumber = 0; channelNumber < audioBuffer.numberOfChannels; channelNumber++ ) {
 
       // initialize some variables that will be used to analyze the data
-      var soundData = audioBuffer.getChannelData( channelNumber );
+      const soundData = audioBuffer.getChannelData( channelNumber );
 
       // find a good point for the loop to start
       loopStartIndexes[ channelNumber ] = findSoundStartIndex( soundData, soundDataLength, AUDIO_DATA_THRESHOLD );
@@ -227,7 +225,7 @@ define( function( require ) {
     }
 
     // return an object with values for where the loop should start and end
-    var sampleRate = audioBuffer.sampleRate;
+    const sampleRate = audioBuffer.sampleRate;
     return {
       loopStart: _.min( loopStartIndexes ) / sampleRate,
       loopEnd: _.max( loopEndIndexes ) / sampleRate
@@ -255,12 +253,11 @@ define( function( require ) {
      */
     play: function( delay ) {
 
-      var now = this.audioContext.currentTime;
+      const now = this.audioContext.currentTime;
 
       // default delay is zero
       delay = typeof delay === 'undefined' ? 0 : delay;
 
-      var self = this;
       if ( this.initiateWhenDisabled || this.fullyEnabled ) {
 
         // make sure the decoding of the audio data is complete before trying to play the sound
@@ -270,7 +267,7 @@ define( function( require ) {
           this.localGainNode.gain.setValueAtTime( 1, now );
 
           // create an audio buffer source node and connect it to the previously decoded audio data
-          var bufferSource = this.audioContext.createBufferSource();
+          const bufferSource = this.audioContext.createBufferSource();
           bufferSource.buffer = this.audioBuffer;
           bufferSource.loop = this.loop;
           bufferSource.loopStart = this.loopStart;
@@ -287,14 +284,14 @@ define( function( require ) {
           if ( !this.loop ) {
 
             // add a handler for when the sound finishes playing
-            bufferSource.onended = function() {
+            bufferSource.onended = () => {
 
               // remove the source from the list of active sources
-              var indexOfSource = self.activeBufferSources.indexOf( bufferSource );
+              const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
               if ( indexOfSource > -1 ) {
-                self.activeBufferSources.splice( indexOfSource );
+                this.activeBufferSources.splice( indexOfSource );
               }
-              self._isPlaying = self.activeBufferSources.length > 0;
+              this._isPlaying = this.activeBufferSources.length > 0;
             };
           }
 
@@ -307,7 +304,7 @@ define( function( require ) {
 
           // the play method was called before the sound buffer finished loading, create an action that play the sound
           // once the loading has completed
-          this.loadCompleteAction = function() { self.play(); };
+          this.loadCompleteAction = () => { this.play(); };
         }
       }
     },
@@ -323,11 +320,9 @@ define( function( require ) {
         // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
         // down the gain quickly, effectively doing a very fast fade out, and then stop playback. The values for the
         // time constant and stop time were empirically determined.
-        var now = this.audioContext.currentTime;
+        const now = this.audioContext.currentTime;
         this.localGainNode.gain.setTargetAtTime( 0, now, 0.01 );
-        this.activeBufferSources.forEach( function( source ) {
-          source.stop( now + 0.1 );
-        } );
+        this.activeBufferSources.forEach( source => { source.stop( now + 0.1 ); } );
 
         // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
         // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
@@ -351,10 +346,9 @@ define( function( require ) {
      * value. The larger this value is, the slower the transition will be.
      */
     setPlaybackRate: function( playbackRate, timeConstant ) {
-      var self = this;
       timeConstant = timeConstant || SoundGenerator.DEFAULT_TIME_CONSTANT;
-      this.activeBufferSources.forEach( function( bufferSource ) {
-        bufferSource.playbackRate.setTargetAtTime( playbackRate, self.audioContext.currentTime, timeConstant );
+      this.activeBufferSources.forEach( bufferSource => {
+        bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
       } );
       this.playbackRate = playbackRate;
     },

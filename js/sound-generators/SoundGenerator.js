@@ -9,14 +9,14 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var ObservableArray = require( 'AXON/ObservableArray' );
-  var phetAudioContext = require( 'TAMBO/phetAudioContext' );
-  var tambo = require( 'TAMBO/tambo' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const ObservableArray = require( 'AXON/ObservableArray' );
+  const phetAudioContext = require( 'TAMBO/phetAudioContext' );
+  const tambo = require( 'TAMBO/tambo' );
 
   // constants
-  var DEFAULT_TIME_CONSTANT = 0.015; // empirically determined to be fast but not cause clicks when applied to gain
+  const DEFAULT_TIME_CONSTANT = 0.015; // empirically determined to be fast but not cause clicks when applied to gain
 
   /**
    * @param {Object} options
@@ -24,7 +24,7 @@ define( function( require ) {
    */
   function SoundGenerator( options ) {
 
-    var self = this;
+    const self = this;
 
     options = _.extend( {
 
@@ -72,9 +72,9 @@ define( function( require ) {
     }
 
     // listen for new enable control properties and hook them up as they arrive
-    this.enableControlProperties.addItemAddedListener( function( addedItem ) {
+    this.enableControlProperties.addItemAddedListener( addedItem => {
       addedItem.link( updateFullyEnabledState );
-      self.enableControlProperties.addItemRemovedListener( function checkAndRemove( removedItem ) {
+      this.enableControlProperties.addItemRemovedListener( function checkAndRemove( removedItem ) {
         if ( removedItem === addedItem ) {
           removedItem.unlink( updateFullyEnabledState );
           self.enableControlProperties.removeItemRemovedListener( checkAndRemove );
@@ -83,7 +83,7 @@ define( function( require ) {
     } );
 
     // add any enable control properties that were provided in the options object
-    options.enableControlProperties.forEach( function( enableControlProperty ) {
+    options.enableControlProperties.forEach( enableControlProperty => {
       self.addEnableControlProperty( enableControlProperty );
     } );
 
@@ -109,13 +109,13 @@ define( function( require ) {
     }
 
     // turn down the gain to zero when not fully enabled
-    this.fullyEnabledProperty.link( function( fullyEnabled ) {
-      var now = self.audioContext.currentTime;
+    this.fullyEnabledProperty.link( fullyEnabled => {
+      const now = this.audioContext.currentTime;
       if ( fullyEnabled ) {
-        self.masterGainNode.gain.setTargetAtTime( self._outputLevel, now, DEFAULT_TIME_CONSTANT );
+        this.masterGainNode.gain.setTargetAtTime( this._outputLevel, now, DEFAULT_TIME_CONSTANT );
       }
       else {
-        self.masterGainNode.gain.setTargetAtTime( 0, now, DEFAULT_TIME_CONSTANT );
+        this.masterGainNode.gain.setTargetAtTime( 0, now, DEFAULT_TIME_CONSTANT );
       }
     } );
 

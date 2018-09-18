@@ -7,27 +7,27 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var LinearGradient = require( 'SCENERY/util/LinearGradient' );
-  var Property = require( 'AXON/Property' );
-  var RadialGradient = require( 'SCENERY/util/RadialGradient' );
-  var Rectangle = require( 'SCENERY/nodes/Rectangle' );
-  var Screen = require( 'JOIST/Screen' );
-  var Sim = require( 'JOIST/Sim' );
-  var SimLauncher = require( 'JOIST/SimLauncher' );
-  var SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
-  var SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
-  var TestingScreenView = require( 'TAMBO/demo/testing/view/TestingScreenView' );
-  var soundManager = require( 'TAMBO/soundManager' );
-  var TamboKeyboardHelpContent = require( 'TAMBO/demo/TamboKeyboardHelpContent' );
-  var UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
-  var UiComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UiComponentsScreenView' );
+  const LinearGradient = require( 'SCENERY/util/LinearGradient' );
+  const Property = require( 'AXON/Property' );
+  const RadialGradient = require( 'SCENERY/util/RadialGradient' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const Screen = require( 'JOIST/Screen' );
+  const Sim = require( 'JOIST/Sim' );
+  const SimLauncher = require( 'JOIST/SimLauncher' );
+  const SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
+  const SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
+  const TestingScreenView = require( 'TAMBO/demo/testing/view/TestingScreenView' );
+  const soundManager = require( 'TAMBO/soundManager' );
+  const TamboKeyboardHelpContent = require( 'TAMBO/demo/TamboKeyboardHelpContent' );
+  const UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
+  const UiComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UiComponentsScreenView' );
 
   // strings
-  var tamboTitleString = require( 'string!TAMBO/tambo.title' );
+  const tamboTitleString = require( 'string!TAMBO/tambo.title' );
 
   // set up the simulation options
-  var keyboardHelpContent = new TamboKeyboardHelpContent();
-  var simOptions = {
+  const keyboardHelpContent = new TamboKeyboardHelpContent();
+  const simOptions = {
     credits: {
       leadDesign: 'John Blanco'
     },
@@ -40,7 +40,7 @@ define( function( require ) {
   // helper function to create screen icons that aren't too bland
   function createScreenIcon( color1, color2, gradientType ) {
 
-    var colorGradient;
+    let colorGradient;
     if ( gradientType === 'radial' ) {
       colorGradient = new RadialGradient(
         Screen.MINIMUM_HOME_SCREEN_ICON_SIZE.width / 2,

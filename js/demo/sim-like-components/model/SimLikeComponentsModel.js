@@ -10,18 +10,16 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var BoxOfBalls = require( 'TAMBO/demo/sim-like-components/model/BoxOfBalls' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
-  var tambo = require( 'TAMBO/tambo' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const BoxOfBalls = require( 'TAMBO/demo/sim-like-components/model/BoxOfBalls' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
+  const tambo = require( 'TAMBO/tambo' );
 
   /**
    * @constructor
    */
   function SimLikeComponentsModel() {
-
-    var self = this;
 
     // @public (read-only) {BoxOfBalls) - box containing bouncing balls, size empirically determined
     this.boxOfBalls = new BoxOfBalls( 100, 60, 10 );
@@ -36,16 +34,16 @@ define( function( require ) {
     this.resetInProgressProperty = new BooleanProperty( false );
 
     // add or remove balls as the count changes
-    this.numberOfBallsProperty.link( function( desiredNumberOfBalls ) {
-      var numberBallsInBox = self.boxOfBalls.balls.lengthProperty.get();
+    this.numberOfBallsProperty.link( desiredNumberOfBalls => {
+      const numberBallsInBox = this.boxOfBalls.balls.lengthProperty.get();
       if ( desiredNumberOfBalls > numberBallsInBox ) {
-        _.times( desiredNumberOfBalls - numberBallsInBox, function() {
-          self.boxOfBalls.addRandomBall();
+        _.times( desiredNumberOfBalls - numberBallsInBox, () => {
+          this.boxOfBalls.addRandomBall();
         } );
       }
       else if ( desiredNumberOfBalls < numberBallsInBox ) {
-        _.times( numberBallsInBox - desiredNumberOfBalls, function() {
-          self.boxOfBalls.removeABall();
+        _.times( numberBallsInBox - desiredNumberOfBalls, () => {
+          this.boxOfBalls.removeABall();
         } );
       }
     } );

@@ -10,20 +10,20 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var tambo = require( 'TAMBO/tambo' );
-  var NumberProperty = require( 'AXON/NumberProperty' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const tambo = require( 'TAMBO/tambo' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
 
   // constants
-  var BELL_SHOWN_TIME = 0.750; // in seconds
+  const BELL_SHOWN_TIME = 0.750; // in seconds
 
   /**
    * @constructor
    */
   function UiComponentsModel() {
 
-    var self = this;
+    const self = this;
 
     // @public {NumberProperty} - a property that is intended to be hooked up to a slider with discrete values
     this.discreteValueProperty = new NumberProperty( 0 );
@@ -41,7 +41,7 @@ define( function( require ) {
     this.lightningBoltVisibleTimer = 0;
 
     // reload the countdown timer when the lightning bolt is set to be shown
-    this.lightningBoltVisibleProperty.link( function( visible ) {
+    this.lightningBoltVisibleProperty.link( visible => {
       if ( visible ) {
         self.lightningBoltVisibleTimer = BELL_SHOWN_TIME;
       }

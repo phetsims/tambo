@@ -6,15 +6,15 @@
 define( function( require ) {
   'use strict';
 
-  var Circle = require( 'SCENERY/nodes/Circle' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  var soundManager = require( 'TAMBO/soundManager' );
-  var tambo = require( 'TAMBO/tambo' );
+  const Circle = require( 'SCENERY/nodes/Circle' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  const soundManager = require( 'TAMBO/soundManager' );
+  const tambo = require( 'TAMBO/tambo' );
 
   // sounds
-  var wallContactSound = require( 'sound!TAMBO/wall-contact.mp3' );
-  var ceilingFloorContactSound = require( 'sound!TAMBO/ceiling-floor-contact.mp3' );
+  const wallContactSound = require( 'sound!TAMBO/wall-contact.mp3' );
+  const ceilingFloorContactSound = require( 'sound!TAMBO/ceiling-floor-contact.mp3' );
 
   /**
    * @param {Ball} ball - model of a ball
@@ -23,16 +23,16 @@ define( function( require ) {
    */
   function BallNode( ball, modelViewTransform ) {
 
-    var self = this;
+    const self = this;
     Circle.call( this );
 
     // create a circle node to represent the ball
-    var radius = modelViewTransform.modelToViewDeltaX( ball.radius );
+    const radius = modelViewTransform.modelToViewDeltaX( ball.radius );
     Circle.call( this, radius, { fill: ball.color, stroke: 'gray' } );
 
     // move this node as the model position changes
-    ball.positionProperty.link( function( position ) {
-      self.center = modelViewTransform.modelToViewPosition( position );
+    ball.positionProperty.link( position => {
+      this.center = modelViewTransform.modelToViewPosition( position );
     } );
 
     // add sounds
@@ -50,7 +50,7 @@ define( function( require ) {
     soundManager.addSoundGenerator( this.ceilingFloorContactSoundClip );
 
     // play bounces when the ball bounces
-    var bounceListener = function( bounceSurface ) {
+    const bounceListener = function( bounceSurface ) {
       if ( bounceSurface === 'left-wall' || bounceSurface === 'right-wall' ) {
         self.wallContactSoundClip.play();
       }

@@ -9,14 +9,14 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
-  var tambo = require( 'TAMBO/tambo' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
+  const tambo = require( 'TAMBO/tambo' );
 
   // constants
-  var NOISE_BUFFER_SECONDS = 2;
-  var PARAMETER_CHANGE_TIME_CONSTANT = 0.015;
-  var LFO_DEPTH_CHANGE_TIME_CONSTANT = 0.05;
+  const NOISE_BUFFER_SECONDS = 2;
+  const PARAMETER_CHANGE_TIME_CONSTANT = 0.015;
+  const LFO_DEPTH_CHANGE_TIME_CONSTANT = 0.05;
 
   /**
    * @constructor
@@ -38,10 +38,10 @@ define( function( require ) {
 
     SoundGenerator.call( this, options );
 
-    var now = this.audioContext.currentTime;
+    const now = this.audioContext.currentTime;
 
     // if specified, create the low-pass filter
-    var lowPassFilter;
+    let lowPassFilter;
     if ( options.lowPassCutoffFrequency ) {
       lowPassFilter = this.audioContext.createBiquadFilter();
       lowPassFilter.type = 'lowpass';
@@ -49,7 +49,7 @@ define( function( require ) {
     }
 
     // if specified, create the high-pass filter
-    var highPassFilter;
+    let highPassFilter;
     if ( options.highPassCutoffFrequency ) {
       highPassFilter = this.audioContext.createBiquadFilter();
       highPassFilter.type = 'highpass';
@@ -65,25 +65,25 @@ define( function( require ) {
     }
 
     // define the noise data
-    var noiseBufferSize = NOISE_BUFFER_SECONDS * this.audioContext.sampleRate;
+    let noiseBufferSize = NOISE_BUFFER_SECONDS * this.audioContext.sampleRate;
     this.noiseBuffer = this.audioContext.createBuffer( 1, noiseBufferSize, this.audioContext.sampleRate ); // @private
-    var data = this.noiseBuffer.getChannelData( 0 );
+    const data = this.noiseBuffer.getChannelData( 0 );
 
     // fill in the sample buffer based on the noise type
     if ( options.noiseType === 'white' ) {
-      for ( var i = 0; i < noiseBufferSize; i++ ) {
+      for ( let i = 0; i < noiseBufferSize; i++ ) {
         data[ i ] = Math.random() * 2 - 1;
       }
     }
     else if ( options.noiseType === 'pink' ) {
-      var b0 = 0;
-      var b1 = 0;
-      var b2 = 0;
-      var b3 = 0;
-      var b4 = 0;
-      var b5 = 0;
-      var b6 = 0;
-      for ( i = 0; i < noiseBufferSize; i++ ) {
+      let b0 = 0;
+      let b1 = 0;
+      let b2 = 0;
+      let b3 = 0;
+      let b4 = 0;
+      let b5 = 0;
+      let b6 = 0;
+      for ( let i = 0; i < noiseBufferSize; i++ ) {
         var white = Math.random() * 2 - 1;
         b0 = 0.99886 * b0 + white * 0.0555179;
         b1 = 0.99332 * b1 + white * 0.0750759;
@@ -98,7 +98,7 @@ define( function( require ) {
     }
     else if ( options.noiseType === 'brown' ) {
       var lastOut = 0;
-      for ( i = 0; i < noiseBufferSize; i++ ) {
+      for ( let i = 0; i < noiseBufferSize; i++ ) {
         white = Math.random() * 2 - 1;
         data[ i ] = ( lastOut + ( 0.02 * white ) ) / 1.02;
         lastOut = data[ i ];
@@ -138,7 +138,7 @@ define( function( require ) {
 
     // wire up the audio path, working our way from the output back to the sound source(s)
     this.lfoControlledGainNode.connect( this.masterGainNode );
-    var nextOutputToConnect = this.lfoControlledGainNode;
+    let nextOutputToConnect = this.lfoControlledGainNode;
     if ( highPassFilter ) {
       highPassFilter.connect( nextOutputToConnect );
       nextOutputToConnect = highPassFilter;

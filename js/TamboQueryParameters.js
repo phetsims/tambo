@@ -9,9 +9,9 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var tambo = require( 'TAMBO/tambo' );
+  const tambo = require( 'TAMBO/tambo' );
 
-  var TamboQueryParameters = QueryStringMachine.getAll( {
+  const TamboQueryParameters = QueryStringMachine.getAll( {
 
     // Use the stubbed audio context regardless of whether support exists for Web Audio.  This is useful for testing in
     // browsers where the stubbed audio context isn't needed (e.g. Chrome), since the main browser where it IS needed

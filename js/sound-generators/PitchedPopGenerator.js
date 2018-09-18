@@ -10,15 +10,15 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Range = require( 'DOT/Range' );
-  var SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
-  var tambo = require( 'TAMBO/tambo' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Range = require( 'DOT/Range' );
+  const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
+  const tambo = require( 'TAMBO/tambo' );
 
   // constants
-  var DEFAULT_NUM_POP_GENERATORS = 8;
-  var ENVELOPE_TIME_CONSTANT = 0.005;
-  var DEFAULT_POP_DURATION = 0.02; // in seconds
+  const DEFAULT_NUM_POP_GENERATORS = 8;
+  const ENVELOPE_TIME_CONSTANT = 0.005;
+  const DEFAULT_POP_DURATION = 0.02; // in seconds
 
   /**
    * @constructor
@@ -35,14 +35,14 @@ define( function( require ) {
       numPopGenerators: DEFAULT_NUM_POP_GENERATORS
     }, options );
 
-    var self = this;
+    const self = this;
     SoundGenerator.call( this, options );
 
     // @private {Object} - make options available to methods
     this.options = options;
 
     // add a dynamics compressor node, otherwise distortion tends to occur when lots of pops are played at once
-    var dynamicsCompressorNode = this.audioContext.createDynamicsCompressor();
+    const dynamicsCompressorNode = this.audioContext.createDynamicsCompressor();
     dynamicsCompressorNode.threshold.value = -50;
     dynamicsCompressorNode.knee.value = 25;
     dynamicsCompressorNode.ratio.value = 12;
@@ -53,14 +53,14 @@ define( function( require ) {
     // create the sources - several are created so that pops can be played in rapid succession if desired
     this.soundSources = [];
     _.times( options.numPopGenerators, function() {
-      var soundSource = {};
-      var oscillator = self.audioContext.createOscillator();
-      var now = self.audioContext.currentTime;
+      const soundSource = {};
+      const oscillator = self.audioContext.createOscillator();
+      const now = self.audioContext.currentTime;
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime( options.pitchRange.min, now );
       oscillator.start( 0 );
       soundSource.oscillator = oscillator;
-      var gainNode = self.audioContext.createGain();
+      const gainNode = self.audioContext.createGain();
       gainNode.gain.setValueAtTime( 0, now );
       oscillator.connect( gainNode );
       gainNode.connect( dynamicsCompressorNode );
@@ -96,16 +96,16 @@ define( function( require ) {
       duration = duration || DEFAULT_POP_DURATION;
 
       // determine the frequency value of the pop
-      var minFrequency = this.options.pitchRange.min;
-      var maxFrequency = this.options.pitchRange.max;
-      var frequency = minFrequency + relativePitch * ( maxFrequency - minFrequency );
+      const minFrequency = this.options.pitchRange.min;
+      const maxFrequency = this.options.pitchRange.max;
+      const frequency = minFrequency + relativePitch * ( maxFrequency - minFrequency );
 
       // get a sound source from the pool, then index to the next one
-      var soundSource = this.soundSources[ this.nextSoundSourceIndex ];
+      const soundSource = this.soundSources[ this.nextSoundSourceIndex ];
       this.nextSoundSourceIndex = ( this.nextSoundSourceIndex + 1 ) % this.soundSources.length;
 
       // play the pop sound
-      var now = this.audioContext.currentTime;
+      const now = this.audioContext.currentTime;
       soundSource.gainNode.gain.cancelScheduledValues( now );
       soundSource.oscillator.frequency.setValueAtTime( frequency / 2, now );
       soundSource.gainNode.gain.setValueAtTime( 0, now );

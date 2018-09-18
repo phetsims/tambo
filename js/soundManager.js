@@ -16,54 +16,54 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var BooleanProperty = require( 'AXON/BooleanProperty' );
-  var Display = require( 'SCENERY/display/Display' );
-  var DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
-  var phetAudioContext = require( 'TAMBO/phetAudioContext' );
-  var platform = require( 'PHET_CORE/platform' );
-  var Property = require( 'AXON/Property' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  var soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
-  var tambo = require( 'TAMBO/tambo' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const Display = require( 'SCENERY/display/Display' );
+  const DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
+  const phetAudioContext = require( 'TAMBO/phetAudioContext' );
+  const platform = require( 'PHET_CORE/platform' );
+  const Property = require( 'AXON/Property' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
+  const tambo = require( 'TAMBO/tambo' );
 
   // sounds
-  var reverbImpulseResponse = require( 'sound!TAMBO/empty_apartment_bedroom_06_resampled.mp3' );
-  var emptySound = require( 'sound!TAMBO/empty.mp3' );
+  const reverbImpulseResponse = require( 'sound!TAMBO/empty_apartment_bedroom_06_resampled.mp3' );
+  const emptySound = require( 'sound!TAMBO/empty.mp3' );
 
   // constants
-  var DEFAULT_REVERB_LEVEL = 0.02;
-  var TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
-  var SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.soundInitiallyEnabled;
-  var ENHANCED_SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.enhancedSoundInitiallyEnabled;
+  const DEFAULT_REVERB_LEVEL = 0.02;
+  const TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
+  const SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.soundInitiallyEnabled;
+  const ENHANCED_SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.enhancedSoundInitiallyEnabled;
 
   // flag that tracks whether sound generation of any kind is enabled
-  var enabledProperty = new BooleanProperty( SOUND_INITIALLY_ENABLED );
+  const enabledProperty = new BooleanProperty( SOUND_INITIALLY_ENABLED );
 
   // flag that tracks whether enhanced sounds are enabled (basic sounds are always enabled if sound generation is)
-  var enhancedSoundEnabledProperty = new BooleanProperty( ENHANCED_SOUND_INITIALLY_ENABLED );
+  const enhancedSoundEnabledProperty = new BooleanProperty( ENHANCED_SOUND_INITIALLY_ENABLED );
 
   // next ID number value, used to assign a unique ID to each sound generator that is registered
-  var nextIdNumber = 1;
+  let nextIdNumber = 1;
 
   // array where the sound generators are stored along with information about how to manage them
-  var soundGeneratorInfoArray = [];
+  let soundGeneratorInfoArray = [];
 
   // output level for the master gain node when sonification is enabled
-  var masterOutputLevel = 1;
+  let masterOutputLevel = 1;
 
   // reverb level, needed because some browsers don't support reading of gain values
-  var _reverbLevel = DEFAULT_REVERB_LEVEL;
+  let _reverbLevel = DEFAULT_REVERB_LEVEL;
 
   // gain nodes for each of the defined "classes", will be defined during init
-  var gainNodesForClasses = {};
+  const gainNodesForClasses = {};
 
   // flag that tracks whether the sonification manager has been initialized
-  var initialized = false;
+  let initialized = false;
 
   /**
    * sonification manager object definition
    */
-  var soundManager = {
+  const soundManager = {
 
     /**
      * initialize the sonification manager - this function must be invoked before any sound generators can be added
@@ -73,7 +73,7 @@ define( function( require ) {
     initialize: function( simVisibleProperty, options ) {
 
       assert && assert( !initialized, 'can\'t initialize the sound manager more than once' );
-      var self = this;
+      const self = this;
 
       options = _.extend( {
 
@@ -87,7 +87,7 @@ define( function( require ) {
       // validate the options
       assert && assert( typeof options.classes === 'object', 'unexpected type for options.classes' );
       assert && assert(
-        _.every( options.classes, function( className ) { return typeof className === 'string'; } ),
+        _.every( options.classes, className => { return typeof className === 'string'; } ),
         'unexpected type for options.classes'
       );
 
@@ -113,30 +113,28 @@ define( function( require ) {
       soundInfoDecoder.decode(
         reverbImpulseResponse,
         phetAudioContext,
-        function( decodedAudioData ) {
-          self.convolver.buffer = decodedAudioData;
-        },
-        function() {
+        decodedAudioData => { self.convolver.buffer = decodedAudioData; },
+        () => {
 
-          // we haven't seen this happen, so for now a message is logged to the console and that's it
+          // error handler, we haven't seen this happen, so for now just log a message to the console
           console.log( 'Error: Unable to decode audio data.' );
         }
       );
 
       // create and hook up gain nodes for each of the defined classes
-      options.classes.forEach( function( className ) {
-        var gainNode = phetAudioContext.createGain();
-        gainNode.connect( self.convolver );
-        gainNode.connect( self.dryGainNode );
+      options.classes.forEach( className => {
+        const gainNode = phetAudioContext.createGain();
+        gainNode.connect( this.convolver );
+        gainNode.connect( this.dryGainNode );
         gainNodesForClasses[ className ] = gainNode;
       } );
 
       // hook up a listener that turns down the gain if sonification is disabled or the sim isn't visible
       Property.multilink(
         [ this.enabledProperty, simVisibleProperty ],
-        function( enabled, simVisible ) {
-          var gain = enabled && simVisible ? masterOutputLevel : 0;
-          self.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+        ( enabled, simVisible ) => {
+          const gain = enabled && simVisible ? masterOutputLevel : 0;
+          this.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
         }
       );
 
@@ -158,7 +156,7 @@ define( function( require ) {
               if ( phetAudioContext.state !== 'running' ) {
 
                 // the audio context isn't running, so tell it to resume
-                phetAudioContext.resume().catch( function( err ) {
+                phetAudioContext.resume().catch( err => {
                   assert && assert( false, 'error when trying to resume audio context, err = ' + err );
                 } );
               }
@@ -172,8 +170,8 @@ define( function( require ) {
           // thread initiated by a user event such as touchstart before any sounds will play.  This requires the user to
           // touch the screen before audio can be played. See
           // http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
-          var emptySoundClip = new SoundClip( emptySound, { connectImmediately: true } );
-          var playSilence = function() {
+          const emptySoundClip = new SoundClip( emptySound, { connectImmediately: true } );
+          const playSilence = function() {
             emptySoundClip.play();
             window.removeEventListener( 'touchstart', playSilence, false );
           };
@@ -200,7 +198,7 @@ define( function( require ) {
       }
 
       // verify that this is not a duplicate addition
-      var duplicateAdd = _.some( soundGeneratorInfoArray, function( sgInfo ) {
+      let duplicateAdd = _.some( soundGeneratorInfoArray, sgInfo => {
         return sgInfo.soundGenerator === soundGenerator;
       } );
       assert && assert( !duplicateAdd, 'can\'t add the same sound generator twice' );
@@ -239,10 +237,10 @@ define( function( require ) {
       }
 
       // create the registration ID for this sound generator
-      var id = 'sg-' + nextIdNumber++;
+      const id = 'sg-' + nextIdNumber++;
 
       // keep a record of the sound generator along with additional information about it
-      var soundGeneratorInfo = {
+      const soundGeneratorInfo = {
         soundGenerator: soundGenerator,
         sonificationLevel: options.sonificationLevel,
         id: id
@@ -280,8 +278,8 @@ define( function( require ) {
       }
 
       // find the info object for this sound generator
-      var sgInfoObject = null;
-      for ( var i = 0; i < soundGeneratorInfoArray.length; i++ ) {
+      let sgInfoObject = null;
+      for ( let i = 0; i < soundGeneratorInfoArray.length; i++ ) {
         if ( soundGeneratorInfoArray[ i ].soundGenerator === soundGenerator ) {
 
           // found it
@@ -300,7 +298,7 @@ define( function( require ) {
       if ( soundGenerator.isConnectedTo( this.dryGainNode ) ) {
         soundGenerator.disconnect( this.dryGainNode );
       }
-      _.values( gainNodesForClasses ).forEach( function( gainNode ) {
+      _.values( gainNodesForClasses ).forEach( gainNode => {
         if ( soundGenerator.isConnectedTo( gainNode ) ) {
           soundGenerator.disconnect( gainNode );
         }
@@ -380,7 +378,7 @@ define( function( require ) {
      */
     setReverbLevel: function( newReverbLevel ) {
       assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1 );
-      var now = phetAudioContext.currentTime;
+      let now = phetAudioContext.currentTime;
       this.reverbGainNode.gain.setTargetAtTime( newReverbLevel, now, TC_FOR_PARAM_CHANGES );
       this.dryGainNode.gain.setTargetAtTime( 1 - newReverbLevel, now, TC_FOR_PARAM_CHANGES );
       _reverbLevel = newReverbLevel;
@@ -441,8 +439,8 @@ define( function( require ) {
      * @return {string}
      */
     getSoundGeneratorId: function( soundGenerator ) {
-      var id = null;
-      soundGeneratorInfoArray.forEach( function( soundGeneratorInfo ) {
+      let id = null;
+      soundGeneratorInfoArray.forEach( soundGeneratorInfo => {
         if ( soundGeneratorInfo.soundGenerator === soundGenerator ) {
           id = soundGeneratorInfo.id;
         }

@@ -10,15 +10,15 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var tambo = require( 'TAMBO/tambo' );
+  const tambo = require( 'TAMBO/tambo' );
 
   // create an HTML DOM audio object that can be used to test sound formats
-  var soundElement = document.createElement( 'audio' );
+  const soundElement = document.createElement( 'audio' );
 
   /**
    * definition of the soundInfoDecoder object
    */
-  var soundInfoDecoder = {
+  const soundInfoDecoder = {
 
     /**
      * @param {Object} soundInfo - an object that contains either a URL for a sound resource or a base64 encoded sound
@@ -31,11 +31,11 @@ define( function( require ) {
       // parameter checking
       assert && assert( typeof( soundInfo ) === 'object' && ( soundInfo.url || soundInfo.base64 ) );
 
-      var supportedFormatFound = false;
+      let supportedFormatFound = false;
 
       // Identify the audio format.  The URL is generally used when running in RequieJS mode, base64 is used when
       // running single-html-file (aka "built") simulations.
-      var audioFormat;
+      let audioFormat;
       if ( soundInfo.url ) {
         audioFormat = 'audio/' + soundInfo.url.slice( soundInfo.url.lastIndexOf( '.' ) + 1,
           soundInfo.url.lastIndexOf( '?' ) >= 0 ? soundInfo.url.lastIndexOf( '?' ) : soundInfo.url.length
@@ -60,10 +60,10 @@ define( function( require ) {
         if ( soundInfo.base64 ) {
 
           // We're working with base64 data, so we need to decode it. The regular expression removes the mime header.
-          var soundData = ( soundInfo.base64 ? soundInfo.base64 : this.sound.getAttribute( 'src' ) ).replace( new RegExp( '^.*,' ), '' );
-          var byteChars = window.atob( soundData );
-          var byteArray = new window.Uint8Array( byteChars.length );
-          for ( var j = 0; j < byteArray.length; j++ ) {
+          const soundData = ( soundInfo.base64 ? soundInfo.base64 : this.sound.getAttribute( 'src' ) ).replace( new RegExp( '^.*,' ), '' );
+          const byteChars = window.atob( soundData );
+          const byteArray = new window.Uint8Array( byteChars.length );
+          for ( let j = 0; j < byteArray.length; j++ ) {
             byteArray[ j ] = byteChars.charCodeAt( j ); // need check to make sure this cast doesn't give problems?
           }
           audioContext.decodeAudioData( byteArray.buffer, onSuccess, onError );
@@ -71,7 +71,7 @@ define( function( require ) {
         else {
 
           // load the sound via URL
-          var request = new XMLHttpRequest();
+          const request = new XMLHttpRequest();
           request.open( 'GET', soundInfo.url, true );
           request.responseType = 'arraybuffer';
           request.onload = function() {

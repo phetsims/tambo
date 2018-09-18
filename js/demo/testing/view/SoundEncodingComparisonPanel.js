@@ -9,29 +9,29 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var ComboBox = require( 'SUN/ComboBox' );
-  var HBox = require( 'SCENERY/nodes/HBox' );
-  var HStrut = require( 'SCENERY/nodes/HStrut' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var Node = require( 'SCENERY/nodes/Node' );
-  var Panel = require( 'SUN/Panel' );
-  var PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  var Property = require( 'AXON/Property' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  var soundManager = require( 'TAMBO/soundManager' );
-  var tambo = require( 'TAMBO/tambo' );
-  var Text = require( 'SCENERY/nodes/Text' );
-  var RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
-  var VBox = require( 'SCENERY/nodes/VBox' );
+  const ComboBox = require( 'SUN/ComboBox' );
+  const HBox = require( 'SCENERY/nodes/HBox' );
+  const HStrut = require( 'SCENERY/nodes/HStrut' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
+  const Panel = require( 'SUN/Panel' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Property = require( 'AXON/Property' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  const soundManager = require( 'TAMBO/soundManager' );
+  const tambo = require( 'TAMBO/tambo' );
+  const Text = require( 'SCENERY/nodes/Text' );
+  const RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
-  var BUTTON_FONT = new PhetFont( 14 );
-  var COMBO_BOX_FONT = new PhetFont( 12 );
-  var PLAY_COLOR = '#66FF8C';
-  var STOP_COLOR = '#FF4D4D';
+  const BUTTON_FONT = new PhetFont( 14 );
+  const COMBO_BOX_FONT = new PhetFont( 12 );
+  const PLAY_COLOR = '#66FF8C';
+  const STOP_COLOR = '#FF4D4D';
 
   // sounds - these are defined in an object to simplify the process of adding or removing sounds to this panel
-  var sounds = [
+  const sounds = [
 
     {
       soundName: 'Bright Marimba',
@@ -183,6 +183,7 @@ define( function( require ) {
 
   /**
    * {Node} listParent - a node where the combo box lists will be placed, necessary for desired drop-down behavior
+   * @param {Node} listParent - parent node for the list from the combo box
    * @param {Object} [options]
    * @constructor
    */
@@ -195,15 +196,15 @@ define( function( require ) {
     }, options );
 
     // informational text that goes at the top of the panel
-    var infoText = new Text( 'Select sound and encoding, use button to play', {
+    const infoText = new Text( 'Select sound and encoding, use button to play', {
       font: new PhetFont( { size: 14, weight: 'bold' } )
     } );
 
     // create the combo box for selecting the sound to be played
-    var soundSelectorComboBoxItems = [];
-    var encodingSelectionComboBoxes = [];
-    var selectedEncodingProperty = new Property( 0 ); // this is shared by all encoding selectors
-    sounds.forEach( function( soundDescriptor, index ) {
+    const soundSelectorComboBoxItems = [];
+    const encodingSelectionComboBoxes = [];
+    const selectedEncodingProperty = new Property( 0 ); // this is shared by all encoding selectors
+    sounds.forEach( ( soundDescriptor, index ) => {
 
       // create the combo box item for selecting this sound
       soundSelectorComboBoxItems.push( ComboBox.createItem(
@@ -212,9 +213,9 @@ define( function( require ) {
       ) );
 
       // each sound generally has several encodings, so create a combo box for selecting the encodings for this sound
-      var encodingSelectorComboBoxItems = [];
-      soundDescriptor.encodings.forEach( function( encoding, encodingIndex ) {
-        var stereoMonoString = encoding.stereo ? '(stereo)' : '(mono)';
+      const encodingSelectorComboBoxItems = [];
+      soundDescriptor.encodings.forEach( ( encoding, encodingIndex ) => {
+        const stereoMonoString = encoding.stereo ? '(stereo)' : '(mono)';
         encodingSelectorComboBoxItems.push( ComboBox.createItem(
           new Text( encoding.format + ' ' + encoding.rate + ' ' + stereoMonoString, { font: COMBO_BOX_FONT } ),
           encodingIndex
@@ -227,14 +228,14 @@ define( function( require ) {
       ) );
 
     } );
-    var selectedSoundIndexProperty = new Property( 0 );
-    var soundSelectorComboBox = new ComboBox( soundSelectorComboBoxItems, selectedSoundIndexProperty, listParent );
+    const selectedSoundIndexProperty = new Property( 0 );
+    const soundSelectorComboBox = new ComboBox( soundSelectorComboBoxItems, selectedSoundIndexProperty, listParent );
 
     // the encoding selector combo boxes get changed around based on which sound is selected - this is the parent node
-    var encodingSelectorParentNode = new Node();
+    const encodingSelectorParentNode = new Node();
 
     // create a node that will contain the combo boxes for selecting the sound and the encoding
-    var soundAndEncodingSelectorNode = new HBox( {
+    const soundAndEncodingSelectorNode = new HBox( {
       children: [
         new Text( 'Sound:', { font: new PhetFont( 14 ) } ),
         soundSelectorComboBox,
@@ -246,8 +247,8 @@ define( function( require ) {
     } );
 
     // create and register sound generators for each sound and encoding
-    sounds.forEach( function( soundDescriptor ) {
-      soundDescriptor.encodings.forEach( function( encoding ) {
+    sounds.forEach( soundDescriptor => {
+      soundDescriptor.encodings.forEach( encoding => {
         if ( soundDescriptor.loop ) {
           encoding.soundGenerator = new SoundClip( encoding.sound, {
             loop: true,
@@ -262,17 +263,17 @@ define( function( require ) {
     } );
 
     // label for sound control button
-    var soundControlButtonLabel = new Text( 'Play', {
+    const soundControlButtonLabel = new Text( 'Play', {
       font: BUTTON_FONT
     } );
 
     // button used to play sounds
-    var soundControlButton = new RectangularPushButton( {
+    const soundControlButton = new RectangularPushButton( {
       content: soundControlButtonLabel,
       baseColor: PLAY_COLOR,
       listener: function() {
-        var sound = sounds[ selectedSoundIndexProperty.value ];
-        var soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
+        const sound = sounds[ selectedSoundIndexProperty.value ];
+        const soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
 
         // This is to make it clear that different sound generators are being selected, since it is sometimes hard to
         // tell when just listening.
@@ -298,7 +299,7 @@ define( function( require ) {
     } );
 
     // update the UI state based on the attributes of the selected sound
-    selectedSoundIndexProperty.link( function( selectedSoundIndex, previouslySelectedSoundIndex ) {
+    selectedSoundIndexProperty.link( ( selectedSoundIndex, previouslySelectedSoundIndex ) => {
 
       // make sure the correct encoding selector is being shown
       encodingSelectorParentNode.removeAllChildren();
@@ -310,9 +311,9 @@ define( function( require ) {
 
       // make sure anything that was playing is stopped
       if ( previouslySelectedSoundIndex !== null ) {
-        var sound = sounds[ previouslySelectedSoundIndex ];
+        const sound = sounds[ previouslySelectedSoundIndex ];
         if ( sound.loop ) {
-          var soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
+          const soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
           if ( soundGenerator.isPlaying ) {
             soundGenerator.stop();
             soundControlButtonLabel.text = 'Play';
@@ -325,13 +326,13 @@ define( function( require ) {
       selectedEncodingProperty.reset();
     } );
 
-    selectedEncodingProperty.link( function( newSelection, oldSelection ) {
+    selectedEncodingProperty.link( ( newSelection, oldSelection ) => {
 
       // make sure anything that was playing is stopped
       if ( oldSelection !== null ) {
-        var sound = sounds[ selectedSoundIndexProperty.value ];
+        const sound = sounds[ selectedSoundIndexProperty.value ];
         if ( sound.loop ) {
-          var soundGenerator = sound.encodings[ oldSelection ].soundGenerator;
+          const soundGenerator = sound.encodings[ oldSelection ].soundGenerator;
           if ( soundGenerator.isPlaying ) {
             soundGenerator.stop();
             soundControlButtonLabel.text = 'Play';
@@ -342,7 +343,7 @@ define( function( require ) {
     } );
 
     // add everything to a vertical box
-    var rootVBox = new VBox( {
+    const rootVBox = new VBox( {
       children: [ infoText, soundAndEncodingSelectorNode, soundControlButton ],
       spacing: 14
     } );

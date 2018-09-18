@@ -4,21 +4,21 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var inherit = require( 'PHET_CORE/inherit' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  var tambo = require( 'TAMBO/tambo' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  const tambo = require( 'TAMBO/tambo' );
 
   // sounds
-  var resetAllSound = require( 'sound!TAMBO/reset-all.mp3' );
+  const resetAllSound = require( 'sound!TAMBO/reset-all.mp3' );
 
   /**
    * @param {BooleanProperty} resetInProgressProperty
    * @constructor
    */
   function ResetAllSoundGenerator( resetInProgressProperty ) {
-    var self = this;
+    const self = this;
     SoundClip.call( this, resetAllSound );
-    var resetListener = function( resetInProgress ) {
+    const resetListener = function( resetInProgress ) {
       if ( resetInProgress ) {
         self.play();
       }

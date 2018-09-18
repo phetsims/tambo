@@ -9,19 +9,19 @@ define( function( require ) {
   'use strict';
 
   // modules
-  var Bounds2 = require( 'DOT/Bounds2' );
-  var inherit = require( 'PHET_CORE/inherit' );
-  var RemoveAndDisposeTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeTestPanel' );
-  var ScreenView = require( 'JOIST/ScreenView' );
-  var SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  var SoundEncodingComparisonPanel = require( 'TAMBO/demo/testing/view/SoundEncodingComparisonPanel' );
-  var soundManager = require( 'TAMBO/soundManager' );
-  var tambo = require( 'TAMBO/tambo' );
-  var TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  const Bounds2 = require( 'DOT/Bounds2' );
+  const inherit = require( 'PHET_CORE/inherit' );
+  const RemoveAndDisposeTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeTestPanel' );
+  const ScreenView = require( 'JOIST/ScreenView' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  const SoundEncodingComparisonPanel = require( 'TAMBO/demo/testing/view/SoundEncodingComparisonPanel' );
+  const soundManager = require( 'TAMBO/soundManager' );
+  const tambo = require( 'TAMBO/tambo' );
+  const TextPushButton = require( 'SUN/buttons/TextPushButton' );
 
   // sounds
-  var loonCallSound = require( 'sound!TAMBO/loon-call.mp3' );
-  var rhodesChordSound = require( 'sound!TAMBO/rhodes-chord.mp3' );
+  const loonCallSound = require( 'sound!TAMBO/loon-call.mp3' );
+  const rhodesChordSound = require( 'sound!TAMBO/rhodes-chord.mp3' );
 
   /**
    * @constructor
@@ -33,13 +33,13 @@ define( function( require ) {
     } );
 
     // create two one-shot sounds, one for basic mode and one for enhanced
-    var loonCallSoundClip = new SoundClip( loonCallSound );
+    const loonCallSoundClip = new SoundClip( loonCallSound );
     soundManager.addSoundGenerator( loonCallSoundClip );
-    var rhodesChordSoundClip = new SoundClip( rhodesChordSound );
+    const rhodesChordSoundClip = new SoundClip( rhodesChordSound );
     soundManager.addSoundGenerator( rhodesChordSoundClip, { sonificationLevel: 'enhanced' } );
 
     // add a button to play a basic-mode sound
-    var playBasicSoundButton = new TextPushButton( 'Play Basic-Level Sound', {
+    const playBasicSoundButton = new TextPushButton( 'Play Basic-Level Sound', {
       listener: function() { loonCallSoundClip.play(); },
       baseColor: '#aad6cc',
       left: this.layoutBounds.left + 20,
@@ -48,7 +48,7 @@ define( function( require ) {
     this.addChild( playBasicSoundButton );
 
     // add button to play enhanced-mode sound
-    var playEnhancedSoundButton = new TextPushButton( 'Play Enhanced-Level Sound', {
+    const playEnhancedSoundButton = new TextPushButton( 'Play Enhanced-Level Sound', {
       listener: function() { rhodesChordSoundClip.play(); },
       baseColor: '#DBB1CD',
       left: playBasicSoundButton.left,
@@ -57,7 +57,7 @@ define( function( require ) {
     this.addChild( playEnhancedSoundButton );
 
     // add a panel that will allow the user to compare sounds with different encodings
-    var soundComparisonPanel = new SoundEncodingComparisonPanel( this, {
+    const soundComparisonPanel = new SoundEncodingComparisonPanel( this, {
       left: playBasicSoundButton.right + 50,
       top: playBasicSoundButton.top
     } );
