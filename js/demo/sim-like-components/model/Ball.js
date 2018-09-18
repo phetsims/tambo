@@ -14,7 +14,7 @@ define( function( require ) {
 
   /**
    * @param {number} radius - in centimeters
-   * @param {Color} color
+   * @param {Color|string} color
    * @param {Vector2} initialPosition
    * @param {Vector2} initialVelocity
    * @constructor

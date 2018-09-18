@@ -69,13 +69,17 @@ define( function( require ) {
       ) );
     },
 
+    /**
+     * remove a ball
+     * @public
+     */
     removeABall: function() {
       this.balls.pop();
     },
 
     /**
      * step function to move and bounce the balls
-     * @param {number} dt
+     * @param {number} dt - time step, in seconds
      * @public
      */
     step: function( dt ) {

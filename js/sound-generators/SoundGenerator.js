@@ -16,11 +16,13 @@ define( function( require ) {
   const tambo = require( 'TAMBO/tambo' );
 
   // constants
+  //REVIEW seconds? and what is it used for?
   const DEFAULT_TIME_CONSTANT = 0.015; // empirically determined to be fast but not cause clicks when applied to gain
 
   /**
    * @param {Object} options
    * @constructor
+   * @abstract
    */
   function SoundGenerator( options ) {
 
@@ -28,10 +30,12 @@ define( function( require ) {
 
     options = _.extend( {
 
+      //REVIEW document, including range
       initialOutputLevel: 1,
 
-      // By default, the shared audio context is used so that this sound can be registered with the sonification
-      // manager, but this can be overridden if desired.  In general, overriding will only be done for testing.
+      // {AudioContext} By default, the shared audio context is used so that this sound can be registered with the
+      // sonification manager, but this can be overridden if desired.  In general, overriding will only be done for
+      // testing.
       audioContext: phetAudioContext,
 
       // This flag controls whether the output of this sound generator is immediately connected to the audio context
@@ -39,10 +43,14 @@ define( function( require ) {
       // in conjunction with the sonification manager.
       connectImmediately: false,
 
+      //REVIEW type expression needed, {BooleanProperty[]} ?
       // An initial set of properties that will be hooked to this sound generator's enabled state, more can be added
       // later via methods if needed.
       enableControlProperties: []
     }, options );
+
+    //REVIEW validate options.initialOutputLevel, should be [0,1]
+    //REVIEW validate options.enableControlProperties, should be all BooleanProperty
 
     // @protected {AudioContext}
     this.audioContext = options.audioContext;
@@ -50,14 +58,15 @@ define( function( require ) {
     // @private {number}
     this._outputLevel = options.initialOutputLevel;
 
-    // @private AudioParam[] - a list of all audio nodes to which this sound generator is connected
+    // @private {AudioParam[]} - a list of all audio nodes to which this sound generator is connected
     this.connectionList = [];
 
     // @private {ObservableArray.<BooleanProperty>} - A set of boolean properties that collectively control whether the
-    // sound generator is enabled.  All of these must be true in order for the sound generator to be able "fully
+    // sound generator is enabled.  All of these must be true in order for the sound generator to be "fully
     // enabled", meaning that it will produce sound.
     this.enableControlProperties = new ObservableArray();
 
+    //REVIEW this is marked read-only but is set by subclass SoundClip
     // @public (read-only) {BooleanProperty} - A property that tracks whether this sound generator is fully enabled,
     // meaning that all the enable control properties are in a state indicating that sound can be produced.  This
     // should only be updated in the listener function defined below, no where else.
@@ -73,6 +82,7 @@ define( function( require ) {
 
     // listen for new enable control properties and hook them up as they arrive
     this.enableControlProperties.addItemAddedListener( addedItem => {
+      //REVIEW verify that addedItem is a BooleanProperty?
       addedItem.link( updateFullyEnabledState );
       this.enableControlProperties.addItemRemovedListener( function checkAndRemove( removedItem ) {
         if ( removedItem === addedItem ) {
@@ -111,6 +121,9 @@ define( function( require ) {
     // turn down the gain to zero when not fully enabled
     this.fullyEnabledProperty.link( fullyEnabled => {
       const now = this.audioContext.currentTime;
+      //REVIEW Duplication in if and else blocks. How about?:
+      //REVIEW const outputLevel = fullyEnabled ? this._outputLevel : 0;
+      //REVIEW this.masterGainNode.gain.setTargetAtTime( outputLevel, now, DEFAULT_TIME_CONSTANT );
       if ( fullyEnabled ) {
         this.masterGainNode.gain.setTargetAtTime( this._outputLevel, now, DEFAULT_TIME_CONSTANT );
       }
@@ -170,7 +183,7 @@ define( function( require ) {
      * @param {number} [timeConstant] - time constant for outputLevel change, see AudioParam.setTargetAtTime
      */
     setOutputLevel: function( outputLevel, timeConstant ) {
-      timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TIME_CONSTANT : timeConstant;
+      timeConstant = ( typeof timeConstant === 'undefined' ) ? DEFAULT_TIME_CONSTANT : timeConstant;
       this._outputLevel = outputLevel;
       if ( this.fullyEnabledProperty.value ) {
         this.masterGainNode.gain.setTargetAtTime(
@@ -190,7 +203,7 @@ define( function( require ) {
     },
 
     /**
-     * remove the provided enable control property from the list of those being used by this sound generator
+     * remove a property from the list of those used to control the enabled state of this sound generator
      * @param {BooleanProperty} enableControlProperty
      */
     removeEnableControlProperty: function( enableControlProperty ) {

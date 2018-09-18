@@ -37,6 +37,8 @@ define( function( require ) {
     supportsEnhancedSound: true
   };
 
+  //REVIEW This feels a bit distracting/gratuitous, but your call. We don't do this in other demos.
+  //REVIEW And joist creates default icons that match the screen's background color.
   // helper function to create screen icons that aren't too bland
   function createScreenIcon( color1, color2, gradientType ) {
 

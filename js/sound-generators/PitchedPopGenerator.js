@@ -17,7 +17,7 @@ define( function( require ) {
 
   // constants
   const DEFAULT_NUM_POP_GENERATORS = 8;
-  const ENVELOPE_TIME_CONSTANT = 0.005;
+  const ENVELOPE_TIME_CONSTANT = 0.005; //REVIEW units?
   const DEFAULT_POP_DURATION = 0.02; // in seconds
 
   /**
@@ -38,11 +38,14 @@ define( function( require ) {
     const self = this;
     SoundGenerator.call( this, options );
 
+    //REVIEW anti-pattern, replace with this.pitchRange = options.pitchRange
     // @private {Object} - make options available to methods
     this.options = options;
 
+    //REVIEW {DynamicsCompressorNode} ?
     // add a dynamics compressor node, otherwise distortion tends to occur when lots of pops are played at once
     const dynamicsCompressorNode = this.audioContext.createDynamicsCompressor();
+    //REVIEW document these magic numbers, or refer to where documentation can be found.
     dynamicsCompressorNode.threshold.value = -50;
     dynamicsCompressorNode.knee.value = 25;
     dynamicsCompressorNode.ratio.value = 12;
@@ -50,21 +53,29 @@ define( function( require ) {
     dynamicsCompressorNode.release.value = 0.25;
     dynamicsCompressorNode.connect( this.masterGainNode );
 
+    //REVIEW type expression, {{oscillator:OscillatorNode, gainNode:GainNode}[]} ?
     // create the sources - several are created so that pops can be played in rapid succession if desired
     this.soundSources = [];
     _.times( options.numPopGenerators, function() {
+
       const soundSource = {};
+
+      // {OscillatorNode}
       const oscillator = self.audioContext.createOscillator();
       const now = self.audioContext.currentTime;
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime( options.pitchRange.min, now );
       oscillator.start( 0 );
       soundSource.oscillator = oscillator;
+
+      // {GainNode}
       const gainNode = self.audioContext.createGain();
       gainNode.gain.setValueAtTime( 0, now );
       oscillator.connect( gainNode );
       gainNode.connect( dynamicsCompressorNode );
       soundSource.gainNode = gainNode;
+
+      //REVIEW get ride of const soundSource and push( { oscillator: oscillator, gainNode: gainNode } )
       self.soundSources.push( soundSource );
     } );
 
@@ -100,6 +111,7 @@ define( function( require ) {
       const maxFrequency = this.options.pitchRange.max;
       const frequency = minFrequency + relativePitch * ( maxFrequency - minFrequency );
 
+      //REVIEW type expression for soundSource
       // get a sound source from the pool, then index to the next one
       const soundSource = this.soundSources[ this.nextSoundSourceIndex ];
       this.nextSoundSourceIndex = ( this.nextSoundSourceIndex + 1 ) % this.soundSources.length;

@@ -26,15 +26,21 @@ define( function( require ) {
     // set up options using default values, see base class for additional options
     options = _.extend( {
       noiseType: 'white', // valid values are 'white', 'pink', and 'brown'
+      //REVIEW Are next 3 options in Hz? What does null mean?
       lowPassCutoffFrequency: null,
       highPassCutoffFrequency: null,
       centerFrequency: null,
       lfoInitiallyEnabled: false,
       lfoInitialFrequency: 2, // Hz
       lfoInitialDepth: 1, // valid values are from 0 to 1
-      lfoType: 'sine',
+      lfoType: 'sine', //REVIEW valid values?
+      //REVIEW Document. What does null mean? Reconsider using a name that starts with uppercase - qFactor?
       Q: null
     }, options );
+
+    //REVIEW validate options.noiseType
+    //REVIEW validate options.lfoInitialDepth
+    //REVIEW validate options.lfoType
 
     SoundGenerator.call( this, options );
 
@@ -112,17 +118,20 @@ define( function( require ) {
     // @private {AudioBufferSourceNode|null} - the source node from which the noise is played
     this.noiseSource = null;
 
+    //REVIEW {OscillatorNode} ?
     // define a low frequency oscillator (LFO) for amplitude modulation
     this.lfo = this.audioContext.createOscillator();
     this.lfo.type = options.lfoType;
     this.lfo.frequency.setValueAtTime( options.lfoInitialFrequency, now ); // initialize LFO frequency, updated through methods defined below
     this.lfo.start();
 
+    //REVIEW {GainNode} ?
     // create a gain stage to attenuate the LFO output so that it will range from -0.5 to +0.5
     this.lfoAttenuatorGainNode = this.audioContext.createGain();
     this.lfoAttenuatorGainNode.gain.value = options.lfoInitialDepth / 2;
     this.lfo.connect( this.lfoAttenuatorGainNode );
 
+    //REVIEW {GainNode} ?
     // create a gain stage for the LFO - the main sound path will run through here
     this.lfoControlledGainNode = this.audioContext.createGain();
     this.lfoControlledGainNode.gain.value = 0.5; // this value is added to the attenuated LFO output value

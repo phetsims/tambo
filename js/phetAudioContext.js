@@ -1,5 +1,6 @@
 // Copyright 2018, University of Colorado Boulder
 
+//REVIEW Indicate that this is a singleton.
 /**
  * a Web Audio audio context that can be included using RequireJS, creates a stubbed version on platforms where Web
  * Audio is not supported
@@ -22,6 +23,7 @@ define( function( require ) {
   // silent stub function, used in the stubbed audio context
   function silentStub() {}
 
+  //REVIEW What exactly is this a stub for? BaseAudioContext?
   // Define a stubbed audio context that can be used in cases where browsers don't support Web Audio.  This was created
   // manually by identifying what portions of the Web Audio API were being used in tambo and adding those methods and
   // properties. This may need to be updated periodically as tambo and our usage of Web Audio evolves.  See

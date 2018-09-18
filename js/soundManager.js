@@ -30,30 +30,40 @@ define( function( require ) {
   const reverbImpulseResponse = require( 'sound!TAMBO/empty_apartment_bedroom_06_resampled.mp3' );
   const emptySound = require( 'sound!TAMBO/empty.mp3' );
 
+  //REVIEW with the exception of TC_FOR_PARAM_CHANGES, these constants are used in 1 place, better to inline them?
   // constants
   const DEFAULT_REVERB_LEVEL = 0.02;
+  //REVIEW time units?
   const TC_FOR_PARAM_CHANGES = 0.015; // time constant for param changes, empirically determined to avoid clicks
   const SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.soundInitiallyEnabled;
   const ENHANCED_SOUND_INITIALLY_ENABLED = phet.chipper.queryParameters.enhancedSoundInitiallyEnabled;
 
   // flag that tracks whether sound generation of any kind is enabled
+  //REVIEW a bit confusing to have both a constant and this.enabledProperty, consider inlining
   const enabledProperty = new BooleanProperty( SOUND_INITIALLY_ENABLED );
 
   // flag that tracks whether enhanced sounds are enabled (basic sounds are always enabled if sound generation is)
+  //REVIEW same comment as enabledProperty
   const enhancedSoundEnabledProperty = new BooleanProperty( ENHANCED_SOUND_INITIALLY_ENABLED );
 
   // next ID number value, used to assign a unique ID to each sound generator that is registered
   let nextIdNumber = 1;
 
+  //REVIEW needs a type expression, probably {Array.<{soundGenerator:SoundGenerator,sonificationLevel:string, id:string}>}, or pointer to where to look
   // array where the sound generators are stored along with information about how to manage them
   let soundGeneratorInfoArray = [];
 
+  //REVIEW document range
+  //REVIEW related functions (setOutputLevel, getOutputLevel,...) don't indicate that they are related to "master"
   // output level for the master gain node when sonification is enabled
   let masterOutputLevel = 1;
 
+  //REVIEW document range here, or refer to doc for setReverbLevel
   // reverb level, needed because some browsers don't support reading of gain values
   let _reverbLevel = DEFAULT_REVERB_LEVEL;
 
+  //REVIEW better doc, looks like this is a map from class name -> {Node}?
+  //REVIEW Does "classes" refer to the doc for initialize() options.classes?
   // gain nodes for each of the defined "classes", will be defined during init
   const gainNodesForClasses = {};
 
@@ -65,6 +75,7 @@ define( function( require ) {
    */
   const soundManager = {
 
+    //REVIEW sentences without capitalization and punctuation.
     /**
      * initialize the sonification manager - this function must be invoked before any sound generators can be added
      * @param {BooleanProperty} simVisibleProperty
@@ -85,10 +96,11 @@ define( function( require ) {
       }, options );
 
       // validate the options
+      //REVIEW should the assertion check be Array.isArray( options.classes ) ?
       assert && assert( typeof options.classes === 'object', 'unexpected type for options.classes' );
       assert && assert(
         _.every( options.classes, className => { return typeof className === 'string'; } ),
-        'unexpected type for options.classes'
+        'unexpected type for options.classes' //REVIEW message should be 'unexpected type of element in options.classes'
       );
 
       // create the master gain node for all sounds managed by this sonification manager
@@ -192,6 +204,7 @@ define( function( require ) {
      */
     addSoundGenerator: function( soundGenerator, options ) {
 
+      //REVIEW why isn't this an assertion?
       if ( !initialized ) {
         console.warn( 'an attempt was made to add a sound generator to an uninitialized sound manager, ignoring (sound will not be produced)' );
         return null;
@@ -205,19 +218,26 @@ define( function( require ) {
 
       // default options
       options = _.extend( {
+
+        //REVIEW document this
         connect: true,
 
+        //REVIEW {string}
         // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of
         // the sonification level parameter for the sim.  Valid values are 'basic' or 'enhanced'.
         sonificationLevel: 'basic',
 
+        //REVIEW {Node|null} ?
         // A Scenery node that, if provided, must be visible in the display for the sound generator to be enabled.  This
         // is generally used only for sounds that can play for long durations, such as a looping sound clip.
         associatedViewNode: null,
 
+        //REVIEW {string} ?
         // class name for this sound, which can be used to group sounds together an control them as a group
         className: null
       }, options );
+
+      //REVIEW validate options.sonficationLevel
 
       // validate the options
       assert && assert(
@@ -272,12 +292,14 @@ define( function( require ) {
      */
     removeSoundGenerator: function( soundGenerator ) {
 
+      //REVIEW why isn't this an assertion?
       if ( !initialized ) {
         console.warn( 'an attempt was made to remove a sound generator from an uninitialized sound manager, ignoring' );
         return null;
       }
 
       // find the info object for this sound generator
+      //REVIEW above you used soundGeneratorInfo, here you use sgInfoObject, especially important to be consistent in this case
       let sgInfoObject = null;
       for ( let i = 0; i < soundGeneratorInfoArray.length; i++ ) {
         if ( soundGeneratorInfoArray[ i ].soundGenerator === soundGenerator ) {
@@ -289,8 +311,10 @@ define( function( require ) {
       }
 
       // make sure it is actually present on the list
+      //REVIEW should there be some way to identify a specific sound generator is assertion messages?
       assert && assert( sgInfoObject, 'unable to remove sound generator - not found' );
 
+      //REVIEW move this to SoundGenerator.disconnectAll ?
       // disconnect the sound generator from any nodes to which it may be connected
       if ( soundGenerator.isConnectedTo( this.convolver ) ) {
         soundGenerator.disconnect( this.convolver );
@@ -308,6 +332,7 @@ define( function( require ) {
       soundGeneratorInfoArray = _.without( soundGeneratorInfoArray, sgInfoObject );
     },
 
+    //REVIEW rename to setMasterOutputLevel? Similar for other functions related to masterOutputLevel.
     /**
      * set the master output level for sonification
      * @param {number} outputLevel - valid values from 0 (min) through 1 (max)
@@ -316,6 +341,7 @@ define( function( require ) {
     setOutputLevel: function( outputLevel ) {
 
       // range check
+      //REVIEW include outputLevel in message
       assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range' );
 
       masterOutputLevel = outputLevel;
@@ -349,6 +375,7 @@ define( function( require ) {
       assert && assert( initialized, 'output levels for classes cannot be added until initialization has been done' );
 
       // range check
+      //REVIEW include outputLevel in message
       assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range' );
 
       // verify that the specified class exists
@@ -377,6 +404,7 @@ define( function( require ) {
      * @param {number} newReverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
      */
     setReverbLevel: function( newReverbLevel ) {
+      //REVIEW add assertion message that includes newReverbLevel
       assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1 );
       let now = phetAudioContext.currentTime;
       this.reverbGainNode.gain.setTargetAtTime( newReverbLevel, now, TC_FOR_PARAM_CHANGES );
@@ -410,6 +438,8 @@ define( function( require ) {
       return enabledProperty.get();
     },
 
+    //REVIEW Consider relocating earlier in the source code, since this.enabledProperty is referenced in initialize.
+    //REVIEW With a singleton, I think it's clearer to define fields before functions.
     /**
      * property that corresponds to the enabled state setting
      * @public (read-only)
@@ -421,6 +451,7 @@ define( function( require ) {
      * @param {string} sonificationLevel
      */
     set sonificationLevel( sonificationLevel ) {
+      //REVIEW 'basic' occurs 4 time in this file, 'enhanced' occurs 5 times. Maybe that's OK.
       assert && assert( sonificationLevel === 'basic' || sonificationLevel === 'enhanced' );
       enhancedSoundEnabledProperty.set( sonificationLevel === 'enhanced' );
     },
@@ -435,7 +466,7 @@ define( function( require ) {
 
     /**
      * get the ID for a sound generator, null if the provided sound generator isn't registered
-     * @param {SoundGenerator) soundGenerator
+     * @param {SoundGenerator} soundGenerator
      * @return {string}
      */
     getSoundGeneratorId: function( soundGenerator ) {
@@ -448,6 +479,7 @@ define( function( require ) {
       return id;
     },
 
+    //REVIEW Same comment as enabledProperty above, define fields before functions in singletons.
     /**
      * property that corresponds to the sonification level setting
      * @public (read-only)

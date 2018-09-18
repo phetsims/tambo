@@ -17,12 +17,14 @@ define( function( require ) {
 
   // constants
 
+  //REVIEW threshold for what? time? what are the units?
   // This threshold is used for analyzing the decoded sound data for where a loop that is intended to continuously
   // generate sound should start and end.  Its value was determined through experimentation on a single loop
   // (charges-in-body) at a number of different encodings.  It may need to be refined over time as we add new loops.  Or
   // it may work perfectly forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
   const AUDIO_DATA_THRESHOLD = 0.05;
 
+  //REVIEW what are the fields in soundInfo? url and base64?
   /**
    * @param {Object} soundInfo - An object that includes *either* a url that points to the sound to be played *or* a
    * base64-encoded version of the sound data.  The former is generally used when a sim is running in RequireJS mode,
@@ -37,7 +39,7 @@ define( function( require ) {
       // Should this sound be played repetitively, or just once (i.e. a one-shot sound)?
       loop: false,
 
-      // Should silence at the beginning and, in the case of loops, the end be removed?
+      // Should silence at the beginning and (in the case of loops) the end be removed?
       trimSilence: true,
 
       // This option controls whether sound generation can be initiated when this sound generator is disabled.  This
@@ -47,6 +49,7 @@ define( function( require ) {
       initiateWhenDisabled: true
 
     }, options );
+
     SoundGenerator.call( this, options );
 
     // options checking
@@ -97,11 +100,13 @@ define( function( require ) {
       () => {
 
         // we haven't seen this happen, so for now a message is logged to the console and that's it
+        //REVIEW can this message be more specific about what clip couldn't be decoded?
         console.log( 'Error: Unable to decode audio data.' );
       }
     );
 
     // @private {number} - rate at which clip is being played back
+    //REVIEW describe range and the semantics of this specific value
     this.playbackRate = 1;
 
     // @private {boolean} - flag that tracks whether the sound is being played
@@ -115,6 +120,7 @@ define( function( require ) {
     } );
   }
 
+  //REVIEW document parameters
   /**
    * helper function to find the point at which a sound starts given a threshold and a buffer of sound data
    */
@@ -232,6 +238,7 @@ define( function( require ) {
     };
   }
 
+  //REVIEW is there any concern about making this function call when it's not needed? Should phet.log pattern be used?
   /**
    * helper function for logging sound analysis information if said logging is enabled, useful for debugging
    * @param string
@@ -246,8 +253,9 @@ define( function( require ) {
 
   return inherit( SoundGenerator, SoundClip, {
 
+    //REVIEW units for delay?
     /**
-     * function to start playing the sound
+     * start playing the sound
      * @param {number} [delay] - optional delay parameter
      * @public
      */
@@ -339,6 +347,7 @@ define( function( require ) {
       }
     },
 
+    //REVIEW units for timeConstant?
     /**
      * play sound and change the speed as playback occurs
      * @param {number} playbackRate - desired playback speed, 1 = normal speed
@@ -346,7 +355,7 @@ define( function( require ) {
      * value. The larger this value is, the slower the transition will be.
      */
     setPlaybackRate: function( playbackRate, timeConstant ) {
-      timeConstant = timeConstant || SoundGenerator.DEFAULT_TIME_CONSTANT;
+      timeConstant = timeConstant || SoundGenerator.DEFAULT_TIME_CONSTANT; //REVIEW incorrect if timeConstant === 0
       this.activeBufferSources.forEach( bufferSource => {
         bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
       } );
