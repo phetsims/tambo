@@ -30,7 +30,7 @@ define( function( require ) {
 
   // audio
   var reverbImpulseResponse = require( 'sound!TAMBO/empty_apartment_bedroom_06_resampled.mp3' );
-  var empty = require( 'sound!TAMBO/empty.mp3' );
+  var emptySound = require( 'sound!TAMBO/empty.mp3' );
 
   // constants
   var DEFAULT_REVERB_LEVEL = 0.02;
@@ -174,9 +174,9 @@ define( function( require ) {
           // thread initiated by a user event such as touchstart before any sounds will play.  This requires the user to
           // touch the screen before audio can be played. See
           // http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
-          var silence = new SoundClip( empty, { connectImmediately: true } );
+          var emptySoundClip = new SoundClip( emptySound, { connectImmediately: true } );
           var playSilence = function() {
-            silence.play();
+            emptySoundClip.play();
             window.removeEventListener( 'touchstart', playSilence, false );
           };
           window.addEventListener( 'touchstart', playSilence, false );

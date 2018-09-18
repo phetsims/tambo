@@ -38,33 +38,34 @@ define( function( require ) {
     // add sounds
 
     // @public (read-only) {SoundClip} - make these available so that the output level can be adjusted
-    this.wallContactSound = new SoundClip( wallContactSound, {
+    this.wallContactSoundClip = new SoundClip( wallContactSound, {
       initialOutputLevel: 0.3
     } );
-    this.ceilingFloorContactSound = new SoundClip( ceilingFloorContactSound, {
+    this.ceilingFloorContactSoundClip = new SoundClip( ceilingFloorContactSound, {
       initialOutputLevel: 0.3
     } );
 
     // add the sound generators
-    soundManager.addSoundGenerator( this.wallContactSound );
-    soundManager.addSoundGenerator( this.ceilingFloorContactSound );
+    soundManager.addSoundGenerator( this.wallContactSoundClip );
+    soundManager.addSoundGenerator( this.ceilingFloorContactSoundClip );
 
     // play bounces when the ball bounces
     var bounceListener = function( bounceSurface ) {
       if ( bounceSurface === 'left-wall' || bounceSurface === 'right-wall' ) {
-        self.wallContactSound.play();
+        self.wallContactSoundClip.play();
       }
       else if ( bounceSurface === 'floor' || bounceSurface === 'ceiling' ) {
-        self.ceilingFloorContactSound.play();
+        self.ceilingFloorContactSoundClip.play();
       }
     };
     ball.bounceEmitter.addListener( bounceListener );
 
     this.disposeBallNode = function() {
       ball.bounceEmitter.removeListener( bounceListener );
-      self.wallContactSound.stop();
-      soundManager.removeSoundGenerator( this.wallContactSound );
-      soundManager.removeSoundGenerator( this.ceilingFloorContactSound );
+      self.wallContactSoundClip.stop();
+      self.ceilingFloorContactSoundClip.stop();
+      soundManager.removeSoundGenerator( this.wallContactSoundClip );
+      soundManager.removeSoundGenerator( this.ceilingFloorContactSoundClip );
     };
   }
 

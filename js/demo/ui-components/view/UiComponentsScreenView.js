@@ -44,7 +44,7 @@ define( function( require ) {
   var lightningImage = require( 'image!TAMBO/lightning.png' );
 
   // audio
-  var chargesInBody = require( 'sound!TAMBO/charges-in-body-better.mp3' );
+  var chargesInBodySound = require( 'sound!TAMBO/charges-in-body-better.mp3' );
   var marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
   var sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
   var sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
@@ -81,19 +81,19 @@ define( function( require ) {
     );
 
     // add sound generators that will play a sound when the value controlled by the slider changes
-    var increaseClickSound = new SoundClip( sliderIncreaseClickSound );
-    soundManager.addSoundGenerator( increaseClickSound );
-    var decreaseClickSound = new SoundClip( sliderDecreaseClickSound, {
+    var sliderIncreaseClickSoundClip = new SoundClip( sliderIncreaseClickSound );
+    soundManager.addSoundGenerator( sliderIncreaseClickSoundClip );
+    var sliderDecreaseClickSoundClip = new SoundClip( sliderDecreaseClickSound, {
       initiateWhenDisabled: false,
       enableControlProperties: [ resetNotInProgressProperty ]
     } );
-    soundManager.addSoundGenerator( decreaseClickSound );
+    soundManager.addSoundGenerator( sliderDecreaseClickSoundClip );
     model.discreteValueProperty.lazyLink( function( newValue, oldValue ) {
       if ( newValue > oldValue ) {
-        increaseClickSound.play();
+        sliderIncreaseClickSoundClip.play();
       }
       else {
-        decreaseClickSound.play();
+        sliderDecreaseClickSoundClip.play();
       }
     } );
 
@@ -109,16 +109,16 @@ define( function( require ) {
     this.addChild( abSwitch );
 
     // add a looping sound that is turned on/off by the switch
-    var loopingSound = new SoundClip( chargesInBody, { loop: true } );
-    soundManager.addSoundGenerator( loopingSound, { associatedViewNode: abSwitch } );
+    var chargesInBodySoundClip = new SoundClip( chargesInBodySound, { loop: true } );
+    soundManager.addSoundGenerator( chargesInBodySoundClip, { associatedViewNode: abSwitch } );
     model.loopOnProperty.link( function( loopOn ) {
 
       // start the loop the first time the switch is set to the on position
-      if ( loopOn && !loopingSound.isPlaying ) {
-        loopingSound.play();
+      if ( loopOn && !chargesInBodySoundClip.isPlaying ) {
+        chargesInBodySoundClip.play();
       }
-      else if ( !loopOn && loopingSound.isPlaying ) {
-        loopingSound.stop();
+      else if ( !loopOn && chargesInBodySoundClip.isPlaying ) {
+        chargesInBodySoundClip.stop();
       }
     } );
 
@@ -133,14 +133,14 @@ define( function( require ) {
 
     // Play a sound when certain threshold values are crossed by the continuous property value, or when a change occurs
     // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
-    var marimbaSoundGenerator = new SoundClip( marimbaSound );
-    soundManager.addSoundGenerator( marimbaSoundGenerator );
+    var marimbaSoundClip = new SoundClip( marimbaSound );
+    soundManager.addSoundGenerator( marimbaSoundClip );
 
     // define a function that will play the marimba sound at a pitch value based on the continuous value property
     function playSoundForContinuousValue() {
       var playbackRate = Math.pow( 2, model.continuousValueProperty.get() / SLIDER_MAX );
-      marimbaSoundGenerator.setPlaybackRate( playbackRate );
-      marimbaSoundGenerator.play();
+      marimbaSoundClip.setPlaybackRate( playbackRate );
+      marimbaSoundClip.play();
     }
 
     // add sound generation for changes that occur due to keyboard interaction
@@ -181,35 +181,35 @@ define( function( require ) {
       fireLightningButton.enabled = !lightningBoltVisible;
     } );
 
-    // add a sound generator for thunderSoundGenerator
-    var thunderSoundGenerator = new SoundClip( thunderSound, {
+    // add a sound generator for thunder
+    var thunderSoundClip = new SoundClip( thunderSound, {
       enableControlProperties: [ resetNotInProgressProperty ],
       initiateWhenDisabled: true
     } );
-    soundManager.addSoundGenerator( thunderSoundGenerator );
+    soundManager.addSoundGenerator( thunderSoundClip );
     model.lightningBoltVisibleProperty.link( function( visible ) {
       if ( visible ) {
-        thunderSoundGenerator.play();
+        thunderSoundClip.play();
       }
     } );
 
-    // a check box that controls whether the thunderSoundGenerator sound is locally enabled
+    // a check box that controls whether the thunderSoundClip sound is locally enabled
     var thunderEnabledCheckbox = new Checkbox(
       new Text( 'Enabled' ),
-      thunderSoundGenerator.locallyEnabledProperty,
+      thunderSoundClip.locallyEnabledProperty,
       { boxWidth: CHECK_BOX_SIZE }
     );
 
-    // a check box that controls whether the thunderSoundGenerator sound can be initiated when disabled
-    var initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundGenerator.initiateWhenDisabled );
-    initiateThunderWhenDisabledProperty.linkAttribute( thunderSoundGenerator, 'initiateWhenDisabled' );
+    // a check box that controls whether the thunderSoundClip sound can be initiated when disabled
+    var initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundClip.initiateWhenDisabled );
+    initiateThunderWhenDisabledProperty.linkAttribute( thunderSoundClip, 'initiateWhenDisabled' );
     var initiateThunderWhenDisabledCheckbox = new Checkbox(
       new Text( 'Initiate when disabled' ),
       initiateThunderWhenDisabledProperty,
       { boxWidth: CHECK_BOX_SIZE }
     );
 
-    // create a set of controls for the thunderSoundGenerator
+    // create a set of controls for the thunderSoundClip
     var thunderControl = new VBox( {
       children: [
         new Text( 'Thunder: ', { font: new PhetFont( 12 ) } ),
@@ -220,7 +220,7 @@ define( function( require ) {
       spacing: 5
     } );
 
-    // add a panel where thunderSoundGenerator and lightning are controlled
+    // add a panel where thunderSoundClip and lightning are controlled
     var lightningControlPanel = new Panel(
       new HBox( { children: [ fireLightningButton, thunderControl ], spacing: 10, align: 'top' } ),
       {
@@ -250,7 +250,7 @@ define( function( require ) {
       bottom: this.layoutBounds.maxY - 20,
       listener: function() {
         model.reset();
-        thunderSoundGenerator.locallyEnabledProperty.reset();
+        thunderSoundClip.locallyEnabledProperty.reset();
       }
     } );
     this.addChild( resetAllButton );

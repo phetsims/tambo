@@ -20,8 +20,8 @@ define( function( require ) {
   var TextPushButton = require( 'SUN/buttons/TextPushButton' );
 
   // audio
-  var loonCall = require( 'sound!TAMBO/loon-call.mp3' );
-  var rhodesChord = require( 'sound!TAMBO/rhodes-chord.mp3' );
+  var loonCallSound = require( 'sound!TAMBO/loon-call.mp3' );
+  var rhodesChordSound = require( 'sound!TAMBO/rhodes-chord.mp3' );
 
   /**
    * @constructor
@@ -33,14 +33,14 @@ define( function( require ) {
     } );
 
     // create two one-shot sounds, one for basic mode and one for enhanced
-    var basicModeOneShotSound = new SoundClip( loonCall );
-    soundManager.addSoundGenerator( basicModeOneShotSound );
-    var enhancedModeOneShotSound = new SoundClip( rhodesChord );
-    soundManager.addSoundGenerator( enhancedModeOneShotSound, { sonificationLevel: 'enhanced' } );
+    var loonCallSoundClip = new SoundClip( loonCallSound );
+    soundManager.addSoundGenerator( loonCallSoundClip );
+    var rhodesChordSoundClip = new SoundClip( rhodesChordSound );
+    soundManager.addSoundGenerator( rhodesChordSoundClip, { sonificationLevel: 'enhanced' } );
 
     // add a button to play a basic-mode sound
     var playBasicSoundButton = new TextPushButton( 'Play Basic-Level Sound', {
-      listener: function() { basicModeOneShotSound.play(); },
+      listener: function() { loonCallSoundClip.play(); },
       baseColor: '#aad6cc',
       left: this.layoutBounds.left + 20,
       top: this.layoutBounds.top + 20
@@ -49,7 +49,7 @@ define( function( require ) {
 
     // add button to play enhanced-mode sound
     var playEnhancedSoundButton = new TextPushButton( 'Play Enhanced-Level Sound', {
-      listener: function() { enhancedModeOneShotSound.play(); },
+      listener: function() { rhodesChordSoundClip.play(); },
       baseColor: '#DBB1CD',
       left: playBasicSoundButton.left,
       top: playBasicSoundButton.bottom + 10
