@@ -1,11 +1,10 @@
 // Copyright 2018, University of Colorado Boulder
 
-//REVIEW indicate that this is a singleton
 /**
- * Utility object that provides a method for decoding soundInfo objects.  This is intended to simplify the process of
- * decoding audio that is provided through the sound plugin created and used by PhET.  The objects provided by the sound
- * plugin generally provide either a URL to a sound or a base64 encoded audio string, and the code in this file can
- * handle either format.
+ * Singleton utility object that provides a method for decoding soundInfo objects.  This is intended to simplify the
+ * process of decoding audio that is provided through the sound plugin created and used by PhET.  The objects provided
+ * by the sound plugin generally provide either a URL to a sound or a base64 encoded audio string, and the code in this
+ * file can handle either format.
  */
 define( function( require ) {
   'use strict';
@@ -30,42 +29,51 @@ define( function( require ) {
      */
     decode: function( soundInfo, audioContext, onSuccess, onError ) {
 
-      //REVIEW add assertion message
       // parameter checking
-      assert && assert( typeof( soundInfo ) === 'object' && ( soundInfo.url || soundInfo.base64 ) );
-
-      //REVIEW this flag is unnecessary if you combine the last 2 if statements in this function
-      let supportedFormatFound = false;
+      assert && assert(
+      typeof( soundInfo ) === 'object' && ( soundInfo.url || soundInfo.base64 ),
+        'soundInfo must be an object and must have either a url or a base64 field'
+      );
 
       // Identify the audio format.  The URL is generally used when running in RequireJS mode, base64 is used when
       // running single-html-file (aka "built") simulations.
       let audioFormat;
       if ( soundInfo.url ) {
-        //REVIEW an example would help to understand this
+
+        // this determines the format based on the file type, e.g. ouch.mp3 is identified as an mp3 file
         audioFormat = 'audio/' + soundInfo.url.slice( soundInfo.url.lastIndexOf( '.' ) + 1,
           soundInfo.url.lastIndexOf( '?' ) >= 0 ? soundInfo.url.lastIndexOf( '?' ) : soundInfo.url.length
         );
       }
       else {
-        //REVIEW an example would help to understand this, or document why you're looking for specific tokens
+
+        // The base64 encoding includes type information at the beginning that specifies the format, e.g.
+        // "data:audio/mpeg;base64".  This code extracts that information to determine the audio format.
         audioFormat = soundInfo.base64.slice( soundInfo.base64.indexOf( ':' ) + 1, soundInfo.base64.indexOf( ';' ) );
       }
 
-      // Determine whether this audio format is supported.  This comes up more often than one might expect because
-      // phatomjs, which is used for automated headless testing of sims, doesn't support audio.
+      // Test if format is supported and, if so, decode the audio information.  The unspported format situation comes up
+      // more often than one might think, because phantomjs doesn't support sound generation at all, and it's used to
+      // support "headless" automated testing of the sims.
       if ( soundElement.canPlayType && soundElement.canPlayType( audioFormat ) ) {
-        supportedFormatFound = true;
-      }
-      else {
-        //REVIEW can audioFormat be added to this message?
-        console.log( 'Warning: audio format not supported, sound will not be played.' );
-      }
 
-      // decode the audio information
-      if ( supportedFormatFound ) {
+        if ( soundInfo.url ) {
 
-        //REVIEW nitpicking, above your if expression was if ( soundInfo.url )
-        if ( soundInfo.base64 ) {
+          // load the sound via URL
+          const request = new XMLHttpRequest();
+          request.open( 'GET', soundInfo.url, true );
+          request.responseType = 'arraybuffer';
+          request.onload = function() {
+
+            // decode the audio data asynchronously
+            audioContext.decodeAudioData( request.response, onSuccess, onError );
+          };
+          request.onerror = function( err ) {
+            console.error( 'unable to obtain sound data, url = ' + soundInfo.url + ', err = ' + err );
+          };
+          request.send();
+        }
+        else {
 
           // We're working with base64 data, so we need to decode it. The regular expression removes the mime header.
           const soundData = ( soundInfo.base64 ? soundInfo.base64 : this.sound.getAttribute( 'src' ) ).replace( new RegExp( '^.*,' ), '' );
@@ -77,23 +85,9 @@ define( function( require ) {
           }
           audioContext.decodeAudioData( byteArray.buffer, onSuccess, onError );
         }
-        else {
-
-          // load the sound via URL
-          const request = new XMLHttpRequest();
-          request.open( 'GET', soundInfo.url, true );
-          request.responseType = 'arraybuffer';
-          request.onload = function() {
-
-            // decode the audio data asynchronously
-            audioContext.decodeAudioData( request.response, onSuccess, onError );
-          };
-          request.onerror = function() {
-            //REVIEW is there anything more specific that can be added to this message?
-            console.log( 'Error occurred on attempt to obtain sound data.' );
-          };
-          request.send();
-        }
+      }
+      else {
+        console.warn( 'audio format not supported, sound will not be played, format = ' + audioFormat );
       }
     }
   };

@@ -1,9 +1,8 @@
 // Copyright 2018, University of Colorado Boulder
 
-//REVIEW Indicate that this is a singleton.
 /**
- * a Web Audio audio context that can be included using RequireJS, creates a stubbed version on platforms where Web
- * Audio is not supported
+ * a singleton instance of a Web Audio audio context that can be included using RequireJS, creates a stubbed version on
+ * platforms where Web Audio is not supported
  */
 define( function( require ) {
   'use strict';

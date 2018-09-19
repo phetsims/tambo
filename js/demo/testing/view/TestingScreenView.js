@@ -15,6 +15,7 @@ define( function( require ) {
   const ScreenView = require( 'JOIST/ScreenView' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const SoundEncodingComparisonPanel = require( 'TAMBO/demo/testing/view/SoundEncodingComparisonPanel' );
+  const SoundLevelEnum = require( 'TAMBO/SoundLevelEnum' );
   const soundManager = require( 'TAMBO/soundManager' );
   const tambo = require( 'TAMBO/tambo' );
   const TextPushButton = require( 'SUN/buttons/TextPushButton' );
@@ -36,7 +37,7 @@ define( function( require ) {
     const loonCallSoundClip = new SoundClip( loonCallSound );
     soundManager.addSoundGenerator( loonCallSoundClip );
     const rhodesChordSoundClip = new SoundClip( rhodesChordSound );
-    soundManager.addSoundGenerator( rhodesChordSoundClip, { sonificationLevel: 'enhanced' } );
+    soundManager.addSoundGenerator( rhodesChordSoundClip, { sonificationLevel: SoundLevelEnum.ENHANCED } );
 
     // add a button to play a basic-mode sound
     const playBasicSoundButton = new TextPushButton( 'Play Basic-Level Sound', {
