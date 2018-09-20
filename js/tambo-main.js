@@ -16,7 +16,6 @@ define( function( require ) {
   const SimLauncher = require( 'JOIST/SimLauncher' );
   const SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
   const SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
-  const soundManager = require( 'TAMBO/soundManager' );
   const TamboKeyboardHelpContent = require( 'TAMBO/demo/TamboKeyboardHelpContent' );
   const TestingScreenView = require( 'TAMBO/demo/testing/view/TestingScreenView' );
   const UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
@@ -28,13 +27,13 @@ define( function( require ) {
   // set up the simulation options
   const keyboardHelpContent = new TamboKeyboardHelpContent();
   const simOptions = {
+    accessibility: true,
     credits: {
       leadDesign: 'John Blanco'
     },
-    soundManager: soundManager,
     keyboardHelpNode: keyboardHelpContent,
-    supportsSound: true,
-    supportsEnhancedSound: true
+    supportsEnhancedSound: true,
+    supportsSound: true
   };
 
   //REVIEW This feels a bit distracting/gratuitous, but your call. We don't do this in other demos.
