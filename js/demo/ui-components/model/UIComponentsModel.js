@@ -1,6 +1,5 @@
 // Copyright 2018, University of Colorado Boulder
 
-//REVIEW rename to UIComponentsModel, UI = User Interface
 /**
  * A model that exists only for the purposes of demonstrating sonification, particularly how view and model elements are
  * used together to hook up sonification elements.
@@ -17,12 +16,12 @@ define( function( require ) {
   const NumberProperty = require( 'AXON/NumberProperty' );
 
   // constants
-  const BELL_SHOWN_TIME = 0.750; // in seconds
+  const LIGHTNING_SHOWN_TIME = 0.750; // in seconds
 
   /**
    * @constructor
    */
-  function UiComponentsModel() {
+  function UIComponentsModel() {
 
     const self = this;
 
@@ -38,14 +37,13 @@ define( function( require ) {
     // @public {BooleanProperty} - tracks whether the lightning bolt is visible
     this.lightningBoltVisibleProperty = new BooleanProperty( false );
 
-    //REVIEW units?
-    // @private {Number} - countdown timer used to hide the lightning bolt
+    // @private {Number} - countdown timer used to hide the lightning bolt, in seconds
     this.lightningBoltVisibleTimer = 0;
 
     // reload the countdown timer when the lightning bolt is set to be shown
     this.lightningBoltVisibleProperty.link( visible => {
       if ( visible ) {
-        self.lightningBoltVisibleTimer = BELL_SHOWN_TIME;
+        self.lightningBoltVisibleTimer = LIGHTNING_SHOWN_TIME;
       }
     } );
 
@@ -53,9 +51,9 @@ define( function( require ) {
     this.resetInProgressProperty = new BooleanProperty( false );
   }
 
-  tambo.register( 'UiComponentsModel', UiComponentsModel );
+  tambo.register( 'UIComponentsModel', UIComponentsModel );
 
-  return inherit( Object, UiComponentsModel, {
+  return inherit( Object, UIComponentsModel, {
 
     /**
      * step the model forward in time, generally called by the framework

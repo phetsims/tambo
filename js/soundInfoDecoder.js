@@ -12,8 +12,7 @@ define( function( require ) {
   // modules
   const tambo = require( 'TAMBO/tambo' );
 
-  //REVIEW add type expression, is it {HTMLAudioElement} ?
-  // create an HTML DOM audio object that can be used to test sound formats
+  // {HTMLAudioElement} - HTML DOM audio object that can be used to test sound formats
   const soundElement = document.createElement( 'audio' );
 
   /**

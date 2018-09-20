@@ -78,9 +78,8 @@ define( function( require ) {
      */
     enhancedSoundEnabledProperty: enhancedSoundEnabledProperty,
 
-    //REVIEW sentences without capitalization and punctuation.
     /**
-     * initialize the sonification manager - this function must be invoked before any sound generators can be added
+     * Initialize the sonification manager. This function must be invoked before any sound generators can be added.
      * @param {BooleanProperty} simVisibleProperty
      * @param {Object} [options]
      */
@@ -206,7 +205,6 @@ define( function( require ) {
      */
     addSoundGenerator: function( soundGenerator, options ) {
 
-      //REVIEW why isn't this an assertion?
       // Check if initialization has been done.  This is not an assertion because the sound manager may not be
       // initialized if sound is not enabled for the sim.
       if ( !initialized ) {
@@ -287,7 +285,6 @@ define( function( require ) {
      */
     removeSoundGenerator: function( soundGenerator ) {
 
-      //REVIEW why isn't this an assertion?
       // Check if the sound manager is initialized and, if not, issue a warning and ignore the request.  This is not an
       // assertion because the sound manager may not be initialized in cases where the sound is not enabled for the
       // simulation, but this method can still end up being invoked.
@@ -308,10 +305,7 @@ define( function( require ) {
       }
 
       // make sure it is actually present on the list
-
-      //REVIEW should there be some way to identify a specific sound generator is assertion messages?
-      //RESPONSE - there isn't now, but I suppose we could add an ID in the base class, but it doesn't seem that worth it to me
-      assert && assert( soundGeneratorInfo, 'unable to remove sound generator - not found', );
+      assert && assert( soundGeneratorInfo, 'unable to remove sound generator - not found' );
 
       // disconnect the sound generator from any audio nodes to which it may be connected
       if ( soundGenerator.isConnectedTo( this.convolver ) ) {
@@ -336,6 +330,13 @@ define( function( require ) {
      * @public
      */
     setMasterOutputLevel: function( level ) {
+
+      // Check if initialization has been done.  This is not an assertion because the sound manager may not be
+      // initialized if sound is not enabled for the sim.
+      if ( !initialized ) {
+        console.warn( 'an attempt was made to set the master output level on an uninitialized sound manager, ignoring' );
+        return null;
+      }
 
       // range check
       assert && assert( level >= 0 && level <= 1, 'output level value out of range: ' + level );
@@ -368,6 +369,13 @@ define( function( require ) {
      */
     setOutputLevelForClass: function( className, outputLevel ) {
 
+      // Check if initialization has been done.  This is not an assertion because the sound manager may not be
+      // initialized if sound is not enabled for the sim.
+      if ( !initialized ) {
+        console.warn( 'an attempt was made to set the output level for a sound class on an uninitialized sound manager, ignoring' );
+        return null;
+      }
+
       assert && assert( initialized, 'output levels for classes cannot be added until initialization has been done' );
 
       // range check
@@ -386,7 +394,12 @@ define( function( require ) {
      */
     getOutputLevelForClass: function( className ) {
 
-      assert && assert( initialized, 'output levels for classes cannot be obtained until initialization has been done' );
+      // Check if initialization has been done.  This is not an assertion because the sound manager may not be
+      // initialized if sound is not enabled for the sim.
+      if ( !initialized ) {
+        console.warn( 'an attempt was made to get the output level for a sound class on an uninitialized sound manager, returning 0' );
+        return 0;
+      }
 
       // verify that the specified class exists
       assert && assert( gainNodesForClasses[ className ], 'no class with name = ' + className );
@@ -399,6 +412,14 @@ define( function( require ) {
      * @param {number} newReverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
      */
     setReverbLevel: function( newReverbLevel ) {
+
+      // Check if initialization has been done.  This is not an assertion because the sound manager may not be
+      // initialized if sound is not enabled for the sim.
+      if ( !initialized ) {
+        console.warn( 'an attempt was made to set the reverb level on an uninitialized sound manager, ignoring' );
+        return null;
+      }
+
       assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1, 'reverb value out of range: ' + newReverbLevel );
       let now = phetAudioContext.currentTime;
       this.reverbGainNode.gain.setTargetAtTime( newReverbLevel, now, TC_FOR_PARAM_CHANGES );

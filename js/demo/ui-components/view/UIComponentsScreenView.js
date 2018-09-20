@@ -53,7 +53,7 @@ define( function( require ) {
   /**
    * @constructor
    */
-  function UiComponentsScreenView( model ) {
+  function UIComponentsScreenView( model ) {
     ScreenView.call( this, {
       layoutBounds: new Bounds2( 0, 0, 768, 504 )
     } );
@@ -257,7 +257,7 @@ define( function( require ) {
     soundManager.addSoundGenerator( new ResetAllSoundGenerator( model.resetInProgressProperty ) );
   }
 
-  tambo.register( 'UiComponentsScreenView', UiComponentsScreenView );
+  tambo.register( 'UIComponentsScreenView', UIComponentsScreenView );
 
-  return inherit( ScreenView, UiComponentsScreenView );
+  return inherit( ScreenView, UIComponentsScreenView );
 } );

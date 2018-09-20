@@ -18,8 +18,8 @@ define( function( require ) {
   const SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
   const TamboKeyboardHelpContent = require( 'TAMBO/demo/TamboKeyboardHelpContent' );
   const TestingScreenView = require( 'TAMBO/demo/testing/view/TestingScreenView' );
-  const UiComponentsModel = require( 'TAMBO/demo/ui-components/model/UiComponentsModel' );
-  const UiComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UiComponentsScreenView' );
+  const UIComponentsModel = require( 'TAMBO/demo/ui-components/model/UIComponentsModel' );
+  const UIComponentsScreenView = require( 'TAMBO/demo/ui-components/view/UIComponentsScreenView' );
 
   // strings
   const tamboTitleString = require( 'string!TAMBO/tambo.title' );
@@ -36,8 +36,6 @@ define( function( require ) {
     supportsSound: true
   };
 
-  //REVIEW This feels a bit distracting/gratuitous, but your call. We don't do this in other demos.
-  //REVIEW And joist creates default icons that match the screen's background color.
   // helper function to create screen icons that aren't too bland
   function createScreenIcon( color1, color2, gradientType ) {
 
@@ -83,8 +81,8 @@ define( function( require ) {
 
       // UI-components screen
       new Screen(
-        function() { return new UiComponentsModel(); },
-        function( model ) { return new UiComponentsScreenView( model ); },
+        function() { return new UIComponentsModel(); },
+        function( model ) { return new UIComponentsScreenView( model ); },
         {
           name: 'UI Components',
           backgroundColorProperty: new Property( '#fff5ba' ),

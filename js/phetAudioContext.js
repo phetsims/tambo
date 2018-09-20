@@ -22,11 +22,10 @@ define( function( require ) {
   // silent stub function, used in the stubbed audio context
   function silentStub() {}
 
-  //REVIEW What exactly is this a stub for? BaseAudioContext?
-  // Define a stubbed audio context that can be used in cases where browsers don't support Web Audio.  This was created
-  // manually by identifying what portions of the Web Audio API were being used in tambo and adding those methods and
-  // properties. This may need to be updated periodically as tambo and our usage of Web Audio evolves.  See
-  // https://github.com/phetsims/tambo/issues/10.
+  // Define a stubbed audio context (basically a subset of the API for AudioContext) that can be used in cases where
+  // browsers don't support Web Audio.  This was created manually by identifying what portions of the Web Audio API were
+  // being used in tambo and adding those methods and properties. This may need to be updated periodically as tambo and
+  // our usage of Web Audio evolves.  See https://github.com/phetsims/tambo/issues/10.
   const STUBBED_AUDIO_CONTEXT = {
 
     // methods and properties are in alphabetical order, please maintain this for ease of maintenance
