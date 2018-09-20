@@ -26,16 +26,28 @@ define( function( require ) {
     // set up options using default values, see base class for additional options
     options = _.extend( {
       noiseType: 'white', // valid values are 'white', 'pink', and 'brown'
-      //REVIEW Are next 3 options in Hz? What does null mean?
+
+      // {number} - low pass value in Hz, null (or any falsey value including zero) means no low pass filter is added
       lowPassCutoffFrequency: null,
+
+      // {number} - high pass value in Hz, null (or any falsey value including zero) means no high pass filter is added
       highPassCutoffFrequency: null,
+
+      // {number} - center frequency for band pass filter value in Hz, null (or any falsey value including zero) means
+      // no band pass filter is added
       centerFrequency: null,
+
+      // {number} - Q factor, aka quality factor, for bandpass filter if present, see Web Audio BiquadFilterNode for
+      // more information
+      qFactor: 1,
+
+      // parameters that control the behavior of the low frequency oscillator (LFO), which does amplitude modulation on
+      // the noise
       lfoInitiallyEnabled: false,
       lfoInitialFrequency: 2, // Hz
       lfoInitialDepth: 1, // valid values are from 0 to 1
-      lfoType: 'sine', //REVIEW valid values?
-      //REVIEW Document. What does null mean? Reconsider using a name that starts with uppercase - qFactor?
-      Q: null
+      lfoType: 'sine' // oscillator type, possible values are the same as a Web Audio OscillatorNode
+
     }, options );
 
     //REVIEW validate options.noiseType
@@ -63,11 +75,11 @@ define( function( require ) {
     }
 
     // if specified, create the band-pass filter
-    if ( options.Q && options.centerFrequency ) {
+    if ( options.qFactor && options.centerFrequency ) {
       this.bandPassFilter = this.audioContext.createBiquadFilter();
       this.bandPassFilter.type = 'bandpass';
       this.bandPassFilter.frequency.setValueAtTime( options.centerFrequency, now );
-      this.bandPassFilter.Q.setValueAtTime( options.Q, now );
+      this.bandPassFilter.qFactor.setValueAtTime( options.qFactor, now );
     }
 
     // define the noise data

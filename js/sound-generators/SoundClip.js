@@ -15,11 +15,10 @@ define( function( require ) {
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   const tambo = require( 'TAMBO/tambo' );
 
-  //REVIEW what are the fields in soundInfo? url and base64?
   /**
-   * @param {Object} soundInfo - An object that includes *either* a url that points to the sound to be played *or* a
-   * base64-encoded version of the sound data.  The former is generally used when a sim is running in RequireJS mode,
-   * the latter is used in built versions.
+   * @param {Object} soundInfo - An object that includes *either* a "url" key with a value that points to the sound to
+   * be played *or* a "base64" key with a value that represents a base64-encoded version of the sound data.  The former
+   * is generally used when a sim is running in RequireJS mode, the latter is used in built versions.
    * @param {Object} [options]
    * @constructor
    */
