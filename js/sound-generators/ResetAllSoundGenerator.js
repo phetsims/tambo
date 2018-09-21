@@ -13,11 +13,12 @@ define( function( require ) {
 
   /**
    * @param {BooleanProperty} resetInProgressProperty
+   * @param {Object} [options]
    * @constructor
    */
-  function ResetAllSoundGenerator( resetInProgressProperty ) {
+  function ResetAllSoundGenerator( resetInProgressProperty, options ) {
     const self = this;
-    SoundClip.call( this, resetAllSound );
+    SoundClip.call( this, resetAllSound, options );
     const resetListener = function( resetInProgress ) {
       if ( resetInProgress ) {
         self.play();
