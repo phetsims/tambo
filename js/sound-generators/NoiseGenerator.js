@@ -25,7 +25,7 @@ define( function( require ) {
 
     // set up options using default values, see base class for additional options
     options = _.extend( {
-      noiseType: 'white', // valid values are 'white', 'pink', and 'brown'
+      noiseType: 'red', // valid values are 'white', 'pink', and 'brown'
 
       // {number} - low pass value in Hz, null (or any falsey value including zero) means no low pass filter is added
       lowPassCutoffFrequency: null,
@@ -50,9 +50,15 @@ define( function( require ) {
 
     }, options );
 
-    //REVIEW validate options.noiseType
-    //REVIEW validate options.lfoInitialDepth
-    //REVIEW validate options.lfoType
+    assert && assert(
+      [ 'white', 'pink', 'brown' ].indexOf( options.noiseType ) !== -1,
+      'invalid noise type: ' + options.noiseType
+    );
+
+    assert && assert(
+    options.lfoInitialDepth >= 0 && options.lfoInitialDepth <= 1,
+      'invalid value for lfoInitialDepth: ' + options.lfoInitialDepth
+    );
 
     SoundGenerator.call( this, options );
 
@@ -130,21 +136,20 @@ define( function( require ) {
     // @private {AudioBufferSourceNode|null} - the source node from which the noise is played
     this.noiseSource = null;
 
-    //REVIEW {OscillatorNode} ?
-    // define a low frequency oscillator (LFO) for amplitude modulation
+    // @private {OscillatorNode} - a low frequency oscillator (LFO) for amplitude modulation
     this.lfo = this.audioContext.createOscillator();
     this.lfo.type = options.lfoType;
-    this.lfo.frequency.setValueAtTime( options.lfoInitialFrequency, now ); // initialize LFO frequency, updated through methods defined below
+
+    // initialize LFO frequency, updated through methods defined below
+    this.lfo.frequency.setValueAtTime( options.lfoInitialFrequency, now );
     this.lfo.start();
 
-    //REVIEW {GainNode} ?
-    // create a gain stage to attenuate the LFO output so that it will range from -0.5 to +0.5
+    // @private {GainNode} - a gain stage to attenuate the LFO output so that it will range from -0.5 to +0.5
     this.lfoAttenuatorGainNode = this.audioContext.createGain();
     this.lfoAttenuatorGainNode.gain.value = options.lfoInitialDepth / 2;
     this.lfo.connect( this.lfoAttenuatorGainNode );
 
-    //REVIEW {GainNode} ?
-    // create a gain stage for the LFO - the main sound path will run through here
+    // @private {GainNode} - a gain stage for the LFO - the main sound path will run through here
     this.lfoControlledGainNode = this.audioContext.createGain();
     this.lfoControlledGainNode.gain.value = 0.5; // this value is added to the attenuated LFO output value
 

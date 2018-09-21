@@ -17,7 +17,7 @@ define( function( require ) {
 
   // constants
   const DEFAULT_NUM_POP_GENERATORS = 8;
-  const ENVELOPE_TIME_CONSTANT = 0.005; //REVIEW units?
+  const ENVELOPE_TIME_CONSTANT = 0.005; // in seconds
   const DEFAULT_POP_DURATION = 0.02; // in seconds
 
   /**
@@ -38,27 +38,27 @@ define( function( require ) {
     const self = this;
     SoundGenerator.call( this, options );
 
-    //REVIEW anti-pattern, replace with this.pitchRange = options.pitchRange
-    // @private {Object} - make options available to methods
-    this.options = options;
+    // @private {Range} - range of pitches to be produced
+    this.pitchRange = options.pitchRange;
 
-    //REVIEW {DynamicsCompressorNode} ?
-    // add a dynamics compressor node, otherwise distortion tends to occur when lots of pops are played at once
+    // {DynamicsCompressorNode} - a dynamics compressor node used to limit max output amplitude, otherwise distortion
+    // tends to occur when lots of pops are played at once
     const dynamicsCompressorNode = this.audioContext.createDynamicsCompressor();
-    //REVIEW document these magic numbers, or refer to where documentation can be found.
-    dynamicsCompressorNode.threshold.value = -50;
-    dynamicsCompressorNode.knee.value = 25;
-    dynamicsCompressorNode.ratio.value = 12;
-    dynamicsCompressorNode.attack.value = 0;
-    dynamicsCompressorNode.release.value = 0.25;
+
+    // the following values were empirically determined throgh informed experimentation
+    var now = this.audioContext.currentTime;
+    dynamicsCompressorNode.threshold.setValueAtTime( -3, now );
+    dynamicsCompressorNode.knee.setValueAtTime( 0, now ); // hard knee
+    dynamicsCompressorNode.ratio.setValueAtTime( 12, now );
+    dynamicsCompressorNode.attack.setValueAtTime( 0, now );
+    dynamicsCompressorNode.release.setValueAtTime( 0.25, now );
     dynamicsCompressorNode.connect( this.masterGainNode );
 
-    //REVIEW type expression, {{oscillator:OscillatorNode, gainNode:GainNode}[]} ?
     // create the sources - several are created so that pops can be played in rapid succession if desired
+    // @private {{oscillator:OscillatorNode, gainNode:GainNode}[]} - an array of sound source, several are created so
+    // that pops can be played in rapid succession without interfering with one another
     this.soundSources = [];
     _.times( options.numPopGenerators, function() {
-
-      const soundSource = {};
 
       // {OscillatorNode}
       const oscillator = self.audioContext.createOscillator();
@@ -66,17 +66,17 @@ define( function( require ) {
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime( options.pitchRange.min, now );
       oscillator.start( 0 );
-      soundSource.oscillator = oscillator;
 
       // {GainNode}
       const gainNode = self.audioContext.createGain();
       gainNode.gain.setValueAtTime( 0, now );
       oscillator.connect( gainNode );
       gainNode.connect( dynamicsCompressorNode );
-      soundSource.gainNode = gainNode;
 
-      //REVIEW get ride of const soundSource and push( { oscillator: oscillator, gainNode: gainNode } )
-      self.soundSources.push( soundSource );
+      self.soundSources.push( {
+        oscillator: oscillator,
+        gainNode: gainNode
+      } );
     } );
 
     // @private
@@ -107,12 +107,11 @@ define( function( require ) {
       duration = duration || DEFAULT_POP_DURATION;
 
       // determine the frequency value of the pop
-      const minFrequency = this.options.pitchRange.min;
-      const maxFrequency = this.options.pitchRange.max;
+      const minFrequency = this.pitchRange.min;
+      const maxFrequency = this.pitchRange.max;
       const frequency = minFrequency + relativePitch * ( maxFrequency - minFrequency );
 
-      //REVIEW type expression for soundSource
-      // get a sound source from the pool, then index to the next one
+      // get a sound source from the pool, then index to the next one (see above for type info on sound sources)
       const soundSource = this.soundSources[ this.nextSoundSourceIndex ];
       this.nextSoundSourceIndex = ( this.nextSoundSourceIndex + 1 ) % this.soundSources.length;
 

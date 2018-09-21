@@ -89,14 +89,15 @@ define( function( require ) {
       },
       () => {
 
-        // we haven't seen this happen, so for now a message is logged to the console and that's it
-        //REVIEW can this message be more specific about what clip couldn't be decoded?
-        console.log( 'Error: Unable to decode audio data.' );
+        // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio file
+        // could cause it.  There is handling for both the RequireJS and build cases.
+        assert && assert( false, 'audio decode failed' );
+        console.error( 'unable to decode audio data, please check all encoded audio' );
       }
     );
 
-    // @private {number} - rate at which clip is being played back
-    //REVIEW describe range and the semantics of this specific value
+    // @private {number} - rate at which clip is being played back, 1 is normal, above 1 is faster, below 1 is slower,
+    // see online docs for AudioBufferSourceNode.playbackRate for more information
     this.playbackRate = 1;
 
     // @private {boolean} - flag that tracks whether the sound is being played
@@ -114,10 +115,9 @@ define( function( require ) {
 
   return inherit( SoundGenerator, SoundClip, {
 
-    //REVIEW units for delay?
     /**
      * start playing the sound
-     * @param {number} [delay] - optional delay parameter
+     * @param {number} [delay] - optional delay parameter, in seconds
      * @public
      */
     play: function( delay ) {
@@ -208,15 +208,14 @@ define( function( require ) {
       }
     },
 
-    //REVIEW units for timeConstant?
     /**
      * play sound and change the speed as playback occurs
      * @param {number} playbackRate - desired playback speed, 1 = normal speed
-     * @param {number} [timeConstant] -  time-constant value of first-order filter (exponential) approach to the target
-     * value. The larger this value is, the slower the transition will be.
+     * @param {number} [timeConstant] -  time-constant in seconds for the first-order filter (exponential) approach to
+     * the target value. The larger this value is, the slower the transition will be.
      */
     setPlaybackRate: function( playbackRate, timeConstant ) {
-      timeConstant = timeConstant || SoundGenerator.DEFAULT_TIME_CONSTANT; //REVIEW incorrect if timeConstant === 0
+      timeConstant = typeof timeConstant === 'undefined' ? SoundGenerator.DEFAULT_TIME_CONSTANT : timeConstant;
       this.activeBufferSources.forEach( bufferSource => {
         bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
       } );

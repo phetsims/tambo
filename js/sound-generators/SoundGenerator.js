@@ -16,8 +16,9 @@ define( function( require ) {
   const tambo = require( 'TAMBO/tambo' );
 
   // constants
-  //REVIEW seconds? and what is it used for?
-  const DEFAULT_TIME_CONSTANT = 0.015; // empirically determined to be fast but not cause clicks when applied to gain
+
+  // eefault time constant in seconds used for parameter changes, empirically determined to prevent sound glitches
+  const DEFAULT_TIME_CONSTANT = 0.015;
 
   /**
    * @param {Object} options
@@ -30,7 +31,8 @@ define( function( require ) {
 
     options = _.extend( {
 
-      //REVIEW document, including range
+      // {number} Initial value for the output level.  Generally, this should always be between 0 and 1, but values
+      // greater than 1 may be needed in some rare cases in order to create enough output to be audible
       initialOutputLevel: 1,
 
       // {AudioContext} By default, the shared audio context is used so that this sound can be registered with the
@@ -43,14 +45,21 @@ define( function( require ) {
       // in conjunction with the sonification manager.
       connectImmediately: false,
 
-      //REVIEW type expression needed, {BooleanProperty[]} ?
-      // An initial set of Properties that will be hooked to this sound generator's enabled state, more can be added
-      // later via methods if needed.
+      // {BooleanProperty[]} - An initial set of Properties that will be hooked to this sound generator's enabled state,
+      // all of which must be true for sound to be produced.  More of these properties can be added after construction
+      // via methods if needed.
       enableControlProperties: []
+
     }, options );
 
-    //REVIEW validate options.initialOutputLevel, should be [0,1]
-    //REVIEW validate options.enableControlProperties, should be all BooleanProperty
+    assert && assert( options.initialOutputLevel >= 0, 'initial output level must be positive' );
+
+    options.enableControlProperties.forEach( enableControlProperty => {
+      assert && assert(
+        typeof enableControlProperty.value === 'boolean',
+        'incorrect type for enable control property'
+      );
+    } );
 
     // @protected {AudioContext}
     this.audioContext = options.audioContext;
@@ -66,7 +75,6 @@ define( function( require ) {
     // enabled", meaning that it will produce sound.
     this.enableControlProperties = new ObservableArray();
 
-    //REVIEW this is marked read-only but is set by subclass SoundClip
     // @public (read-only) {BooleanProperty} - A Property that tracks whether this sound generator is fully enabled,
     // meaning that all the enable control Properties are in a state indicating that sound can be produced.  This
     // should only be updated in the listener function defined below, no where else.
@@ -82,7 +90,6 @@ define( function( require ) {
 
     // listen for new enable control Properties and hook them up as they arrive
     this.enableControlProperties.addItemAddedListener( addedItem => {
-      //REVIEW verify that addedItem is a BooleanProperty?
       addedItem.link( updateFullyEnabledState );
       this.enableControlProperties.addItemRemovedListener( function checkAndRemove( removedItem ) {
         if ( removedItem === addedItem ) {
@@ -120,16 +127,9 @@ define( function( require ) {
 
     // turn down the gain to zero when not fully enabled
     this.fullyEnabledProperty.link( fullyEnabled => {
-      const now = this.audioContext.currentTime;
-      //REVIEW Duplication in if and else blocks. How about?:
-      //REVIEW const outputLevel = fullyEnabled ? this._outputLevel : 0;
-      //REVIEW this.masterGainNode.gain.setTargetAtTime( outputLevel, now, DEFAULT_TIME_CONSTANT );
-      if ( fullyEnabled ) {
-        this.masterGainNode.gain.setTargetAtTime( this._outputLevel, now, DEFAULT_TIME_CONSTANT );
-      }
-      else {
-        this.masterGainNode.gain.setTargetAtTime( 0, now, DEFAULT_TIME_CONSTANT );
-      }
+      const outputLevel = fullyEnabled ? this._outputLevel : 0;
+      this.masterGainNode.gain.setTargetAtTime( outputLevel, this.audioContext.currentTime, DEFAULT_TIME_CONSTANT
+      );
     } );
 
     // @private {function} - internally used disposal function
