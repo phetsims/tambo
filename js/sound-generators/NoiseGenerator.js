@@ -79,7 +79,7 @@ define( function( require ) {
       this.bandPassFilter = this.audioContext.createBiquadFilter();
       this.bandPassFilter.type = 'bandpass';
       this.bandPassFilter.frequency.setValueAtTime( options.centerFrequency, now );
-      this.bandPassFilter.qFactor.setValueAtTime( options.qFactor, now );
+      this.bandPassFilter.Q.setValueAtTime( options.qFactor, now );
     }
 
     // define the noise data
