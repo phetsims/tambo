@@ -133,7 +133,7 @@ define( function( require ) {
       throw new Error( 'unexpected value for noiseType: ' + options.noiseType );
     }
 
-    // @private {AudioBufferSourceNode|null} - the source node from which the noise is played
+    // @private {AudioBufferSourceNode|null} - the source node from which the noise is played, set when play is called
     this.noiseSource = null;
 
     // @private {OscillatorNode} - a low frequency oscillator (LFO) for amplitude modulation
