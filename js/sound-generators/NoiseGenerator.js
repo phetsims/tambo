@@ -191,9 +191,12 @@ define( function( require ) {
 
     /**
      * start the noise source
-     * @param {number} [time] - optional audio context time at which this should be started
+     * @param {number} [delay] - optional delay for when to start the noise source
      */
-    start: function( time ) {
+    start: function( delay ) {
+
+      delay = typeof delay === 'undefined' ? 0 : delay;
+      const now = this.audioContext.currentTime;
 
       // only do something if not already playing, otherwise ignore this request
       if ( !this.isPlaying ) {
@@ -201,7 +204,7 @@ define( function( require ) {
         this.noiseSource.buffer = this.noiseBuffer;
         this.noiseSource.loop = true;
         this.noiseSource.connect( this.noiseSourceConnectionPoint );
-        this.noiseSource.start( time );
+        this.noiseSource.start( now + delay );
         this.isPlaying = true;
       }
     },
