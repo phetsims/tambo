@@ -36,7 +36,7 @@ define( function( require ) {
   const TC_FOR_PARAM_CHANGES = 0.015; // in seconds, time constant for param changes, empirically determined to avoid clicks
 
   // flag that tracks whether sound generation of any kind is enabled
-  const enabledProperty = new BooleanProperty( phet.chipper.queryParameters.soundInitiallyEnabled );
+  const enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled' );
 
   // flag that tracks whether enhanced sounds are enabled (basic sounds are always enabled if sound generation is)
   const enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled );
