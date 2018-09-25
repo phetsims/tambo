@@ -183,7 +183,7 @@ define( function( require ) {
      * @param {number} [timeConstant] - time constant for outputLevel change, see AudioParam.setTargetAtTime
      */
     setOutputLevel: function( outputLevel, timeConstant ) {
-      timeConstant = ( typeof timeConstant === 'undefined' ) ? DEFAULT_TIME_CONSTANT : timeConstant;
+      timeConstant = ( timeConstant === undefined ) ? DEFAULT_TIME_CONSTANT : timeConstant;
       this._outputLevel = outputLevel;
       if ( this.fullyEnabledProperty.value ) {
         this.masterGainNode.gain.setTargetAtTime(
@@ -192,6 +192,22 @@ define( function( require ) {
           timeConstant
         );
       }
+    },
+    set outputLevel( outputLevel ) {
+      this.setOutputLevel( outputLevel );
+    },
+
+    /**
+     * Get the current output level setting.  Note that if the sound generator is disabled, this could return a non-zero
+     * value but the sound generator won't produce audible sound.
+     * @return {number}
+     * @public
+     */
+    getOutputLevel: function() {
+      return this._outputLevel;
+    },
+    get outputLevel() {
+      return this.getOutputLevel();
     },
 
     /**
@@ -208,15 +224,6 @@ define( function( require ) {
      */
     removeEnableControlProperty: function( enableControlProperty ) {
       this.enableControlProperties.remove( enableControlProperty );
-    },
-
-    /**
-     * get the current output level
-     * @return {number}
-     * @public
-     */
-    get outputLevel() {
-      return this._outputLevel;
     },
 
     /**
