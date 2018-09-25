@@ -191,11 +191,11 @@ define( function( require ) {
 
     /**
      * start the noise source
-     * @param {number} [delay] - optional delay for when to start the noise source
+     * @param {number} [delay] - optional delay for when to start the noise source, in seconds
      */
     start: function( delay ) {
 
-      delay = typeof delay === 'undefined' ? 0 : delay;
+      delay = ( delay === undefined ) ? 0 : delay;
       const now = this.audioContext.currentTime;
 
       // only do something if not already playing, otherwise ignore this request
