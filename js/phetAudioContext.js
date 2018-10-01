@@ -30,6 +30,34 @@ define( function( require ) {
 
     // methods and properties are in alphabetical order, please maintain this for ease of maintenance
 
+    createBiquadFilter: function() {
+      logUnimplementedWarning();
+      return {
+        connect: silentStub,
+        frequency: {
+          setTargetAtTime: silentStub,
+          setValueAtTime: silentStub
+        },
+        Q: {
+          setValueAtTime: silentStub
+        }
+      };
+    },
+    createBuffer: function() {
+      return {
+        getChannelData: function() {
+          return {};
+        }
+      };
+    },
+    createBufferSource: function() {
+      return {
+        connect: silentStub,
+        disconnect: silentStub,
+        start: silentStub,
+        stop: silentStub
+      };
+    },
     createConvolver: function() {
       logUnimplementedWarning();
       return {
@@ -39,12 +67,22 @@ define( function( require ) {
     createDynamicsCompressor: function() {
       logUnimplementedWarning();
       return {
-        threshold: {},
-        knee: {},
-        ratio: {},
-        attack: {},
-        release: {},
-        connect: silentStub
+        attack: {
+          setValueAtTime: silentStub
+        },
+        connect: silentStub,
+        knee: {
+          setValueAtTime: silentStub
+        },
+        ratio: {
+          setValueAtTime: silentStub
+        },
+        release: {
+          setValueAtTime: silentStub
+        },
+        threshold: {
+          setValueAtTime: silentStub
+        }
       };
     },
     createGain: function() {
