@@ -81,9 +81,10 @@ define( function( require ) {
     /**
      * Initialize the sonification manager. This function must be invoked before any sound generators can be added.
      * @param {BooleanProperty} simVisibleProperty
+     * @param {BooleanProperty} simActiveProperty
      * @param {Object} [options]
      */
-    initialize: function( simVisibleProperty, options ) {
+    initialize: function( simVisibleProperty, simActiveProperty, options ) {
 
       assert && assert( !initialized, 'can\'t initialize the sound manager more than once' );
       const self = this;
@@ -142,11 +143,12 @@ define( function( require ) {
         gainNodesForClasses[ className ] = gainNode;
       } );
 
-      // hook up a listener that turns down the gain if sonification is disabled or the sim isn't visible
+      // hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
+      // active
       Property.multilink(
-        [ this.enabledProperty, simVisibleProperty ],
-        ( enabled, simVisible ) => {
-          const gain = enabled && simVisible ? masterOutputLevel : 0;
+        [ this.enabledProperty, simVisibleProperty, simActiveProperty ],
+        ( enabled, simVisible, simActive ) => {
+          const gain = enabled && simVisible && simActive ? masterOutputLevel : 0;
           this.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
         }
       );
