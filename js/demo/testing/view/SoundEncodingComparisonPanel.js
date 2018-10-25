@@ -17,11 +17,11 @@ define( function( require ) {
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Property = require( 'AXON/Property' );
+  const RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const soundManager = require( 'TAMBO/soundManager' );
   const tambo = require( 'TAMBO/tambo' );
   const Text = require( 'SCENERY/nodes/Text' );
-  const RectangularPushButton = require( 'SUN/buttons/RectangularPushButton' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants

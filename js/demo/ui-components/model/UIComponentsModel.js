@@ -12,8 +12,8 @@ define( function( require ) {
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const inherit = require( 'PHET_CORE/inherit' );
-  const tambo = require( 'TAMBO/tambo' );
   const NumberProperty = require( 'AXON/NumberProperty' );
+  const tambo = require( 'TAMBO/tambo' );
 
   // constants
   const LIGHTNING_SHOWN_TIME = 0.750; // in seconds

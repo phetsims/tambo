@@ -20,13 +20,13 @@ define( function( require ) {
   const Image = require( 'SCENERY/nodes/Image' );
   const inherit = require( 'PHET_CORE/inherit' );
   const KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
-  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Range = require( 'DOT/Range' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
   const ScreenView = require( 'JOIST/ScreenView' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const soundManager = require( 'TAMBO/soundManager' );
   const tambo = require( 'TAMBO/tambo' );
   const Text = require( 'SCENERY/nodes/Text' );
@@ -46,8 +46,8 @@ define( function( require ) {
   // sounds
   const chargesInBodySound = require( 'sound!TAMBO/charges-in-body-better.mp3' );
   const marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
-  const sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
   const sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
+  const sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
   const thunderSound = require( 'sound!TAMBO/thunder.mp3' );
 
   /**

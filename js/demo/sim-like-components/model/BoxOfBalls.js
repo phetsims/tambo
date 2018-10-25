@@ -11,8 +11,8 @@ define( function( require ) {
   const Color = require( 'SCENERY/util/Color' );
   const inherit = require( 'PHET_CORE/inherit' );
   const ObservableArray = require( 'AXON/ObservableArray' );
-  const tambo = require( 'TAMBO/tambo' );
   const Shape = require( 'KITE/Shape' );
+  const tambo = require( 'TAMBO/tambo' );
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants

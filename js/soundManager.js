@@ -23,13 +23,13 @@ define( function( require ) {
   const platform = require( 'PHET_CORE/platform' );
   const Property = require( 'AXON/Property' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  const SoundLevelEnum = require( 'TAMBO/SoundLevelEnum' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
+  const SoundLevelEnum = require( 'TAMBO/SoundLevelEnum' );
   const tambo = require( 'TAMBO/tambo' );
 
   // sounds
-  const reverbImpulseResponse = require( 'sound!TAMBO/empty_apartment_bedroom_06_resampled.mp3' );
   const emptySound = require( 'sound!TAMBO/empty.mp3' );
+  const reverbImpulseResponse = require( 'sound!TAMBO/empty_apartment_bedroom_06_resampled.mp3' );
 
   // constants
   const DEFAULT_REVERB_LEVEL = 0.02;

@@ -11,8 +11,8 @@ define( function( require ) {
   // modules
   const inherit = require( 'PHET_CORE/inherit' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
-  const SoundUtil = require( 'TAMBO/SoundUtil' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
+  const SoundUtil = require( 'TAMBO/SoundUtil' );
   const tambo = require( 'TAMBO/tambo' );
 
   /**
