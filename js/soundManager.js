@@ -105,9 +105,25 @@ define( function( require ) {
         'unexpected type of element in options.classes'
       );
 
+      const now = phetAudioContext.currentTime;
+
+      // the final stage is a dynamics compressor that is used essentially as a limiter to prevent clipping
+      // TODO: This dynamics compressor was added due to a problem where generation of some sounds in rapid succession
+      // was causing clipping, see https://github.com/phetsims/resistance-in-a-wire/issues/182.  I (jbphet) am not sure
+      // if there is a better way to do this, if there are undesirable consequences to doing this, or if it can be
+      // configured better.  This comment is a reminder to "keep our eye" on this.  This comment was added in November
+      // 2018, so if this has been working well for, say, six months, we should remove the comment and go with it.
+      const dynamicsCompressor = phetAudioContext.createDynamicsCompressor();
+      dynamicsCompressor.threshold.setValueAtTime( -6, now );
+      dynamicsCompressor.knee.setValueAtTime( 5, now );
+      dynamicsCompressor.ratio.setValueAtTime( 12, now );
+      dynamicsCompressor.attack.setValueAtTime( 0, now );
+      dynamicsCompressor.release.setValueAtTime( 0.25, now );
+      dynamicsCompressor.connect( phetAudioContext.destination );
+
       // create the master gain node for all sounds managed by this sonification manager
       this.masterGainNode = phetAudioContext.createGain();
-      this.masterGainNode.connect( phetAudioContext.destination );
+      this.masterGainNode.connect( dynamicsCompressor );
 
       // convolver node, which will be used to create the reverb effect
       this.convolver = phetAudioContext.createConvolver();
