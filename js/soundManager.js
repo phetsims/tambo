@@ -215,8 +215,7 @@ define( function( require ) {
 
     /**
      * add a sound generator, which connects it to the audio path, puts it on the list of sound generators, and creates
-     * and
-     * returns a unique ID
+     * and returns a unique ID
      * @param {SoundGenerator} soundGenerator
      * @param {Object} [options]
      * @returns {string|null} - unique ID of sound generator, null if add not allowed
