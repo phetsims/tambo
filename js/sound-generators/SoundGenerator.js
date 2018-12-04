@@ -17,7 +17,7 @@ define( function( require ) {
 
   // constants
 
-  // eefault time constant in seconds used for parameter changes, empirically determined to prevent sound glitches
+  // default time constant in seconds used for parameter changes, empirically determined to prevent sound glitches
   const DEFAULT_TIME_CONSTANT = 0.015;
 
   /**
