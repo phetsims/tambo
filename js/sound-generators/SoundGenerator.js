@@ -114,10 +114,9 @@ define( function( require ) {
 
     // @protected {GainNode) - master gain control that will be used to control the volume of the sound
     this.masterGainNode = this.audioContext.createGain();
-    this.masterGainNode.gain.setTargetAtTime(
+    this.masterGainNode.gain.setValueAtTime(
       this._outputLevel,
-      this.audioContext.currentTime,
-      DEFAULT_TIME_CONSTANT
+      this.audioContext.currentTime
     );
 
     // if the option specifies immediate connection, connect the master gain node to the audio context destination
