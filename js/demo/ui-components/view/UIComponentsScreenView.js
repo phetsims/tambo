@@ -146,7 +146,7 @@ define( function( require ) {
     // add sound generation for changes that occur due to keyboard interaction
     continuousSlider.addInputListener( {
       keydown: function( event ) {
-        if ( KeyboardUtil.isRangeKey( event.keyCode ) ) {
+        if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
           playSoundForContinuousValue();
         }
       }
