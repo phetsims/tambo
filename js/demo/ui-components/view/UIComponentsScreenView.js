@@ -160,7 +160,7 @@ define( function( require ) {
 
       // Play the sound when certain threshold values are crossed or when a change occurs in the absence of mouse/touch
       // interaction with the slider, which implies keyboard-driven interaction.
-      if ( continuousSlider.thumbDragging && (
+    if ( continuousSlider.isThumbDraggingProperty.value && (
         mapValueToBin( newValue ) !== mapValueToBin( oldValue ) ||
         newValue === 0 && oldValue !== 0 ||
         newValue === SLIDER_MAX && oldValue !== SLIDER_MAX ) ) {
