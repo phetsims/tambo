@@ -158,7 +158,7 @@ define( function( require ) {
               // remove the source from the list of active sources
               const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
               if ( indexOfSource > -1 ) {
-                this.activeBufferSources.splice( indexOfSource );
+                this.activeBufferSources.splice( indexOfSource, 1 );
               }
               this._isPlaying = this.activeBufferSources.length > 0;
             };
