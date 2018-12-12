@@ -57,7 +57,7 @@ define( function( require ) {
       xVelocity = phet.joist.random.nextBoolean() ? xVelocity : -xVelocity;
       let yVelocity = MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * ( MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY );
       yVelocity = phet.joist.random.nextBoolean() ? yVelocity : -yVelocity;
-      let velocity = new Vector2( xVelocity, yVelocity );
+      const velocity = new Vector2( xVelocity, yVelocity );
       this.balls.push( new Ball(
         BALL_RADIUS,
         createRandomColor(),

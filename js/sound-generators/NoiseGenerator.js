@@ -89,7 +89,7 @@ define( function( require ) {
     }
 
     // define the noise data
-    let noiseBufferSize = NOISE_BUFFER_SECONDS * this.audioContext.sampleRate;
+    const noiseBufferSize = NOISE_BUFFER_SECONDS * this.audioContext.sampleRate;
     this.noiseBuffer = this.audioContext.createBuffer( 1, noiseBufferSize, this.audioContext.sampleRate ); // @private
     const data = this.noiseBuffer.getChannelData( 0 );
 

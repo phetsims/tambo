@@ -30,9 +30,9 @@ define( function( require ) {
     detectLoopBounds: function( audioBuffer ) {
       logLoopAnalysisInfo( '------------- entered detectLoopBounds --------------------' );
 
-      let soundDataLength = audioBuffer.length;
-      let loopStartIndexes = [];
-      let loopEndIndexes = [];
+      const soundDataLength = audioBuffer.length;
+      const loopStartIndexes = [];
+      const loopEndIndexes = [];
 
       // analyze each channel of the sound data
       for ( let channelNumber = 0; channelNumber < audioBuffer.numberOfChannels; channelNumber++ ) {
@@ -85,7 +85,7 @@ define( function( require ) {
     let soundStartIndex = 0;
     found = false;
     for ( dataIndex = startThresholdIndex; dataIndex > 0 && !found; dataIndex-- ) {
-      let value = soundData[ dataIndex ];
+      const value = soundData[ dataIndex ];
       if ( value <= 0 ) {
         soundStartIndex = value === 0 ? dataIndex : dataIndex + 1;
         found = true;

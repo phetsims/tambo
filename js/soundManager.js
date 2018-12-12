@@ -243,7 +243,7 @@ define( function( require ) {
       }
 
       // verify that this is not a duplicate addition
-      let duplicateAdd = _.some( soundGeneratorInfoArray, soundGeneratorInfo => {
+      const duplicateAdd = _.some( soundGeneratorInfoArray, soundGeneratorInfo => {
         return soundGeneratorInfo.soundGenerator === soundGenerator;
       } );
       assert && assert( !duplicateAdd, 'can\'t add the same sound generator twice' );
@@ -451,7 +451,7 @@ define( function( require ) {
       }
 
       assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1, 'reverb value out of range: ' + newReverbLevel );
-      let now = phetAudioContext.currentTime;
+      const now = phetAudioContext.currentTime;
       this.reverbGainNode.gain.setTargetAtTime( newReverbLevel, now, TC_FOR_PARAM_CHANGES );
       this.dryGainNode.gain.setTargetAtTime( 1 - newReverbLevel, now, TC_FOR_PARAM_CHANGES );
       _reverbLevel = newReverbLevel;
