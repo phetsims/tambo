@@ -169,6 +169,19 @@ define( function( require ) {
         }
       );
 
+      if ( platform.mobileSafari ) {
+
+        // When running on iOS, we sometimes see the audio context get set to the "interrupted" state if the user
+        // switches to a different tab and plays sound.  This code resumes the audio context if it is in that state
+        // when the tab containing the sim becomes visible again, see
+        // https://github.com/phetsims/resistance-in-a-wire/issues/199.
+        simVisibleProperty.lazyLink( function( simVisible ) {
+          if ( simVisible && phetAudioContext.state === 'interrupted' ) {
+            phetAudioContext.resume();
+          }
+        } );
+      }
+
       // Below is some platform-specific code for handling some issues related to audio.  It may be possible to remove
       // some or all of this as Web Audio becomes more consistently implemented.
       if ( phetAudioContext ) {
