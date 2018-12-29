@@ -26,6 +26,7 @@ define( function( require ) {
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   const SoundLevelEnum = require( 'TAMBO/SoundLevelEnum' );
   const tambo = require( 'TAMBO/tambo' );
+  const Tandem = require( 'TANDEM/Tandem' );
 
   // sounds
   const emptySound = require( 'sound!TAMBO/empty.mp3' );
@@ -36,7 +37,9 @@ define( function( require ) {
   const TC_FOR_PARAM_CHANGES = 0.015; // in seconds, time constant for param changes, empirically determined to avoid clicks
 
   // flag that tracks whether sound generation of any kind is enabled
-  const enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled' );
+  const soundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
+    tandem: Tandem.generalTandem.createTandem( 'soundEnabledProperty' )
+  } );
 
   // flag that tracks whether enhanced sounds are enabled (basic sounds are always enabled if sound generation is)
   const enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled );
@@ -70,7 +73,7 @@ define( function( require ) {
      * Property that corresponds to the enabled state setting
      * @public (read-only)
      */
-    enabledProperty: enabledProperty,
+    enabledProperty: soundEnabledProperty,
 
     /**
      * Property that corresponds to the sonification level setting
@@ -291,7 +294,7 @@ define( function( require ) {
       soundGeneratorInfoArray.push( soundGeneratorInfo );
 
       // add the global enable Property to the list of Properties that enable this sound generator
-      soundGenerator.addEnableControlProperty( enabledProperty );
+      soundGenerator.addEnableControlProperty( soundEnabledProperty );
 
       // if this sound generator is only enabled in enhanced mode, add the enhanced mode Property as an enable control
       if ( options.sonificationLevel === SoundLevelEnum.ENHANCED ) {
@@ -372,7 +375,7 @@ define( function( require ) {
       assert && assert( level >= 0 && level <= 1, 'output level value out of range: ' + level );
 
       masterOutputLevel = level;
-      if ( enabledProperty.get() ) {
+      if ( soundEnabledProperty.get() ) {
         this.masterGainNode.gain.setTargetAtTime( level, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
       }
     },
@@ -472,7 +475,7 @@ define( function( require ) {
      * @param {boolean} enabled
      */
     set enabled( enabled ) {
-      enabledProperty.set( enabled );
+      soundEnabledProperty.set( enabled );
     },
 
     /**
@@ -480,7 +483,7 @@ define( function( require ) {
      * @returns {boolean}
      */
     get enabled() {
-      return enabledProperty.get();
+      return soundEnabledProperty.get();
     },
 
     /**
