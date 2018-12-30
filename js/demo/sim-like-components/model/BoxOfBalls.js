@@ -16,7 +16,7 @@ define( function( require ) {
   const Vector2 = require( 'DOT/Vector2' );
 
   // constants
-  const BALL_RADIUS = 5;
+  const BALL_RADIUS = 7; // ball radius in cm
   const MIN_X_OR_Y_VELOCITY = 30;
   const MAX_X_OR_Y_VELOCITY = 60;
 
@@ -31,10 +31,9 @@ define( function( require ) {
   /**
    * @param {number} width - in centimeters
    * @param {number} height - in centimeters
-   * @param {number} ballRadius - in centimeters
    * @constructor
    */
-  function BoxOfBalls( width, height, ballRadius ) {
+  function BoxOfBalls( width, height ) {
 
     // @public (read-only) {Shape.rect} - the bounding box
     this.box = Shape.rect( 0, 0, width, height );

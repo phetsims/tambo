@@ -22,7 +22,7 @@ define( function( require ) {
   function SimLikeComponentsModel() {
 
     // @public (read-only) {BoxOfBalls) - box containing bouncing balls, size empirically determined
-    this.boxOfBalls = new BoxOfBalls( 100, 60, 10 );
+    this.boxOfBalls = new BoxOfBalls( 135, 80 );
 
     // @public {NumberProperty} - controls the number of balls in the box
     this.numberOfBallsProperty = new NumberProperty( 0 );

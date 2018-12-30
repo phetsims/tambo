@@ -28,8 +28,8 @@ define( function( require ) {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
-  const BUTTON_FONT = new PhetFont( 14 );
-  const COMBO_BOX_FONT = new PhetFont( 12 );
+  const BUTTON_FONT = new PhetFont( 19 );
+  const COMBO_BOX_FONT = new PhetFont( 16 );
   const TOTAL_ADDED_TEMPLATE = 'Total Added: {{numSoundGenerators}}';
   const ADD_BUTTON_COLOR = '#C0D890';
 
@@ -67,8 +67,8 @@ define( function( require ) {
 
     options = _.extend( {
       fill: '#f5d3b3',
-      xMargin: 10,
-      yMargin: 10
+      xMargin: 14,
+      yMargin: 14
     }, options );
 
     // array of sound generators that have been added and not yet removed and disposed
@@ -79,7 +79,7 @@ define( function( require ) {
 
     // informational text that goes at the top of the panel
     const infoText = new Text( 'Test addition, removal, and disposal of sound generators', {
-      font: new PhetFont( { size: 14, weight: 'bold' } )
+      font: new PhetFont( { size: 19, weight: 'bold' } )
     } );
 
     // create the combo box for selecting the type of sound generator to add
@@ -96,10 +96,10 @@ define( function( require ) {
     } );
     const sgSelectorNode = new HBox( {
       children: [
-        new Text( 'SG type to add:', { font: new PhetFont( 14 ) } ),
+        new Text( 'SG type to add:', { font: new PhetFont( 19 ) } ),
         comboBox
       ],
-      spacing: 5
+      spacing: 7
     } );
 
     function addSoundGenerators( numToAdd ) {
@@ -135,11 +135,11 @@ define( function( require ) {
           }
         } )
       ],
-      spacing: 10
+      spacing: 14
     } );
 
     // create a horizontal box with an indicator for the number of sound generators added and a button to remove them all
-    const totalAddedIndicator = new Text( TOTAL_ADDED_TEMPLATE, { font: new PhetFont( 14 ) } );
+    const totalAddedIndicator = new Text( TOTAL_ADDED_TEMPLATE, { font: new PhetFont( 19 ) } );
     const removeAllSoundGeneratorsButton = new TextPushButton( 'Remove All', {
       font: BUTTON_FONT,
       listener: function() {
@@ -151,7 +151,7 @@ define( function( require ) {
         totalAddedIndicator,
         removeAllSoundGeneratorsButton
       ],
-      spacing: 10
+      spacing: 14
     } );
 
     // create a button that will test the most recently added sound generator
@@ -207,7 +207,7 @@ define( function( require ) {
     // add everything to a vertical box
     const rootVBox = new VBox( {
       children: [ infoText, sgSelectorNode, addButtonHBox, showTotalHBox, testLastAddedSGButton ],
-      spacing: 14
+      spacing: 19
     } );
 
     panelContentNode.addChild( rootVBox );
