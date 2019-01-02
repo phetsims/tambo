@@ -8,6 +8,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
   const platform = require( 'PHET_CORE/platform' );
   const tambo = require( 'TAMBO/tambo' );
   const TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
@@ -113,7 +114,10 @@ define( function( require ) {
     decodeAudioData: logUnimplementedWarning,
     destination: null,
     resume: logUnimplementedWarning,
-    state: 'running'
+    state: 'running',
+
+    // this is a flag that is specific to the stubbed audio context, allowing it to be identified
+    isStubbed: true
   };
 
   // create a Web Audio context
@@ -128,21 +132,27 @@ define( function( require ) {
 
     // the browser doesn't support creating an audio context, so use a stubbed out version
     phetAudioContext = STUBBED_AUDIO_CONTEXT;
-    console.warn( 'warning: using stubbed audio context' );
+    console.warn( 'warning: no support for Web Audio detected, using stubbed audio context' );
   }
 
   // If we are running on non-mobile Safari, add a handler to restart the audio context if it goes into the
   // "interrupted" state.  This can happen when putting the sim into full screen mode, though it seems like a violation
   // of the Web Audio spec.  See https://github.com/phetsims/resistance-in-a-wire/issues/190.  It may be possible to
   // remove this code at some point in the future if Apple fixes this issue in Safari.
-  if ( platform.safari && !platform.mobileSafari ) {
-    phetAudioContext.onstatechange = function() {
-      if ( phetAudioContext.state === 'interrupted' ) {
+  if ( !phetAudioContext.isStubbed && platform.safari && !platform.mobileSafari ) {
+    audioContextStateChangeMonitor.addStateChangeListener( phetAudioContext, state => {
+      if ( state === 'interrupted' ) {
         console.warn( 'the audio context was interrupted, calling resume()' );
         phetAudioContext.resume();
       }
-    };
+    } );
   }
+
+  // TODO: Temporary - add a state change listener for testing
+  console.log( 'phetAudioContext.state = ' + phetAudioContext.state );
+  audioContextStateChangeMonitor.addStateChangeListener( phetAudioContext, state => {
+    console.log( 'state (from in phetAudioContext) = ' + state );
+  } );
 
   // register for phet-io
   tambo.register( 'phetAudioContext', phetAudioContext );
