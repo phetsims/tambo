@@ -199,7 +199,7 @@ define( function( require ) {
     /**
      * Get the current output level setting.  Note that if the sound generator is disabled, this could return a non-zero
      * value but the sound generator won't produce audible sound.
-     * @return {number}
+     * @returns {number}
      * @public
      */
     getOutputLevel: function() {
@@ -237,7 +237,7 @@ define( function( require ) {
 
     /**
      * public
-     * @return {boolean}
+     * @returns {boolean}
      */
     get fullyEnabled() {
       return this.fullyEnabledProperty.get();

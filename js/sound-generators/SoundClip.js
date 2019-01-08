@@ -224,7 +224,7 @@ define( function( require ) {
 
     /**
      * indicates whether sound is currently being played
-     * @return {boolean}
+     * @returns {boolean}
      */
     get isPlaying() {
       return this._isPlaying;

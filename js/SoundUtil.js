@@ -65,7 +65,7 @@ define( function( require ) {
    * @param {Float32Array} soundData - sound data to be analyzed
    * @param {number} length - length of the sound data
    * @param {number} threshold - detection level for initial sound, should be between 0 and 1
-   * @return {number} - index where sound can be considered to start
+   * @returns {number} - index where sound can be considered to start
    */
   function findSoundStartIndex( soundData, length, threshold ) {
 
@@ -112,7 +112,7 @@ define( function( require ) {
    * @param {Float32Array} soundData
    * @param {number} length - length of the sound data
    * @param {number} threshold - detection level for the presence of sound, should be between 0 and 1
-   * @return {number} - index where sound ends
+   * @returns {number} - index where sound ends
    */
   function findSoundEndIndex( soundData, length, threshold ) {
 

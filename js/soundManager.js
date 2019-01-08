@@ -385,7 +385,7 @@ define( function( require ) {
 
     /**
      * get the current output level setting
-     * @return {number}
+     * @returns {number}
      */
     getMasterOutputLevel: function() {
       return masterOutputLevel;
@@ -509,7 +509,7 @@ define( function( require ) {
     /**
      * get the ID for a sound generator, null if the provided sound generator isn't registered
      * @param {SoundGenerator} soundGenerator
-     * @return {string}
+     * @returns {string}
      */
     getSoundGeneratorId: function( soundGenerator ) {
       let id = null;
