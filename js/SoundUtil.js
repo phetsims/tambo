@@ -10,11 +10,10 @@ define( function( require ) {
   const tambo = require( 'TAMBO/tambo' );
   const TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
 
-  // Make it clear that this is a sample value for audio data.
-  // This threshold is used for analyzing the decoded sound sample data in order to find where a loop that is intended
-  // to continuously generate sound should start and end.  Its value was determined through experimentation on a single
-  // loop (charges-in-body) at a number of different encodings.  It may need to be refined over time as we add new
-  // loops.  Or it may work perfectly forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
+  // This threshold is used for analyzing individual decoded sound samples in order to find where a loop that is
+  // intended to continuously generate sound should start and end.  Its value was determined through experimentation on
+  // a single loop (charges-in-body) at a number of different encodings.  It may need to be refined over time as we add
+  // new loops.  Or it may work perfectly forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
   const AUDIO_DATA_THRESHOLD = 0.05;
 
   /**

@@ -9,11 +9,15 @@ define( function( require ) {
   'use strict';
 
   // modules
+  const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
   const inherit = require( 'PHET_CORE/inherit' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   const SoundUtil = require( 'TAMBO/SoundUtil' );
   const tambo = require( 'TAMBO/tambo' );
+
+  // constants
+  const MAX_PLAY_DEFER_TIME = 0.2; // seconds, max time to defer a play request while waiting for audio context state change
 
   /**
    * @param {Object} soundInfo - An object that includes *either* a "url" key with a value that points to the sound to
@@ -103,6 +107,32 @@ define( function( require ) {
     // @private {boolean} - flag that tracks whether the sound is being played
     this._isPlaying = false;
 
+    // @private {number} - time at which a deferred play request occurred.
+    this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
+
+    // @private {function|null} - callback for when audio context isn't in 'running' state, see usage
+    this.audioContextStateChangeListener = state => {
+
+      if ( state === 'running' ) {
+
+        // initiate deferred play if this is a loop or if it hasn't been too long since the request was made
+        if ( this.loop || this.audioContext.currentTime - this.timeOfDeferredPlayRequest < MAX_PLAY_DEFER_TIME ) {
+
+          // Play the sound, but with a little bit of delay.  The delay was found to be needed because otherwise on
+          // some browsers the sound would be somewhat muted, probably due to some sort of fade in of the audio levels
+          // that the browser does automatically to avoid having the web page's sound start too abruptly.  The amount of
+          // delay was empirically determined by testing on multiple browsers.
+          this.play( 0.05 );
+        }
+
+        // automatically remove after firing
+        audioContextStateChangeMonitor.removeStateChangeListener(
+          this.audioContext,
+          this.audioContextStateChangeListener
+        );
+      }
+    };
+
     // listen to the Property that indicates whether we are fully enabled and stop one-shot sounds when it goes false
     this.fullyEnabledProperty.lazyLink( fullyEnabled => {
       if ( !this.loop && !fullyEnabled ) {
@@ -122,58 +152,76 @@ define( function( require ) {
      */
     play: function( delay ) {
 
-      const now = this.audioContext.currentTime;
+      window.phet.jb.soundManager.logGain( 0.1 );
 
-      // default delay is zero
-      delay = typeof delay === 'undefined' ? 0 : delay;
+      if ( this.audioContext.state === 'running' ) {
 
-      if ( this.initiateWhenDisabled || this.fullyEnabled ) {
+        const now = this.audioContext.currentTime;
 
-        // make sure the decoding of the audio data is complete before trying to play the sound
-        if ( this.audioBuffer ) {
+        // default delay is zero
+        delay = typeof delay === 'undefined' ? 0 : delay;
 
-          // make sure the local gain is set to unity value
-          this.localGainNode.gain.setValueAtTime( 1, now );
+        if ( this.initiateWhenDisabled || this.fullyEnabled ) {
 
-          // create an audio buffer source node and connect it to the previously decoded audio data
-          const bufferSource = this.audioContext.createBufferSource();
-          bufferSource.buffer = this.audioBuffer;
-          bufferSource.loop = this.loop;
-          bufferSource.loopStart = this.loopStart;
-          if ( this.loopEnd ) {
-            bufferSource.loopEnd = this.loopEnd;
+          // make sure the decoding of the audio data is complete before trying to play the sound
+          if ( this.audioBuffer ) {
+
+            // make sure the local gain is set to unity value
+            this.localGainNode.gain.setValueAtTime( 1, now );
+
+            // create an audio buffer source node and connect it to the previously decoded audio data
+            const bufferSource = this.audioContext.createBufferSource();
+            bufferSource.buffer = this.audioBuffer;
+            bufferSource.loop = this.loop;
+            bufferSource.loopStart = this.loopStart;
+            if ( this.loopEnd ) {
+              bufferSource.loopEnd = this.loopEnd;
+            }
+
+            // connect this source node to the output
+            bufferSource.connect( this.localGainNode );
+
+            // add this to the list of active sources so that it can be stopped if necessary
+            this.activeBufferSources.push( bufferSource );
+
+            if ( !this.loop ) {
+
+              // add a handler for when the sound finishes playing
+              bufferSource.onended = () => {
+
+                // remove the source from the list of active sources
+                const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
+                if ( indexOfSource > -1 ) {
+                  this.activeBufferSources.splice( indexOfSource, 1 );
+                }
+                this._isPlaying = this.activeBufferSources.length > 0;
+              };
+            }
+
+            // set the playback rate and start playback
+            bufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
+            bufferSource.start( now + delay );
+            this._isPlaying = true;
           }
+          else {
 
-          // connect this source node to the output
-          bufferSource.connect( this.localGainNode );
-
-          // add this to the list of active sources so that it can be stopped if necessary
-          this.activeBufferSources.push( bufferSource );
-
-          if ( !this.loop ) {
-
-            // add a handler for when the sound finishes playing
-            bufferSource.onended = () => {
-
-              // remove the source from the list of active sources
-              const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
-              if ( indexOfSource > -1 ) {
-                this.activeBufferSources.splice( indexOfSource, 1 );
-              }
-              this._isPlaying = this.activeBufferSources.length > 0;
-            };
+            // the play method was called before the sound buffer finished loading, create an action that play the sound
+            // once the loading has completed
+            this.loadCompleteAction = () => { this.play(); };
           }
-
-          // set the playback rate and start playback
-          bufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
-          bufferSource.start( now + delay );
-          this._isPlaying = true;
         }
-        else {
+      }
+      else {
 
-          // the play method was called before the sound buffer finished loading, create an action that play the sound
-          // once the loading has completed
-          this.loadCompleteAction = () => { this.play(); };
+        // This method was called when the audio context was not yet running, add a listener to play if and when the
+        // state changes.  This will play any loops, and will also play a sound if the time between the request and the
+        // state change isn't too great.  Note that this does NOT queue up more than one individual sound to be played.
+        this.timeOfDeferredPlayRequest = this.audioContext.currentTime;
+        if ( !audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
+          audioContextStateChangeMonitor.addStateChangeListener(
+            this.audioContext,
+            this.audioContextStateChangeListener
+          );
         }
       }
     },
@@ -205,6 +253,15 @@ define( function( require ) {
 
         // this was called before the sound finished loading, cancel any previously created actions
         this.loadCompleteAction = null;
+      }
+
+      if ( audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
+
+        // remove the state change listener that was going to do a deferred play, since the sound has now been stopped
+        audioContextStateChangeMonitor.removeStateChangeListener(
+          this.audioContext,
+          this.audioContextStateChangeListener
+        );
       }
     },
 
