@@ -35,6 +35,7 @@ define( function( require ) {
   // constants
   const DEFAULT_REVERB_LEVEL = 0.02;
   const TC_FOR_PARAM_CHANGES = 0.015; // in seconds, time constant for param changes, empirically determined to avoid clicks
+  const VOLUME_CHANGE_TIME = 0.05; //
 
   // flag that tracks whether sound generation of any kind is enabled
   const soundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
@@ -168,7 +169,9 @@ define( function( require ) {
         [ this.enabledProperty, simVisibleProperty, simActiveProperty ],
         ( enabled, simVisible, simActive ) => {
           const gain = enabled && simVisible && simActive ? masterOutputLevel : 0;
-          this.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+          // this.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+          this.masterGainNode.gain.linearRampToValueAtTime( gain, phetAudioContext.currentTime + 0.1 );
+          this.logGain( 0.1 );
         }
       );
 
@@ -519,10 +522,31 @@ define( function( require ) {
         }
       } );
       return id;
+    },
+
+    // TODO: temp for debug
+    logGain: function( duration ) {
+      duration = duration || 1;
+      var startTime = phetAudioContext.currentTime;
+      console.log( '------- start of gain logging -----' );
+      var self = this;
+
+      function logGain() {
+        var timeInMilliseconds = ( phetAudioContext.currentTime - startTime ) * 1000;
+        console.log( 'Time (ms): ' + timeInMilliseconds.toFixed( 2 ) + ', Gain Value: ' + self.masterGainNode.gain.value );
+        if ( phetAudioContext.currentTime - startTime < duration ) {
+          window.requestAnimationFrame( logGain );
+        }
+      }
+
+      logGain();
     }
   };
 
   tambo.register( 'soundManager', soundManager );
+
+  window.phet.jb = {};
+  window.phet.jb.soundManager = soundManager;
 
   return soundManager;
 } );

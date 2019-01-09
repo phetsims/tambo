@@ -113,12 +113,7 @@ define( function( require ) {
     // @private {function|null} - callback for when audio context isn't in 'running' state, see usage
     this.audioContextStateChangeListener = state => {
 
-      console.log( '---------------' );
-      console.log( 'deferred play callback invoked' );
-
       if ( state === 'running' ) {
-
-        console.log( 'state is running' );
 
         // initiate deferred play if this is a loop or if it hasn't been too long since the request was made
         if ( this.loop || this.audioContext.currentTime - this.timeOfDeferredPlayRequest < MAX_PLAY_DEFER_TIME ) {
@@ -156,6 +151,8 @@ define( function( require ) {
      * @public
      */
     play: function( delay ) {
+
+      window.phet.jb.soundManager.logGain( 0.1 );
 
       if ( this.audioContext.state === 'running' ) {
 
