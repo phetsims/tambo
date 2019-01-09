@@ -152,7 +152,7 @@ define( function( require ) {
      */
     play: function( delay ) {
 
-      window.phet.jb.soundManager.logGain( 0.1 );
+      // window.phet.jb.soundManager.logMasterGain( 0.1 );
 
       if ( this.audioContext.state === 'running' ) {
 
@@ -238,8 +238,9 @@ define( function( require ) {
         // down the gain quickly, effectively doing a very fast fade out, and then stop playback. The values for the
         // time constant and stop time were empirically determined.
         const now = this.audioContext.currentTime;
-        this.localGainNode.gain.setTargetAtTime( 0, now, 0.01 );
-        this.activeBufferSources.forEach( source => { source.stop( now + 0.1 ); } );
+        const stopTime = 0.05; // in seconds
+        this.localGainNode.gain.linearRampToValueAtTime( 0, now + stopTime );
+        this.activeBufferSources.forEach( source => { source.stop( now + stopTime ); } );
 
         // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
         // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
