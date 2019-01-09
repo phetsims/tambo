@@ -34,7 +34,7 @@ define( function( require ) {
 
   // constants
   const DEFAULT_REVERB_LEVEL = 0.02;
-  const TC_FOR_PARAM_CHANGES = 0.015; // in seconds, time constant for param changes, empirically determined to avoid clicks
+  const LINEAR_GAIN_CHANGE_TIME = 0.05; // in seconds
 
   // flag that tracks whether sound generation of any kind is enabled
   const soundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
@@ -140,6 +140,7 @@ define( function( require ) {
       // dry (non-reverbed) portion of the output
       this.dryGainNode = phetAudioContext.createGain();
       this.dryGainNode.gain.setValueAtTime( 1 - _reverbLevel, phetAudioContext.currentTime );
+      this.dryGainNode.gain.linearRampToValueAtTime( 1 - _reverbLevel, phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME );
       this.dryGainNode.connect( this.masterGainNode );
 
       // load the reverb impulse response into the convolver
@@ -168,9 +169,11 @@ define( function( require ) {
         [ this.enabledProperty, simVisibleProperty, simActiveProperty ],
         ( enabled, simVisible, simActive ) => {
           const gain = enabled && simVisible && simActive ? masterOutputLevel : 0;
-          this.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
-          // this.masterGainNode.gain.linearRampToValueAtTime( gain, phetAudioContext.currentTime + 0.1 );
-          this.logGain( 0.1 );
+          this.masterGainNode.gain.linearRampToValueAtTime(
+            gain,
+            phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
+          );
+          // this.logGain( this.masterGainNode, 0.1 );
         }
       );
 
@@ -378,7 +381,10 @@ define( function( require ) {
 
       masterOutputLevel = level;
       if ( soundEnabledProperty.get() ) {
-        this.masterGainNode.gain.setTargetAtTime( level, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+        this.masterGainNode.gain.linearRampToValueAtTime(
+          level,
+          phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
+        );
       }
     },
     set masterOutputLevel( outputLevel ) {
@@ -457,8 +463,8 @@ define( function( require ) {
 
       assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1, 'reverb value out of range: ' + newReverbLevel );
       const now = phetAudioContext.currentTime;
-      this.reverbGainNode.gain.setTargetAtTime( newReverbLevel, now, TC_FOR_PARAM_CHANGES );
-      this.dryGainNode.gain.setTargetAtTime( 1 - newReverbLevel, now, TC_FOR_PARAM_CHANGES );
+      this.reverbGainNode.gain.linearRampToValueAtTime( newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
+      this.dryGainNode.gain.linearRampToValueAtTime( 1 - newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
       _reverbLevel = newReverbLevel;
     },
     set reverbLevel( reverbLevel ) {
@@ -524,21 +530,29 @@ define( function( require ) {
     },
 
     // TODO: temp for debug
-    logGain: function( duration ) {
+    logGain: function( gainNode, duration ) {
       duration = duration || 1;
-      var startTime = phetAudioContext.currentTime;
+      var startTime = Date.now();
       console.log( '------- start of gain logging -----' );
-      var self = this;
 
       function logGain() {
-        var timeInMilliseconds = ( phetAudioContext.currentTime - startTime ) * 1000;
-        console.log( 'Time (ms): ' + timeInMilliseconds.toFixed( 2 ) + ', Gain Value: ' + self.masterGainNode.gain.value );
-        if ( phetAudioContext.currentTime - startTime < duration ) {
+        var now = Date.now();
+        var timeInMilliseconds = now - startTime;
+        console.log( 'Time (ms): ' + timeInMilliseconds.toFixed( 2 ) + ', Gain Value: ' + gainNode.gain.value );
+        if ( now - startTime < ( duration * 1000 ) ) {
           window.requestAnimationFrame( logGain );
         }
       }
 
       logGain();
+    },
+
+    // TODO: temp for debug
+    logMasterGain: function( duration ) {
+      this.logGain( this.masterGainNode, duration );
+    },
+    logReverbGain: function( duration ) {
+      this.logGain( this.reverbGainNode, duration );
     }
   };
 
