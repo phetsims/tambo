@@ -35,7 +35,6 @@ define( function( require ) {
   // constants
   const DEFAULT_REVERB_LEVEL = 0.02;
   const TC_FOR_PARAM_CHANGES = 0.015; // in seconds, time constant for param changes, empirically determined to avoid clicks
-  const VOLUME_CHANGE_TIME = 0.05; //
 
   // flag that tracks whether sound generation of any kind is enabled
   const soundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
