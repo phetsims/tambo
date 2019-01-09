@@ -148,12 +148,6 @@ define( function( require ) {
     } );
   }
 
-  // TODO: Temporary - add a state change listener for testing
-  console.log( 'phetAudioContext.state = ' + phetAudioContext.state );
-  audioContextStateChangeMonitor.addStateChangeListener( phetAudioContext, state => {
-    console.log( 'state (from in phetAudioContext) = ' + state );
-  } );
-
   // register for phet-io
   tambo.register( 'phetAudioContext', phetAudioContext );
 

@@ -1,7 +1,9 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * a singleton instance that allows clients to register listeners that get fired on state changes for an aduio context
+ * A singleton instance that allows clients to register listeners that get fired on state changes for an audio context.
+ * This exists because an audio context has a single "onstatechange" property, and we had the need to register multiple
+ * listeners.
  */
 define( function( require ) {
   'use strict';
@@ -44,9 +46,6 @@ define( function( require ) {
 
         // hook up a function that will fire all listeners on a state change
         audioContext.onstatechange = function() {
-
-          // TODO: remove log statement (here initially for debugging purposes)
-          console.log( 'audioContext.state = ' + audioContext.state );
           listenerArray.forEach( function( listener ) {
             listener( audioContext.state );
           } );
