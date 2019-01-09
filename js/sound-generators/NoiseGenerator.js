@@ -9,6 +9,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
   const inherit = require( 'PHET_CORE/inherit' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const tambo = require( 'TAMBO/tambo' );
@@ -183,6 +184,24 @@ define( function( require ) {
 
     // @public (read-only) {boolean}
     this.isPlaying = false;
+
+    // @private {number} - time at which a deferred play request occurred.
+    this.timeOfDeferredStartRequest = Number.NEGATIVE_INFINITY;
+
+    // @private {function} - callback for when audio context isn't in 'running' state, see usage
+    this.audioContextStateChangeListener = state => {
+
+      if ( state === 'running' && this.isPlaying ) {
+
+        this.start();
+
+        // automatically remove after firing
+        audioContextStateChangeMonitor.removeStateChangeListener(
+          this.audioContext,
+          this.audioContextStateChangeListener
+        );
+      }
+    };
   }
 
   tambo.register( 'NoiseGenerator', NoiseGenerator );
@@ -195,18 +214,35 @@ define( function( require ) {
      */
     start: function( delay ) {
 
-      delay = ( delay === undefined ) ? 0 : delay;
-      const now = this.audioContext.currentTime;
+      if ( this.audioContext.state === 'running' ) {
 
-      // only do something if not already playing, otherwise ignore this request
-      if ( !this.isPlaying ) {
-        this.noiseSource = this.audioContext.createBufferSource();
-        this.noiseSource.buffer = this.noiseBuffer;
-        this.noiseSource.loop = true;
-        this.noiseSource.connect( this.noiseSourceConnectionPoint );
-        this.noiseSource.start( now + delay );
-        this.isPlaying = true;
+        delay = ( delay === undefined ) ? 0 : delay;
+        const now = this.audioContext.currentTime;
+
+        // only do something if not already playing, otherwise ignore this request
+        if ( !this.isPlaying ) {
+          this.noiseSource = this.audioContext.createBufferSource();
+          this.noiseSource.buffer = this.noiseBuffer;
+          this.noiseSource.loop = true;
+          this.noiseSource.connect( this.noiseSourceConnectionPoint );
+          this.noiseSource.start( now + delay );
+        }
       }
+      else {
+
+        // This method was called when the audio context was not yet running, so add a listener to start if and when the
+        // audio context state changes.
+        this.timeOfDeferredStartRequest = Date.now();
+        if ( !audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
+          audioContextStateChangeMonitor.addStateChangeListener(
+            this.audioContext,
+            this.audioContextStateChangeListener
+          );
+        }
+      }
+
+      // set the flag even if the start is deferred, since it is used to decide whether to do a deferred start
+      this.isPlaying = true;
     },
 
     /**
@@ -216,12 +252,12 @@ define( function( require ) {
     stop: function( time ) {
 
       // only stop if playing, otherwise ignore
-      if ( this.isPlaying ) {
+      if ( this.isPlaying && this.noiseSource ) {
         this.noiseSource.stop( time );
         this.noiseSource.disconnect( this.noiseSourceConnectionPoint );
         this.noiseSource = null;
-        this.isPlaying = false;
       }
+      this.isPlaying = false;
     },
 
     /**
