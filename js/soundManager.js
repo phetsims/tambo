@@ -168,8 +168,8 @@ define( function( require ) {
         [ this.enabledProperty, simVisibleProperty, simActiveProperty ],
         ( enabled, simVisible, simActive ) => {
           const gain = enabled && simVisible && simActive ? masterOutputLevel : 0;
-          // this.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
-          this.masterGainNode.gain.linearRampToValueAtTime( gain, phetAudioContext.currentTime + 0.1 );
+          this.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+          // this.masterGainNode.gain.linearRampToValueAtTime( gain, phetAudioContext.currentTime + 0.1 );
           this.logGain( 0.1 );
         }
       );
