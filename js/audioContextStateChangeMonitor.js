@@ -81,7 +81,7 @@ define( function( require ) {
      * test if the provided listener is present for the specified audio context
      * @param {AudioContext} audioContext
      * @param {function} listener
-     * @return {boolean} - true is listener is found, false if not
+     * @returns {boolean} - true is listener is found, false if not
      */
     hasListener( audioContext, listener ) {
       let found = false;
