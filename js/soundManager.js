@@ -34,6 +34,7 @@ define( function( require ) {
   // constants
   const DEFAULT_REVERB_LEVEL = 0.02;
   const TC_FOR_PARAM_CHANGES = 0.015; // in seconds, time constant for param changes, empirically determined to avoid clicks
+  const TIME_FOR_LINEAR_GAIN_CHANGES = 0.05; // in seconds, time for linear gain changes, empirically determined to avoid clicks
 
   // flag that tracks whether sound generation of any kind is enabled
   const enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled' );
@@ -165,7 +166,10 @@ define( function( require ) {
         [ this.enabledProperty, simVisibleProperty, simActiveProperty ],
         ( enabled, simVisible, simActive ) => {
           const gain = enabled && simVisible && simActive ? masterOutputLevel : 0;
-          this.masterGainNode.gain.setTargetAtTime( gain, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+          this.masterGainNode.gain.linearRampToValueAtTime(
+            gain,
+            phetAudioContext.currentTime + TIME_FOR_LINEAR_GAIN_CHANGES
+          );
         }
       );
 
@@ -374,7 +378,10 @@ define( function( require ) {
 
       masterOutputLevel = level;
       if ( enabledProperty.get() ) {
-        this.masterGainNode.gain.setTargetAtTime( level, phetAudioContext.currentTime, TC_FOR_PARAM_CHANGES );
+        this.masterGainNode.gain.linearRampToValueAtTime(
+          level,
+          phetAudioContext.currentTime + TIME_FOR_LINEAR_GAIN_CHANGES
+        );
       }
     },
     set masterOutputLevel( outputLevel ) {
@@ -453,8 +460,9 @@ define( function( require ) {
 
       assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1, 'reverb value out of range: ' + newReverbLevel );
       let now = phetAudioContext.currentTime;
-      this.reverbGainNode.gain.setTargetAtTime( newReverbLevel, now, TC_FOR_PARAM_CHANGES );
+      this.reverbGainNode.gain.linearRampToValueAtTime( newReverbLevel, now + TIME_FOR_LINEAR_GAIN_CHANGES );
       this.dryGainNode.gain.setTargetAtTime( 1 - newReverbLevel, now, TC_FOR_PARAM_CHANGES );
+      this.dryGainNode.gain.linearRampToValueAtTime( 1 - newReverbLevel, now + TIME_FOR_LINEAR_GAIN_CHANGES );
       _reverbLevel = newReverbLevel;
     },
     set reverbLevel( reverbLevel ) {
