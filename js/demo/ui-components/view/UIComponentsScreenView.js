@@ -18,7 +18,6 @@ define( function( require ) {
   const HSlider = require( 'SUN/HSlider' );
   const Image = require( 'SCENERY/nodes/Image' );
   const inherit = require( 'PHET_CORE/inherit' );
-  const KeyboardUtil = require( 'SCENERY/accessibility/KeyboardUtil' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const Range = require( 'DOT/Range' );
@@ -124,6 +123,9 @@ define( function( require ) {
       }
     } );
 
+    // flag that indicates whether slider is being dragged through keyboard interaction
+    var sliderBeingDraggedByKeyboard = false;
+
     // Add a slider with continuous behavior.  We create our own thumb node so that we can observe it.
     const continuousSlider = new HSlider( model.continuousValueProperty, new Range( 0, SLIDER_MAX ), {
       trackSize: SLIDER_TRACK_SIZE,
@@ -131,7 +133,13 @@ define( function( require ) {
       thumbFillEnabled: '#880000',
       thumbFillHighlighted: '#aa0000',
       left: discreteSlider.left,
-      top: abSwitch.bottom + 50
+      top: abSwitch.bottom + 50,
+      startDrag: event => {
+        if ( event.type === 'keydown' ) {
+          sliderBeingDraggedByKeyboard = true;
+        }
+      },
+      endDrag: () => { sliderBeingDraggedByKeyboard = false; }
     } );
     this.addChild( continuousSlider );
 
@@ -147,15 +155,6 @@ define( function( require ) {
       marimbaSoundClip.play();
     }
 
-    // add sound generation for changes that occur due to keyboard interaction
-    continuousSlider.addInputListener( {
-      keydown: function( event ) {
-        if ( KeyboardUtil.isRangeKey( event.domEvent.keyCode ) ) {
-          playSoundForContinuousValue();
-        }
-      }
-    } );
-
     model.continuousValueProperty.lazyLink( ( newValue, oldValue ) => {
 
       function mapValueToBin( value ) {
@@ -164,10 +163,10 @@ define( function( require ) {
 
       // Play the sound when certain threshold values are crossed or when a change occurs in the absence of mouse/touch
       // interaction with the slider, which implies keyboard-driven interaction.
-    if ( continuousSlider.isThumbDraggingProperty.value && (
-        mapValueToBin( newValue ) !== mapValueToBin( oldValue ) ||
-        newValue === 0 && oldValue !== 0 ||
-        newValue === SLIDER_MAX && oldValue !== SLIDER_MAX ) ) {
+      if ( sliderBeingDraggedByKeyboard ||
+           mapValueToBin( newValue ) !== mapValueToBin( oldValue ) ||
+           newValue === 0 && oldValue !== 0 ||
+           newValue === SLIDER_MAX && oldValue !== SLIDER_MAX ) {
 
         playSoundForContinuousValue();
       }
