@@ -3,6 +3,8 @@
 /**
  * a singleton instance of a Web Audio audio context that can be included using RequireJS, creates a stubbed version on
  * platforms where Web Audio is not supported
+ *
+ * @author John Blanco
  */
 define( function( require ) {
   'use strict';

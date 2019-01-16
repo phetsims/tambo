@@ -22,6 +22,7 @@ define( function( require ) {
   const phetAudioContext = require( 'TAMBO/phetAudioContext' );
   const platform = require( 'PHET_CORE/platform' );
   const Property = require( 'AXON/Property' );
+  const soundConstants = require( 'TAMBO/soundConstants' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   const SoundLevelEnum = require( 'TAMBO/SoundLevelEnum' );
@@ -34,7 +35,7 @@ define( function( require ) {
 
   // constants
   const DEFAULT_REVERB_LEVEL = 0.02;
-  const LINEAR_GAIN_CHANGE_TIME = 0.05; // in seconds
+  const LINEAR_GAIN_CHANGE_TIME = soundConstants.LINEAR_GAIN_CHANGE_TIME; // in seconds
 
   // flag that tracks whether sound generation of any kind is enabled
   const soundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
