@@ -13,12 +13,11 @@ define( function( require ) {
   const inherit = require( 'PHET_CORE/inherit' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const phetAudioContext = require( 'TAMBO/phetAudioContext' );
+  const soundConstants = require( 'TAMBO/soundConstants' );
   const tambo = require( 'TAMBO/tambo' );
 
   // constants
-
-  // default time constant in seconds used for parameter changes, empirically determined to prevent sound glitches
-  const DEFAULT_TIME_CONSTANT = 0.015;
+  const DEFAULT_TC = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
   /**
    * @param {Object} options
@@ -126,8 +125,9 @@ define( function( require ) {
 
     // turn down the gain to zero when not fully enabled
     this.fullyEnabledProperty.link( fullyEnabled => {
-      const outputLevel = fullyEnabled ? this._outputLevel : 0;
-      this.masterGainNode.gain.setTargetAtTime( outputLevel, this.audioContext.currentTime, DEFAULT_TIME_CONSTANT
+      this.masterGainNode.gain.linearRampToValueAtTime(
+        fullyEnabled ? this._outputLevel : 0,
+        this.audioContext.currentTime + soundConstants.LINEAR_GAIN_CHANGE_TIME
       );
     } );
 
@@ -182,7 +182,7 @@ define( function( require ) {
      * @param {number} [timeConstant] - time constant for outputLevel change, see AudioParam.setTargetAtTime
      */
     setOutputLevel: function( outputLevel, timeConstant ) {
-      timeConstant = ( timeConstant === undefined ) ? DEFAULT_TIME_CONSTANT : timeConstant;
+      timeConstant = ( timeConstant === undefined ) ? DEFAULT_TC : timeConstant;
       this._outputLevel = outputLevel;
       if ( this.fullyEnabledProperty.value ) {
         this.masterGainNode.gain.setTargetAtTime(
@@ -249,9 +249,5 @@ define( function( require ) {
     dispose: function() {
       this.disposeSoundGenerator();
     }
-  }, {
-
-    // statics
-    DEFAULT_TIME_CONSTANT: DEFAULT_TIME_CONSTANT
   } );
 } );

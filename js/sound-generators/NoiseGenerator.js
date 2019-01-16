@@ -11,12 +11,13 @@ define( function( require ) {
   // modules
   const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const soundConstants = require( 'TAMBO/soundConstants' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const tambo = require( 'TAMBO/tambo' );
 
   // constants
   const NOISE_BUFFER_SECONDS = 2;
-  const PARAMETER_CHANGE_TIME_CONSTANT = 0.015;
+  const PARAMETER_CHANGE_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
   const LFO_DEPTH_CHANGE_TIME_CONSTANT = 0.05;
 
   /**

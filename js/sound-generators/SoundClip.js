@@ -11,6 +11,7 @@ define( function( require ) {
   // modules
   const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const soundConstants = require( 'TAMBO/soundConstants' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   const SoundUtil = require( 'TAMBO/SoundUtil' );
@@ -18,6 +19,7 @@ define( function( require ) {
 
   // constants
   const MAX_PLAY_DEFER_TIME = 0.2; // seconds, max time to defer a play request while waiting for audio context state change
+  const DEFAULT_TC = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
   /**
    * @param {Object} soundInfo - An object that includes *either* a "url" key with a value that points to the sound to
@@ -239,7 +241,7 @@ define( function( require ) {
         // down the gain quickly, effectively doing a very fast fade out, and then stop playback. The values for the
         // time constant and stop time were empirically determined.
         const now = this.audioContext.currentTime;
-        const stopTime = 0.05; // in seconds
+        const stopTime = soundConstants.LINEAR_GAIN_CHANGE_TIME; // in seconds
         this.localGainNode.gain.linearRampToValueAtTime( 0, now + stopTime );
         this.activeBufferSources.forEach( source => { source.stop( now + stopTime ); } );
 
@@ -274,7 +276,7 @@ define( function( require ) {
      * the target value. The larger this value is, the slower the transition will be.
      */
     setPlaybackRate: function( playbackRate, timeConstant ) {
-      timeConstant = typeof timeConstant === 'undefined' ? SoundGenerator.DEFAULT_TIME_CONSTANT : timeConstant;
+      timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TC : timeConstant;
       this.activeBufferSources.forEach( bufferSource => {
         bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
       } );
