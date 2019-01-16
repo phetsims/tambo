@@ -27,6 +27,7 @@ define( function( require ) {
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   const SoundLevelEnum = require( 'TAMBO/SoundLevelEnum' );
   const tambo = require( 'TAMBO/tambo' );
+  const TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
   const Tandem = require( 'TANDEM/Tandem' );
 
   // sounds
@@ -530,12 +531,23 @@ define( function( require ) {
       return id;
     },
 
-    // TODO: temp for debug
+    /**
+     * Log the value of the gain parameter at every animation frame for the specified duration.  This is useful for
+     * debugging, because these parameters change over time when set using methods like "setTargetAtTime", and the
+     * details of how they change seems to be different on the different browsers.
+     *
+     * It may be possible to remove this method someday once the behavior is more consistent across browsers.  See
+     * https://github.com/phetsims/resistance-in-a-wire/issues/205 for some history on this.
+     *
+     * @param {GainNode} gainNode
+     * @param {number} duration - duration for logging, in seconds
+     */
     logGain: function( gainNode, duration ) {
+
       duration = duration || 1;
       var startTime = Date.now();
-      console.log( '------- start of gain logging -----' );
 
+      // closure that will be invoked multiple times to log the changing values
       function logGain() {
         var now = Date.now();
         var timeInMilliseconds = now - startTime;
@@ -545,13 +557,27 @@ define( function( require ) {
         }
       }
 
-      logGain();
+      if ( TamboQueryParameters.gainLoggingEnabled ) {
+
+        // kick off the logging
+        console.log( '------- start of gain logging -----' );
+        logGain();
+      }
     },
 
-    // TODO: temp for debug
+    /**
+     * log the value of the master gain as it changes
+     * @param {number} duration - in seconds
+     */
     logMasterGain: function( duration ) {
       this.logGain( this.masterGainNode, duration );
     },
+
+
+    /**
+     * log the value of the reverb gain as it changes
+     * @param {number} duration - in seconds
+     */
     logReverbGain: function( duration ) {
       this.logGain( this.reverbGainNode, duration );
     }

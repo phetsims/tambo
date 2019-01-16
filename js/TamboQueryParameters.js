@@ -21,7 +21,11 @@ define( function( require ) {
     // Output some data when analyzing sound loops for where the start and end points should be.  This was very useful
     // when adding the auto-identification of the loop start and end points, and may be useful again if more refinement
     // of this process is needed in the future.  See https://github.com/phetsims/tambo/issues/35.
-    logLoopAnalysisInfo: { type: 'flag' }
+    logLoopAnalysisInfo: { type: 'flag' },
+
+    // Enable logging of gain parameters, which can change over time and whose behavior seems to vary between browsers.
+    // This can be useful for debugging.  This is used in conjunction with soundManager.logGain.
+    gainLoggingEnabled: { type: 'flag' }
   } );
 
   tambo.register( 'TamboQueryParameters', TamboQueryParameters );
