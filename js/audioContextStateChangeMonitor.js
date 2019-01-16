@@ -46,7 +46,7 @@ define( function( require ) {
 
         // hook up a function that will fire all listeners on a state change
         audioContext.onstatechange = function() {
-          listenerArray.forEach( function( listener ) {
+          _.clone( listenerArray ).forEach( function( listener ) {
             listener( audioContext.state );
           } );
         };
