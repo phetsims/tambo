@@ -252,6 +252,8 @@ define( function( require ) {
      */
     stop: function( time ) {
 
+      time = time === undefined ? this.audioContext.currentTime : time;
+
       // only stop if playing, otherwise ignore
       if ( this.isPlaying && this.noiseSource ) {
         this.noiseSource.stop( time );

@@ -109,7 +109,7 @@ define( function( require ) {
     // @private {boolean} - flag that tracks whether the sound is being played
     this._isPlaying = false;
 
-    // @private {number} - time at which a deferred play request occurred.
+    // @private {number} - time at which a deferred play request occurred, in milliseconds since epoch
     this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
 
     // @private {function} - callback for when audio context isn't in 'running' state, see usage
@@ -118,7 +118,7 @@ define( function( require ) {
       if ( state === 'running' ) {
 
         // initiate deferred play if this is a loop or if it hasn't been too long since the request was made
-        if ( this.loop || Date.now() - this.timeOfDeferredPlayRequest < MAX_PLAY_DEFER_TIME ) {
+        if ( this.loop || ( Date.now() - this.timeOfDeferredPlayRequest ) / 1000 < MAX_PLAY_DEFER_TIME ) {
 
           // Play the sound, but with a little bit of delay.  The delay was found to be needed because otherwise on
           // some browsers the sound would be somewhat muted, probably due to some sort of fade in of the audio levels
@@ -153,8 +153,6 @@ define( function( require ) {
      * @public
      */
     play: function( delay ) {
-
-      // window.phet.jb.soundManager.logMasterGain( 0.1 );
 
       if ( this.audioContext.state === 'running' ) {
 
@@ -215,8 +213,8 @@ define( function( require ) {
       }
       else {
 
-        // This method was called when the audio context was not yet running, so add a listener to play if and when the
-        // audio context state changes.  This will start any loops, and will also play a one-shot sound if the time
+        // The play method was called when the audio context was not yet running, so add a listener to play if and when
+        // the audio context state changes.  This will start any loops, and will also play a one-shot sound if the time
         // between the request and the state change isn't too great.  Note that this does NOT queue up more than one
         // individual sound to be played.
         this.timeOfDeferredPlayRequest = Date.now();

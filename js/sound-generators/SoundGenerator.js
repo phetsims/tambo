@@ -17,7 +17,7 @@ define( function( require ) {
   const tambo = require( 'TAMBO/tambo' );
 
   // constants
-  const DEFAULT_TC = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
+  const DEFAULT_RAMP_TIME = soundConstants.LINEAR_GAIN_CHANGE_TIME;
 
   /**
    * @param {Object} options
@@ -179,16 +179,15 @@ define( function( require ) {
     /**
      * set output level of the sound generator
      * @param {number} outputLevel - generally between 0 and 1, but doesn't have to be
-     * @param {number} [timeConstant] - time constant for outputLevel change, see AudioParam.setTargetAtTime
+     * @param {number} [rampTime] - time, in seconds, to ramp to new value
      */
-    setOutputLevel: function( outputLevel, timeConstant ) {
-      timeConstant = ( timeConstant === undefined ) ? DEFAULT_TC : timeConstant;
+    setOutputLevel: function( outputLevel, rampTime ) {
+      rampTime = ( rampTime === undefined ) ? DEFAULT_RAMP_TIME : rampTime;
       this._outputLevel = outputLevel;
       if ( this.fullyEnabledProperty.value ) {
-        this.masterGainNode.gain.setTargetAtTime(
+        this.masterGainNode.gain.linearRampToValueAtTime(
           outputLevel,
-          this.audioContext.currentTime,
-          timeConstant
+          this.audioContext.currentTime + rampTime
         );
       }
     },
