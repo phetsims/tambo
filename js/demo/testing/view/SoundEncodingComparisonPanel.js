@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   const ComboBox = require( 'SUN/ComboBox' );
+  const ComboBoxItem = require( 'SUN/ComboBoxItem' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HStrut = require( 'SCENERY/nodes/HStrut' );
   const inherit = require( 'PHET_CORE/inherit' );
@@ -207,7 +208,7 @@ define( function( require ) {
     sounds.forEach( ( soundDescriptor, index ) => {
 
       // create the combo box item for selecting this sound
-      soundSelectorComboBoxItems.push( ComboBox.createItem(
+      soundSelectorComboBoxItems.push( new ComboBoxItem(
         new Text( soundDescriptor.soundName, { font: COMBO_BOX_FONT } ),
         index
       ) );
@@ -216,7 +217,7 @@ define( function( require ) {
       const encodingSelectorComboBoxItems = [];
       soundDescriptor.encodings.forEach( ( encoding, encodingIndex ) => {
         const stereoMonoString = encoding.stereo ? '(stereo)' : '(mono)';
-        encodingSelectorComboBoxItems.push( ComboBox.createItem(
+        encodingSelectorComboBoxItems.push( new ComboBoxItem(
           new Text( encoding.format + ' ' + encoding.rate + ' ' + stereoMonoString, { font: COMBO_BOX_FONT } ),
           encodingIndex
         ) );

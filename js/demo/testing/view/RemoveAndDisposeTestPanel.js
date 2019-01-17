@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   const ComboBox = require( 'SUN/ComboBox' );
+  const ComboBoxItem = require( 'SUN/ComboBoxItem' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const inherit = require( 'PHET_CORE/inherit' );
   const Node = require( 'SCENERY/nodes/Node' );
@@ -85,7 +86,7 @@ define( function( require ) {
     // create the combo box for selecting the type of sound generator to add
     const comboBoxItems = [];
     _.keys( SOUND_GENERATOR_INFO ).forEach( soundGeneratorKey => {
-      comboBoxItems.push( ComboBox.createItem(
+      comboBoxItems.push( new ComboBoxItem(
         new Text( SOUND_GENERATOR_INFO[ soundGeneratorKey ].comboBoxName, { font: COMBO_BOX_FONT } ),
         soundGeneratorKey
       ) );
