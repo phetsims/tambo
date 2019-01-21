@@ -257,7 +257,6 @@ define( function( require ) {
       // only stop if playing, otherwise ignore
       if ( this.isPlaying && this.noiseSource ) {
         this.noiseSource.stop( time );
-        this.noiseSource.disconnect( this.noiseSourceConnectionPoint );
         this.noiseSource = null;
       }
       this.isPlaying = false;
