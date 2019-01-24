@@ -29,6 +29,7 @@ define( function( require ) {
   const tambo = require( 'TAMBO/tambo' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TextPushButton = require( 'SUN/buttons/TextPushButton' );
+  const Util = require( 'DOT/Util' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
@@ -64,7 +65,7 @@ define( function( require ) {
       left: 115,
       top: 115,
       constrainValue: function( value ) {
-        return Math.round( value );
+        return Util.roundSymmetric( value );
       },
       keyboardStep: 1
     } );
