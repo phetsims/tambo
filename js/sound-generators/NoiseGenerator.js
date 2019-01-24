@@ -98,7 +98,7 @@ define( function( require ) {
     // fill in the sample buffer based on the noise type
     if ( options.noiseType === 'white' ) {
       for ( let i = 0; i < noiseBufferSize; i++ ) {
-        data[ i ] = Math.random() * 2 - 1;
+        data[ i ] = phet.joist.random.nextDouble() * 2 - 1;
       }
     }
     else if ( options.noiseType === 'pink' ) {
@@ -110,7 +110,7 @@ define( function( require ) {
       let b5 = 0;
       let b6 = 0;
       for ( let i = 0; i < noiseBufferSize; i++ ) {
-        var white = Math.random() * 2 - 1;
+        var white = phet.joist.random.nextDouble() * 2 - 1;
         b0 = 0.99886 * b0 + white * 0.0555179;
         b1 = 0.99332 * b1 + white * 0.0750759;
         b2 = 0.96900 * b2 + white * 0.1538520;
@@ -125,7 +125,7 @@ define( function( require ) {
     else if ( options.noiseType === 'brown' ) {
       var lastOut = 0;
       for ( let i = 0; i < noiseBufferSize; i++ ) {
-        white = Math.random() * 2 - 1;
+        white = phet.joist.random.nextDouble() * 2 - 1;
         data[ i ] = ( lastOut + ( 0.02 * white ) ) / 1.02;
         lastOut = data[ i ];
         data[ i ] *= 3.5; // adjust to 0dB, empirically determined, will be approximate due to randomness of data
