@@ -11,13 +11,13 @@ define( function( require ) {
   // modules
   const ABSwitch = require( 'SUN/ABSwitch' );
   const BallNode = require( 'TAMBO/demo/sim-like-components/view/BallNode' );
-  const Bounds2 = require( 'DOT/Bounds2' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Dimension2 = require( 'DOT/Dimension2' );
   const inherit = require( 'PHET_CORE/inherit' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
   const NumberSpinner = require( 'SUN/NumberSpinner' );
   const Path = require( 'SCENERY/nodes/Path' );
+  const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const PitchedPopGenerator = require( 'TAMBO/sound-generators/PitchedPopGenerator' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
@@ -31,6 +31,7 @@ define( function( require ) {
 
   // constants
   const MAX_BALLS = 8;
+  const FONT = new PhetFont( 16 );
 
   /**
    * @constructor
@@ -40,9 +41,7 @@ define( function( require ) {
 
     const self = this;
 
-    ScreenView.call( this, {
-      layoutBounds: new Bounds2( 0, 0, 768, 504 )
-    } );
+    ScreenView.call( this );
 
     // set up the model view transform
     const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
@@ -96,10 +95,10 @@ define( function( require ) {
     const ballsMovingSwitch = new ABSwitch(
       model.ballsMovingProperty,
       false,
-      new Text( 'Paused' ),
+      new Text( 'Paused', { font: FONT } ),
       true,
-      new Text( 'Running' ),
-      { switchSize: new Dimension2( 40, 20 ), centerX: boxNode.centerX, top: boxNode.bottom + 20 }
+      new Text( 'Running', { font: FONT } ),
+      { switchSize: new Dimension2( 60, 30 ), centerX: boxNode.centerX, top: boxNode.bottom + 25 }
     );
     this.addChild( ballsMovingSwitch );
 
@@ -108,6 +107,7 @@ define( function( require ) {
       model.numberOfBallsProperty,
       new Property( new Range( 0, MAX_BALLS ) ),
       {
+        font: new PhetFont( 35 ),
         arrowsPosition: 'bothBottom',
         backgroundFill: '#cccccc',
         backgroundStroke: 'green',
@@ -118,14 +118,14 @@ define( function( require ) {
         valueAlign: 'center',
         xMargin: 20,
         centerX: ballsMovingSwitch.centerX,
-        top: ballsMovingSwitch.bottom + 20
+        top: ballsMovingSwitch.bottom + 25
       } );
     this.addChild( ballCountSpinner );
 
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
-      right: this.layoutBounds.maxX - 20,
-      bottom: this.layoutBounds.maxY - 20,
+      right: this.layoutBounds.maxX - 25,
+      bottom: this.layoutBounds.maxY - 25,
       listener: function() {
         model.reset();
       }

@@ -25,8 +25,8 @@ define( function( require ) {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
-  const BUTTON_FONT = new PhetFont( 14 );
-  const COMBO_BOX_FONT = new PhetFont( 12 );
+  const BUTTON_FONT = new PhetFont( 19 );
+  const COMBO_BOX_FONT = new PhetFont( 16 );
   const PLAY_COLOR = '#66FF8C';
   const STOP_COLOR = '#FF4D4D';
 
@@ -191,13 +191,13 @@ define( function( require ) {
 
     options = _.extend( {
       fill: '#CFE2CF',
-      xMargin: 10,
-      yMargin: 10
+      xMargin: 14,
+      yMargin: 14
     }, options );
 
     // informational text that goes at the top of the panel
     const infoText = new Text( 'Select sound and encoding, use button to play', {
-      font: new PhetFont( { size: 14, weight: 'bold' } )
+      font: new PhetFont( { size: 19, weight: 'bold' } )
     } );
 
     // create the combo box for selecting the sound to be played
@@ -237,13 +237,13 @@ define( function( require ) {
     // create a node that will contain the combo boxes for selecting the sound and the encoding
     const soundAndEncodingSelectorNode = new HBox( {
       children: [
-        new Text( 'Sound:', { font: new PhetFont( 14 ) } ),
+        new Text( 'Sound:', { font: new PhetFont( 19 ) } ),
         soundSelectorComboBox,
         new HStrut( 5 ),
-        new Text( 'Encoding:', { font: new PhetFont( 14 ) } ),
+        new Text( 'Encoding:', { font: new PhetFont( 19 ) } ),
         encodingSelectorParentNode
       ],
-      spacing: 4
+      spacing: 6
     } );
 
     // create and register sound generators for each sound and encoding
@@ -345,7 +345,7 @@ define( function( require ) {
     // add everything to a vertical box
     const rootVBox = new VBox( {
       children: [ infoText, soundAndEncodingSelectorNode, soundControlButton ],
-      spacing: 14
+      spacing: 19
     } );
 
     Panel.call( this, rootVBox, options );

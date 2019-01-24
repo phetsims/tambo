@@ -11,7 +11,6 @@ define( function( require ) {
   // modules
   const ABSwitch = require( 'SUN/ABSwitch' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const Bounds2 = require( 'DOT/Bounds2' );
   const Checkbox = require( 'SUN/Checkbox' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Dimension2 = require( 'DOT/Dimension2' );
@@ -35,8 +34,11 @@ define( function( require ) {
 
   // constants
   const SLIDER_MAX = 5;
+  const SLIDER_TRACK_SIZE = new Dimension2( 150, 5 );
+  const SLIDER_THUMB_SIZE = new Dimension2( 22, 45 );
   const NUM_TICK_MARKS = SLIDER_MAX + 1;
-  const CHECK_BOX_SIZE = 12;
+  const CHECK_BOX_SIZE = 16;
+  const FONT = new PhetFont( 16 );
   const NUM_BINS_FOR_CONTINUOUS_SLIDER = 8;
   const BIN_SIZE_FOR_CONTINUOUS_SLIDER = SLIDER_MAX / NUM_BINS_FOR_CONTINUOUS_SLIDER;
 
@@ -54,14 +56,14 @@ define( function( require ) {
    * @constructor
    */
   function UIComponentsScreenView( model ) {
-    ScreenView.call( this, {
-      layoutBounds: new Bounds2( 0, 0, 768, 504 )
-    } );
+    ScreenView.call( this );
 
     // add a slider with snap-to-ticks behavior
     const discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
-      left: 100,
-      top: 100,
+      trackSize: SLIDER_TRACK_SIZE,
+      thumbSize: SLIDER_THUMB_SIZE,
+      left: 115,
+      top: 115,
       constrainValue: function( value ) {
         return Math.round( value );
       },
@@ -101,10 +103,10 @@ define( function( require ) {
     const abSwitch = new ABSwitch(
       model.loopOnProperty,
       false,
-      new Text( 'Off' ),
+      new Text( 'Off', { font: FONT } ),
       true,
-      new Text( 'On' ),
-      { switchSize: new Dimension2( 40, 20 ), centerX: discreteSlider.centerX, top: discreteSlider.bottom + 40 }
+      new Text( 'On', { font: FONT } ),
+      { switchSize: new Dimension2( 60, 30 ), centerX: discreteSlider.centerX, top: discreteSlider.bottom + 50 }
     );
     this.addChild( abSwitch );
 
@@ -124,10 +126,12 @@ define( function( require ) {
 
     // Add a slider with continuous behavior.  We create our own thumb node so that we can observe it.
     const continuousSlider = new HSlider( model.continuousValueProperty, new Range( 0, SLIDER_MAX ), {
+      trackSize: SLIDER_TRACK_SIZE,
+      thumbSize: SLIDER_THUMB_SIZE,
       thumbFillEnabled: '#880000',
       thumbFillHighlighted: '#aa0000',
       left: discreteSlider.left,
-      top: abSwitch.bottom + 40
+      top: abSwitch.bottom + 50
     } );
     this.addChild( continuousSlider );
 
@@ -171,6 +175,7 @@ define( function( require ) {
 
     // add the button that will cause a lightening bolt to be shown
     const fireLightningButton = new TextPushButton( 'Lightning', {
+      font: FONT,
       listener: function() {
         model.lightningBoltVisibleProperty.set( true );
       }
@@ -195,7 +200,7 @@ define( function( require ) {
 
     // a check box that controls whether the thunderSoundClip sound is locally enabled
     const thunderEnabledCheckbox = new Checkbox(
-      new Text( 'Enabled' ),
+      new Text( 'Enabled', { font: FONT } ),
       thunderSoundClip.locallyEnabledProperty,
       { boxWidth: CHECK_BOX_SIZE }
     );
@@ -204,7 +209,7 @@ define( function( require ) {
     const initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundClip.initiateWhenDisabled );
     initiateThunderWhenDisabledProperty.linkAttribute( thunderSoundClip, 'initiateWhenDisabled' );
     const initiateThunderWhenDisabledCheckbox = new Checkbox(
-      new Text( 'Initiate when disabled' ),
+      new Text( 'Initiate when disabled', { font: FONT } ),
       initiateThunderWhenDisabledProperty,
       { boxWidth: CHECK_BOX_SIZE }
     );
@@ -212,27 +217,29 @@ define( function( require ) {
     // create a set of controls for the thunderSoundClip
     const thunderControl = new VBox( {
       children: [
-        new Text( 'Thunder: ', { font: new PhetFont( 12 ) } ),
+        new Text( 'Thunder: ', { font: new PhetFont( 16 ) } ),
         thunderEnabledCheckbox,
         initiateThunderWhenDisabledCheckbox
       ],
       align: 'left',
-      spacing: 5
+      spacing: 8
     } );
 
     // add a panel where thunderSoundClip and lightning are controlled
     const lightningControlPanel = new Panel(
-      new HBox( { children: [ fireLightningButton, thunderControl ], spacing: 10, align: 'top' } ),
+      new HBox( { children: [ fireLightningButton, thunderControl ], spacing: 14, align: 'top' } ),
       {
+        xMargin: 10,
+        yMargin: 8,
         fill: '#FCFBE3',
-        left: discreteSlider.right + 20,
+        left: discreteSlider.right + 25,
         top: discreteSlider.top
       }
     );
 
     // add the lightning bolt that will appear when commanded by the user (and make him/her feel like Zeus)
     const lightningBoltNode = new Image( lightningImage, {
-      left: lightningControlPanel.left + 20,
+      left: lightningControlPanel.left + 25,
       top: lightningControlPanel.bottom - 3,
       maxHeight: 50
     } );
@@ -246,8 +253,8 @@ define( function( require ) {
 
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
-      right: this.layoutBounds.maxX - 20,
-      bottom: this.layoutBounds.maxY - 20,
+      right: this.layoutBounds.maxX - 25,
+      bottom: this.layoutBounds.maxY - 25,
       listener: function() {
         model.reset();
         thunderSoundClip.locallyEnabledProperty.reset();
