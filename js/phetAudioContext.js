@@ -39,10 +39,12 @@ define( function( require ) {
       return {
         connect: silentStub,
         frequency: {
+          linearRampToValueAtTime: silentStub,
           setTargetAtTime: silentStub,
           setValueAtTime: silentStub
         },
         Q: {
+          linearRampToValueAtTime: silentStub,
           setValueAtTime: silentStub
         }
       };
@@ -96,6 +98,7 @@ define( function( require ) {
         disconnect: silentStub,
         gain: {
           cancelScheduledValues: silentStub,
+          linearRampToValueAtTime: silentStub,
           setTargetAtTime: silentStub,
           setValueAtTime: silentStub
         }
