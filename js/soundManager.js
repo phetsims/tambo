@@ -585,8 +585,5 @@ define( function( require ) {
 
   tambo.register( 'soundManager', soundManager );
 
-  window.phet.jb = {};
-  window.phet.jb.soundManager = soundManager;
-
   return soundManager;
 } );
