@@ -23,7 +23,6 @@ define( function( require ) {
   const platform = require( 'PHET_CORE/platform' );
   const Property = require( 'AXON/Property' );
   const soundConstants = require( 'TAMBO/soundConstants' );
-  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   const SoundLevelEnum = require( 'TAMBO/SoundLevelEnum' );
   const tambo = require( 'TAMBO/tambo' );
@@ -31,7 +30,6 @@ define( function( require ) {
   const Tandem = require( 'TANDEM/Tandem' );
 
   // sounds
-  const emptySound = require( 'sound!TAMBO/empty.mp3' );
   const reverbImpulseResponse = require( 'sound!TAMBO/empty_apartment_bedroom_06_resampled.mp3' );
 
   // constants
@@ -194,7 +192,7 @@ define( function( require ) {
 
       // Below is some platform-specific code for handling some issues related to audio.  It may be possible to remove
       // some or all of this as Web Audio becomes more consistently implemented.
-      if ( phetAudioContext ) {
+      if ( !phetAudioContext.isStubbed ) {
 
         if ( !platform.mobileSafari ) {
 
@@ -220,16 +218,19 @@ define( function( require ) {
         }
         else {
 
-          // There is a different issue for audio on iOS+Safari: On this platform, we must play an audio file from a
-          // thread initiated by a user event such as touchstart before any sounds will play.  This requires the user to
-          // touch the screen before audio can be played. See
-          // http://stackoverflow.com/questions/12517000/no-sound-on-ios-6-web-audio-api
-          const emptySoundClip = new SoundClip( emptySound, { connectImmediately: true } );
-          const playSilence = function() {
-            emptySoundClip.play();
-            window.removeEventListener( 'touchstart', playSilence, false );
+          // use a different event for iOS
+          const resumeAudioContext = function() {
+
+            if ( phetAudioContext.state !== 'running' ) {
+
+              // the audio context isn't running, so tell it to resume
+              phetAudioContext.resume().catch( err => {
+                assert && assert( false, 'error when trying to resume audio context, err = ' + err );
+              } );
+            }
+            window.removeEventListener( 'touchstart', resumeAudioContext, false );
           };
-          window.addEventListener( 'touchstart', playSilence, false );
+          window.addEventListener( 'touchstart', resumeAudioContext, false );
         }
       }
 
