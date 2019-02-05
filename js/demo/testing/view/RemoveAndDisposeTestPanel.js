@@ -25,7 +25,7 @@ define( function( require ) {
   const tambo = require( 'TAMBO/tambo' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  const timer = require( 'PHET_CORE/timer' );
+  const timer = require( 'AXON/timer' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
