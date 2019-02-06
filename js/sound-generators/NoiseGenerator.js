@@ -27,7 +27,7 @@ define( function( require ) {
 
     // set up options using default values, see base class for additional options
     options = _.extend( {
-      noiseType: 'red', // valid values are 'white', 'pink', and 'brown'
+      noiseType: 'pink', // valid values are 'white', 'pink', and 'brown'
 
       // {number} - low pass value in Hz, null (or any falsey value including zero) means no low pass filter is added
       lowPassCutoffFrequency: null,
