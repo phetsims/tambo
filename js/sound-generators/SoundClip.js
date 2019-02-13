@@ -158,13 +158,14 @@ define( function( require ) {
         // default delay is zero
         delay = typeof delay === 'undefined' ? 0 : delay;
 
-        if ( ( this.loop && this.fullyEnabled && !this.isPlaying ) ||
+        if ( ( this.loop && this.fullyEnabled && !this._isPlaying ) ||
              ( !this.loop && ( this.fullyEnabled || this.initiateWhenDisabled ) ) ) {
 
           // make sure the decoding of the audio data is complete before trying to play the sound
           if ( this.audioBuffer ) {
 
             // make sure the local gain is set to unity value
+            this.localGainNode.gain.cancelScheduledValues( now );
             this.localGainNode.gain.setValueAtTime( 1, now );
 
             // create an audio buffer source node and connect it to the previously decoded audio data
