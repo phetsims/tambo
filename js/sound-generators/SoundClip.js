@@ -158,7 +158,8 @@ define( function( require ) {
         // default delay is zero
         delay = typeof delay === 'undefined' ? 0 : delay;
 
-        if ( this.fullyEnabled || this.loop || this.initiateWhenDisabled ) {
+        if ( ( this.loop && this.fullyEnabled && !this.isPlaying ) ||
+             ( !this.loop && ( this.fullyEnabled || this.initiateWhenDisabled ) ) ) {
 
           // make sure the decoding of the audio data is complete before trying to play the sound
           if ( this.audioBuffer ) {
