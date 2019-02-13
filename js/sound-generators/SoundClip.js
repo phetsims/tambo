@@ -41,15 +41,12 @@ define( function( require ) {
       // This option controls whether sound generation can be initiated when this sound generator is disabled.  This
       // is useful for a one-shot sound that is long, so if the user does something that generally would cause a sound,
       // but sound is disabled, but they immediately re-enable it, the "tail" of this sound would be heard.  This option
-      // should never be set for false for loops, since loops always allow initiation when disabled.
-      initiateWhenDisabled: true
+      // is ignored for loops, since loops always allow initiation when disabled.
+      initiateWhenDisabled: false
 
     }, options );
 
     SoundGenerator.call( this, options );
-
-    // options checking
-    assert && assert( !options.loop || options.initiateWhenDisabled, 'initiateWhenDisabled must be true for loops' );
 
     // @private {boolean} - flag that controls whether this is a one-shot or loop sound
     this.loop = options.loop;
@@ -161,7 +158,7 @@ define( function( require ) {
         // default delay is zero
         delay = typeof delay === 'undefined' ? 0 : delay;
 
-        if ( this.initiateWhenDisabled || this.fullyEnabled ) {
+        if ( this.fullyEnabled || this.loop || this.initiateWhenDisabled ) {
 
           // make sure the decoding of the audio data is complete before trying to play the sound
           if ( this.audioBuffer ) {
