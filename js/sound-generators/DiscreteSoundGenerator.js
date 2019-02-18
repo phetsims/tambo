@@ -5,6 +5,7 @@ define( function( require ) {
 
   // modules
   const inherit = require( 'PHET_CORE/inherit' );
+  var Range = require( 'DOT/Range' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const tambo = require( 'TAMBO/tambo' );
 
@@ -19,24 +20,27 @@ define( function( require ) {
    */
   function DiscreteSoundGenerator( valueProperty, valueRange, options ) {
 
-    var self = this;
+    const self = this;
 
     options = _.extend( {
 
-      // the sound to play as the value changes
+      // {SoundClipe} - the sound to play as the value changes
       sound: defaultSound,
 
-      // initial level at which sounds will be produced, can be changed later
+      // {number} - initial level at which sounds will be produced, can be changed later
       initialOutputLevel: 1,
 
-      // number of bins, odd numbers are generally better if slider starts in middle of range
+      // {nummber} - number of bins, odd numbers are generally better if slider starts in middle of range
       numBins: 7,
 
-      // the range over which the playback rate is varied, 1 is normal speed, 2 is double speed, et cetera
-      playbackRateRange: { min: 1, max: 1 }, // default is no change to the sound
+      // {Range} - the range over which the playback rate is varied, 1 is normal speed, 2 is double speed, et cetera
+      playbackRateRange: new Range( 1, 1 ), // default is no change to the sound
 
-      // a property that, when true, will cause sound to be played on any change of the value property
-      alwaysPlayOnChangesProperty: null
+      // {BooleanProperty} - when true will cause sound to be played on any change of the value property
+      alwaysPlayOnChangesProperty: null,
+
+      // {boolean} - a fl
+      outOfRangeValuesOK: false
 
     }, options );
 
@@ -44,7 +48,7 @@ define( function( require ) {
     SoundClip.call( this, options.sound, options );
 
     // create the object that will place the continuous values into bins
-    const binSelector = new BinSelector( valueRange, options.numBins );
+    const binSelector = new BinSelector( valueRange, options.numBins, options.outOfRangeValuesOK );
 
     // function for playing sound when the appropriate conditions are met
     function playSoundOnChanges( newValue, oldValue ) {
@@ -78,9 +82,10 @@ define( function( require ) {
    * inner type for placing values in a bin
    * @param {Range} valueRange
    * @param {number} numBins
+   * @param {boolean} tolerateOutOfRangeValues
    * @constructor
    */
-  function BinSelector( valueRange, numBins ) {
+  function BinSelector( valueRange, numBins, tolerateOutOfRangeValues ) {
 
     // parameter checking
     assert && assert( numBins > 0 );
@@ -90,6 +95,7 @@ define( function( require ) {
     this.maxValue = valueRange.max;
     this.span = valueRange.getLength();
     this.numBins = numBins;
+    this.tolerateOutOfRangeValues = tolerateOutOfRangeValues;
   }
 
   inherit( Object, BinSelector, {
@@ -100,8 +106,10 @@ define( function( require ) {
      * @returns {number}
      */
     selectBin: function( value ) {
-      assert && assert( value <= this.maxValue );
-      assert && assert( value >= this.minValue );
+      if ( !this.tolerateOutOfRangeValues ) {
+        assert && assert( value <= this.maxValue );
+        assert && assert( value >= this.minValue );
+      }
 
       // this calculation means that values on the boundaries will go into the higher bin except for the max value
       const proportion = ( value - this.minValue ) / ( this.span );
