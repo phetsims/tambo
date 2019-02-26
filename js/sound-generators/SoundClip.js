@@ -42,14 +42,22 @@ define( function( require ) {
       // is useful for a one-shot sound that is long, so if the user does something that generally would cause a sound,
       // but sound is disabled, but they immediately re-enable it, the "tail" of this sound would be heard.  This option
       // is ignored for loops, since loops always allow initiation when disabled.
-      initiateWhenDisabled: false
+      initiateWhenDisabled: false,
 
+      // This option controls whether changes to the playback rate via the API causes changes to the sounds that are
+      // already in the process of playing or only those that are played in the future.  This is relevant for both loops
+      // and one-shot sounds, since a one-shot sound (especially one that is fairly long) could be in the process of
+      // playing when a playback rate change occurs.
+      rateChangesAffectPlayingSounds: true
     }, options );
 
     SoundGenerator.call( this, options );
 
     // @private {boolean} - flag that controls whether this is a one-shot or loop sound
     this.loop = options.loop;
+
+    // @private {boolean} - flag that controls whether changes to the playback rate affects in-progess sounds
+    this.rateChangesAffectPlayingSounds = options.rateChangesAffectPlayingSounds;
 
     // @public {boolean} - see description in options above
     this.initiateWhenDisabled = options.initiateWhenDisabled;
@@ -274,9 +282,11 @@ define( function( require ) {
      */
     setPlaybackRate: function( playbackRate, timeConstant ) {
       timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TC : timeConstant;
-      this.activeBufferSources.forEach( bufferSource => {
-        bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
-      } );
+      if ( this.rateChangesAffectPlayingSounds ) {
+        this.activeBufferSources.forEach( bufferSource => {
+          bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
+        } );
+      }
       this.playbackRate = playbackRate;
     },
 
