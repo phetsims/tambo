@@ -24,7 +24,7 @@ define( function( require ) {
 
     options = _.extend( {
 
-      // {SoundClipe} - the sound to play as the value changes
+      // sound - the sound to play as the value changes
       sound: defaultSound,
 
       // {number} - initial level at which sounds will be produced, can be changed later
@@ -39,13 +39,16 @@ define( function( require ) {
       // {BooleanProperty} - when true will cause sound to be played on any change of the value property
       alwaysPlayOnChangesProperty: null,
 
-      // {boolean} - a fl
+      // {boolean} - a flag that indicates whether out of range values should be ignored
       outOfRangeValuesOK: false
 
     }, options );
 
     // invoke superconstructor
-    SoundClip.call( this, options.sound, options );
+    SoundClip.call( this, options.sound, {
+      initialOutputLevel: options.initialOutputLevel,
+      rateChangesAffectPlayingSounds: false
+    } );
 
     // create the object that will place the continuous values into bins
     const binSelector = new BinSelector( valueRange, options.numBins, options.outOfRangeValuesOK );
