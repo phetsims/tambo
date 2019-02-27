@@ -34,25 +34,25 @@ define( function( require ) {
     this.velocityProperty = new Property( initialVelocity );
 
     // @public (read-only) {Emitter} - emitter that fires when the ball bounces, indicates surface on which it bounced
-    this.bounceEmitter = new Emitter();
+    this.bounceEmitter = new Emitter( { validationEnabled: false } );
 
     // monitor the velocity Property and fire the emitter when a bounce occurs
     this.velocityProperty.lazyLink( ( newVelocity, oldVelocity ) => {
 
       // check for wall bounce
       if ( oldVelocity.x > 0 && newVelocity.x < 0 ) {
-        this.bounceEmitter.emit1( 'right-wall' );
+        this.bounceEmitter.emit( 'right-wall' );
       }
       else if ( oldVelocity.x < 0 && newVelocity.x > 0 ) {
-        this.bounceEmitter.emit1( 'left-wall' );
+        this.bounceEmitter.emit( 'left-wall' );
       }
 
       // check for floor and ceiling bounce
       if ( oldVelocity.y > 0 && newVelocity.y < 0 ) {
-        this.bounceEmitter.emit1( 'ceiling' );
+        this.bounceEmitter.emit( 'ceiling' );
       }
       else if ( oldVelocity.y < 0 && newVelocity.y > 0 ) {
-        this.bounceEmitter.emit1( 'floor' );
+        this.bounceEmitter.emit( 'floor' );
       }
     } );
   }
