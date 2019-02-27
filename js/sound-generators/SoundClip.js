@@ -283,7 +283,6 @@ define( function( require ) {
     setPlaybackRate: function( playbackRate, timeConstant ) {
       timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TC : timeConstant;
       if ( this.rateChangesAffectPlayingSounds ) {
-        debugger;
         this.activeBufferSources.forEach( bufferSource => {
           bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
         } );
