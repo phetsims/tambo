@@ -16,6 +16,7 @@ define( function( require ) {
   'use strict';
 
   // modules
+  const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Display = require( 'SCENERY/display/Display' );
   const DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
@@ -177,40 +178,44 @@ define( function( require ) {
         }
       );
 
-      if ( platform.mobileSafari ) {
-
-        // When running on iOS, we sometimes see the audio context get set to the "interrupted" state if the user
-        // switches to a different tab and plays sound.  This code resumes the audio context if it is in that state
-        // when the tab containing the sim becomes visible again, see
-        // https://github.com/phetsims/resistance-in-a-wire/issues/199.
-        simVisibleProperty.lazyLink( function( simVisible ) {
-          if ( simVisible && phetAudioContext.state === 'interrupted' ) {
-            phetAudioContext.resume();
-          }
-        } );
-      }
-
-      // Below is some platform-specific code for handling some issues related to audio.  It may be possible to remove
-      // some or all of this as Web Audio becomes more consistently implemented.
+      // Handle the audio context state, both when changes occur and when it is initially muted.  As of this writing
+      // (Feb 2019), there are a lot of differences between how the audio context state behaves on different platforms,
+      // so there is some platform-specific code here.  As the behavior of the audio context becomes more consistent
+      // across browsers, it may be possible to simplify this.
       if ( !phetAudioContext.isStubbed ) {
 
         if ( !platform.mobileSafari ) {
 
           // In some browsers the audio context is not allowed to run before the user interacts with the simulation.
-          // The motivation for this is to prevent auto-play of sound (mostly videos) when users land on websites, but
+          // The motivation for this is to prevent auto-play of sound (mostly videos) when users load web pages, but
           // it ends up preventing PhET sims from being able to play sound.  To deal with this, we add a listener that
           // can check the state of the audio context and "resume" it if necessary when the user starts interacting with
           // the sim.  See https://github.com/phetsims/vibe/issues/32 and https://github.com/phetsims/tambo/issues/9 for
           // more information.
           if ( phetAudioContext.state !== 'running' ) {
 
+            phet.log && phet.log(
+              'The audio context was not running when soundManager.init was called, adding listener that will resume it'
+            );
+
             Display.userGestureEmitter.addListener( function resumeAudioContext() {
               if ( phetAudioContext.state !== 'running' ) {
 
+                phet.log && phet.log(
+                  'attempting to resume audio context after user gesture, current state = ' + phetAudioContext.state
+                );
+
                 // the audio context isn't running, so tell it to resume
-                phetAudioContext.resume().catch( err => {
-                  assert && assert( false, 'error when trying to resume audio context, err = ' + err );
-                } );
+                phetAudioContext.resume()
+                  .then( () => {
+                    phet.log && phet.log( 'resume of audio context completed, state = ' + phetAudioContext.state );
+                  } )
+                  .catch( err => {
+                    assert && assert( false, 'error when trying to resume audio context, err = ' + err );
+                  } );
+              }
+              else {
+                phet.log && phet.log( 'audio context was automatically resumed, removing resumption listener' );
               }
               Display.userGestureEmitter.removeListener( resumeAudioContext ); // only do this once
             } );
@@ -225,13 +230,50 @@ define( function( require ) {
 
               // the audio context isn't running, so tell it to resume
               phetAudioContext.resume().catch( err => {
-                assert && assert( false, 'error when trying to resume audio context, err = ' + err );
+                assert && alert( 'error when trying to resume audio context, err = ' + err );
               } );
             }
             window.removeEventListener( 'touchstart', resumeAudioContext, false );
           };
           window.addEventListener( 'touchstart', resumeAudioContext, false );
         }
+
+        // During testing, several use cases were found where the audio context state changes to something other than
+        // the "running" state while the sim is in use (generally either "suspended" or "interrupted", depending on the
+        // browser).  The following code is intended to handle this situation by trying to resume it right away.  GitHub
+        // issues with details about why this is necessary are:
+        // - https://github.com/phetsims/tambo/issues/58
+        // - https://github.com/phetsims/tambo/issues/59
+        // - https://github.com/phetsims/fractions-common/issues/82
+        // - https://github.com/phetsims/friction/issues/173
+        // - https://github.com/phetsims/resistance-in-a-wire/issues/190
+        let previousAudioContextState = phetAudioContext.state;
+        audioContextStateChangeMonitor.addStateChangeListener( phetAudioContext, state => {
+          phet.log && phet.log(
+            'audio context state changed, old state = ' +
+            previousAudioContextState +
+            ', new state = ' +
+            state +
+            ', audio context time = ' +
+            phetAudioContext.currentTime
+          );
+
+          if ( previousAudioContextState === 'running' && state !== 'running' ) {
+
+            phet.log && phet.log( 'attempting to resume audio context in ' + state + ' state' );
+
+            // the audio context isn't running, so tell it to resume
+            phetAudioContext.resume()
+              .then( () => {
+                phet.log && phet.log( 'resume of audio context completed, state = ' + phetAudioContext.state );
+              } )
+              .catch( err => {
+                assert && assert( false, 'error when trying to resume audio context, err = ' + err );
+              } );
+          }
+
+          previousAudioContextState = state;
+        } );
       }
 
       initialized = true;
