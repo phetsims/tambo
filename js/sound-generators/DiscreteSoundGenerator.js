@@ -45,10 +45,7 @@ define( function( require ) {
     }, options );
 
     // invoke superconstructor
-    SoundClip.call( this, options.sound, {
-      initialOutputLevel: options.initialOutputLevel,
-      rateChangesAffectPlayingSounds: false
-    } );
+    SoundClip.call( this, options.sound, options );
 
     // create the object that will place the continuous values into bins
     const binSelector = new BinSelector( valueRange, options.numBins, options.outOfRangeValuesOK );
