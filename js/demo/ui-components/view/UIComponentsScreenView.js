@@ -131,7 +131,7 @@ define( function( require ) {
     const continuousSlider = new HSlider( model.continuousValueProperty, new Range( 0, SLIDER_MAX ), {
       trackSize: SLIDER_TRACK_SIZE,
       thumbSize: SLIDER_THUMB_SIZE,
-      thumbFillEnabled: '#880000',
+      thumbFill: '#880000',
       thumbFillHighlighted: '#aa0000',
       left: discreteSlider.left,
       top: abSwitch.bottom + 50,
