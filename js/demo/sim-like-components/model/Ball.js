@@ -34,7 +34,7 @@ define( function( require ) {
     this.velocityProperty = new Property( initialVelocity );
 
     // @public (read-only) {Emitter} - emitter that fires when the ball bounces, indicates surface on which it bounced
-    this.bounceEmitter = new Emitter( { validationEnabled: false } );
+    this.bounceEmitter = new Emitter( { validators: [ { valueType: 'string' } ] } );
 
     // monitor the velocity Property and fire the emitter when a bounce occurs
     this.velocityProperty.lazyLink( ( newVelocity, oldVelocity ) => {
