@@ -30,7 +30,7 @@ define( function( require ) {
       // {number} - initial level at which sounds will be produced, can be changed later
       initialOutputLevel: 1,
 
-      // {nummber} - number of bins, odd numbers are generally better if slider starts in middle of range
+      // {number} - number of bins, odd numbers are generally better if slider starts in middle of range
       numBins: 7,
 
       // {Range} - the range over which the playback rate is varied, 1 is normal speed, 2 is double speed, et cetera
@@ -38,6 +38,12 @@ define( function( require ) {
 
       // {BooleanProperty} - when true will cause sound to be played on any change of the value property
       alwaysPlayOnChangesProperty: null,
+
+      // {boolean} - if true, the sound will be played when the value reaches the min
+      playSoundAtMin: true,
+
+      // {boolean} - if true, the sound will be played when the value reaches the max
+      playSoundAtMax: true,
 
       // {boolean} - a flag that indicates whether out of range values should be ignored
       outOfRangeValuesOK: false
@@ -57,8 +63,8 @@ define( function( require ) {
       const oldBin = binSelector.selectBin( oldValue );
 
       if ( options.alwaysPlayOnChangesProperty && options.alwaysPlayOnChangesProperty.value ||
-           newValue === valueRange.min ||
-           newValue === valueRange.max ||
+           ( newValue === valueRange.min && options.playSoundAtMin ) ||
+           ( newValue === valueRange.max && options.playSoundAtMax ) ||
            newBin !== oldBin ) {
 
         const normalizedValue = ( newValue - valueRange.min ) / valueRange.getLength();
