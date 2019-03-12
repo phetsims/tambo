@@ -18,6 +18,7 @@ define( function( require ) {
 
   // constants
   const DEFAULT_RAMP_TIME = soundConstants.LINEAR_GAIN_CHANGE_TIME;
+  const DEFAULT_TC = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
   /**
    * @param {Object} options
@@ -194,6 +195,26 @@ define( function( require ) {
     set outputLevel( outputLevel ) {
       this.setOutputLevel( outputLevel );
     },
+
+    /**
+     * This is an alternative to "setOutputLevel" that works better when the client needs to make frequent, smooth
+     * adjustments to the output level, rather than making a fairly rapid level transition.
+     * @param {number} targetOutputLevel - generally between 0 and 1, but doesn't have to be
+     * @param {number} [timeConstant] - the time constant to use for the change, see the online Web Audio docs for
+     * details
+     */
+    adjustOutputLevel: function( targetOutputLevel, timeConstant ) {
+      timeConstant = ( timeConstant === undefined ) ? DEFAULT_TC : timeConstant;
+      if ( this.fullyEnabledProperty.value ) {
+        this.masterGainNode.gain.setTargetAtTime(
+          targetOutputLevel,
+          this.audioContext.currentTime,
+          timeConstant
+        );
+      }
+      this._outputLevel = targetOutputLevel;
+    },
+
 
     /**
      * Get the current output level setting.  Note that if the sound generator is disabled, this could return a non-zero
