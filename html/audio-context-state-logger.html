@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<!-- standalone HTML page for testing audio context state transitions -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Audio Context State Logger</title>
+</head>
+<body>
+<h1>Audio Context State Logger</h1>
+
+<button type="button" id="playButton">Play Sound</button>
+
+<p id="stateChangeLog"><b>Audio Context State Change Log:</b></p>
+
+<script>
+
+  // create an audio context
+  var audioContext = new ( window.AudioContext || window.webkitAudioContext )();
+
+  // create and connect a gain node
+  var gainNode = audioContext.createGain();
+  gainNode.gain.setValueAtTime( 0, audioContext.currentTime );
+  gainNode.connect( audioContext.destination );
+
+  // create, initialize, and start an oscillator
+  var oscillator = audioContext.createOscillator();
+  oscillator.type = 'triangle';
+  oscillator.frequency.setValueAtTime( 440, audioContext.currentTime );
+  oscillator.connect( gainNode );
+  oscillator.start();
+
+  // track the previous state of the audio context
+  var previousAudioContextState = audioContext.state;
+
+  // get a reference to the text area where the state change log will appear
+  var stateChangeLog = document.getElementById( "stateChangeLog" );
+
+  // log the initial state
+  stateChangeLog.innerHTML = stateChangeLog.innerHTML + '<br>state at startup = ' + audioContext.state;
+
+  // listen for audio context state changes and log them as they occur
+  audioContext.onstatechange = function() {
+    var message = 'audio context state changed from ' + previousAudioContextState + ' to ' + audioContext.state;
+
+    // log the state change to the console and the screen
+    console.log( message );
+    stateChangeLog.innerHTML = stateChangeLog.innerHTML + '<br>' + message;
+    previousAudioContextState = audioContext.state;
+  };
+
+  // hook up a listener to the button that will play a sound
+  var button = document.getElementById( "playButton" );
+  button.addEventListener( "click", function() {
+
+    if ( audioContext.state !== 'running' ) {
+      audioContext.resume();
+    }
+    gainNode.gain.cancelScheduledValues( audioContext.currentTime );
+    gainNode.gain.setValueAtTime( 0, audioContext.currentTime );
+    gainNode.gain.linearRampToValueAtTime( 1, audioContext.currentTime + 0.1 );
+    gainNode.gain.linearRampToValueAtTime( 0, audioContext.currentTime + 1 );
+  } );
+</script>
+</body>
+</html>
