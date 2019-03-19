@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<!-- Copyright 2019, University of Colorado Boulder -->
+
+<!-- standalone HTML page for testing how changing the gain in a Web Audio gain node behaves -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gain Change Behavior Tester</title>
+</head>
+<body>
+<h1>Gain Change Behavior Tester</h1>
+
+<h2>Sound Generator</h2>
+
+<input type="checkbox" id="soundGeneratorEnabled">Sound source<br>
+
+<h2>setValueAtTime</h2>
+
+<button type="button" id="setValueAtTimeTo1">setValueAtTime -> 1</button>
+<br>
+<button type="button" id="setValueAtTimeTo0">setValueAtTime -> 0</button>
+<br>
+<input type="text" id="setValueAtTimeValue" size="10">
+<button type="button" id="setValueAtTimeButton">Call setValueAtTime</button>
+
+<h2>setTargetAtTime</h2>
+
+<h2>linearRampToValueAtTime</h2>
+
+<h2>Monitors</h2>
+
+<p id="stateChangeLog"><b>Audio Context State Change Log:</b></p>
+
+<script>
+
+  // create an audio context
+  var audioContext = new ( window.AudioContext || window.webkitAudioContext )();
+
+  // create and connect a gain node
+  var gainNode = audioContext.createGain();
+  gainNode.gain.setValueAtTime( 1, audioContext.currentTime );
+  gainNode.connect( audioContext.destination );
+
+  // the sound source will be created, started, and stopped based on the user's actions
+  var oscillator = null;
+
+  // function to start the sound source
+  function startSoundSource() {
+
+    // make sure this method isn't called when it shouldn't be
+    if ( oscillator ) {
+      throw new Error( 'oscillator is set' );
+    }
+
+    // create the oscillator, hook it up, and start it
+    oscillator = audioContext.createOscillator();
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime( 220, audioContext.currentTime );
+    oscillator.connect( gainNode );
+    oscillator.start();
+  }
+
+  function stopSoundSource() {
+    if ( oscillator === null ) {
+      throw new Error( 'oscillator is not running' );
+    }
+    oscillator.stop();
+    oscillator = null;
+  }
+
+  // turn the sound source on and off as the user checks and unchecks the box
+  var soundGeneratorEnabledCheckbox = document.getElementById( 'soundGeneratorEnabled' );
+  soundGeneratorEnabledCheckbox.checked = false;
+  soundGeneratorEnabledCheckbox.onclick = function() {
+    if ( soundGeneratorEnabledCheckbox.checked ) {
+      startSoundSource();
+    }
+    else {
+      stopSoundSource();
+    }
+  };
+
+  // hook up listeners that will use setValueAtTime to set the gain value
+
+  var setValueAtTimeTo1Button = document.getElementById( 'setValueAtTimeTo1' );
+  setValueAtTimeTo1Button.addEventListener( 'click', function() {
+    gainNode.gain.setValueAtTime( 1, audioContext.currentTime );
+    console.log( 'using setValueAtTime to set gain to 1' );
+  } );
+
+  var setValueAtTimeTo0Button = document.getElementById( 'setValueAtTimeTo0' );
+  setValueAtTimeTo0Button.addEventListener( 'click', function() {
+    gainNode.gain.setValueAtTime( 0, audioContext.currentTime );
+    console.log( 'using setValueAtTime to set gain to 0' );
+  } );
+
+  var setValueAtTimeValueTextBox = document.getElementById( 'setValueAtTimeValue' );
+  setValueAtTimeValueTextBox.value = '1.0'; // set initial value
+  var setValueAtTimeButton = document.getElementById( 'setValueAtTimeButton' );
+  setValueAtTimeButton.addEventListener( 'click', function() {
+    var value = parseFloat( setValueAtTimeValueTextBox.value );
+    gainNode.gain.setValueAtTime( value, audioContext.currentTime );
+    console.log( 'calling setValueAtTime with value = ' + value + ' and current time' );
+  } );
+
+
+</script>
+</body>
+</html>
