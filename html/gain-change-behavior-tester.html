@@ -40,9 +40,21 @@
 
 <h2>linearRampToValueAtTime</h2>
 
+<label for="linearRampToValueAtTimeRampTime">Ramp Time: </label>
+<input type="text" id="linearRampToValueAtTimeRampTime" size="10">
+<br>
+<button type="button" id="linearRampToValueAtTimeTo1">linearRampToValueAtTime -> 1</button>
+<br>
+<button type="button" id="linearRampToValueAtTimeTo0">linearRampToValueAtTime -> 0</button>
+<br>
+<label for="linearRampToValueAtTimeTarget">Value: </label>
+<input type="text" id="linearRampToValueAtTimeTarget" size="10">
+<button type="button" id="linearRampToValueAtTimeButton">Call linearRampToValueAtTime</button>
+
 <h2>Monitors</h2>
 
-<p id="stateChangeLog"><b>Audio Context State Change Log:</b></p>
+<p><b>Gain Log:</b></p>
+<p id="gainLog"></p>
 
 <script>
 
@@ -86,12 +98,35 @@
   soundGeneratorEnabledCheckbox.checked = false;
   soundGeneratorEnabledCheckbox.onclick = function() {
     if ( soundGeneratorEnabledCheckbox.checked ) {
+      // logGainOverTime( 1 );
       startSoundSource();
     }
     else {
       stopSoundSource();
     }
   };
+
+  // The following function sets up a repeating call to monitor the gain level.  Only one such monitoring process is
+  // allowed to be going at a time.
+  var gainLog = document.getElementById( 'gainLog' );
+  var gainLoggingStartTime = Number.NEGATIVE_INFINITY;
+  var gainLoggingEndTime = Number.NEGATIVE_INFINITY;
+
+  function logGain() {
+    var now = Date.now();
+    var message = ( now - gainLoggingStartTime ) + ' ms : gainNode.gain.value = ' + gainNode.gain.value;
+    gainLog.innerHTML = gainLog.innerHTML + '<br>' + message;
+    if ( now < gainLoggingEndTime ) {
+      window.requestAnimationFrame( logGain );
+    }
+  }
+
+  function logGainOverTime( duration ) {
+    gainLog.innerHTML = '';
+    gainLoggingStartTime = Date.now();
+    gainLoggingEndTime = gainLoggingStartTime + duration * 1000;
+    window.requestAnimationFrame( logGain );
+  }
 
   //-------------------------------------------------------------------------------------------------------------------
   // hook up listeners that will use setValueAtTime to set the gain value
@@ -129,6 +164,7 @@
     var timeConstant = parseFloat( setTargetAtTimeTCTexttBox.value );
     gainNode.gain.setTargetAtTime( target, audioContext.currentTime, timeConstant );
     console.log( 'calling setTargetAtTime with target = ' + target + ' and TC = ' + timeConstant );
+    logGainOverTime( 1 );
   }
 
   var setTargetAtTimeTo1Button = document.getElementById( 'setTargetAtTimeTo1' );
@@ -147,6 +183,37 @@
   setTargetAtTimeButton.addEventListener( 'click', function() {
     var value = parseFloat( setTargetAtTimeTargetTextBox.value );
     setTargetNow( value );
+  } );
+
+  //-------------------------------------------------------------------------------------------------------------------
+  // hook up listeners that will use linearRampToValueAtTime to set the gain value
+  //-------------------------------------------------------------------------------------------------------------------
+
+  var linearRampToValueAtTimeRampTimeTextBox = document.getElementById( 'linearRampToValueAtTimeRampTime' );
+  linearRampToValueAtTimeRampTimeTextBox.value = '0.5'; // set initial value
+
+  function linearRampToValue( value ) {
+    var rampTime = parseFloat( linearRampToValueAtTimeRampTimeTextBox.value );
+    gainNode.gain.linearRampToValueAtTime( value, audioContext.currentTime + rampTime );
+    console.log( 'calling linearRampToValueAtTime with value = ' + value + ' and ramp time = ' + rampTime );
+  }
+
+  var linearRampToValueAtTimeTo1Button = document.getElementById( 'linearRampToValueAtTimeTo1' );
+  linearRampToValueAtTimeTo1Button.addEventListener( 'click', function() {
+    linearRampToValue( 1 );
+  } );
+
+  var linearRampToValueAtTimeTo0Button = document.getElementById( 'linearRampToValueAtTimeTo0' );
+  linearRampToValueAtTimeTo0Button.addEventListener( 'click', function() {
+    linearRampToValue( 0 );
+  } );
+
+  var linearRampToValueAtTimeTargetTextBox = document.getElementById( 'linearRampToValueAtTimeTarget' );
+  linearRampToValueAtTimeTargetTextBox.value = '1.0'; // set initial value
+  var linearRampToValueAtTimeButton = document.getElementById( 'linearRampToValueAtTimeButton' );
+  linearRampToValueAtTimeButton.addEventListener( 'click', function() {
+    var value = parseFloat( linearRampToValueAtTimeTargetTextBox.value );
+    linearRampToValue( value );
   } );
 
 </script>
