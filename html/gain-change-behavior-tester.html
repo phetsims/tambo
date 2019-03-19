@@ -21,10 +21,22 @@
 <br>
 <button type="button" id="setValueAtTimeTo0">setValueAtTime -> 0</button>
 <br>
+<label for="setValueAtTimeValue">Value: </label>
 <input type="text" id="setValueAtTimeValue" size="10">
 <button type="button" id="setValueAtTimeButton">Call setValueAtTime</button>
 
 <h2>setTargetAtTime</h2>
+
+<label for="setTargetAtTimeTC">Time Constant: </label>
+<input type="text" id="setTargetAtTimeTC" size="10">
+<br>
+<button type="button" id="setTargetAtTimeTo1">setTargetAtTime -> 1</button>
+<br>
+<button type="button" id="setTargetAtTimeTo0">setTargetAtTime -> 0</button>
+<br>
+<label for="setTargetAtTimeTarget">Target: </label>
+<input type="text" id="setTargetAtTimeTarget" size="10">
+<button type="button" id="setTargetAtTimeButton">Call setTargetAtTime</button>
 
 <h2>linearRampToValueAtTime</h2>
 
@@ -81,7 +93,9 @@
     }
   };
 
+  //-------------------------------------------------------------------------------------------------------------------
   // hook up listeners that will use setValueAtTime to set the gain value
+  //-------------------------------------------------------------------------------------------------------------------
 
   var setValueAtTimeTo1Button = document.getElementById( 'setValueAtTimeTo1' );
   setValueAtTimeTo1Button.addEventListener( 'click', function() {
@@ -104,6 +118,36 @@
     console.log( 'calling setValueAtTime with value = ' + value + ' and current time' );
   } );
 
+  //-------------------------------------------------------------------------------------------------------------------
+  // hook up listeners that will use setTargetAtTime to set the gain value
+  //-------------------------------------------------------------------------------------------------------------------
+
+  var setTargetAtTimeTCTexttBox = document.getElementById( 'setTargetAtTimeTC' );
+  setTargetAtTimeTCTexttBox.value = '0.05'; // set initial value
+
+  function setTargetNow( target ) {
+    var timeConstant = parseFloat( setTargetAtTimeTCTexttBox.value );
+    gainNode.gain.setTargetAtTime( target, audioContext.currentTime, timeConstant );
+    console.log( 'calling setTargetAtTime with target = ' + target + ' and TC = ' + timeConstant );
+  }
+
+  var setTargetAtTimeTo1Button = document.getElementById( 'setTargetAtTimeTo1' );
+  setTargetAtTimeTo1Button.addEventListener( 'click', function() {
+    setTargetNow( 1 );
+  } );
+
+  var setTargetAtTimeTo0Button = document.getElementById( 'setTargetAtTimeTo0' );
+  setTargetAtTimeTo0Button.addEventListener( 'click', function() {
+    setTargetNow( 0 );
+  } );
+
+  var setTargetAtTimeTargetTextBox = document.getElementById( 'setTargetAtTimeTarget' );
+  setTargetAtTimeTargetTextBox.value = '1.0'; // set initial value
+  var setTargetAtTimeButton = document.getElementById( 'setTargetAtTimeButton' );
+  setTargetAtTimeButton.addEventListener( 'click', function() {
+    var value = parseFloat( setTargetAtTimeTargetTextBox.value );
+    setTargetNow( value );
+  } );
 
 </script>
 </body>
