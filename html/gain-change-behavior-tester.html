@@ -98,7 +98,7 @@
   soundGeneratorEnabledCheckbox.checked = false;
   soundGeneratorEnabledCheckbox.onclick = function() {
     if ( soundGeneratorEnabledCheckbox.checked ) {
-      // logGainOverTime( 1 );
+      logGainOverTime( 1 );
       startSoundSource();
     }
     else {
@@ -132,15 +132,20 @@
   // hook up listeners that will use setValueAtTime to set the gain value
   //-------------------------------------------------------------------------------------------------------------------
 
+  function setGainValueNow( value ) {
+    logGainOverTime( 1 );
+    gainNode.gain.setValueAtTime( value, audioContext.currentTime );
+  }
+
   var setValueAtTimeTo1Button = document.getElementById( 'setValueAtTimeTo1' );
   setValueAtTimeTo1Button.addEventListener( 'click', function() {
-    gainNode.gain.setValueAtTime( 1, audioContext.currentTime );
+    setGainValueNow( 1 );
     console.log( 'using setValueAtTime to set gain to 1' );
   } );
 
   var setValueAtTimeTo0Button = document.getElementById( 'setValueAtTimeTo0' );
   setValueAtTimeTo0Button.addEventListener( 'click', function() {
-    gainNode.gain.setValueAtTime( 0, audioContext.currentTime );
+    setGainValueNow( 0 );
     console.log( 'using setValueAtTime to set gain to 0' );
   } );
 
@@ -149,7 +154,7 @@
   var setValueAtTimeButton = document.getElementById( 'setValueAtTimeButton' );
   setValueAtTimeButton.addEventListener( 'click', function() {
     var value = parseFloat( setValueAtTimeValueTextBox.value );
-    gainNode.gain.setValueAtTime( value, audioContext.currentTime );
+    setGainValueNow( value );
     console.log( 'calling setValueAtTime with value = ' + value + ' and current time' );
   } );
 
@@ -162,9 +167,9 @@
 
   function setTargetNow( target ) {
     var timeConstant = parseFloat( setTargetAtTimeTCTexttBox.value );
+    logGainOverTime( 1 );
     gainNode.gain.setTargetAtTime( target, audioContext.currentTime, timeConstant );
     console.log( 'calling setTargetAtTime with target = ' + target + ' and TC = ' + timeConstant );
-    logGainOverTime( 1 );
   }
 
   var setTargetAtTimeTo1Button = document.getElementById( 'setTargetAtTimeTo1' );
@@ -194,6 +199,7 @@
 
   function linearRampToValue( value ) {
     var rampTime = parseFloat( linearRampToValueAtTimeRampTimeTextBox.value );
+    logGainOverTime( 1 );
     gainNode.gain.linearRampToValueAtTime( value, audioContext.currentTime + rampTime );
     console.log( 'calling linearRampToValueAtTime with value = ' + value + ' and ramp time = ' + rampTime );
   }
