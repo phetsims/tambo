@@ -1,0 +1,203 @@
+/*
+Copyright 2019, University of Colorado Boulder
+
+@author Chris Klusendorf (PhET Interactive Simulations)
+*/
+
+:root {
+
+  /* text spacing */
+  --title-margin: 20px;
+  --header-margin: 2px;
+  --header-padding: 5px;
+  --sub-header-margin: 6px;
+
+  /* panel sizing and spacing */
+  --title-bar-height: 86px;
+  --control-panel-margin: 20px;
+  --control-panel-padding: 6px;
+
+  --log-min-height: 39px;
+  --log-padding: 10px;
+  --log-panel-width: 680px;
+  --upper-log-panel-height: 161px;
+  --gain-log-time-width: 70px;
+
+  /* colors */
+  --body-background: #efefef;
+  --white: white;
+  --black: #353535;
+  --gray: #cecece;
+  --code-background: #f4edf7;
+  --button-background: #eaf9f9;
+  --focus: #ffb2be;
+  --selection: #ffd6dc;
+
+  /* fonts */
+  --code-font: 'Source Code Pro', monospace;
+  --text-font: 'Roboto Mono', monospace;
+
+  --sub-header-font-size: 18px;
+  --label-font-size: 14;
+  --log-font-size: 16px;
+}
+
+html,
+body {
+  margin: 0;
+  overflow: hidden;
+  background: var(--body-background);
+  width: 100%;
+  height: 100%;
+  font-family: var(--text-font);
+}
+
+/* divs ids */
+
+#title-bar {
+  height: var(--title-bar-height);
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+#page {
+  height: calc(100% - var(--title-bar-height));
+  width: 100%;
+  position: fixed;
+  top: var(--title-bar-height);
+  left: 0;
+  overflow: scroll;
+}
+
+#log-panel {
+  width: var(--log-panel-width);
+  height: calc(100% - 2 * var(--control-panel-margin) - 2 * var(--control-panel-padding));
+}
+
+#log-panel-upper {
+  height: var(--upper-log-panel-height);
+}
+
+#action-log {
+  height: calc(var(--log-min-height) - 2 * var(--log-padding));
+  overflow-x: scroll;
+  white-space: nowrap;
+}
+
+#gain-log {
+  margin-top: calc(var(--sub-header-margin) + 2px);
+  height: calc(100% - var(--upper-log-panel-height) - 2 * var(--log-padding) - 3 * var(--sub-header-margin));
+  overflow: scroll;
+}
+
+#gain-log-time {
+  width: var(--gain-log-time-width);
+  text-align: right;
+}
+
+#gain-log-gain {
+  width: calc(100% - var(--gain-log-time-width) - var(--control-panel-padding));
+  padding-left: var(--control-panel-padding);
+}
+
+/* div classes */
+
+.page-panel {
+  height: 100%;
+  display: inline-block;
+  vertical-align: top;
+  float: left;
+}
+
+.control-panel {
+  background-color: var(--white);
+  border: 2px solid var(--black);
+  border-radius: 6px;
+  margin: 0 0 var(--control-panel-margin) var(--control-panel-margin);
+  padding: var(--control-panel-padding);
+}
+
+.log-output {
+  margin: var(--sub-header-margin);
+  width: calc(100% - (2 * var(--sub-header-margin) + 2 * var(--log-padding)));
+  min-height: calc(var(--log-min-height) - 2 * var(--log-padding));
+  padding: var(--log-padding);
+  font-size: var(--log-font-size)
+}
+
+.input {
+  font-size: var(--label-font-size);
+  padding: 8px 4px 4px 4px;
+}
+
+/* text classes */
+
+h1.title {
+  font-family: var(--text-font);
+  color: var(--black);
+  margin: var(--title-margin) var(--title-margin) 0 var(--title-margin);
+}
+
+h2.header {
+  color: var(--black);
+  margin: var(--header-margin);
+  padding: var(--header-padding);
+  text-align: center;
+}
+
+h4.sub-header {
+  margin: 12px var(--sub-header-margin) var(--sub-header-margin) var(--sub-header-margin);
+  font-size: var(--sub-header-font-size);
+}
+
+.code {
+  font-family: var(--code-font);
+  background: var(--code-background);
+  border-radius: 4px;
+  border: 1px solid var(--gray);
+}
+
+/* input */
+
+button {
+  padding: 2px 4px;
+  border: 2px solid var(--gray);
+  border-radius: 4px;
+  font-family: var(--code-font);
+  font-size: var(--label-font-size);
+  color: var(--black);
+  background: var(--button-background);
+  cursor: pointer;
+}
+
+button:focus {
+  outline: none;
+  border-color: var(--focus);
+}
+
+input[ type=text ] {
+  border: 2px solid var(--gray);
+  border-radius: 3px;
+  font-size: var(--label-font-size);
+  width: 40px;
+  padding: 2px 4px;
+}
+
+input:focus {
+  outline: none;
+  border-color: var(--focus);
+}
+
+::selection {
+  background: var(--selection)
+}
+
+/* remove ugly scroll bars (thanks Microsoft) */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
