@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<!-- Copyright 2019, University of Colorado Boulder -->
+
+<!-- standalone HTML page for testing periodic calls to Web Audio linearRampToValueAtTime -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Linear Ramp Tester</title>
+</head>
+<body>
+<h1>Linear Ramp Tester</h1>
+
+<button type="button" id="startStopButton">Start</button>
+
+<p id="log">stopped</p>
+
+<script>
+
+  // create an audio context
+  const audioContext = new ( window.AudioContext || window.webkitAudioContext )();
+
+  // create and connect a gain node
+  const gainNode = audioContext.createGain();
+  gainNode.gain.setValueAtTime( 0, audioContext.currentTime );
+  gainNode.connect( audioContext.destination );
+
+  // vars for sound creation and control
+  let oscillator;
+  let playing = false;
+  let lastChange = 'down';
+  let timerInterval;
+
+  // get a reference to the text area where the logging will occur
+  var logArea = document.getElementById( 'log' );
+
+  // function to log a message
+  function logMessage( message ) {
+    logArea.innerHTML = message;
+    console.log( message );
+  }
+
+  // function to trigger a linear ramp change to the gain node
+  function changeGainUsingLinearRamp() {
+    console.log( 'lastChange = ' + lastChange );
+    if ( lastChange === 'up' ) {
+
+      // ramp the gain down
+      gainNode.gain.linearRampToValueAtTime( 0, audioContext.currentTime + 0.5 );
+      lastChange = 'down';
+      logMessage( 'ramping gain down' );
+    }
+    else {
+
+      // ramp the gain up
+      gainNode.gain.linearRampToValueAtTime( 1, audioContext.currentTime + 0.5 );
+      lastChange = 'up';
+      logMessage( 'ramping gain up' );
+    }
+  }
+
+  // function to create, initialize, and start an oscillator
+  function startOscillator() {
+
+    // create and hook up the oscillator
+    oscillator = audioContext.createOscillator();
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime( 220, audioContext.currentTime );
+    oscillator.connect( gainNode );
+    oscillator.start();
+
+    // start the initial gain ramp
+    changeGainUsingLinearRamp();
+
+    // hook up a periodic function that will change the gain
+    timerInterval = window.setInterval( changeGainUsingLinearRamp, 1000 );
+
+    // update state
+    playing = true;
+
+    logMessage( 'running' );
+  }
+
+  // function to disconnect and stop the oscillator
+  function stopOscillator() {
+
+    // stop the oscillator
+    oscillator.stop();
+    oscillator.disconnect( gainNode );
+
+    // unhook periodic gain changer
+    window.clearInterval( timerInterval );
+    timerInterval = null;
+
+    // update state
+    playing = false;
+
+    // set gain to zero
+    gainNode.gain.setValueAtTime( 0, audioContext.currentTime );
+    lastChange = 'down';
+
+    logMessage( 'stopped' );
+  }
+
+  // hook up a listener to the button that will play a sound
+  var button = document.getElementById( 'startStopButton' );
+  button.addEventListener( "click", function() {
+
+    if ( playing ) {
+      stopOscillator();
+      button.innerHTML = 'Start';
+    }
+    else {
+      startOscillator();
+      button.innerHTML = 'Stop';
+    }
+  } );
+</script>
+</body>
+</html>
