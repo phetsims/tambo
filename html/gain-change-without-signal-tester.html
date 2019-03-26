@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<!-- Copyright 2019, University of Colorado Boulder -->
+
+<!-- standalone HTML page for testing changes to Web Audio setTargetAtTime in absence of a signal -->
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gain change without signal present</title>
+</head>
+<body>
+<h1>Gain change without signal present</h1>
+
+<button type="button" id="go-button">Go</button>
+
+<p id="log"></p>
+
+<script>
+
+  // create an audio context
+  const audioContext = new ( window.AudioContext || window.webkitAudioContext )();
+
+  // vars for sound creation and control
+  let oscillator = null;
+  let gainNode = null;
+  const goButton = document.getElementById( 'go-button' );
+
+  // get a reference to the text area where the logging will occur
+  const logArea = document.getElementById( 'log' );
+
+  // function to log a message
+  function logMessage( message ) {
+    console.log( message );
+    logArea.innerHTML = logArea.innerHTML + '<br>' + message;
+  }
+
+  // function to clear the log area
+  function clearLog() {
+    logArea.innerHTML = '';
+  }
+
+  // function to create, initialize, and start an oscillator
+  function startOscillator() {
+
+    // start the oscillator
+    oscillator.start();
+
+    // re-enable the button
+    goButton.disabled = false;
+
+    // log
+    logMessage( 'started oscillator' );
+  }
+
+  // hook up a listener to the button that will play a sound
+  goButton.addEventListener( "click", function() {
+
+    clearLog();
+
+    // clear out gain node and oscillator from previous run of the test
+    if ( oscillator ) {
+      oscillator.stop();
+      oscillator.disconnect( gainNode );
+    }
+    if ( gainNode ) {
+      gainNode.disconnect( audioContext.destination );
+    }
+
+    // create and connect a gain node
+    gainNode = audioContext.createGain();
+    gainNode.gain.setValueAtTime( 0, audioContext.currentTime );
+    gainNode.connect( audioContext.destination );
+    logMessage( 'created and connected gain node' );
+
+    // create and hook up the oscillator, but don't start it yet
+    oscillator = audioContext.createOscillator();
+    oscillator.type = 'triangle';
+    oscillator.frequency.setValueAtTime( 220, audioContext.currentTime );
+    oscillator.connect( gainNode );
+    logMessage( 'created and connected oscillator (did not start)' );
+
+    // set the gain target
+    gainNode.gain.setTargetAtTime( 0, audioContext.currentTime, 0.015 );
+
+    // disable the button, will be re-enabled when timer fires
+    goButton.disabled = true;
+
+    // set a timeout to turn on the oscillator
+    window.setTimeout( startOscillator, 1000 );
+  } );
+</script>
+</body>
+</html>
