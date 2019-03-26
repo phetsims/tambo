@@ -164,7 +164,7 @@
     else {
       stopSoundSource();
     }
-    logGainOverTime( 1 );
+    logGainOverTime( 0.5 );
   };
 
   // The following function sets up a repeating call to monitor the gain level.  Only one such monitoring process is
@@ -201,7 +201,7 @@
 
   function setGainValueNow( value ) {
     logAction( 'calling setValueAtTime with value ' + value + ' using audioContext.currentTime' );
-    logGainOverTime( 1 );
+    logGainOverTime( 0.5 );
     gainNode.gain.setValueAtTime( value, audioContext.currentTime );
   }
 
@@ -233,7 +233,7 @@
   function setTargetNow( target ) {
     const timeConstant = parseFloat( setTargetAtTimeTCTextBox.value );
     logAction( 'calling setTargetAtTime with target = ' + target + ' and TC = ' + timeConstant );
-    logGainOverTime( 1 );
+    logGainOverTime( 0.5 );
     gainNode.gain.setTargetAtTime( target, audioContext.currentTime, timeConstant );
   }
 
@@ -264,7 +264,7 @@
 
   function linearRampToValue( value ) {
     const rampTime = parseFloat( linearRampToValueAtTimeRampTimeTextBox.value );
-    logGainOverTime( 1 );
+    logGainOverTime( 0.5 );
     gainNode.gain.linearRampToValueAtTime( value, audioContext.currentTime + rampTime );
     logAction( 'calling linearRampToValueAtTime with value = ' + value + ' and ramp time = ' + rampTime );
   }
