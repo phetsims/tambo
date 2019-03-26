@@ -50,6 +50,12 @@
 
     // log
     logMessage( 'started oscillator' );
+    logMessage( 'when oscillator started, gainNode.gain.value = ' + gainNode.gain.value );
+
+    // read and log the gain again after a delay
+    window.setTimeout( function() {
+      logMessage( 'after delay, gainNode.gain.value = ' + gainNode.gain.value );
+    }, 1000 );
   }
 
   // hook up a listener to the button that will play a sound
@@ -80,13 +86,16 @@
     logMessage( 'created and connected oscillator (did not start)' );
 
     // set the gain target
-    gainNode.gain.setTargetAtTime( 0, audioContext.currentTime, 0.015 );
+    gainNode.gain.setTargetAtTime( 0, audioContext.currentTime, 0.1 );
 
     // disable the button, will be re-enabled when timer fires
     goButton.disabled = true;
 
     // set a timeout to turn on the oscillator
-    window.setTimeout( startOscillator, 1000 );
+    const delay = 1000;
+    logMessage( 'gainNode.gain.value = ' + gainNode.gain.value );
+    logMessage( 'oscillator will start in ' + delay + ' ms' );
+    window.setTimeout( startOscillator, delay );
   } );
 </script>
 </body>
