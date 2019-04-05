@@ -10,7 +10,7 @@ define( function( require ) {
   'use strict';
 
   // modules
-  const GeneralNavigationHelpContent = require( 'SCENERY_PHET/keyboard/help/GeneralNavigationHelpContent' );
+  const GeneralKeyboardHelpSection = require( 'SCENERY_PHET/keyboard/help/GeneralKeyboardHelpSection' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const inherit = require( 'PHET_CORE/inherit' );
   const tambo = require( 'TAMBO/tambo' );
@@ -20,7 +20,7 @@ define( function( require ) {
    */
   function TamboKeyboardHelpContent() {
 
-    const generalNavigationHelpContent = new GeneralNavigationHelpContent();
+    const generalNavigationHelpContent = new GeneralKeyboardHelpSection();
 
     HBox.call( this, {
       children: [ generalNavigationHelpContent ],
