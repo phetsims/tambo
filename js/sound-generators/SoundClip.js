@@ -32,19 +32,19 @@ define( function( require ) {
 
     options = _.extend( {
 
-      // Should this sound be played repetitively, or just once (i.e. a one-shot sound)?
+      // {boolean} - controls whether this sound will wrap around and start over when done or just be played once
       loop: false,
 
-      // Should silence at the beginning and (in the case of loops) the end be removed?
+      // {boolean} - controls whether the silence at the beginning and (in the case of loops) the end is removed
       trimSilence: true,
 
-      // This option controls whether sound generation can be initiated when this sound generator is disabled.  This
-      // is useful for a one-shot sound that is long, so if the user does something that generally would cause a sound,
-      // but sound is disabled, but they immediately re-enable it, the "tail" of this sound would be heard.  This option
-      // is ignored for loops, since loops always allow initiation when disabled.
+      // {boolean} - controls whether sound generation can be initiated when this sound generator is disabled.  This is
+      // useful for a one-shot sound that is long, so if the user does something that generally would cause a sound, but
+      // sound is disabled, but they immediately re-enable it, the "tail" of this sound would be heard.  This option is
+      // ignored for loops, since loops always allow initiation when disabled.
       initiateWhenDisabled: false,
 
-      // This option controls whether changes to the playback rate via the API causes changes to the sounds that are
+      // {boolean} - controls whether changes to the playback rate via the API causes changes to the sounds that are
       // already in the process of playing or only those that are played in the future.  This is relevant for both loops
       // and one-shot sounds, since a one-shot sound (especially one that is fairly long) could be in the process of
       // playing when a playback rate change occurs.
@@ -56,7 +56,7 @@ define( function( require ) {
     // @private {boolean} - flag that controls whether this is a one-shot or loop sound
     this.loop = options.loop;
 
-    // @private {boolean} - flag that controls whether changes to the playback rate affects in-progess sounds
+    // @private {boolean} - flag that controls whether changes to the playback rate affects in-progress sounds
     this.rateChangesAffectPlayingSounds = options.rateChangesAffectPlayingSounds;
 
     // @public {boolean} - see description in options above
@@ -69,8 +69,8 @@ define( function( require ) {
     this.loadCompleteAction = null;
 
     // @private {number} - start and end points for the loop if this clip is used for looping
-    this.loopStart = 0;
-    this.loopEnd = null;
+    this.soundStart = 0;
+    this.soundEnd = null;
 
     // @private {AudioBufferSourceNode[]} - a list of active source buffer nodes, used so that this clip can be played
     // again before previous play finishes
@@ -89,9 +89,9 @@ define( function( require ) {
         this.audioBuffer = decodedAudioData;
 
         if ( options.trimSilence ) {
-          const loopBoundsInfo = SoundUtil.detectLoopBounds( decodedAudioData );
-          this.loopStart = loopBoundsInfo.loopStart;
-          this.loopEnd = loopBoundsInfo.loopEnd;
+          const loopBoundsInfo = SoundUtil.detectSoundBounds( decodedAudioData );
+          this.soundStart = loopBoundsInfo.soundStart;
+          this.soundEnd = loopBoundsInfo.soundEnd;
         }
 
         // perform the "load complete" actions, if any
@@ -180,9 +180,9 @@ define( function( require ) {
             const bufferSource = this.audioContext.createBufferSource();
             bufferSource.buffer = this.audioBuffer;
             bufferSource.loop = this.loop;
-            bufferSource.loopStart = this.loopStart;
-            if ( this.loopEnd ) {
-              bufferSource.loopEnd = this.loopEnd;
+            bufferSource.loopStart = this.soundStart;
+            if ( this.soundEnd ) {
+              bufferSource.loopEnd = this.soundEnd;
             }
 
             // connect this source node to the output
@@ -207,7 +207,7 @@ define( function( require ) {
 
             // set the playback rate and start playback
             bufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
-            bufferSource.start( now + delay );
+            bufferSource.start( now + delay, this.soundStart );
             this._isPlaying = true;
           }
           else {

@@ -10,10 +10,10 @@ define( function( require ) {
   const tambo = require( 'TAMBO/tambo' );
   const TamboQueryParameters = require( 'TAMBO/TamboQueryParameters' );
 
-  // This threshold is used for analyzing individual decoded sound samples in order to find where a loop that is
-  // intended to continuously generate sound should start and end.  Its value was determined through experimentation on
-  // a single loop (charges-in-body) at a number of different encodings.  It may need to be refined over time as we add
-  // new loops.  Or it may work perfectly forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
+  // This threshold is used for analyzing individual decoded sound samples in order to find where the actual sound
+  // values start and end.  Its value was determined through experimentation on a single loop (charges-in-body) at a
+  // number of different encodings.  It may need to be refined over time as we add new sounds.  Or it may work perfectly
+  // forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
   const AUDIO_DATA_THRESHOLD = 0.05;
 
   /**
@@ -22,16 +22,17 @@ define( function( require ) {
   const SoundUtil = {
 
     /**
-     * helper function that sets the start and end points for looping based on where the sound data starts and ends
-     * {AudioBuffer} soundClip
-     * @returns {Object} - an object with values for loopStart and loopEnd
+     * helper function that sets the start and end points for a decoded set of sound samples based on where the sound
+     * data first and last exceeds a certain threshold
+     * {AudioBuffer} audioBuffer
+     * @returns {Object} - an object with values for the time at which the sound starts and ends
      */
-    detectLoopBounds: function( audioBuffer ) {
-      logLoopAnalysisInfo( '------------- entered detectLoopBounds --------------------' );
+    detectSoundBounds: function( audioBuffer ) {
+      logAnalysisInfo( '------------- entered detectLoopBounds --------------------' );
 
       const soundDataLength = audioBuffer.length;
-      const loopStartIndexes = [];
-      const loopEndIndexes = [];
+      const soundStartIndexes = [];
+      const soundEndIndexes = [];
 
       // analyze each channel of the sound data
       for ( let channelNumber = 0; channelNumber < audioBuffer.numberOfChannels; channelNumber++ ) {
@@ -39,22 +40,22 @@ define( function( require ) {
         // initialize some variables that will be used to analyze the data
         const soundData = audioBuffer.getChannelData( channelNumber );
 
-        // find a good point for the loop to start
-        loopStartIndexes[ channelNumber ] = findSoundStartIndex(
+        // find where the sound first exceeds the threshold
+        soundStartIndexes[ channelNumber ] = findSoundStartIndex(
           soundData,
           soundDataLength,
           AUDIO_DATA_THRESHOLD
         );
 
-        // find a good point for the loop to end
-        loopEndIndexes[ channelNumber ] = findSoundEndIndex( soundData, soundDataLength, AUDIO_DATA_THRESHOLD );
+        // find the last point at which the sound exceeds the threshold, then go a little past
+        soundEndIndexes[ channelNumber ] = findSoundEndIndex( soundData, soundDataLength, AUDIO_DATA_THRESHOLD );
       }
 
       // return an object with values for where the loop should start and end
       const sampleRate = audioBuffer.sampleRate;
       return {
-        loopStart: _.min( loopStartIndexes ) / sampleRate,
-        loopEnd: _.max( loopEndIndexes ) / sampleRate
+        soundStart: _.min( soundStartIndexes ) / sampleRate,
+        soundEnd: _.max( soundEndIndexes ) / sampleRate
       };
     }
   };
@@ -78,7 +79,7 @@ define( function( require ) {
         found = true;
       }
     }
-    logLoopAnalysisInfo( 'startThresholdIndex = ' + startThresholdIndex );
+    logAnalysisInfo( 'startThresholdIndex = ' + startThresholdIndex );
 
     // work backwards from the first threshold found to find the first zero or zero crossing
     let soundStartIndex = 0;
@@ -90,7 +91,7 @@ define( function( require ) {
         found = true;
       }
     }
-    logLoopAnalysisInfo( 'soundStartIndex = ' + soundStartIndex );
+    logAnalysisInfo( 'soundStartIndex = ' + soundStartIndex );
 
     // detect and log the peaks in the pre-start data, useful for determining what the threshold value should be
     let maxPreStartPeak = 0;
@@ -99,8 +100,8 @@ define( function( require ) {
       maxPreStartPeak = Math.max( maxPreStartPeak, soundData[ dataIndex ] );
       minPreStartPeak = Math.min( minPreStartPeak, soundData[ dataIndex ] );
     }
-    logLoopAnalysisInfo( 'maxPreStartPeak = ' + maxPreStartPeak );
-    logLoopAnalysisInfo( 'minPreStartPeak = ' + minPreStartPeak );
+    logAnalysisInfo( 'maxPreStartPeak = ' + maxPreStartPeak );
+    logAnalysisInfo( 'minPreStartPeak = ' + minPreStartPeak );
 
     return soundStartIndex;
   }
@@ -126,7 +127,7 @@ define( function( require ) {
       }
     }
 
-    logLoopAnalysisInfo( 'endThresholdIndex = ' + endThresholdIndex );
+    logAnalysisInfo( 'endThresholdIndex = ' + endThresholdIndex );
 
     // work forward from the end threshold to find a zero or zero crossing that can work as the end of the loop
     let soundEndIndex = endThresholdIndex;
@@ -137,7 +138,7 @@ define( function( require ) {
         found = true;
       }
     }
-    logLoopAnalysisInfo( 'soundEndIndex = ' + soundEndIndex );
+    logAnalysisInfo( 'soundEndIndex = ' + soundEndIndex );
 
     // detect and log the peaks in the post-end data, useful for determining what the threshold value should be
     let maxPostEndPeak = 0;
@@ -146,8 +147,8 @@ define( function( require ) {
       maxPostEndPeak = Math.max( maxPostEndPeak, soundData[ dataIndex ] );
       minPostEndPeak = Math.min( minPostEndPeak, soundData[ dataIndex ] );
     }
-    logLoopAnalysisInfo( 'maxPostEndPeak = ' + maxPostEndPeak );
-    logLoopAnalysisInfo( 'minPostEndPeak = ' + minPostEndPeak );
+    logAnalysisInfo( 'maxPostEndPeak = ' + maxPostEndPeak );
+    logAnalysisInfo( 'minPostEndPeak = ' + minPostEndPeak );
 
     return soundEndIndex;
   }
@@ -156,7 +157,7 @@ define( function( require ) {
    * helper function for logging sound analysis information if said logging is enabled, useful for debugging
    * @param {String} string
    */
-  function logLoopAnalysisInfo( string ) {
+  function logAnalysisInfo( string ) {
     if ( TamboQueryParameters.logLoopAnalysisInfo ) {
       console.log( string );
     }
