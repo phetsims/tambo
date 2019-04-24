@@ -146,7 +146,7 @@ define( function( require ) {
 
     // Play a sound when certain threshold values are crossed by the continuous Property value, or when a change occurs
     // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
-    const marimbaSoundClip = new SoundClip( marimbaSound );
+    const marimbaSoundClip = new SoundClip( marimbaSound, { enableControlProperties: [ resetNotInProgressProperty ] } );
     soundManager.addSoundGenerator( marimbaSoundClip );
 
     // define a function that will play the marimba sound at a pitch value based on the continuous value Property

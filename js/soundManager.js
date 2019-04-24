@@ -37,50 +37,42 @@ define( function( require ) {
   const DEFAULT_REVERB_LEVEL = 0.02;
   const LINEAR_GAIN_CHANGE_TIME = soundConstants.LINEAR_GAIN_CHANGE_TIME; // in seconds
 
-  // flag that tracks whether sound generation of any kind is enabled
-  const soundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
-    tandem: Tandem.generalTandem.createTandem( 'soundEnabledProperty' )
-  } );
-
-  // flag that tracks whether enhanced sounds are enabled (basic sounds are always enabled if sound generation is)
-  const enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled );
-
-  // next ID number value, used to assign a unique ID to each sound generator that is registered
-  let nextIdNumber = 1;
-
-  // {Array.<{ soundGenerator:SoundGenerator, sonificationLevel:string, id:string }>} - array where the sound generators
-  // are stored along with information about how to manage them
-  let soundGeneratorInfoArray = [];
-
-  // output level for the master gain node when sonification is enabled, valid range is 0 to 1
-  let masterOutputLevel = 1;
-
-  // reverb level, needed because some browsers don't support reading of gain values, see methods for more info
-  let _reverbLevel = DEFAULT_REVERB_LEVEL;
-
-  // A map of class name to GainNode instances that control gains for that class name, will be filled in during init,
-  // see the usage of options.classes in the initialize function for more information.
-  const gainNodesForClasses = {};
-
-  // flag that tracks whether the sonification manager has been initialized
-  let initialized = false;
-
   /**
    * sonification manager object definition
    */
-  const soundManager = {
+  class SoundManager {
 
-    /**
-     * Property that corresponds to the enabled state setting
-     * @public (read-only)
-     */
-    enabledProperty: soundEnabledProperty,
+    constructor() {
 
-    /**
-     * Property that corresponds to the sonification level setting
-     * @public (read-only)
-     */
-    enhancedSoundEnabledProperty: enhancedSoundEnabledProperty,
+      // @public (read-only) {BooleanProperty} - global enabled state for sound generation
+      this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
+        tandem: Tandem.generalTandem.createTandem( 'soundEnabledProperty' )
+      } );
+
+      // @public (read-only) {BooleanProperty} - enabled state for enhanced sounds
+      this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled );
+
+      // @private {Array.<{ soundGenerator:SoundGenerator, sonificationLevel:string, id:string }>} - array where the
+      // sound generators are stored along with information about how to manage them
+      this.soundGeneratorInfoArray = [];
+
+      // @private {number} - output level for the master gain node when sonification is enabled, valid range is 0 to 1
+      this._masterOutputLevel = 1;
+
+      // @private {number} - reverb level, needed because some browsers don't support reading of gain values, see
+      // methods for more info
+      this._reverbLevel = DEFAULT_REVERB_LEVEL;
+
+      // @private {number} - next ID number value, used to assign a unique ID to each sound generator that is registered
+      this.nextIdNumber = 1;
+
+      // @private {Object} - a map of class name to GainNode instances that control gains for that class name, will be
+      // filled in during init, see the usage of options.classes in the initialize function for more information.
+      this.gainNodesForClasses = {};
+
+      // @private {boolean} - flag that tracks whether the sonification manager has been initialized
+      this.initialized = false;
+    }
 
     /**
      * Initialize the sonification manager. This function must be invoked before any sound generators can be added.
@@ -88,9 +80,9 @@ define( function( require ) {
      * @param {BooleanProperty} simActiveProperty
      * @param {Object} [options]
      */
-    initialize: function( simVisibleProperty, simActiveProperty, options ) {
+    initialize( simVisibleProperty, simActiveProperty, options ) {
 
-      assert && assert( !initialized, 'can\'t initialize the sound manager more than once' );
+      assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
       const self = this;
 
       options = _.extend( {
@@ -135,13 +127,16 @@ define( function( require ) {
       // gain node that will control the reverb level
       this.reverbGainNode = phetAudioContext.createGain();
       this.reverbGainNode.connect( this.masterGainNode );
-      this.reverbGainNode.gain.setValueAtTime( _reverbLevel, phetAudioContext.currentTime );
+      this.reverbGainNode.gain.setValueAtTime( this._reverbLevel, phetAudioContext.currentTime );
       this.convolver.connect( this.reverbGainNode );
 
       // dry (non-reverbed) portion of the output
       this.dryGainNode = phetAudioContext.createGain();
-      this.dryGainNode.gain.setValueAtTime( 1 - _reverbLevel, phetAudioContext.currentTime );
-      this.dryGainNode.gain.linearRampToValueAtTime( 1 - _reverbLevel, phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME );
+      this.dryGainNode.gain.setValueAtTime( 1 - this._reverbLevel, phetAudioContext.currentTime );
+      this.dryGainNode.gain.linearRampToValueAtTime(
+        1 - this._reverbLevel,
+        phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
+      );
       this.dryGainNode.connect( this.masterGainNode );
 
       // load the reverb impulse response into the convolver
@@ -161,7 +156,7 @@ define( function( require ) {
         const gainNode = phetAudioContext.createGain();
         gainNode.connect( this.convolver );
         gainNode.connect( this.dryGainNode );
-        gainNodesForClasses[ className ] = gainNode;
+        this.gainNodesForClasses[ className ] = gainNode;
       } );
 
       // hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
@@ -169,7 +164,7 @@ define( function( require ) {
       Property.multilink(
         [ this.enabledProperty, simVisibleProperty, simActiveProperty ],
         ( enabled, simVisible, simActive ) => {
-          const gain = enabled && simVisible && simActive ? masterOutputLevel : 0;
+          const gain = enabled && simVisible && simActive ? this._masterOutputLevel : 0;
           this.masterGainNode.gain.linearRampToValueAtTime(
             gain,
             phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
@@ -276,8 +271,8 @@ define( function( require ) {
         } );
       }
 
-      initialized = true;
-    },
+      this.initialized = true;
+    }
 
     /**
      * add a sound generator, which connects it to the audio path, puts it on the list of sound generators, and creates
@@ -286,17 +281,17 @@ define( function( require ) {
      * @param {Object} [options]
      * @returns {string|null} - unique ID of sound generator, null if add not allowed
      */
-    addSoundGenerator: function( soundGenerator, options ) {
+    addSoundGenerator( soundGenerator, options ) {
 
       // Check if initialization has been done.  This is not an assertion because the sound manager may not be
       // initialized if sound is not enabled for the sim.
-      if ( !initialized ) {
+      if ( !this.initialized ) {
         console.warn( 'an attempt was made to add a sound generator to an uninitialized sound manager, ignoring (sound will not be produced)' );
         return null;
       }
 
       // verify that this is not a duplicate addition
-      const duplicateAdd = _.some( soundGeneratorInfoArray, soundGeneratorInfo => {
+      const duplicateAdd = _.some( this.soundGeneratorInfoArray, soundGeneratorInfo => {
         return soundGeneratorInfo.soundGenerator === soundGenerator;
       } );
       assert && assert( !duplicateAdd, 'can\'t add the same sound generator twice' );
@@ -329,11 +324,11 @@ define( function( require ) {
         soundGenerator.connect( this.dryGainNode );
       }
       else {
-        soundGenerator.connect( gainNodesForClasses[ options.className ] );
+        soundGenerator.connect( this.gainNodesForClasses[ options.className ] );
       }
 
       // create the registration ID for this sound generator
-      const id = 'sg-' + nextIdNumber++;
+      const id = 'sg-' + this.nextIdNumber++;
 
       // keep a record of the sound generator along with additional information about it
       const soundGeneratorInfo = {
@@ -341,14 +336,14 @@ define( function( require ) {
         sonificationLevel: options.sonificationLevel,
         id: id
       };
-      soundGeneratorInfoArray.push( soundGeneratorInfo );
+      this.soundGeneratorInfoArray.push( soundGeneratorInfo );
 
       // add the global enable Property to the list of Properties that enable this sound generator
-      soundGenerator.addEnableControlProperty( soundEnabledProperty );
+      soundGenerator.addEnableControlProperty( this.enabledProperty );
 
       // if this sound generator is only enabled in enhanced mode, add the enhanced mode Property as an enable control
       if ( options.sonificationLevel === SoundLevelEnum.ENHANCED ) {
-        soundGenerator.addEnableControlProperty( enhancedSoundEnabledProperty );
+        soundGenerator.addEnableControlProperty( this.enhancedSoundEnabledProperty );
       }
 
       // if a view node was specified, create and pass in a boolean Property that is true only when the node is displayed
@@ -359,30 +354,30 @@ define( function( require ) {
       }
 
       return id;
-    },
+    }
 
     /**
      * remove the specified sound generator
      * @param {SoundGenerator} soundGenerator
      * @public
      */
-    removeSoundGenerator: function( soundGenerator ) {
+    removeSoundGenerator( soundGenerator ) {
 
       // Check if the sound manager is initialized and, if not, issue a warning and ignore the request.  This is not an
       // assertion because the sound manager may not be initialized in cases where the sound is not enabled for the
       // simulation, but this method can still end up being invoked.
-      if ( !initialized ) {
+      if ( !this.initialized ) {
         console.warn( 'an attempt was made to remove a sound generator from an uninitialized sound manager, ignoring' );
         return null;
       }
 
       // find the info object for this sound generator
       let soundGeneratorInfo = null;
-      for ( let i = 0; i < soundGeneratorInfoArray.length; i++ ) {
-        if ( soundGeneratorInfoArray[ i ].soundGenerator === soundGenerator ) {
+      for ( let i = 0; i < this.soundGeneratorInfoArray.length; i++ ) {
+        if ( this.soundGeneratorInfoArray[ i ].soundGenerator === soundGenerator ) {
 
           // found it
-          soundGeneratorInfo = soundGeneratorInfoArray[ i ];
+          soundGeneratorInfo = this.soundGeneratorInfoArray[ i ];
           break;
         }
       }
@@ -397,26 +392,26 @@ define( function( require ) {
       if ( soundGenerator.isConnectedTo( this.dryGainNode ) ) {
         soundGenerator.disconnect( this.dryGainNode );
       }
-      _.values( gainNodesForClasses ).forEach( gainNode => {
+      _.values( this.gainNodesForClasses ).forEach( gainNode => {
         if ( soundGenerator.isConnectedTo( gainNode ) ) {
           soundGenerator.disconnect( gainNode );
         }
       } );
 
       // remove the sound generator from the list
-      soundGeneratorInfoArray = _.without( soundGeneratorInfoArray, soundGeneratorInfo );
-    },
+      this.soundGeneratorInfoArray = _.without( this.soundGeneratorInfoArray, soundGeneratorInfo );
+    }
 
     /**
      * set the master output level for sonification
      * @param {number} level - valid values from 0 (min) through 1 (max)
      * @public
      */
-    setMasterOutputLevel: function( level ) {
+    setMasterOutputLevel( level ) {
 
       // Check if initialization has been done.  This is not an assertion because the sound manager may not be
       // initialized if sound is not enabled for the sim.
-      if ( !initialized ) {
+      if ( !this.initialized ) {
         console.warn( 'an attempt was made to set the master output level on an uninitialized sound manager, ignoring' );
         return null;
       }
@@ -424,28 +419,28 @@ define( function( require ) {
       // range check
       assert && assert( level >= 0 && level <= 1, 'output level value out of range: ' + level );
 
-      masterOutputLevel = level;
-      if ( soundEnabledProperty.get() ) {
+      this._masterOutputLevel = level;
+      if ( this.enabledProperty.get() ) {
         this.masterGainNode.gain.linearRampToValueAtTime(
           level,
           phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
         );
       }
-    },
+    }
     set masterOutputLevel( outputLevel ) {
       this.setMasterOutputLevel( outputLevel );
-    },
+    }
 
     /**
      * get the current output level setting
      * @returns {number}
      */
-    getMasterOutputLevel: function() {
-      return masterOutputLevel;
-    },
+    getMasterOutputLevel() {
+      return this._masterOutputLevel;
+    }
     get masterOutputLevel() {
       return this.getMasterOutputLevel();
-    },
+    }
 
     /**
      * set the output level for the specified class of sound generator
@@ -453,55 +448,55 @@ define( function( require ) {
      * @param {number} outputLevel - valid values from 0 through 1
      * @public
      */
-    setOutputLevelForClass: function( className, outputLevel ) {
+    setOutputLevelForClass( className, outputLevel ) {
 
       // Check if initialization has been done.  This is not an assertion because the sound manager may not be
       // initialized if sound is not enabled for the sim.
-      if ( !initialized ) {
+      if ( !this.initialized ) {
         console.warn( 'an attempt was made to set the output level for a sound class on an uninitialized sound manager, ignoring' );
         return null;
       }
 
-      assert && assert( initialized, 'output levels for classes cannot be added until initialization has been done' );
+      assert && assert( this.initialized, 'output levels for classes cannot be added until initialization has been done' );
 
       // range check
       assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range: ' + outputLevel );
 
       // verify that the specified class exists
-      assert && assert( gainNodesForClasses[ className ], 'no class with name = ' + className );
+      assert && assert( this.gainNodesForClasses[ className ], 'no class with name = ' + className );
 
-      gainNodesForClasses[ className ].gain.setValueAtTime( outputLevel, phetAudioContext.currentTime );
-    },
+      this.gainNodesForClasses[ className ].gain.setValueAtTime( outputLevel, phetAudioContext.currentTime );
+    }
 
     /**
      * get the output level for the specified sound generator class
      * @param {String} className - name of class to which this invocation applies
      * @public
      */
-    getOutputLevelForClass: function( className ) {
+    getOutputLevelForClass( className ) {
 
       // Check if initialization has been done.  This is not an assertion because the sound manager may not be
       // initialized if sound is not enabled for the sim.
-      if ( !initialized ) {
+      if ( !this.initialized ) {
         console.warn( 'an attempt was made to get the output level for a sound class on an uninitialized sound manager, returning 0' );
         return 0;
       }
 
       // verify that the specified class exists
-      assert && assert( gainNodesForClasses[ className ], 'no class with name = ' + className );
+      assert && assert( this.gainNodesForClasses[ className ], 'no class with name = ' + className );
 
-      return gainNodesForClasses[ className ].value;
-    },
+      return this.gainNodesForClasses[ className ].value;
+    }
 
     /**
      * set the amount of reverb
      * @param {number} newReverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
      */
-    setReverbLevel: function( newReverbLevel ) {
+    setReverbLevel( newReverbLevel ) {
 
       // Check if initialization has been done.  This is not an assertion because the sound manager may not be
       // initialized if sound is not enabled for the sim.
-      if ( !initialized ) {
+      if ( !this.initialized ) {
         console.warn( 'an attempt was made to set the reverb level on an uninitialized sound manager, ignoring' );
         return null;
       }
@@ -510,34 +505,34 @@ define( function( require ) {
       const now = phetAudioContext.currentTime;
       this.reverbGainNode.gain.linearRampToValueAtTime( newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
       this.dryGainNode.gain.linearRampToValueAtTime( 1 - newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
-      _reverbLevel = newReverbLevel;
-    },
+      this._reverbLevel = newReverbLevel;
+    }
     set reverbLevel( reverbLevel ) {
       this.setReverbLevel( reverbLevel );
-    },
+    }
 
-    getReverbLevel: function() {
-      return _reverbLevel;
-    },
+    getReverbLevel() {
+      return this._reverbLevel;
+    }
     get reverbLevel() {
       return this.getReverbLevel();
-    },
+    }
 
     /**
      * ES5 setter for enabled state
      * @param {boolean} enabled
      */
     set enabled( enabled ) {
-      soundEnabledProperty.set( enabled );
-    },
+      this.enabledProperty.set( enabled );
+    }
 
     /**
      * ES5 getter for enabled state
      * @returns {boolean}
      */
     get enabled() {
-      return soundEnabledProperty.get();
-    },
+      return this.enabledProperty.value;
+    }
 
     /**
      * ES5 setter for sonification level
@@ -548,31 +543,31 @@ define( function( require ) {
         _.values( SoundLevelEnum ).includes( sonificationLevel ),
         'invalid sonification level: ' + sonificationLevel
       );
-      enhancedSoundEnabledProperty.set( sonificationLevel === SoundLevelEnum.ENHANCED );
-    },
+      this.enhancedSoundEnabledProperty.set( sonificationLevel === SoundLevelEnum.ENHANCED );
+    }
 
     /**
      * ES5 getter for sonification level
      * @returns {string}
      */
     get sonificationLevel() {
-      return enhancedSoundEnabledProperty.get() ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
-    },
+      return this.enhancedSoundEnabledProperty.get() ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
+    }
 
     /**
      * get the ID for a sound generator, null if the provided sound generator isn't registered
      * @param {SoundGenerator} soundGenerator
      * @returns {string}
      */
-    getSoundGeneratorId: function( soundGenerator ) {
+    getSoundGeneratorId( soundGenerator ) {
       let id = null;
-      soundGeneratorInfoArray.forEach( soundGeneratorInfo => {
+      this.soundGeneratorInfoArray.forEach( soundGeneratorInfo => {
         if ( soundGeneratorInfo.soundGenerator === soundGenerator ) {
           id = soundGeneratorInfo.id;
         }
       } );
       return id;
-    },
+    }
 
     /**
      * Log the value of the gain parameter at every animation frame for the specified duration.  This is useful for
@@ -585,7 +580,7 @@ define( function( require ) {
      * @param {GainNode} gainNode
      * @param {number} duration - duration for logging, in seconds
      */
-    logGain: function( gainNode, duration ) {
+    logGain( gainNode, duration ) {
 
       duration = duration || 1;
       var startTime = Date.now();
@@ -606,27 +601,25 @@ define( function( require ) {
         console.log( '------- start of gain logging -----' );
         logGain();
       }
-    },
+    }
 
     /**
      * log the value of the master gain as it changes
      * @param {number} duration - in seconds
      */
-    logMasterGain: function( duration ) {
+    logMasterGain( duration ) {
       this.logGain( this.masterGainNode, duration );
-    },
-
+    }
 
     /**
      * log the value of the reverb gain as it changes
      * @param {number} duration - in seconds
      */
-    logReverbGain: function( duration ) {
+    logReverbGain( duration ) {
       this.logGain( this.reverbGainNode, duration );
     }
-  };
+  }
 
-  tambo.register( 'soundManager', soundManager );
-
-  return soundManager;
+  const soundManager = new SoundManager();
+  return tambo.register( 'soundManager', soundManager );
 } );
