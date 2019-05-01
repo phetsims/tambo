@@ -314,7 +314,7 @@ define( function( require ) {
 
       // validate the options
       assert && assert(
-        _.values( SoundLevelEnum ).includes( options.sonificationLevel ),
+        _.includes( _.values( SoundLevelEnum ), options.sonificationLevel ),
         'invalid value for sonification level: ' + options.sonificationLevel
       );
 
@@ -540,7 +540,7 @@ define( function( require ) {
      */
     set sonificationLevel( sonificationLevel ) {
       assert && assert(
-        _.values( SoundLevelEnum ).includes( sonificationLevel ),
+        _.includes( _.values( SoundLevelEnum ), sonificationLevel ),
         'invalid sonification level: ' + sonificationLevel
       );
       this.enhancedSoundEnabledProperty.set( sonificationLevel === SoundLevelEnum.ENHANCED );
