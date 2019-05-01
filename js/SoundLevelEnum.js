@@ -15,8 +15,6 @@ define( require => {
     ENHANCED: 'ENHANCED'
   };
 
-  SoundLevelEnum.VALUES = _.values( SoundLevelEnum );
-
   // in development mode, catch any attempted changes to the enum
   if ( assert ) { Object.freeze( SoundLevelEnum ); }
 
