@@ -52,8 +52,8 @@ define( function( require ) {
       // @public (read-only) {BooleanProperty} - enabled state for enhanced sounds
       this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled );
 
-      // @private {Array.<{ soundGenerator:SoundGenerator, sonificationLevel:string, id:string }>} - array where the
-      // sound generators are stored along with information about how to manage them
+      // @private {Array.<{ soundGenerator:SoundGenerator, sonificationLevel:string }>} - array where the sound
+      // generators are stored along with information about how to manage them
       this.soundGeneratorInfoArray = [];
 
       // @private {number} - output level for the master gain node when sonification is enabled, valid range is 0 to 1
@@ -62,9 +62,6 @@ define( function( require ) {
       // @private {number} - reverb level, needed because some browsers don't support reading of gain values, see
       // methods for more info
       this._reverbLevel = DEFAULT_REVERB_LEVEL;
-
-      // @private {number} - next ID number value, used to assign a unique ID to each sound generator that is registered
-      this.nextIdNumber = 1;
 
       // @private {Object} - a map of class name to GainNode instances that control gains for that class name, will be
       // filled in during init, see the usage of options.classes in the initialize function for more information.
@@ -279,7 +276,7 @@ define( function( require ) {
      * and returns a unique ID
      * @param {SoundGenerator} soundGenerator
      * @param {Object} [options]
-     * @returns {string|null} - unique ID of sound generator, null if add not allowed
+     * @public
      */
     addSoundGenerator( soundGenerator, options ) {
 
@@ -327,14 +324,10 @@ define( function( require ) {
         soundGenerator.connect( this.gainNodesForClasses[ options.className ] );
       }
 
-      // create the registration ID for this sound generator
-      const id = 'sg-' + this.nextIdNumber++;
-
       // keep a record of the sound generator along with additional information about it
       const soundGeneratorInfo = {
         soundGenerator: soundGenerator,
-        sonificationLevel: options.sonificationLevel,
-        id: id
+        sonificationLevel: options.sonificationLevel
       };
       this.soundGeneratorInfoArray.push( soundGeneratorInfo );
 
@@ -352,8 +345,6 @@ define( function( require ) {
           new DisplayedProperty( options.associatedViewNode, phet.joist.display )
         );
       }
-
-      return id;
     }
 
     /**
@@ -552,21 +543,6 @@ define( function( require ) {
      */
     get sonificationLevel() {
       return this.enhancedSoundEnabledProperty.get() ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
-    }
-
-    /**
-     * get the ID for a sound generator, null if the provided sound generator isn't registered
-     * @param {SoundGenerator} soundGenerator
-     * @returns {string}
-     */
-    getSoundGeneratorId( soundGenerator ) {
-      let id = null;
-      this.soundGeneratorInfoArray.forEach( soundGeneratorInfo => {
-        if ( soundGeneratorInfo.soundGenerator === soundGenerator ) {
-          id = soundGeneratorInfo.id;
-        }
-      } );
-      return id;
     }
 
     /**

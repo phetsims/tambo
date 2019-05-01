@@ -276,10 +276,6 @@ define( function( require ) {
         const sound = sounds[ selectedSoundIndexProperty.value ];
         const soundGenerator = sound.encodings[ selectedEncodingProperty.value ].soundGenerator;
 
-        // This is to make it clear that different sound generators are being selected, since it is sometimes hard to
-        // tell when just listening.
-        console.log( 'selected sound generator ID = ' + soundManager.getSoundGeneratorId( soundGenerator ) );
-
         // play or start the sound
         if ( sound.loop ) {
           if ( soundGenerator.isPlaying ) {
