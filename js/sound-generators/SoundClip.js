@@ -236,19 +236,21 @@ define( function( require ) {
 
     /**
      * stop playing the sound
+     * {number} delay - the amount of time to wait before stopping, often used to prevent sudden stops, which can cause
+     * audible clicks
      */
-    stop: function() {
+    stop: function( delay ) {
+
+      delay = delay === undefined ? soundConstants.LINEAR_GAIN_CHANGE_TIME : delay;
 
       // make sure the decoding of the audio data has completed before stopping anything
       if ( this.audioBuffer ) {
 
         // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
-        // down the gain quickly, effectively doing a very fast fade out, and then stop playback. The values for the
-        // time constant and stop time were empirically determined.
-        const now = this.audioContext.currentTime;
-        const stopTime = soundConstants.LINEAR_GAIN_CHANGE_TIME; // in seconds
-        this.localGainNode.gain.linearRampToValueAtTime( 0, now + stopTime );
-        this.activeBufferSources.forEach( source => { source.stop( now + stopTime ); } );
+        // down the gain, effectively doing a fade out, and then stopping playback.
+        const stopTime = this.audioContext.currentTime + delay;
+        this.localGainNode.gain.linearRampToValueAtTime( 0, stopTime );
+        this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
 
         // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
         // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
