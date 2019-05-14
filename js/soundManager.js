@@ -187,10 +187,13 @@ define( function( require ) {
           if ( phetAudioContext.state !== 'running' ) {
 
             phet.log && phet.log(
-              'The audio context was not running when soundManager.init was called, adding listener that will resume it'
+              'The audio context was not running when soundManager.init was called, adding user gesture listener to resume'
             );
 
             Display.userGestureEmitter.addListener( function resumeAudioContext() {
+              phet.log && phet.log(
+                'userGestureEmitter fired, phetAudioContext.state = ' + phetAudioContext.state
+              );
               if ( phetAudioContext.state !== 'running' ) {
 
                 phet.log && phet.log(
@@ -201,16 +204,26 @@ define( function( require ) {
                 phetAudioContext.resume()
                   .then( () => {
                     phet.log && phet.log( 'resume of audio context completed, state = ' + phetAudioContext.state );
+                    if ( Display.userGestureEmitter.hasListener( resumeAudioContext ) ) {
+                      Display.userGestureEmitter.removeListener( resumeAudioContext );
+                      phet.log && phet.log( 'removed resumption listener after state change' );
+                    }
+                    else {
+                      phet.log && phet.log( 'resumption listener was already removed' );
+                    }
                   } )
                   .catch( err => {
                     assert && assert( false, 'error when trying to resume audio context, err = ' + err );
                   } );
               }
               else {
-                phet.log && phet.log( 'audio context was automatically resumed, removing resumption listener' );
+                phet.log && phet.log( 'audio context was (apparently) automatically resumed, removing resumption listener' );
+                Display.userGestureEmitter.removeListener( resumeAudioContext );
               }
-              Display.userGestureEmitter.removeListener( resumeAudioContext ); // only do this once
             } );
+          }
+          else {
+            phet.log && phet.log( 'audio context was running at load time for soundManager' );
           }
         }
         else {
