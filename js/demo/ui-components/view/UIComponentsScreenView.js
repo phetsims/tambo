@@ -18,8 +18,11 @@ define( function( require ) {
   const HSlider = require( 'SUN/HSlider' );
   const Image = require( 'SCENERY/nodes/Image' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const NumberPicker = require( 'SCENERY_PHET/NumberPicker' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
@@ -51,6 +54,11 @@ define( function( require ) {
   const sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
   const sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
   const thunderSound = require( 'sound!TAMBO/thunder.mp3' );
+  const buttonSounds = [
+    require( 'sound!TAMBO/general-button-001.mp3' ),
+    require( 'sound!TAMBO/general-button-002.mp3' ),
+    require( 'sound!TAMBO/general-button-003.mp3' )
+  ];
 
   /**
    * @constructor
@@ -106,7 +114,7 @@ define( function( require ) {
       new Text( 'Off', { font: FONT } ),
       true,
       new Text( 'On', { font: FONT } ),
-      { switchSize: new Dimension2( 60, 30 ), centerX: discreteSlider.centerX, top: discreteSlider.bottom + 50 }
+      { switchSize: new Dimension2( 60, 30 ), centerX: discreteSlider.centerX, top: discreteSlider.bottom + 30 }
     );
     this.addChild( abSwitch );
 
@@ -134,7 +142,7 @@ define( function( require ) {
       thumbFill: '#880000',
       thumbFillHighlighted: '#aa0000',
       left: discreteSlider.left,
-      top: abSwitch.bottom + 50,
+      top: abSwitch.bottom + 30,
       startDrag: event => {
         if ( event.type === 'keydown' ) {
           sliderBeingDraggedByKeyboard = true;
@@ -232,8 +240,8 @@ define( function( require ) {
         xMargin: 10,
         yMargin: 8,
         fill: '#FCFBE3',
-        left: discreteSlider.right + 25,
-        top: discreteSlider.top
+        left: continuousSlider.left,
+        top: continuousSlider.bottom + 30
       }
     );
 
@@ -248,8 +256,48 @@ define( function( require ) {
     this.addChild( lightningBoltNode );
     this.addChild( lightningControlPanel );
 
-    // only show the lightening when the model indicates - this is done after the panel is created so the layout works
+    // only show the lightning when the model indicates - this is done after the panel is created so the layout works
     model.lightningBoltVisibleProperty.linkAttribute( lightningBoltNode, 'visible' );
+
+    // create the button sound clips, which will be fired by the button press
+    const buttonSoundClips = [];
+    buttonSounds.forEach( buttonSound => {
+      const buttonSoundClip = new SoundClip( buttonSound );
+      soundManager.addSoundGenerator( buttonSoundClip );
+      buttonSoundClips.push( buttonSoundClip );
+    } );
+
+    // create a number picker for choosing the button sound
+    const selectedButtonSoundProperty = new NumberProperty( 1 );
+    const soundSetNumberPicker = new NumberPicker(
+      selectedButtonSoundProperty,
+      new Property( new Range( 1, buttonSoundClips.length ) ),
+      {
+        font: new PhetFont( 20 ),
+        arrowHeight: 6,
+        arrowYSpacing: 6
+      }
+    );
+
+    // add the button with a label and a sound selector
+    const buttonSoundHBox = new HBox( {
+      children: [
+        new TextPushButton( 'Play Sound', {
+          font: new PhetFont( 16 ),
+          baseColor: 'lightgreen',
+          listener: () => {
+            const soundIndex = Math.min( selectedButtonSoundProperty.value, buttonSoundClips.length ) - 1;
+            buttonSoundClips[ soundIndex ].play();
+          }
+        } ),
+        new Text( 'Selected Button Sound:', { font: new PhetFont( 16 ) } ),
+        soundSetNumberPicker
+      ],
+      spacing: 10,
+      left: lightningControlPanel.right + 60,
+      top: discreteSlider.top
+    } );
+    this.addChild( buttonSoundHBox );
 
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
@@ -257,6 +305,7 @@ define( function( require ) {
       bottom: this.layoutBounds.maxY - 25,
       listener: function() {
         model.reset();
+        selectedButtonSoundProperty.reset();
         thunderSoundClip.locallyEnabledProperty.reset();
       }
     } );

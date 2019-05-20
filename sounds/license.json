@@ -215,6 +215,30 @@
     "license": "Public Domain Creative Commons",
     "notes": "downloaded from http://www.openairlib.net/auralizationdb/content/empty-apartment-bedroom, resampled to 44.1 kHz"
   },
+  "general-button-001.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  },
+  "general-button-002.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  },
+  "general-button-003.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  },
   "loon-call.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"
