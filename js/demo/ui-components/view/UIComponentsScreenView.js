@@ -23,6 +23,7 @@ define( function( require ) {
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
+  const PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
@@ -49,7 +50,6 @@ define( function( require ) {
   const RADIO_BUTTON_FONT = new PhetFont( 14 );
   const RADIO_BUTTON_RADIUS = 6;
 
-
   // images
   const lightningImage = require( 'image!TAMBO/lightning.png' );
 
@@ -68,6 +68,12 @@ define( function( require ) {
     require( 'sound!TAMBO/radio-button-001.mp3' ),
     require( 'sound!TAMBO/radio-button-002.mp3' ),
     require( 'sound!TAMBO/radio-button-003.mp3' )
+  ];
+  const playPauseSounds = [
+    require( 'sound!TAMBO/play-pause-001.mp3' ),
+    require( 'sound!TAMBO/play-pause-002.mp3' ),
+    require( 'sound!TAMBO/play-pause-003.mp3' ),
+    require( 'sound!TAMBO/play-pause-004.mp3' )
   ];
 
   /**
@@ -434,6 +440,60 @@ define( function( require ) {
       }
     );
     this.addChild( radioButtonSoundPanel );
+
+    //-----------------------------------------------------------------------------------------------------------------
+    // add play/pause sound test
+    //-----------------------------------------------------------------------------------------------------------------
+
+    // create the sounds that can be played on radio box selections
+    const playPauseSoundClips = [];
+    playPauseSounds.forEach( sound => {
+      const playPauseSoundClip = new SoundClip( sound );
+      soundManager.addSoundGenerator( playPauseSoundClip );
+      playPauseSoundClips.push( playPauseSoundClip );
+    } );
+
+    // create a number picker for choosing the button sound
+    const selectedPlayPauseSoundProperty = new NumberProperty( 1 );
+    const playPauseSoundNumberPicker = new NumberPicker(
+      selectedPlayPauseSoundProperty,
+      new Property( new Range( 1, playPauseSoundClips.length ) ),
+      {
+        font: new PhetFont( 20 ),
+        arrowHeight: 6,
+        arrowYSpacing: 6
+      }
+    );
+
+    const playingProperty = new BooleanProperty( true );
+    const playPauseButton = new PlayPauseButton( playingProperty, { radius: 25 } );
+
+    // play the play-pause sound when the playing state changes
+    playingProperty.lazyLink( () => {
+      const clip = playPauseSoundClips[ selectedPlayPauseSoundProperty.value - 1 ];
+      clip.play();
+    } );
+
+    const playPauseSoundPanel = new Panel(
+      new HBox(
+        {
+          children: [
+            playPauseButton,
+            playPauseSoundNumberPicker
+          ],
+          spacing: 20
+        }
+      ),
+      {
+        fill: '#FCFBE3',
+        left: radioButtonSoundPanel.left,
+        top: radioButtonSoundPanel.bottom + 30
+      }
+    );
+    this.addChild( playPauseSoundPanel );
+
+
+
 
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
