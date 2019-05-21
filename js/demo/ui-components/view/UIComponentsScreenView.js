@@ -10,6 +10,7 @@ define( function( require ) {
 
   // modules
   const ABSwitch = require( 'SUN/ABSwitch' );
+  const AquaRadioButton = require( 'SUN/AquaRadioButton' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Checkbox = require( 'SUN/Checkbox' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
@@ -45,6 +46,10 @@ define( function( require ) {
   const NUM_BINS_FOR_CONTINUOUS_SLIDER = 8;
   const BIN_SIZE_FOR_CONTINUOUS_SLIDER = SLIDER_MAX / NUM_BINS_FOR_CONTINUOUS_SLIDER;
 
+  const RADIO_BUTTON_FONT = new PhetFont( 14 );
+  const RADIO_BUTTON_RADIUS = 6;
+
+
   // images
   const lightningImage = require( 'image!TAMBO/lightning.png' );
 
@@ -54,10 +59,15 @@ define( function( require ) {
   const sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
   const sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
   const thunderSound = require( 'sound!TAMBO/thunder.mp3' );
-  const buttonSounds = [
+  const pushButtonSounds = [
     require( 'sound!TAMBO/general-button-001.mp3' ),
     require( 'sound!TAMBO/general-button-002.mp3' ),
     require( 'sound!TAMBO/general-button-003.mp3' )
+  ];
+  const radioButtonSounds = [
+    require( 'sound!TAMBO/radio-button-001.mp3' ),
+    require( 'sound!TAMBO/radio-button-002.mp3' ),
+    require( 'sound!TAMBO/radio-button-003.mp3' )
   ];
 
   /**
@@ -260,18 +270,18 @@ define( function( require ) {
     model.lightningBoltVisibleProperty.linkAttribute( lightningBoltNode, 'visible' );
 
     // create the button sound clips, which will be fired by the button press
-    const buttonSoundClips = [];
-    buttonSounds.forEach( buttonSound => {
+    const pushButtonSoundClips = [];
+    pushButtonSounds.forEach( buttonSound => {
       const buttonSoundClip = new SoundClip( buttonSound );
       soundManager.addSoundGenerator( buttonSoundClip );
-      buttonSoundClips.push( buttonSoundClip );
+      pushButtonSoundClips.push( buttonSoundClip );
     } );
 
     // create a number picker for choosing the button sound
-    const selectedButtonSoundProperty = new NumberProperty( 1 );
+    const selectedPushButtonSoundProperty = new NumberProperty( 1 );
     const soundSetNumberPicker = new NumberPicker(
-      selectedButtonSoundProperty,
-      new Property( new Range( 1, buttonSoundClips.length ) ),
+      selectedPushButtonSoundProperty,
+      new Property( new Range( 1, pushButtonSoundClips.length ) ),
       {
         font: new PhetFont( 20 ),
         arrowHeight: 6,
@@ -286,8 +296,8 @@ define( function( require ) {
           font: new PhetFont( 16 ),
           baseColor: 'lightgreen',
           listener: () => {
-            const soundIndex = Math.min( selectedButtonSoundProperty.value, buttonSoundClips.length ) - 1;
-            buttonSoundClips[ soundIndex ].play();
+            const soundIndex = Math.min( selectedPushButtonSoundProperty.value, pushButtonSoundClips.length ) - 1;
+            pushButtonSoundClips[ soundIndex ].play();
           }
         } ),
         new Text( 'Selected Button Sound:', { font: new PhetFont( 16 ) } ),
@@ -299,13 +309,139 @@ define( function( require ) {
     } );
     this.addChild( buttonSoundHBox );
 
+    // create the sounds that can be played on radio box selections
+    const radioButtonSoundClips = [];
+    radioButtonSounds.forEach( sound => {
+      const radioButtonSoundClip = new SoundClip( sound );
+      soundManager.addSoundGenerator( radioButtonSoundClip );
+      radioButtonSoundClips.push( radioButtonSoundClip );
+    } );
+
+    // create a selector for choosing which radio button sound should be used
+    const selectedRadioButtonSoundProperty = new NumberProperty( 1 );
+    const radioButtonSoundNumberPicker = new NumberPicker(
+      selectedRadioButtonSoundProperty,
+      new Property( new Range( 1, radioButtonSoundClips.length ) ),
+      {
+        font: new PhetFont( 20 ),
+        arrowHeight: 6,
+        arrowYSpacing: 6
+      }
+    );
+
+    // TODO: I (jbphet) could probably consolidate the code for the radio button groups into a class that creates them
+
+    // function to play a radio button sound based on the selected clip and the radio button index
+    const playRadioButtonSound = ( selectionIndex, totalSelections ) => {
+      const clip = radioButtonSoundClips[ selectedRadioButtonSoundProperty.value - 1 ];
+      const playbackRate = Math.pow( 2, ( selectionIndex - ( totalSelections - 1 ) / 2 ) * ( 1 / 6 ) );
+      clip.setPlaybackRate( playbackRate );
+      clip.play();
+    };
+
+    const twoRadioButtonSelectorValueProperty = new NumberProperty( 0 );
+    twoRadioButtonSelectorValueProperty.lazyLink( value => playRadioButtonSound( value, 2 ) );
+    const fiveRadioButtonSelectorValueProperty = new NumberProperty( 0 );
+    fiveRadioButtonSelectorValueProperty.lazyLink( value => playRadioButtonSound( value, 5 ) );
+
+    const twoButtonGroupSelectionA = new AquaRadioButton(
+      twoRadioButtonSelectorValueProperty,
+      0,
+      new Text( 'A', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
+    );
+    const twoButtonGroupSelectionB = new AquaRadioButton(
+      twoRadioButtonSelectorValueProperty,
+      1,
+      new Text( 'B', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
+    );
+    const twoRadioButtonBox = new VBox( {
+      children: [
+        twoButtonGroupSelectionA,
+        twoButtonGroupSelectionB
+      ],
+      align: 'left',
+      spacing: 10
+    } );
+
+    const fiveButtonGroupSelectionA = new AquaRadioButton(
+      fiveRadioButtonSelectorValueProperty,
+      0,
+      new Text( 'A', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
+    );
+    const fiveButtonGroupSelectionB = new AquaRadioButton(
+      fiveRadioButtonSelectorValueProperty,
+      1,
+      new Text( 'B', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
+    );
+    const fiveButtonGroupSelectionC = new AquaRadioButton(
+      fiveRadioButtonSelectorValueProperty,
+      2,
+      new Text( 'C', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
+    );
+    const fiveButtonGroupSelectionD = new AquaRadioButton(
+      fiveRadioButtonSelectorValueProperty,
+      3,
+      new Text( 'D', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
+    );
+    const fiveButtonGroupSelectionE = new AquaRadioButton(
+      fiveRadioButtonSelectorValueProperty,
+      4,
+      new Text( 'E', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
+    );
+    const fiveRadioButtonBox = new VBox( {
+      children: [
+        fiveButtonGroupSelectionA,
+        fiveButtonGroupSelectionB,
+        fiveButtonGroupSelectionC,
+        fiveButtonGroupSelectionD,
+        fiveButtonGroupSelectionE
+      ],
+      align: 'left',
+      spacing: 10
+    } );
+
+    // create a panel with the radio button sound selector and the radio button sets
+    const radioButtonSoundPanel = new Panel(
+      new VBox(
+        {
+          children: [
+            new HBox(
+              {
+                children: [
+                  new Text( 'Selected Sound: ', { font: new PhetFont( 14 ) } ),
+                  radioButtonSoundNumberPicker
+                ],
+                spacing: 10
+              },
+            ),
+            new HBox(
+              {
+                children: [
+                  twoRadioButtonBox,
+                  fiveRadioButtonBox
+                ],
+                spacing: 50
+              }
+            )
+          ],
+          spacing: 20
+        }
+      ),
+      {
+        fill: '#FCFBE3',
+        left: buttonSoundHBox.left,
+        top: buttonSoundHBox.bottom + 30
+      }
+    );
+    this.addChild( radioButtonSoundPanel );
+
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
       right: this.layoutBounds.maxX - 25,
       bottom: this.layoutBounds.maxY - 25,
       listener: function() {
         model.reset();
-        selectedButtonSoundProperty.reset();
+        selectedPushButtonSoundProperty.reset();
         thunderSoundClip.locallyEnabledProperty.reset();
       }
     } );
