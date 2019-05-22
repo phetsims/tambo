@@ -225,9 +225,17 @@ define( function( require ) {
                 assert && alert( 'error when trying to resume audio context, err = ' + err );
               } );
             }
+
+            // remove all listeners, since once the audio context has been resumed, it should stay that way
             window.removeEventListener( 'touchstart', resumeAudioContext, false );
+            Display.userGestureEmitter.removeListener( resumeAudioContext );
           };
+
+          // listen for a touchstart
           window.addEventListener( 'touchstart', resumeAudioContext, false );
+
+          // listen for other user gesture events that might come before touchstart, especially if VoiceOver is enabled
+          Display.userGestureEmitter.addListener( resumeAudioContext );
         }
 
         // During testing, several use cases were found where the audio context state changes to something other than
@@ -418,6 +426,7 @@ define( function( require ) {
         );
       }
     }
+
     set masterOutputLevel( outputLevel ) {
       this.setMasterOutputLevel( outputLevel );
     }
@@ -429,6 +438,7 @@ define( function( require ) {
     getMasterOutputLevel() {
       return this._masterOutputLevel;
     }
+
     get masterOutputLevel() {
       return this.getMasterOutputLevel();
     }
@@ -498,6 +508,7 @@ define( function( require ) {
       this.dryGainNode.gain.linearRampToValueAtTime( 1 - newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
       this._reverbLevel = newReverbLevel;
     }
+
     set reverbLevel( reverbLevel ) {
       this.setReverbLevel( reverbLevel );
     }
@@ -505,6 +516,7 @@ define( function( require ) {
     getReverbLevel() {
       return this._reverbLevel;
     }
+
     get reverbLevel() {
       return this.getReverbLevel();
     }
