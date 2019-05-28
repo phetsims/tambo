@@ -35,7 +35,7 @@ define( function( require ) {
 
   // constants
   const DEFAULT_REVERB_LEVEL = 0.02;
-  const LINEAR_GAIN_CHANGE_TIME = soundConstants.LINEAR_GAIN_CHANGE_TIME; // in seconds
+  const LINEAR_GAIN_CHANGE_TIME = soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME; // in seconds
 
   /**
    * sonification manager object definition

@@ -123,11 +123,21 @@ define( function( require ) {
       this.masterGainNode.connect( this.audioContext.destination );
     }
 
-    // turn down the gain to zero when not fully enabled
+    // turn down the gain to zero when not fully enabled, or up to the current output level when becoming fully enabled
     this.fullyEnabledProperty.link( fullyEnabled => {
+
+      const previousGainSetting = fullyEnabled ? 0 : this._outputLevel;
+      const newGainSetting = fullyEnabled ? this._outputLevel : 0;
+      const now = this.audioContext.currentTime;
+
+      // For the linear ramp to work consistently on all browsers, the gain must be explicitly set to what it is
+      // supposed to be before making any changes.  Otherwise, it may extrapolate from the most recent previous event.
+      this.masterGainNode.gain.setValueAtTime( previousGainSetting, now );
+
+      // ramp the gain to the new level
       this.masterGainNode.gain.linearRampToValueAtTime(
-        fullyEnabled ? this._outputLevel : 0,
-        this.audioContext.currentTime + soundConstants.LINEAR_GAIN_CHANGE_TIME
+        newGainSetting,
+        this.audioContext.currentTime + soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME
       );
     } );
 

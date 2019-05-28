@@ -241,7 +241,7 @@ define( function( require ) {
      */
     stop: function( delay ) {
 
-      delay = delay === undefined ? soundConstants.LINEAR_GAIN_CHANGE_TIME : delay;
+      delay = delay === undefined ? soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME : delay;
 
       // make sure the decoding of the audio data has completed before stopping anything
       if ( this.audioBuffer ) {
