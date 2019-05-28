@@ -340,7 +340,9 @@ define( function( require ) {
     // function to play a radio button sound based on the selected clip and the radio button index
     const playRadioButtonSound = ( selectionIndex, totalSelections ) => {
       const clip = radioButtonSoundClips[ selectedRadioButtonSoundProperty.value - 1 ];
-      const playbackRate = Math.pow( 2, ( selectionIndex - ( totalSelections - 1 ) / 2 ) * ( 1 / 6 ) );
+
+      // calculate a playback rate that centers around 1 and puts 2 semitones (aka one whole tone) between each sound
+      const playbackRate = Math.pow( 2, ( ( totalSelections - 1 ) / 2 - selectionIndex ) * ( 1 / 6 ) );
       clip.setPlaybackRate( playbackRate );
       clip.play();
     };
