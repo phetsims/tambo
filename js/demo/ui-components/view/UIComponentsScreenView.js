@@ -49,7 +49,6 @@ define( function( require ) {
   const FONT = new PhetFont( 16 );
   const NUM_BINS_FOR_CONTINUOUS_SLIDER = 8;
   const BIN_SIZE_FOR_CONTINUOUS_SLIDER = SLIDER_MAX / NUM_BINS_FOR_CONTINUOUS_SLIDER;
-
   const RADIO_BUTTON_FONT = new PhetFont( 14 );
   const RADIO_BUTTON_RADIUS = 6;
 
@@ -77,6 +76,14 @@ define( function( require ) {
     require( 'sound!TAMBO/play-pause-002.mp3' ),
     require( 'sound!TAMBO/play-pause-003.mp3' ),
     require( 'sound!TAMBO/play-pause-004.mp3' )
+  ];
+  const grabSounds = [
+    require( 'sound!TAMBO/grab-001.mp3' ),
+    require( 'sound!TAMBO/grab-002.mp3' )
+  ];
+  const releaseSounds = [
+    require( 'sound!TAMBO/release-001.mp3' ),
+    require( 'sound!TAMBO/release-002.mp3' )
   ];
 
   /**
@@ -288,7 +295,7 @@ define( function( require ) {
 
     // create a number picker for choosing the button sound
     const selectedPushButtonSoundProperty = new NumberProperty( 1 );
-    const soundSetNumberPicker = new NumberPicker(
+    const buttonSoundNumberPicker = new NumberPicker(
       selectedPushButtonSoundProperty,
       new Property( new Range( 1, pushButtonSoundClips.length ) ),
       {
@@ -310,7 +317,7 @@ define( function( require ) {
           }
         } ),
         new Text( 'Selected Button Sound:', { font: new PhetFont( 16 ) } ),
-        soundSetNumberPicker
+        buttonSoundNumberPicker
       ],
       spacing: 10,
       left: lightningControlPanel.right + 60,
@@ -526,30 +533,70 @@ define( function( require ) {
     constructor( options ) {
       super();
 
-      const width = 150;
-      const height = 100;
+      const width = 200;
+      const height = 120;
 
-      // create the background
+      // background
       const background = new Rectangle( 0, 0, width, height, 5, 5, {
         fill: 'white',
         stroke: 'black'
       } );
 
-      // add a caption
-      background.addChild( new Text( 'Grab/Release Sound Test', {
+      // caption
+      const caption = new Text( 'Grab/Release Sound Test', {
         font: new PhetFont( 12 ),
         centerX: width / 2,
         top: 5
-      } ) );
+      } );
       this.addChild( background );
 
+      // this class assumes that grab and release sounds come as a set, so make sure we have an equal number of them
+      assert && assert(
+        grabSounds.length === releaseSounds.length,
+        'there are an unequal number of grab and release sounds'
+      );
+
+      // sound clips for grab and release
+      const grabSoundClips = [];
+      grabSounds.forEach( sound => {
+        const soundClip = new SoundClip( sound );
+        soundManager.addSoundGenerator( soundClip );
+        grabSoundClips.push( soundClip );
+      } );
+      const releaseSoundClips = [];
+      releaseSounds.forEach( sound => {
+        const soundClip = new SoundClip( sound );
+        soundManager.addSoundGenerator( soundClip );
+        releaseSoundClips.push( soundClip );
+      } );
+
+      // number picker for choosing the grab and release sound set
+      const grabAndReleaseSoundIndexProperty = new NumberProperty( 1 );
+      const grabAndReleaseSoundNumberPicker = new NumberPicker(
+        grabAndReleaseSoundIndexProperty,
+        new Property( new Range( 1, grabSoundClips.length ) ),
+        {
+          font: new PhetFont( 20 ),
+          arrowHeight: 6,
+          arrowYSpacing: 6
+        }
+      );
+
+      // add the caption and number picker as a unit
+      this.addChild( new HBox( {
+        children: [ caption, grabAndReleaseSoundNumberPicker ],
+        spacing: 15,
+        centerX: width / 2,
+        top: 3
+      } ) );
+      
       // add the draggable node
       const squareLength = 20;
       const draggableNode = new Rectangle( -squareLength / 2, -squareLength / 2, squareLength, squareLength, {
         fill: 'orange',
         stroke: 'black',
         centerX: width / 2,
-        centerY: height / 2,
+        centerY: height * 0.67,
         cursor: 'pointer'
       } );
       this.addChild( draggableNode );
@@ -558,11 +605,11 @@ define( function( require ) {
       draggableNode.addInputListener( new DragListener( {
         dragBoundsProperty: new Property( background.bounds.dilated( -squareLength / 2 - 4 ) ),
         translateNode: true,
-        start: event => {
-          console.log( 'start' );
+        start: () => {
+          grabSoundClips[ grabAndReleaseSoundIndexProperty.value - 1 ].play();
         },
         end: () => {
-          console.log( 'end' );
+          releaseSoundClips[ grabAndReleaseSoundIndexProperty.value - 1 ].play();
         }
       } ) );
       this.mutate( options );
