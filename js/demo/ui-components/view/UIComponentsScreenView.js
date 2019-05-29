@@ -15,16 +15,19 @@ define( function( require ) {
   const Checkbox = require( 'SUN/Checkbox' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Dimension2 = require( 'DOT/Dimension2' );
+  const DragListener = require( 'SCENERY/listeners/DragListener' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HSlider = require( 'SUN/HSlider' );
   const Image = require( 'SCENERY/nodes/Image' );
   const inherit = require( 'PHET_CORE/inherit' );
+  const Node = require( 'SCENERY/nodes/Node' );
   const NumberPicker = require( 'SCENERY_PHET/NumberPicker' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   const Property = require( 'AXON/Property' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const Range = require( 'DOT/Range' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
@@ -494,8 +497,14 @@ define( function( require ) {
     );
     this.addChild( playPauseSoundPanel );
 
+    //-----------------------------------------------------------------------------------------------------------------
+    // add grab/release sound test
+    //-----------------------------------------------------------------------------------------------------------------
 
-
+    this.addChild( new PanelWithGrabbableItem( {
+      left: radioButtonSoundPanel.right + 30,
+      top: radioButtonSoundPanel.top
+    } ) );
 
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
@@ -509,6 +518,55 @@ define( function( require ) {
     } );
     this.addChild( resetAllButton );
     soundManager.addSoundGenerator( new ResetAllSoundGenerator( model.resetInProgressProperty ) );
+  }
+
+  // inner class for testing grab and release sounds
+  class PanelWithGrabbableItem extends Node {
+
+    constructor( options ) {
+      super();
+
+      const width = 150;
+      const height = 100;
+
+      // create the background
+      const background = new Rectangle( 0, 0, width, height, 5, 5, {
+        fill: 'white',
+        stroke: 'black'
+      } );
+
+      // add a caption
+      background.addChild( new Text( 'Grab/Release Sound Test', {
+        font: new PhetFont( 12 ),
+        centerX: width / 2,
+        top: 5
+      } ) );
+      this.addChild( background );
+
+      // add the draggable node
+      const squareLength = 20;
+      const draggableNode = new Rectangle( -squareLength / 2, -squareLength / 2, squareLength, squareLength, {
+        fill: 'orange',
+        stroke: 'black',
+        centerX: width / 2,
+        centerY: height / 2,
+        cursor: 'pointer'
+      } );
+      this.addChild( draggableNode );
+
+      // add the drag handler, which will move the node and play the sounds
+      draggableNode.addInputListener( new DragListener( {
+        dragBoundsProperty: new Property( background.bounds.dilated( -squareLength / 2 - 4 ) ),
+        translateNode: true,
+        start: event => {
+          console.log( 'start' );
+        },
+        end: () => {
+          console.log( 'end' );
+        }
+      } ) );
+      this.mutate( options );
+    }
   }
 
   tambo.register( 'UIComponentsScreenView', UIComponentsScreenView );
