@@ -508,10 +508,11 @@ define( function( require ) {
     // add grab/release sound test
     //-----------------------------------------------------------------------------------------------------------------
 
-    this.addChild( new PanelWithGrabbableItem( {
+    const grabbableNodePanel = new PanelWithGrabbableItem( {
       left: radioButtonSoundPanel.right + 30,
       top: radioButtonSoundPanel.top
-    } ) );
+    } );
+    this.addChild( grabbableNodePanel );
 
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
@@ -519,8 +520,11 @@ define( function( require ) {
       bottom: this.layoutBounds.maxY - 25,
       listener: function() {
         model.reset();
-        selectedPushButtonSoundProperty.reset();
         thunderSoundClip.locallyEnabledProperty.reset();
+        selectedPushButtonSoundProperty.reset();
+        selectedPlayPauseSoundProperty.reset();
+        selectedRadioButtonSoundProperty.reset();
+        grabbableNodePanel.reset();
       }
     } );
     this.addChild( resetAllButton );
@@ -535,6 +539,7 @@ define( function( require ) {
 
       const width = 200;
       const height = 120;
+      const squareLength = 20;
 
       // background
       const background = new Rectangle( 0, 0, width, height, 5, 5, {
@@ -570,10 +575,12 @@ define( function( require ) {
         releaseSoundClips.push( soundClip );
       } );
 
+      // @private
+      this.grabAndReleaseSoundIndexProperty = new NumberProperty( 1 );
+
       // number picker for choosing the grab and release sound set
-      const grabAndReleaseSoundIndexProperty = new NumberProperty( 1 );
       const grabAndReleaseSoundNumberPicker = new NumberPicker(
-        grabAndReleaseSoundIndexProperty,
+        this.grabAndReleaseSoundIndexProperty,
         new Property( new Range( 1, grabSoundClips.length ) ),
         {
           font: new PhetFont( 20 ),
@@ -589,30 +596,37 @@ define( function( require ) {
         centerX: width / 2,
         top: 3
       } ) );
-      
-      // add the draggable node
-      const squareLength = 20;
-      const draggableNode = new Rectangle( -squareLength / 2, -squareLength / 2, squareLength, squareLength, {
+
+      // @private {Node} - the draggable node
+      this.draggableNode = new Rectangle( -squareLength / 2, -squareLength / 2, squareLength, squareLength, {
         fill: 'orange',
         stroke: 'black',
         centerX: width / 2,
         centerY: height * 0.67,
         cursor: 'pointer'
       } );
-      this.addChild( draggableNode );
+      this.addChild( this.draggableNode );
+
+      // @private
+      this.draggableNodeInitialPosition = this.draggableNode.center.copy();
 
       // add the drag handler, which will move the node and play the sounds
-      draggableNode.addInputListener( new DragListener( {
+      this.draggableNode.addInputListener( new DragListener( {
         dragBoundsProperty: new Property( background.bounds.dilated( -squareLength / 2 - 4 ) ),
         translateNode: true,
         start: () => {
-          grabSoundClips[ grabAndReleaseSoundIndexProperty.value - 1 ].play();
+          grabSoundClips[ this.grabAndReleaseSoundIndexProperty.value - 1 ].play();
         },
         end: () => {
-          releaseSoundClips[ grabAndReleaseSoundIndexProperty.value - 1 ].play();
+          releaseSoundClips[ this.grabAndReleaseSoundIndexProperty.value - 1 ].play();
         }
       } ) );
       this.mutate( options );
+    }
+
+    reset() {
+      this.grabAndReleaseSoundIndexProperty.reset();
+      this.draggableNode.center = this.draggableNodeInitialPosition;
     }
   }
 
