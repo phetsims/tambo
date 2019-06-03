@@ -34,6 +34,8 @@ define( function( require ) {
   const ScreenView = require( 'JOIST/ScreenView' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const soundManager = require( 'TAMBO/soundManager' );
+  const StepForwardButton = require( 'SCENERY_PHET/buttons/StepForwardButton' );
+  const StepBackwardButton = require( 'SCENERY_PHET/buttons/StepBackwardButton' );
   const tambo = require( 'TAMBO/tambo' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TextPushButton = require( 'SUN/buttons/TextPushButton' );
@@ -64,18 +66,37 @@ define( function( require ) {
   const pushButtonSounds = [
     require( 'sound!TAMBO/general-button-001.mp3' ),
     require( 'sound!TAMBO/general-button-002.mp3' ),
-    require( 'sound!TAMBO/general-button-003.mp3' )
+    require( 'sound!TAMBO/general-button-003.mp3' ),
+    require( 'sound!TAMBO/general-button-v2.mp3' )
   ];
   const radioButtonSounds = [
     require( 'sound!TAMBO/radio-button-001.mp3' ),
     require( 'sound!TAMBO/radio-button-002.mp3' ),
     require( 'sound!TAMBO/radio-button-003.mp3' )
   ];
-  const playPauseSounds = [
+  const playSounds = [
     require( 'sound!TAMBO/play-pause-001.mp3' ),
     require( 'sound!TAMBO/play-pause-002.mp3' ),
     require( 'sound!TAMBO/play-pause-003.mp3' ),
     require( 'sound!TAMBO/play-pause-004.mp3' )
+  ];
+  const pauseSounds = [
+    require( 'sound!TAMBO/pause.mp3' ),
+    require( 'sound!TAMBO/pause-001.mp3' ),
+    require( 'sound!TAMBO/pause.mp3' ),
+    require( 'sound!TAMBO/pause-001.mp3' )
+  ];
+  const stepForwardSounds = [
+    require( 'sound!TAMBO/step-forward.mp3' ),
+    require( 'sound!TAMBO/step-forward-001.mp3' ),
+    require( 'sound!TAMBO/step-forward-002.mp3' ),
+    require( 'sound!TAMBO/step-forward-002.mp3' )
+  ];
+  const stepBackwardSounds = [
+    require( 'sound!TAMBO/step-back.mp3' ),
+    require( 'sound!TAMBO/step-back-001.mp3' ),
+    require( 'sound!TAMBO/step-back-002.mp3' ),
+    require( 'sound!TAMBO/step-back-002.mp3' )
   ];
   const grabSounds = [
     require( 'sound!TAMBO/grab-001.mp3' ),
@@ -457,19 +478,37 @@ define( function( require ) {
     // add play/pause sound test
     //-----------------------------------------------------------------------------------------------------------------
 
-    // create the sounds that can be played on radio box selections
-    const playPauseSoundClips = [];
-    playPauseSounds.forEach( sound => {
+    // create the sounds for play/pause/step
+    const playSoundClips = [];
+    playSounds.forEach( sound => {
       const playPauseSoundClip = new SoundClip( sound );
       soundManager.addSoundGenerator( playPauseSoundClip );
-      playPauseSoundClips.push( playPauseSoundClip );
+      playSoundClips.push( playPauseSoundClip );
     } );
-
+    const pauseSoundClips = [];
+    pauseSounds.forEach( sound => {
+      const pausePauseSoundClip = new SoundClip( sound );
+      soundManager.addSoundGenerator( pausePauseSoundClip );
+      pauseSoundClips.push( pausePauseSoundClip );
+    } );
+    const stepForwardSoundClips = [];
+    stepForwardSounds.forEach( sound => {
+      const stepForwardSoundClip = new SoundClip( sound );
+      soundManager.addSoundGenerator( stepForwardSoundClip );
+      stepForwardSoundClips.push( stepForwardSoundClip );
+    } );
+    const stepBackwardSoundClips = [];
+    stepBackwardSounds.forEach( sound => {
+      const stepBackwardSoundClip = new SoundClip( sound );
+      soundManager.addSoundGenerator( stepBackwardSoundClip );
+      stepBackwardSoundClips.push( stepBackwardSoundClip );
+    } );
+    
     // create a number picker for choosing the button sound
     const selectedPlayPauseSoundProperty = new NumberProperty( 1 );
     const playPauseSoundNumberPicker = new NumberPicker(
       selectedPlayPauseSoundProperty,
-      new Property( new Range( 1, playPauseSoundClips.length ) ),
+      new Property( new Range( 1, playSoundClips.length ) ),
       {
         font: new PhetFont( 20 ),
         arrowHeight: 6,
@@ -479,18 +518,36 @@ define( function( require ) {
 
     const playingProperty = new BooleanProperty( true );
     const playPauseButton = new PlayPauseButton( playingProperty, { radius: 25 } );
+    const stepBackwardButton = new StepBackwardButton( {
+      listener: () => {
+        stepBackwardSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
+      },
+      radius: 15
+    } );
+    const stepForwardButton = new StepForwardButton( {
+      listener: () => {
+        stepForwardSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
+      },
+      radius: 15
+    } );
 
     // play the play-pause sound when the playing state changes
-    playingProperty.lazyLink( () => {
-      const clip = playPauseSoundClips[ selectedPlayPauseSoundProperty.value - 1 ];
-      clip.play();
+    playingProperty.lazyLink( playing => {
+      if ( playing ) {
+        playSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
+      }
+      else {
+        pauseSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
+      }
     } );
 
     const playPauseSoundPanel = new Panel(
       new HBox(
         {
           children: [
+            stepBackwardButton,
             playPauseButton,
+            stepForwardButton,
             playPauseSoundNumberPicker
           ],
           spacing: 20
