@@ -63,6 +63,8 @@ define( function( require ) {
   const sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
   const sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
   const thunderSound = require( 'sound!TAMBO/thunder.mp3' );
+  const checkboxCheckedSound = require( 'sound!TAMBO/check-box-checked.mp3' );
+  const checkboxUncheckedSound = require( 'sound!TAMBO/check-box-unchecked.mp3' );
   const pushButtonSounds = [
     require( 'sound!TAMBO/general-button-001.mp3' ),
     require( 'sound!TAMBO/general-button-002.mp3' ),
@@ -112,6 +114,12 @@ define( function( require ) {
    */
   function UIComponentsScreenView( model ) {
     ScreenView.call( this );
+
+    // create the check box sounds
+    const checkedClip = new SoundClip( checkboxCheckedSound );
+    soundManager.addSoundGenerator( checkedClip );
+    const uncheckedClip = new SoundClip( checkboxUncheckedSound );
+    soundManager.addSoundGenerator( uncheckedClip );
 
     // add a slider with snap-to-ticks behavior
     const discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
@@ -260,6 +268,15 @@ define( function( require ) {
       { boxWidth: CHECK_BOX_SIZE }
     );
 
+    thunderSoundClip.locallyEnabledProperty.lazyLink( enabled => {
+      if ( enabled ) {
+        checkedClip.play();
+      }
+      else {
+        uncheckedClip.play();
+      }
+    } );
+
     // a check box that controls whether the thunderSoundClip sound can be initiated when disabled
     const initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundClip.initiateWhenDisabled );
     initiateThunderWhenDisabledProperty.linkAttribute( thunderSoundClip, 'initiateWhenDisabled' );
@@ -268,6 +285,15 @@ define( function( require ) {
       initiateThunderWhenDisabledProperty,
       { boxWidth: CHECK_BOX_SIZE }
     );
+
+    initiateThunderWhenDisabledProperty.lazyLink( enabled => {
+      if ( enabled ) {
+        checkedClip.play();
+      }
+      else {
+        uncheckedClip.play();
+      }
+    } );
 
     // create a set of controls for the thunderSoundClip
     const thunderControl = new VBox( {
