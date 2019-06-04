@@ -239,6 +239,14 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
+  "general-button-v2.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "TODO: notes"
+  },
   "grab-001.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
@@ -262,6 +270,22 @@
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
     "notes": "created by John Blanco (PhET)"
+  },
+  "pause.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "TODO: notes"
+  },
+  "pause-001.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "TODO: notes"
   },
   "play-pause-001.mp3": {
     "text": [
@@ -366,6 +390,54 @@
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mike Winters (Georgia Tech) for use by PhET"
+  },
+  "step-back.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "TODO: notes"
+  },
+  "step-back-001.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "TODO: notes"
+  },
+  "step-back-002.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "TODO: notes"
+  },
+  "step-forward.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "TODO: notes"
+  },
+  "step-forward-001.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "TODO: notes"
+  },
+  "step-forward-002.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "TODO: notes"
   },
   "thunder.mp3": {
     "text": [
