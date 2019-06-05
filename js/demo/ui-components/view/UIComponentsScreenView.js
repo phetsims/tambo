@@ -13,6 +13,8 @@ define( function( require ) {
   const AquaRadioButton = require( 'SUN/AquaRadioButton' );
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Checkbox = require( 'SUN/Checkbox' );
+  const ComboBox = require( 'SUN/ComboBox' );
+  const ComboBoxItem = require( 'SUN/ComboBoxItem' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Dimension2 = require( 'DOT/Dimension2' );
   const DragListener = require( 'SCENERY/listeners/DragListener' );
@@ -58,6 +60,8 @@ define( function( require ) {
   const lightningImage = require( 'image!TAMBO/lightning.png' );
 
   // sounds
+  const comboBoxOpenSound = require( 'sound!TAMBO/combo-box-open-v3.mp3' );
+  const comboBoxCloseSound = require( 'sound!TAMBO/combo-box-close-v3.mp3' );
   const edgeBoundarySound = require( 'sound!TAMBO/edge-boundary-bottle.mp3' );
   const chargesInBodySound = require( 'sound!TAMBO/charges-in-body-better.mp3' );
   const marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
@@ -502,7 +506,7 @@ define( function( require ) {
     this.addChild( radioButtonSoundPanel );
 
     //-----------------------------------------------------------------------------------------------------------------
-    // add play/pause sound test
+    // play/pause sounds
     //-----------------------------------------------------------------------------------------------------------------
 
     // create the sounds for play/pause/step
@@ -530,7 +534,7 @@ define( function( require ) {
       soundManager.addSoundGenerator( stepBackwardSoundClip );
       stepBackwardSoundClips.push( stepBackwardSoundClip );
     } );
-    
+
     // create a number picker for choosing the button sound
     const selectedPlayPauseSoundProperty = new NumberProperty( 1 );
     const playPauseSoundNumberPicker = new NumberPicker(
@@ -589,7 +593,7 @@ define( function( require ) {
     this.addChild( playPauseSoundPanel );
 
     //-----------------------------------------------------------------------------------------------------------------
-    // add grab/release sound test
+    // grab/release sounds
     //-----------------------------------------------------------------------------------------------------------------
 
     const grabbableNodePanel = new PanelWithGrabbableItem( {
@@ -611,6 +615,58 @@ define( function( require ) {
         grabbableNodePanel.reset();
       }
     } );
+
+    //---------------------------------------------------------------------------------------------------------------
+    // combo box and sounds
+    //---------------------------------------------------------------------------------------------------------------
+
+    // create the selection items for the range selection combo box
+    const comboBoxItems = [];
+    const items = [ 'this', 'that', 'the other' ];
+    const selectedItemProperty = new Property( items[ 0 ] );
+    items.forEach( label => {
+      comboBoxItems.push(
+        new ComboBoxItem( new Text( label, { font: new PhetFont( 16 ) } ), label )
+      );
+    } );
+
+    // combo box for selecting the range
+    const comboBox = new ComboBox(
+      comboBoxItems,
+      selectedItemProperty,
+      this,
+      {
+        xMargin: 13,
+        yMargin: 6,
+        cornerRadius: 4,
+        right: grabbableNodePanel.right,
+        top: grabbableNodePanel.bottom + 10
+      }
+    );
+    this.addChild( comboBox );
+
+    // create and hook up the sounds
+    const comboBoxOpenSoundClip = new SoundClip( comboBoxOpenSound );
+    soundManager.addSoundGenerator( comboBoxOpenSoundClip );
+    const comboBoxCloseSoundClip = new SoundClip( comboBoxCloseSound );
+    soundManager.addSoundGenerator( comboBoxCloseSoundClip );
+
+    // play sounds on open and close
+    comboBox.listBox.on( 'visibility', () => {
+      if ( comboBox.listBox.visible ) {
+        comboBoxOpenSoundClip.play();
+      }
+      else {
+        comboBoxCloseSoundClip.play();
+      }
+    } );
+
+    // play sounds on selection change
+    selectedItemProperty.lazyLink( item => {
+      console.log( 'item = ' + item );
+    } );
+
+    // reset all button and sound
     this.addChild( resetAllButton );
     soundManager.addSoundGenerator( new ResetAllSoundGenerator( model.resetInProgressProperty ) );
   }
@@ -730,6 +786,7 @@ define( function( require ) {
           releaseSoundClips[ this.grabAndReleaseSoundIndexProperty.value - 1 ].play();
         }
       } ) );
+
       this.mutate( options );
     }
 
