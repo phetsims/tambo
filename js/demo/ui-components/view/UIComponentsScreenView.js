@@ -58,6 +58,7 @@ define( function( require ) {
   const lightningImage = require( 'image!TAMBO/lightning.png' );
 
   // sounds
+  const edgeBoundarySound = require( 'sound!TAMBO/edge-boundary-bottle.mp3' );
   const chargesInBodySound = require( 'sound!TAMBO/charges-in-body-better.mp3' );
   const marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
   const sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
@@ -657,6 +658,8 @@ define( function( require ) {
         soundManager.addSoundGenerator( soundClip );
         releaseSoundClips.push( soundClip );
       } );
+      const edgeBoundarySoundClip = new SoundClip( edgeBoundarySound );
+      soundManager.addSoundGenerator( edgeBoundarySoundClip );
 
       // @private
       this.grabAndReleaseSoundIndexProperty = new NumberProperty( 1 );
@@ -694,11 +697,34 @@ define( function( require ) {
       this.draggableNodeInitialPosition = this.draggableNode.center.copy();
 
       // add the drag handler, which will move the node and play the sounds
+      const boundsDilation = -squareLength / 2 - 4;
+      const dragBounds = background.bounds.dilated( boundsDilation );
+      let previousDraggableNodeCenter = this.draggableNode.center.copy;
       this.draggableNode.addInputListener( new DragListener( {
-        dragBoundsProperty: new Property( background.bounds.dilated( -squareLength / 2 - 4 ) ),
+        dragBoundsProperty: new Property( dragBounds ),
         translateNode: true,
         start: () => {
           grabSoundClips[ this.grabAndReleaseSoundIndexProperty.value - 1 ].play();
+        },
+        drag: ( event ) => {
+          const currentPosition = this.draggableNode.center;
+          let boundaryHit = false;
+          if ( previousDraggableNodeCenter.x > dragBounds.minX && currentPosition.x === dragBounds.minX ) {
+            boundaryHit = true;
+          }
+          else if ( previousDraggableNodeCenter.x < dragBounds.maxX && currentPosition.x === dragBounds.maxX ) {
+            boundaryHit = true;
+          }
+          if ( previousDraggableNodeCenter.y > dragBounds.minY && currentPosition.y === dragBounds.minY ) {
+            boundaryHit = true;
+          }
+          else if ( previousDraggableNodeCenter.y < dragBounds.maxY && currentPosition.y === dragBounds.maxY ) {
+            boundaryHit = true;
+          }
+          if ( boundaryHit ) {
+            edgeBoundarySoundClip.play();
+          }
+          previousDraggableNodeCenter = this.draggableNode.center;
         },
         end: () => {
           releaseSoundClips[ this.grabAndReleaseSoundIndexProperty.value - 1 ].play();
