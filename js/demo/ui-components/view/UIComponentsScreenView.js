@@ -193,7 +193,7 @@ define( function( require ) {
     } );
 
     // flag that indicates whether slider is being dragged through keyboard interaction
-    var sliderBeingDraggedByKeyboard = false;
+    let sliderBeingDraggedByKeyboard = false;
 
     // Add a slider with continuous behavior.  We create our own thumb node so that we can observe it.
     const continuousSlider = new HSlider( model.continuousValueProperty, new Range( 0, SLIDER_MAX ), {
@@ -659,11 +659,6 @@ define( function( require ) {
       else {
         comboBoxCloseSoundClip.play();
       }
-    } );
-
-    // play sounds on selection change
-    selectedItemProperty.lazyLink( item => {
-      console.log( 'item = ' + item );
     } );
 
     // reset all button and sound

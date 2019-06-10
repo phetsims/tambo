@@ -46,7 +46,7 @@ define( function( require ) {
     const dynamicsCompressorNode = this.audioContext.createDynamicsCompressor();
 
     // the following values were empirically determined throgh informed experimentation
-    var now = this.audioContext.currentTime;
+    const now = this.audioContext.currentTime;
     dynamicsCompressorNode.threshold.setValueAtTime( -3, now );
     dynamicsCompressorNode.knee.setValueAtTime( 0, now ); // hard knee
     dynamicsCompressorNode.ratio.setValueAtTime( 12, now );

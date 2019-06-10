@@ -96,6 +96,7 @@ define( function( require ) {
     const data = this.noiseBuffer.getChannelData( 0 );
 
     // fill in the sample buffer based on the noise type
+    let white;
     if ( options.noiseType === 'white' ) {
       for ( let i = 0; i < noiseBufferSize; i++ ) {
         data[ i ] = phet.joist.random.nextDouble() * 2 - 1;
@@ -110,7 +111,7 @@ define( function( require ) {
       let b5 = 0;
       let b6 = 0;
       for ( let i = 0; i < noiseBufferSize; i++ ) {
-        var white = phet.joist.random.nextDouble() * 2 - 1;
+        white = phet.joist.random.nextDouble() * 2 - 1;
         b0 = 0.99886 * b0 + white * 0.0555179;
         b1 = 0.99332 * b1 + white * 0.0750759;
         b2 = 0.96900 * b2 + white * 0.1538520;
@@ -123,7 +124,7 @@ define( function( require ) {
       }
     }
     else if ( options.noiseType === 'brown' ) {
-      var lastOut = 0;
+      let lastOut = 0;
       for ( let i = 0; i < noiseBufferSize; i++ ) {
         white = phet.joist.random.nextDouble() * 2 - 1;
         data[ i ] = ( lastOut + ( 0.02 * white ) ) / 1.02;

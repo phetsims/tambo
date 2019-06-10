@@ -584,12 +584,12 @@ define( function( require ) {
     logGain( gainNode, duration ) {
 
       duration = duration || 1;
-      var startTime = Date.now();
+      const startTime = Date.now();
 
       // closure that will be invoked multiple times to log the changing values
       function logGain() {
-        var now = Date.now();
-        var timeInMilliseconds = now - startTime;
+        const now = Date.now();
+        const timeInMilliseconds = now - startTime;
         console.log( 'Time (ms): ' + timeInMilliseconds.toFixed( 2 ) + ', Gain Value: ' + gainNode.gain.value );
         if ( now - startTime < ( duration * 1000 ) ) {
           window.requestAnimationFrame( logGain );

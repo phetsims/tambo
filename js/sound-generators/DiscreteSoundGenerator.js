@@ -5,7 +5,7 @@ define( function( require ) {
 
   // modules
   const inherit = require( 'PHET_CORE/inherit' );
-  var Range = require( 'DOT/Range' );
+  const Range = require( 'DOT/Range' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const tambo = require( 'TAMBO/tambo' );
 
