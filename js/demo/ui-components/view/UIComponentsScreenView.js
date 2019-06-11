@@ -71,47 +71,63 @@ define( function( require ) {
   const checkboxCheckedSound = require( 'sound!TAMBO/check-box-checked.mp3' );
   const checkboxUncheckedSound = require( 'sound!TAMBO/check-box-unchecked.mp3' );
   const pushButtonSounds = [
+
+    // the order here is important, since the first sound is meant to be the current favorite
+    require( 'sound!TAMBO/general-button-v3.mp3' ),
     require( 'sound!TAMBO/general-button-001.mp3' ),
     require( 'sound!TAMBO/general-button-002.mp3' ),
-    require( 'sound!TAMBO/general-button-003.mp3' ),
-    require( 'sound!TAMBO/general-button-v2.mp3' )
+    require( 'sound!TAMBO/general-button-003.mp3' )
   ];
   const radioButtonSounds = [
+
+    // the order here is important, since the first sound is meant to be the current favorite
+    require( 'sound!TAMBO/radio-button-v2.mp3' ),
     require( 'sound!TAMBO/radio-button-001.mp3' ),
-    require( 'sound!TAMBO/radio-button-002.mp3' ),
-    require( 'sound!TAMBO/radio-button-003.mp3' )
+    require( 'sound!TAMBO/radio-button-002.mp3' )
   ];
   const playSounds = [
+
+    // the order here is important, since the first sound is meant to be the current favorite
+    require( 'sound!TAMBO/play-pause-003.mp3' ),
     require( 'sound!TAMBO/play-pause-001.mp3' ),
     require( 'sound!TAMBO/play-pause-002.mp3' ),
-    require( 'sound!TAMBO/play-pause-003.mp3' ),
     require( 'sound!TAMBO/play-pause-004.mp3' )
   ];
   const pauseSounds = [
+
+    // the order here is important, since the first sound is meant to be the current favorite
     require( 'sound!TAMBO/pause.mp3' ),
     require( 'sound!TAMBO/pause-001.mp3' ),
     require( 'sound!TAMBO/pause.mp3' ),
     require( 'sound!TAMBO/pause-001.mp3' )
   ];
   const stepForwardSounds = [
-    require( 'sound!TAMBO/step-forward.mp3' ),
+
+    // the order here is important, since the first sound is meant to be the current favorite
     require( 'sound!TAMBO/step-forward-001.mp3' ),
+    require( 'sound!TAMBO/step-forward.mp3' ),
     require( 'sound!TAMBO/step-forward-002.mp3' ),
     require( 'sound!TAMBO/step-forward-002.mp3' )
   ];
   const stepBackwardSounds = [
-    require( 'sound!TAMBO/step-back.mp3' ),
+
+    // the order here is important, since the first sound is meant to be the current favorite
     require( 'sound!TAMBO/step-back-001.mp3' ),
+    require( 'sound!TAMBO/step-back.mp3' ),
     require( 'sound!TAMBO/step-back-002.mp3' ),
     require( 'sound!TAMBO/step-back-002.mp3' )
   ];
   const grabSounds = [
-    require( 'sound!TAMBO/grab-001.mp3' ),
-    require( 'sound!TAMBO/grab-002.mp3' )
+
+    // the order here is important, since the first sound is meant to be the current favorite
+    require( 'sound!TAMBO/grab-002.mp3' ),
+    require( 'sound!TAMBO/grab-001.mp3' )
   ];
   const releaseSounds = [
-    require( 'sound!TAMBO/release-001.mp3' ),
-    require( 'sound!TAMBO/release-002.mp3' )
+
+    // the order here is important, since the first sound is meant to be the current favorite
+    require( 'sound!TAMBO/release-002.mp3' ),
+    require( 'sound!TAMBO/release-001.mp3' )
   ];
 
   /**
@@ -700,12 +716,14 @@ define( function( require ) {
       const grabSoundClips = [];
       grabSounds.forEach( sound => {
         const soundClip = new SoundClip( sound );
+        soundClip.setPlaybackRate( 1 + Math.pow( 2, 1 / 12 ) );
         soundManager.addSoundGenerator( soundClip );
         grabSoundClips.push( soundClip );
       } );
       const releaseSoundClips = [];
       releaseSounds.forEach( sound => {
         const soundClip = new SoundClip( sound );
+        soundClip.setPlaybackRate( 1 + Math.pow( 2, 1 / 12 ) );
         soundManager.addSoundGenerator( soundClip );
         releaseSoundClips.push( soundClip );
       } );
