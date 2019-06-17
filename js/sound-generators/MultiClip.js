@@ -17,7 +17,6 @@ define( function( require ) {
   const tambo = require( 'TAMBO/tambo' );
 
   // constants
-  const MAX_PLAY_DEFER_TIME = 0.2; // seconds, max time to defer a play request while waiting for audio context state change
   const STOP_DELAY_TIME = 0.1; // empirically determined to avoid clicks when stopping sounds
 
   class MultiClip extends SoundGenerator {
@@ -63,42 +62,13 @@ define( function( require ) {
           },
           () => {
 
-            // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio file
-            // could cause it.  There is handling for both the RequireJS and build cases.
+            // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio
+            // file could cause it.  There is handling for both the RequireJS and build cases.
             assert && assert( false, 'audio decode failed' );
             console.error( 'unable to decode audio data, please check all encoded audio' );
           }
         );
       } );
-
-      // @private {number} - time at which a deferred play request occurred, in milliseconds since epoch
-      this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
-
-      // @private {function} - callback for when audio context isn't in 'running' state, see usage
-      this.audioContextStateChangeListener = state => {
-
-        if ( state === 'running' ) {
-
-          console.log( '( Date.now() - this.timeOfDeferredPlayRequest ) / 1000 = ' + ( ( Date.now() - this.timeOfDeferredPlayRequest ) / 1000 ) );
-
-          // initiate deferred play if this is a loop or if it hasn't been too long since the request was made
-          if ( ( Date.now() - this.timeOfDeferredPlayRequest ) / 1000 < MAX_PLAY_DEFER_TIME ) {
-
-            // Play the sound, but with a little bit of delay.  The delay was found to be needed because otherwise on
-            // some browsers the sound would be somewhat muted, probably due to some sort of fade in of the audio levels
-            // that the browser does automatically to avoid having the web page's sound start too abruptly.  The amount of
-            // delay was empirically determined by testing on multiple browsers.
-            this.play( 1, 0.05 );
-            console.log( 'played' );
-          }
-
-          // automatically remove after firing
-          audioContextStateChangeMonitor.removeStateChangeListener(
-            this.audioContext,
-            this.audioContextStateChangeListener
-          );
-        }
-      };
 
       // listen to the Property that indicates whether we are fully enabled and stop sounds when it goes false
       this.fullyEnabledProperty.lazyLink( fullyEnabled => {
@@ -119,65 +89,48 @@ define( function( require ) {
       // parameter checking
       assert && assert( index < this.numberOfClips, 'clip index out of range' );
 
-      if ( this.audioContext.state === 'running' ) {
+      const now = this.audioContext.currentTime;
 
-        const now = this.audioContext.currentTime;
+      // default delay is zero
+      delay = typeof delay === 'undefined' ? 0 : delay;
 
-        // default delay is zero
-        delay = typeof delay === 'undefined' ? 0 : delay;
+      if ( this.fullyEnabled ) {
 
-        if ( this.fullyEnabled ) {
+        // make sure the decoding of the audio data is complete before trying to play the sound
+        if ( this.audioBuffers[ index ] ) {
 
-          // make sure the decoding of the audio data is complete before trying to play the sound
-          if ( this.audioBuffers[ index ] ) {
+          // make sure the local gain is set to unity value
+          this.localGainNode.gain.cancelScheduledValues( now );
+          this.localGainNode.gain.setValueAtTime( 1, now );
 
-            // make sure the local gain is set to unity value
-            this.localGainNode.gain.cancelScheduledValues( now );
-            this.localGainNode.gain.setValueAtTime( 1, now );
+          // create an audio buffer source node and connect it to the previously decoded audio data
+          const bufferSource = this.audioContext.createBufferSource();
+          bufferSource.buffer = this.audioBuffers[ index ];
 
-            // create an audio buffer source node and connect it to the previously decoded audio data
-            const bufferSource = this.audioContext.createBufferSource();
-            bufferSource.buffer = this.audioBuffers[ index ];
+          // connect this source node to the output
+          bufferSource.connect( this.localGainNode );
 
-            // connect this source node to the output
-            bufferSource.connect( this.localGainNode );
+          // add this to the list of active sources so that it can be stopped if necessary
+          this.activeBufferSources.push( bufferSource );
 
-            // add this to the list of active sources so that it can be stopped if necessary
-            this.activeBufferSources.push( bufferSource );
+          // add a handler for when the sound finishes playing
+          bufferSource.onended = () => {
 
-            // add a handler for when the sound finishes playing
-            bufferSource.onended = () => {
+            // remove the source from the list of active sources
+            const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
+            if ( indexOfSource > -1 ) {
+              this.activeBufferSources.splice( indexOfSource, 1 );
+            }
+          };
 
-              // remove the source from the list of active sources
-              const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
-              if ( indexOfSource > -1 ) {
-                this.activeBufferSources.splice( indexOfSource, 1 );
-              }
-            };
-
-            // start the playback of the sound
-            bufferSource.start( now + delay, this.soundStart );
-          }
-          else {
-
-            // the play method was called before the sound buffer finished loading, create an action that play the sound
-            // once the loading has completed
-            this.loadCompleteAction = () => { this.play( index, delay ); };
-          }
+          // start the playback of the sound
+          bufferSource.start( now + delay, this.soundStart );
         }
-      }
-      else {
+        else {
 
-        // The play method was called when the audio context was not yet running, so add a listener to play if and when
-        // the audio context state changes.  This will start any loops, and will also play a one-shot sound if the time
-        // between the request and the state change isn't too great.  Note that this does NOT queue up more than one
-        // individual sound to be played.
-        this.timeOfDeferredPlayRequest = Date.now();
-        if ( !audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
-          audioContextStateChangeMonitor.addStateChangeListener(
-            this.audioContext,
-            this.audioContextStateChangeListener
-          );
+          // the play method was called before the sound buffer finished loading, create an action that play the sound
+          // once the loading has completed
+          this.loadCompleteAction = () => { this.play( index, delay ); };
         }
       }
     }
