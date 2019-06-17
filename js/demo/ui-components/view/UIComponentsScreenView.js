@@ -120,12 +120,14 @@ define( function( require ) {
   const grabSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
+    require( 'sound!TAMBO/grab-v2.mp3' ),
     require( 'sound!TAMBO/grab-002.mp3' ),
     require( 'sound!TAMBO/grab-001.mp3' )
   ];
   const releaseSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
+    require( 'sound!TAMBO/grab-release-v2.mp3' ),
     require( 'sound!TAMBO/release-002.mp3' ),
     require( 'sound!TAMBO/release-001.mp3' )
   ];
@@ -716,14 +718,12 @@ define( function( require ) {
       const grabSoundClips = [];
       grabSounds.forEach( sound => {
         const soundClip = new SoundClip( sound );
-        soundClip.setPlaybackRate( 1 + Math.pow( 2, 1 / 12 ) );
         soundManager.addSoundGenerator( soundClip );
         grabSoundClips.push( soundClip );
       } );
       const releaseSoundClips = [];
       releaseSounds.forEach( sound => {
         const soundClip = new SoundClip( sound );
-        soundClip.setPlaybackRate( 1 + Math.pow( 2, 1 / 12 ) );
         soundManager.addSoundGenerator( soundClip );
         releaseSoundClips.push( soundClip );
       } );
