@@ -60,8 +60,8 @@ define( function( require ) {
   const lightningImage = require( 'image!TAMBO/lightning.png' );
 
   // sounds
-  const comboBoxOpenSound = require( 'sound!TAMBO/combo-box-open-v3.mp3' );
-  const comboBoxCloseSound = require( 'sound!TAMBO/combo-box-close-v3.mp3' );
+  const comboBoxOpenSound = require( 'sound!TAMBO/combo-box-open.mp3' );
+  const comboBoxCloseSound = require( 'sound!TAMBO/combo-box-close.mp3' );
   const edgeBoundarySound = require( 'sound!TAMBO/edge-boundary-bottle.mp3' );
   const chargesInBodySound = require( 'sound!TAMBO/charges-in-body-better.mp3' );
   const marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
