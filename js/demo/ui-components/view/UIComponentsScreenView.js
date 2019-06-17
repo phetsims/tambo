@@ -104,17 +104,17 @@ define( function( require ) {
   const stepForwardSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
-    require( 'sound!TAMBO/step-forward-001.mp3' ),
+    require( 'sound!TAMBO/step-forward-v2.mp3' ),
     require( 'sound!TAMBO/step-forward.mp3' ),
-    require( 'sound!TAMBO/step-forward-002.mp3' ),
+    require( 'sound!TAMBO/step-forward-001.mp3' ),
     require( 'sound!TAMBO/step-forward-002.mp3' )
   ];
   const stepBackwardSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
-    require( 'sound!TAMBO/step-back-001.mp3' ),
+    require( 'sound!TAMBO/step-back-v2.mp3' ),
     require( 'sound!TAMBO/step-back.mp3' ),
-    require( 'sound!TAMBO/step-back-002.mp3' ),
+    require( 'sound!TAMBO/step-back-001.mp3' ),
     require( 'sound!TAMBO/step-back-002.mp3' )
   ];
   const grabSounds = [
