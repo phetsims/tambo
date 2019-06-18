@@ -1,5 +1,5 @@
 {
-  "comment": "# tambo 1.0.0-dev.12 Tue Jun 18 2019 15:18:20 GMT-0600 (Mountain Daylight Time)",
+  "comment": "# tambo 1.0.0-dev.12 Tue Jun 18 2019 16:24:21 GMT-0600 (Mountain Daylight Time)",
   "assert": {
     "sha": "d8a2e8992420327ff72a6fc4bb93ec76549ded0e",
     "branch": "master"
@@ -69,7 +69,7 @@
     "branch": "master"
   },
   "tambo": {
-    "sha": "835196767492676993599c2cf5d3ded57e27ae51",
+    "sha": "96dedc92ea140beef5e9531f5c1c2ffc8157a019",
     "branch": "master"
   },
   "tandem": {
