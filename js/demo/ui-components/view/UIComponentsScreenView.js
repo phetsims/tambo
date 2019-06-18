@@ -545,12 +545,14 @@ define( function( require ) {
       listener: () => {
         stepBackwardSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
       },
+      isPlayingProperty: playingProperty,
       radius: 15
     } );
     const stepForwardButton = new StepForwardButton( {
       listener: () => {
         stepForwardSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
       },
+      isPlayingProperty: playingProperty,
       radius: 15
     } );
 
@@ -564,18 +566,27 @@ define( function( require ) {
       }
     } );
 
+    // create a text indicator of the current play/pause state (makes it easier to understand what's going on)
+    const playPauseStateIndicator = new Text( '', { font: new PhetFont( 18 ) } );
+    playingProperty.link( playing => { playPauseStateIndicator.text = playing ? 'playing' : 'paused'; } );
+
     const playPauseSoundPanel = new Panel(
-      new HBox(
-        {
-          children: [
-            stepBackwardButton,
-            playPauseButton,
-            stepForwardButton,
-            playPauseSoundNumberPicker
-          ],
-          spacing: 20
-        }
-      ),
+      new VBox( {
+        children: [
+          new HBox( {
+            children: [
+              stepBackwardButton,
+              playPauseButton,
+              stepForwardButton,
+              playPauseSoundNumberPicker
+            ],
+            spacing: 20
+          } ),
+          playPauseStateIndicator
+        ],
+        spacing: 10,
+        align: 'left'
+      } ),
       {
         fill: '#FCFBE3',
         left: radioButtonSoundPanel.left,
