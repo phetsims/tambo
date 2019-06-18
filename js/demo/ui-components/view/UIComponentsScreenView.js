@@ -418,72 +418,46 @@ define( function( require ) {
     // TODO: I (jbphet) could probably consolidate the code for the radio button groups into a class that creates them
 
     // function to play a radio button sound based on the selected clip and the radio button index
-    const playRadioButtonSound = ( selectionIndex, totalSelections ) => {
+    const playRadioButtonSound = ( selectionIndex ) => {
       const clip = radioButtonSoundClips[ selectedRadioButtonSoundProperty.value - 1 ];
 
-      // calculate a playback rate that centers around 1 and puts 2 semitones (aka one whole tone) between each sound
-      const playbackRate = Math.pow( 2, ( ( totalSelections - 1 ) / 2 - selectionIndex ) * ( 1 / 6 ) );
+      // calculate a playback rate that starts from the natural frequency of the sound and goes down by whole tones
+      const playbackRate = Math.pow( 2, -selectionIndex / 12 );
       clip.setPlaybackRate( playbackRate );
       clip.play();
     };
 
-    const twoRadioButtonSelectorValueProperty = new NumberProperty( 0 );
-    twoRadioButtonSelectorValueProperty.lazyLink( value => playRadioButtonSound( value, 2 ) );
-    const fiveRadioButtonSelectorValueProperty = new NumberProperty( 0 );
-    fiveRadioButtonSelectorValueProperty.lazyLink( value => playRadioButtonSound( value, 5 ) );
+    const smallerRadioButtonSelectorValueProperty = new NumberProperty( 0 );
+    smallerRadioButtonSelectorValueProperty.lazyLink( value => playRadioButtonSound( value ) );
+    const largerRadioButtonSelectorValueProperty = new NumberProperty( 0 );
+    largerRadioButtonSelectorValueProperty.lazyLink( value => playRadioButtonSound( value ) );
 
-    const twoButtonGroupSelectionA = new AquaRadioButton(
-      twoRadioButtonSelectorValueProperty,
-      0,
-      new Text( 'A', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
-    );
-    const twoButtonGroupSelectionB = new AquaRadioButton(
-      twoRadioButtonSelectorValueProperty,
-      1,
-      new Text( 'B', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
-    );
-    const twoRadioButtonBox = new VBox( {
-      children: [
-        twoButtonGroupSelectionA,
-        twoButtonGroupSelectionB
-      ],
+    const smallerRadioButtonGroupButtons = [];
+    _.times( 2, index => {
+      smallerRadioButtonGroupButtons.push( new AquaRadioButton(
+        smallerRadioButtonSelectorValueProperty,
+        index,
+        new Text( String.fromCharCode( 65 + index ), { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
+      ) );
+    } );
+
+    const smallerRadioButtonBox = new VBox( {
+      children: smallerRadioButtonGroupButtons,
       align: 'left',
       spacing: 10
     } );
 
-    const fiveButtonGroupSelectionA = new AquaRadioButton(
-      fiveRadioButtonSelectorValueProperty,
-      0,
-      new Text( 'A', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
-    );
-    const fiveButtonGroupSelectionB = new AquaRadioButton(
-      fiveRadioButtonSelectorValueProperty,
-      1,
-      new Text( 'B', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
-    );
-    const fiveButtonGroupSelectionC = new AquaRadioButton(
-      fiveRadioButtonSelectorValueProperty,
-      2,
-      new Text( 'C', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
-    );
-    const fiveButtonGroupSelectionD = new AquaRadioButton(
-      fiveRadioButtonSelectorValueProperty,
-      3,
-      new Text( 'D', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
-    );
-    const fiveButtonGroupSelectionE = new AquaRadioButton(
-      fiveRadioButtonSelectorValueProperty,
-      4,
-      new Text( 'E', { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
-    );
-    const fiveRadioButtonBox = new VBox( {
-      children: [
-        fiveButtonGroupSelectionA,
-        fiveButtonGroupSelectionB,
-        fiveButtonGroupSelectionC,
-        fiveButtonGroupSelectionD,
-        fiveButtonGroupSelectionE
-      ],
+    const largerRadioButtonGroupButtons = [];
+    _.times( 7, index => {
+      largerRadioButtonGroupButtons.push( new AquaRadioButton(
+        largerRadioButtonSelectorValueProperty,
+        index,
+        new Text( String.fromCharCode( 65 + index ), { font: RADIO_BUTTON_FONT } ), { radius: RADIO_BUTTON_RADIUS }
+      ) );
+    } );
+
+    const largerRadioButtonBox = new VBox( {
+      children: largerRadioButtonGroupButtons,
       align: 'left',
       spacing: 10
     } );
@@ -505,8 +479,8 @@ define( function( require ) {
             new HBox(
               {
                 children: [
-                  twoRadioButtonBox,
-                  fiveRadioButtonBox
+                  smallerRadioButtonBox,
+                  largerRadioButtonBox
                 ],
                 spacing: 50
               }
