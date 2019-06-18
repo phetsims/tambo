@@ -33,6 +33,7 @@ define( function( require ) {
   const Range = require( 'DOT/Range' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
+  const ScreenSelectionSoundGenerator = require( 'TAMBO/sound-generators/ScreenSelectionSoundGenerator' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const soundManager = require( 'TAMBO/soundManager' );
@@ -137,6 +138,9 @@ define( function( require ) {
    */
   function UIComponentsScreenView( model ) {
     ScreenView.call( this );
+
+    // TODO: This is a temporary way to get screen selection sounds to play, will everntually be integrated into joist
+    soundManager.addSoundGenerator( new ScreenSelectionSoundGenerator( phet.joist.sim.currentScreenProperty ) );
 
     // create the check box sounds
     const checkedClip = new SoundClip( checkboxCheckedSound );

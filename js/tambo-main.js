@@ -12,12 +12,10 @@ define( function( require ) {
   const RadialGradient = require( 'SCENERY/util/RadialGradient' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const Screen = require( 'JOIST/Screen' );
-  const ScreenSelectionSoundGenerator = require( 'TAMBO/sound-generators/ScreenSelectionSoundGenerator' );
   const Sim = require( 'JOIST/Sim' );
   const SimLauncher = require( 'JOIST/SimLauncher' );
   const SimLikeComponentsModel = require( 'TAMBO/demo/sim-like-components/model/SimLikeComponentsModel' );
   const SimLikeComponentsScreenView = require( 'TAMBO/demo/sim-like-components/view/SimLikeComponentsScreenView' );
-  const soundManager = require( 'TAMBO/soundManager' );
   const TamboKeyboardHelpContent = require( 'TAMBO/demo/TamboKeyboardHelpContent' );
   const TestingScreenView = require( 'TAMBO/demo/testing/view/TestingScreenView' );
   const UIComponentsModel = require( 'TAMBO/demo/ui-components/model/UIComponentsModel' );
@@ -106,7 +104,4 @@ define( function( require ) {
     ], simOptions ).start();
 
   } );
-
-  // sound generator for screen selections
-  soundManager.addSoundGenerator( new ScreenSelectionSoundGenerator( phet.joist.sim.currentScreenProperty ) );
 } );
