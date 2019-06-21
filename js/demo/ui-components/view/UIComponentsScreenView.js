@@ -74,6 +74,7 @@ define( function( require ) {
   const pushButtonSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
+    require( 'sound!TAMBO/general-button-v4.mp3' ),
     require( 'sound!TAMBO/general-button-v3.mp3' ),
     require( 'sound!TAMBO/general-button-001.mp3' ),
     require( 'sound!TAMBO/general-button-002.mp3' ),
