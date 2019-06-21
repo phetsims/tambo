@@ -2,8 +2,14 @@
 
 /**
  * A sound generator that plays one-shot sounds from a set of pre-recorded files that are provided upon construction.
- * This is often used as a base class for a sound generator when a finite set of sounds clips need to be played in response to different values of a
- * model parameter.
+ * This is often used as a base class for a sound generator when a finite set of sounds clips need to be played in
+ * response to different values of a model parameter.
+ *
+ * Individual gain controls are not provided for the different sound clips in this class, there is just a single gain
+ * node for the sound generator as a whole.  If such control is needed, a similar type could be created using multiple
+ * instances of the SoundClip class.
+ *
+ * This class only supports clips that are played as one shots, i.e. it does not include support for looping.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
