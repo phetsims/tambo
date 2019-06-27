@@ -20,7 +20,7 @@ define( function( require ) {
   const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
   /**
-   * @param {Object} options
+   * @param {Object} [options]
    * @constructor
    * @abstract
    */

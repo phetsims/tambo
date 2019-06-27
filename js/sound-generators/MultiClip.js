@@ -6,8 +6,9 @@
  * response to different values of a model parameter.
  *
  * Individual gain controls are not provided for the different sound clips in this class, there is just a single gain
- * node for the sound generator as a whole.  If such control is needed, a similar type could be created using multiple
- * instances of the SoundClip class.
+ * node for the sound generator as a whole.  The intent here is that this saves resources by not creating unneeded gain
+ * controls.  If such control is needed, a similar type could be created using multiple instances of the SoundClip
+ * class.
  *
  * This class only supports clips that are played as one shots, i.e. it does not include support for looping.
  *
@@ -28,13 +29,31 @@ define( function( require ) {
   class MultiClip extends SoundGenerator {
 
     /**
-     * @param {Object[]} soundInfoList - A list of objects that includes *either* a "url" key with a value that points to
-     * the sound to be played *or* a "base64" key with a value that represents a base64-encoded version of the sound data.
-     * The former is generally used when a sim is running in RequireJS mode, the latter is used in built versions.
+     * @param {Object[]} soundInfoList - A list of objects that includes *either* a 'url' key with a value that points
+     * to the sound to be played *or* a 'base64' key with a value that represents a base64-encoded version of the sound
+     * data. The former is generally used when a sim is running in RequireJS mode, the latter is used in built versions.
+     * This is the format that is provided when using the sound.js plugin.
+     * @param {Object} [options]
      */
-    constructor( soundInfoList ) {
+    constructor( soundInfoList, options ) {
 
-      super();
+      options = _.extend( {
+
+        // {Array.<*>} - a list of values that can be used through the playByValue method to associate values with sounds
+        orderedValueList: null
+
+      }, options );
+
+      // parameter checking
+      assert && assert(
+        options.orderedValueList === null || options.orderedValueList.length === soundInfoList.length,
+        'if provided, the length of the ordered value list must match the length of the sound info list'
+      );
+
+      super( options );
+
+      // @private {Array.<*>}
+      this.orderedValueList = options.orderedValueList;
 
       // @private {number}
       this.numberOfClips = soundInfoList.length;
@@ -85,15 +104,15 @@ define( function( require ) {
     }
 
     /**
-     * play the specified clip
+     * play the specified sound clip
      * @param {number} index - index of the sound clip to be played
      * @param {number} [delay] - optional delay value for how long to wait before initiating play, in seconds
      * @public
      */
-    play( index, delay ) {
+    playByIndex( index, delay ) {
 
       // parameter checking
-      assert && assert( index < this.numberOfClips, 'clip index out of range' );
+      assert && assert( index >= 0 && index < this.numberOfClips, 'clip index out of range' );
 
       const now = this.audioContext.currentTime;
 
@@ -139,6 +158,22 @@ define( function( require ) {
           this.loadCompleteAction = () => { this.play( index, delay ); };
         }
       }
+    }
+
+    /**
+     * play the sound associated with the provided value
+     * @param {*} value
+     * @param {number} [delay]
+     */
+    playByValue( value, delay ) {
+
+      // state checking
+      assert && assert( this.orderedValueList, 'can\t use playByValue without specifying the values at construction' );
+
+      const soundIndex = this.orderedValueList.indexOf( value );
+      assert && assert( soundIndex !== -1, 'specified value not found in ordered value list' );
+
+      this.playByIndex( soundIndex, delay );
     }
 
     /**
