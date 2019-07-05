@@ -3,13 +3,12 @@
 /**
  * model of a box containing moving balls that bounce off the walls
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
   const Ball = require( 'TAMBO/demo/sim-like-components/model/Ball' );
   const Color = require( 'SCENERY/util/Color' );
-  const inherit = require( 'PHET_CORE/inherit' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Shape = require( 'KITE/Shape' );
   const tambo = require( 'TAMBO/tambo' );
@@ -28,29 +27,27 @@ define( function( require ) {
     return new Color( r, g, b );
   }
 
-  /**
-   * @param {number} width - in centimeters
-   * @param {number} height - in centimeters
-   * @constructor
-   */
-  function BoxOfBalls( width, height ) {
+  class BoxOfBalls {
 
-    // @public (read-only) {Shape.rect} - the bounding box
-    this.box = Shape.rect( 0, 0, width, height );
+    /**
+     * @param {number} width - in centimeters
+     * @param {number} height - in centimeters
+     * @constructor
+     */
+    constructor( width, height ) {
 
-    // @public (read-only) {ObservableArray}
-    this.balls = new ObservableArray();
-  }
+      // @public (read-only) {Shape.rect} - the bounding box
+      this.box = Shape.rect( 0, 0, width, height );
 
-  tambo.register( 'BoxOfBalls', BoxOfBalls );
-
-  return inherit( Object, BoxOfBalls, {
+      // @public (read-only) {ObservableArray}
+      this.balls = new ObservableArray();
+    }
 
     /**
      * add a ball with random size, color, position, and velocity
      * @public
      */
-    addRandomBall: function() {
+    addRandomBall() {
 
       let xVelocity = MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * ( MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY );
       xVelocity = phet.joist.random.nextBoolean() ? xVelocity : -xVelocity;
@@ -66,33 +63,33 @@ define( function( require ) {
         ),
         velocity
       ) );
-    },
+    }
 
     /**
      * remove a ball
      * @public
      */
-    removeABall: function() {
+    removeABall() {
       this.balls.pop();
-    },
+    }
 
     /**
      * step function to move and bounce the balls
      * @param {number} dt - time step, in seconds
      * @public
      */
-    step: function( dt ) {
+    step( dt ) {
       const boxBounds = this.box.bounds;
       this.balls.forEach( ball => {
-        const positionBeforeMotion = ball.positionProperty.get();
-        const ballVelocity = ball.velocityProperty.get();
+        const positionBeforeMotion = ball.positionProperty.value;
+        const ballVelocity = ball.velocityProperty.value;
         const newPosition = positionBeforeMotion.plus( ballVelocity.timesScalar( dt ) );
 
         // set new position
-        ball.positionProperty.set( newPosition );
+        ball.positionProperty.value = newPosition;
 
         // handle bouncing
-        let newBallVelocity = ball.velocityProperty.get().copy();
+        let newBallVelocity = ball.velocityProperty.value.copy();
         if ( ballVelocity.x > 0 && newPosition.x + ball.radius > boxBounds.maxX ) {
           newBallVelocity = new Vector2( -ballVelocity.x, ballVelocity.y );
         }
@@ -108,18 +105,22 @@ define( function( require ) {
 
         // update the velocity if it has changed
         if ( !ballVelocity.equals( newBallVelocity ) ) {
-          ball.velocityProperty.set( newBallVelocity );
+          ball.velocityProperty.value = newBallVelocity;
         }
       } );
-    },
+    }
 
     /**
      * restore initial state
      * @public
      */
-    reset: function() {
+    reset() {
       this.balls.reset();
     }
 
-  } );
+  }
+
+  tambo.register( 'BoxOfBalls', BoxOfBalls );
+
+  return BoxOfBalls;
 } );
