@@ -3,71 +3,72 @@
 /**
  * simple model of a ball
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
   const Emitter = require( 'AXON/Emitter' );
-  const inherit = require( 'PHET_CORE/inherit' );
   const Property = require( 'AXON/Property' );
   const tambo = require( 'TAMBO/tambo' );
 
-  /**
-   * @param {number} radius - in centimeters
-   * @param {Color|string} color
-   * @param {Vector2} initialPosition
-   * @param {Vector2} initialVelocity
-   * @constructor
-   */
-  function Ball( radius, color, initialPosition, initialVelocity ) {
+  class Ball {
 
-    // @public read-only {number}
-    this.radius = radius;
+    /**
+     * @param {number} radius - in centimeters
+     * @param {Color|string} color
+     * @param {Vector2} initialPosition
+     * @param {Vector2} initialVelocity
+     */
+    constructor( radius, color, initialPosition, initialVelocity ) {
 
-    // @public read-only {Color}
-    this.color = color;
+      // @public read-only {number}
+      this.radius = radius;
 
-    // @public {Property<Vector2>}
-    this.positionProperty = new Property( initialPosition );
+      // @public read-only {Color}
+      this.color = color;
 
-    // @public {Property<Vector2>}
-    this.velocityProperty = new Property( initialVelocity );
+      // @public {Property<Vector2>}
+      this.positionProperty = new Property( initialPosition );
 
-    // @public (read-only) {Emitter} - emitter that fires when the ball bounces, indicates surface on which it bounced
-    this.bounceEmitter = new Emitter( { validators: [ { valueType: 'string' } ] } );
+      // @public {Property<Vector2>}
+      this.velocityProperty = new Property( initialVelocity );
 
-    // monitor the velocity Property and fire the emitter when a bounce occurs
-    this.velocityProperty.lazyLink( ( newVelocity, oldVelocity ) => {
+      // @public (read-only) {Emitter} - emitter that fires when the ball bounces, indicates surface on which it bounced
+      this.bounceEmitter = new Emitter( { validators: [ { valueType: 'string' } ] } );
 
-      // check for wall bounce
-      if ( oldVelocity.x > 0 && newVelocity.x < 0 ) {
-        this.bounceEmitter.emit( 'right-wall' );
-      }
-      else if ( oldVelocity.x < 0 && newVelocity.x > 0 ) {
-        this.bounceEmitter.emit( 'left-wall' );
-      }
+      // monitor the velocity Property and fire the emitter when a bounce occurs
+      this.velocityProperty.lazyLink( ( newVelocity, oldVelocity ) => {
 
-      // check for floor and ceiling bounce
-      if ( oldVelocity.y > 0 && newVelocity.y < 0 ) {
-        this.bounceEmitter.emit( 'ceiling' );
-      }
-      else if ( oldVelocity.y < 0 && newVelocity.y > 0 ) {
-        this.bounceEmitter.emit( 'floor' );
-      }
-    } );
-  }
+        // check for wall bounce
+        if ( oldVelocity.x > 0 && newVelocity.x < 0 ) {
+          this.bounceEmitter.emit( 'right-wall' );
+        }
+        else if ( oldVelocity.x < 0 && newVelocity.x > 0 ) {
+          this.bounceEmitter.emit( 'left-wall' );
+        }
 
-  tambo.register( 'Ball', Ball );
-
-  return inherit( Object, Ball, {
+        // check for floor and ceiling bounce
+        if ( oldVelocity.y > 0 && newVelocity.y < 0 ) {
+          this.bounceEmitter.emit( 'ceiling' );
+        }
+        else if ( oldVelocity.y < 0 && newVelocity.y > 0 ) {
+          this.bounceEmitter.emit( 'floor' );
+        }
+      } );
+    }
 
     /**
      * restore initial state
      * @public
      */
-    reset: function() {
+    reset() {
       this.positionProperty.reset();
       this.velocityProperty.reset();
     }
-  } );
+
+  }
+
+  tambo.register( 'Ball', Ball );
+
+  return Ball;
 } );
