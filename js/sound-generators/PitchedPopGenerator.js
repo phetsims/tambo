@@ -6,11 +6,10 @@
  * @author John Blanco (PhET Interactive Simulations)
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  const inherit = require( 'PHET_CORE/inherit' );
   const Range = require( 'DOT/Range' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const tambo = require( 'TAMBO/tambo' );
@@ -20,72 +19,69 @@ define( function( require ) {
   const ENVELOPE_TIME_CONSTANT = 0.005; // in seconds
   const DEFAULT_POP_DURATION = 0.02; // in seconds
 
-  /**
-   * @constructor
-   * {Object} options
-   */
-  function PitchedPopGenerator( options ) {
+  class PitchedPopGenerator extends SoundGenerator {
 
-    options = _.extend( {
+    /**
+     * @constructor
+     * {Object} options
+     */
+    constructor( options ) {
 
-      // the range of pitches that this pop generator will produce, in Hz
-      pitchRange: new Range( 220, 660 ),
+      options = _.extend( {
 
-      // the number of pop generators to create and pool, use more if generating lots of pops close together, less if not
-      numPopGenerators: DEFAULT_NUM_POP_GENERATORS
-    }, options );
+        // the range of pitches that this pop generator will produce, in Hz
+        pitchRange: new Range( 220, 660 ),
 
-    const self = this;
-    SoundGenerator.call( this, options );
+        // the number of pop generators to create and pool, use more if generating lots of pops close together, less if not
+        numPopGenerators: DEFAULT_NUM_POP_GENERATORS
+      }, options );
 
-    // @private {Range} - range of pitches to be produced
-    this.pitchRange = options.pitchRange;
+      super( options );
 
-    // {DynamicsCompressorNode} - a dynamics compressor node used to limit max output amplitude, otherwise distortion
-    // tends to occur when lots of pops are played at once
-    const dynamicsCompressorNode = this.audioContext.createDynamicsCompressor();
+      // @private {Range} - range of pitches to be produced
+      this.pitchRange = options.pitchRange;
 
-    // the following values were empirically determined throgh informed experimentation
-    const now = this.audioContext.currentTime;
-    dynamicsCompressorNode.threshold.setValueAtTime( -3, now );
-    dynamicsCompressorNode.knee.setValueAtTime( 0, now ); // hard knee
-    dynamicsCompressorNode.ratio.setValueAtTime( 12, now );
-    dynamicsCompressorNode.attack.setValueAtTime( 0, now );
-    dynamicsCompressorNode.release.setValueAtTime( 0.25, now );
-    dynamicsCompressorNode.connect( this.masterGainNode );
+      // {DynamicsCompressorNode} - a dynamics compressor node used to limit max output amplitude, otherwise distortion
+      // tends to occur when lots of pops are played at once
+      const dynamicsCompressorNode = this.audioContext.createDynamicsCompressor();
 
-    // create the sources - several are created so that pops can be played in rapid succession if desired
-    // @private {{oscillator:OscillatorNode, gainNode:GainNode}[]} - an array of sound source, several are created so
-    // that pops can be played in rapid succession without interfering with one another
-    this.soundSources = [];
-    _.times( options.numPopGenerators, function() {
+      // the following values were empirically determined throgh informed experimentation
+      const now = this.audioContext.currentTime;
+      dynamicsCompressorNode.threshold.setValueAtTime( -3, now );
+      dynamicsCompressorNode.knee.setValueAtTime( 0, now ); // hard knee
+      dynamicsCompressorNode.ratio.setValueAtTime( 12, now );
+      dynamicsCompressorNode.attack.setValueAtTime( 0, now );
+      dynamicsCompressorNode.release.setValueAtTime( 0.25, now );
+      dynamicsCompressorNode.connect( this.masterGainNode );
 
-      // {OscillatorNode}
-      const oscillator = self.audioContext.createOscillator();
-      const now = self.audioContext.currentTime;
-      oscillator.type = 'sine';
-      oscillator.frequency.setValueAtTime( options.pitchRange.min, now );
-      oscillator.start( 0 );
+      // create the sources - several are created so that pops can be played in rapid succession if desired
+      // @private {{oscillator:OscillatorNode, gainNode:GainNode}[]} - an array of sound source, several are created so
+      // that pops can be played in rapid succession without interfering with one another
+      this.soundSources = [];
+      _.times( options.numPopGenerators, () => {
 
-      // {GainNode}
-      const gainNode = self.audioContext.createGain();
-      gainNode.gain.setValueAtTime( 0, now );
-      oscillator.connect( gainNode );
-      gainNode.connect( dynamicsCompressorNode );
+        // {OscillatorNode}
+        const oscillator = this.audioContext.createOscillator();
+        const now = this.audioContext.currentTime;
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime( options.pitchRange.min, now );
+        oscillator.start( 0 );
 
-      self.soundSources.push( {
-        oscillator: oscillator,
-        gainNode: gainNode
+        // {GainNode}
+        const gainNode = this.audioContext.createGain();
+        gainNode.gain.setValueAtTime( 0, now );
+        oscillator.connect( gainNode );
+        gainNode.connect( dynamicsCompressorNode );
+
+        this.soundSources.push( {
+          oscillator: oscillator,
+          gainNode: gainNode
+        } );
       } );
-    } );
 
-    // @private
-    this.nextSoundSourceIndex = 0;
-  }
-
-  tambo.register( 'PitchedPopGenerator', PitchedPopGenerator );
-
-  inherit( SoundGenerator, PitchedPopGenerator, {
+      // @private
+      this.nextSoundSourceIndex = 0;
+    }
 
     /**
      * play the pop sound
@@ -93,7 +89,7 @@ define( function( require ) {
      * {number} [duration] - the duration of the sound, in seconds
      * @public
      */
-    playPop: function( relativePitch, duration ) {
+    playPop( relativePitch, duration ) {
 
       assert && assert( relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range' );
 
@@ -124,7 +120,10 @@ define( function( require ) {
       soundSource.gainNode.gain.setTargetAtTime( 1, now, ENVELOPE_TIME_CONSTANT );
       soundSource.gainNode.gain.setTargetAtTime( 0, now + duration, ENVELOPE_TIME_CONSTANT );
     }
-  } );
+
+  }
+
+  tambo.register( 'PitchedPopGenerator', PitchedPopGenerator );
 
   return PitchedPopGenerator;
 } );
