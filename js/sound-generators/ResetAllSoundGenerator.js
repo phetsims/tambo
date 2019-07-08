@@ -1,47 +1,46 @@
 // Copyright 2018, University of Colorado Boulder
 
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
-  const inherit = require( 'PHET_CORE/inherit' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const tambo = require( 'TAMBO/tambo' );
 
   // sounds
   const resetAllSound = require( 'sound!TAMBO/reset-all.mp3' );
 
-  /**
-   * @param {BooleanProperty} resetInProgressProperty
-   * @param {Object} [options]
-   * @constructor
-   */
-  function ResetAllSoundGenerator( resetInProgressProperty, options ) {
-    const self = this;
-    SoundClip.call( this, resetAllSound, options );
-    const resetListener = function( resetInProgress ) {
-      if ( resetInProgress ) {
-        self.play();
-      }
-    };
-    resetInProgressProperty.link( resetListener );
+  class ResetAllSoundGenerator extends SoundClip {
 
-    // @private {function}
-    this.disposeResetAllSound = function() {
-      resetInProgressProperty.unlink( resetListener );
-    };
-  }
+    /**
+     * @param {BooleanProperty} resetInProgressProperty
+     * @param {Object} [options]
+     * @constructor
+     */
+    constructor( resetInProgressProperty, options ) {
+      super( resetAllSound, options );
+      const resetListener = resetInProgress => {
+        if ( resetInProgress ) {
+          this.play();
+        }
+      };
+      resetInProgressProperty.link( resetListener );
 
-  tambo.register( 'ResetAllSoundGenerator', ResetAllSoundGenerator );
-
-  return inherit( SoundClip, ResetAllSoundGenerator, {
+      // @private {function}
+      this.disposeResetAllSound = () => { resetInProgressProperty.unlink( resetListener ); };
+    }
 
     /**
      * @public
      */
-    dispose: function() {
+    dispose() {
       this.disposeResetAllSound();
-      SoundClip.prototype.dispose.call( this );
+      super.dispose();
     }
-  } );
+
+  }
+
+  tambo.register( 'ResetAllSoundGenerator', ResetAllSoundGenerator );
+
+  return ResetAllSoundGenerator;
 } );

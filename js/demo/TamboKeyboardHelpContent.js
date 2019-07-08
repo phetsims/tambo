@@ -12,24 +12,20 @@ define( function( require ) {
   // modules
   const GeneralKeyboardHelpSection = require( 'SCENERY_PHET/keyboard/help/GeneralKeyboardHelpSection' );
   const HBox = require( 'SCENERY/nodes/HBox' );
-  const inherit = require( 'PHET_CORE/inherit' );
   const tambo = require( 'TAMBO/tambo' );
 
-  /**
-   * @constructor
-   */
-  function TamboKeyboardHelpContent() {
+  class TamboKeyboardHelpContent extends HBox {
 
-    const generalNavigationHelpContent = new GeneralKeyboardHelpSection();
+    /**
+     * @constructor
+     */
+    constructor() {
+      super( { children: [ new GeneralKeyboardHelpSection() ], align: 'top', spacing: 30 } );
+    }
 
-    HBox.call( this, {
-      children: [ generalNavigationHelpContent ],
-      align: 'top',
-      spacing: 30
-    } );
   }
 
   tambo.register( 'TamboKeyboardHelpContent', TamboKeyboardHelpContent );
 
-  return inherit( HBox, TamboKeyboardHelpContent );
+  return TamboKeyboardHelpContent;
 } );
