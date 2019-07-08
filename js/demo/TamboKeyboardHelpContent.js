@@ -20,11 +20,7 @@ define( function( require ) {
      * @constructor
      */
     constructor() {
-      super( {
-        children: [ new GeneralKeyboardHelpSection() ],
-        align: 'top',
-        spacing: 30
-      } );
+      super( { children: [ new GeneralKeyboardHelpSection() ], align: 'top', spacing: 30 } );
     }
 
   }
