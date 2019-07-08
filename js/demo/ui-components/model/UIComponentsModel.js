@@ -6,61 +6,56 @@
  *
  * @author John Blanco
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const inherit = require( 'PHET_CORE/inherit' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const tambo = require( 'TAMBO/tambo' );
 
   // constants
   const LIGHTNING_SHOWN_TIME = 0.750; // in seconds
 
-  /**
-   * @constructor
-   */
-  function UIComponentsModel() {
+  class UIComponentsModel {
 
-    const self = this;
+    /**
+     * @constructor
+     */
+    constructor() {
 
-    // @public {NumberProperty} - a Property that is intended to be hooked up to a slider with discrete values
-    this.discreteValueProperty = new NumberProperty( 0 );
+      // @public {NumberProperty} - a Property that is intended to be hooked up to a slider with discrete values
+      this.discreteValueProperty = new NumberProperty( 0 );
 
-    // @public {NumberProperty} - a Property that is intended to be hooked up to a slider with continuous values
-    this.continuousValueProperty = new NumberProperty( 0 );
+      // @public {NumberProperty} - a Property that is intended to be hooked up to a slider with continuous values
+      this.continuousValueProperty = new NumberProperty( 0 );
 
-    // @public {BooleanProperty} - tracks whether the sound loop should be on
-    this.loopOnProperty = new BooleanProperty( false );
+      // @public {BooleanProperty} - tracks whether the sound loop should be on
+      this.loopOnProperty = new BooleanProperty( false );
 
-    // @public {BooleanProperty} - tracks whether the lightning bolt is visible
-    this.lightningBoltVisibleProperty = new BooleanProperty( false );
+      // @public {BooleanProperty} - tracks whether the lightning bolt is visible
+      this.lightningBoltVisibleProperty = new BooleanProperty( false );
 
-    // @private {Number} - countdown timer used to hide the lightning bolt, in seconds
-    this.lightningBoltVisibleTimer = 0;
+      // @private {Number} - countdown timer used to hide the lightning bolt, in seconds
+      this.lightningBoltVisibleTimer = 0;
 
-    // reload the countdown timer when the lightning bolt is set to be shown
-    this.lightningBoltVisibleProperty.link( visible => {
-      if ( visible ) {
-        self.lightningBoltVisibleTimer = LIGHTNING_SHOWN_TIME;
-      }
-    } );
+      // reload the countdown timer when the lightning bolt is set to be shown
+      this.lightningBoltVisibleProperty.link( visible => {
+        if ( visible ) {
+          this.lightningBoltVisibleTimer = LIGHTNING_SHOWN_TIME;
+        }
+      } );
 
-    // @public {BooleanProperty} - tracks whether a reset is happening
-    this.resetInProgressProperty = new BooleanProperty( false );
-  }
-
-  tambo.register( 'UIComponentsModel', UIComponentsModel );
-
-  return inherit( Object, UIComponentsModel, {
+      // @public {BooleanProperty} - tracks whether a reset is happening
+      this.resetInProgressProperty = new BooleanProperty( false );
+    }
 
     /**
      * step the model forward in time, generally called by the framework
      * @param {number} dt - time step, in seconds
      * @public
      */
-    step: function( dt ) {
+    step( dt ) {
 
       // manage the lightning visibility timer
       if ( this.lightningBoltVisibleTimer > 0 ) {
@@ -68,22 +63,27 @@ define( function( require ) {
         if ( this.lightningBoltVisibleTimer <= 0 ) {
 
           // countdown complete, set visibility to false
-          this.lightningBoltVisibleProperty.set( false );
+          this.lightningBoltVisibleProperty.value = false;
         }
       }
-    },
+    }
 
     /**
      * restore initial state
      * @public
      */
-    reset: function() {
-      this.resetInProgressProperty.set( true );
+    reset() {
+      this.resetInProgressProperty.value = true;
       this.discreteValueProperty.reset();
       this.continuousValueProperty.reset();
       this.loopOnProperty.reset();
       this.lightningBoltVisibleProperty.reset();
-      this.resetInProgressProperty.set( false );
+      this.resetInProgressProperty.value = false;
     }
-  } );
+
+  }
+
+  tambo.register( 'UIComponentsModel', UIComponentsModel );
+
+  return UIComponentsModel;
 } );
