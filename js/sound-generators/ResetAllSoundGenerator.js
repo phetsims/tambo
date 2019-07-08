@@ -21,7 +21,7 @@ define( require => {
       super( resetAllSound, options );
       const resetListener = resetInProgress => {
         if ( resetInProgress ) {
-          self.play();
+          this.play();
         }
       };
       resetInProgressProperty.link( resetListener );
