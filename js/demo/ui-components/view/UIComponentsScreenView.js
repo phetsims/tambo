@@ -141,8 +141,12 @@ define( require => {
     constructor( model ) {
       super();
 
-      // TODO: This is a temporary way to get screen selection sounds to play, will everntually be integrated into joist
-      soundManager.addSoundGenerator( new ScreenSelectionSoundGenerator( phet.joist.sim.currentScreenProperty ) );
+      // TODO: This is a temporary way to get screen selection sounds to play, will eventually be integrated into joist
+      soundManager.addSoundGenerator( new ScreenSelectionSoundGenerator(
+        phet.joist.sim.currentScreenProperty,
+        phet.joist.sim.screenIndexProperty,
+        { initialOutputLevel: 0.5 }
+      ) );
 
       // create the check box sounds
       const checkedClip = new SoundClip( checkboxCheckedSound );
