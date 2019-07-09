@@ -10,12 +10,12 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const tambo = require( 'TAMBO/tambo' );
 
-  /**
-   * {BooleanProperty} propertyToInvert
-   * @constructor
-   */
   class InvertedBooleanProperty extends BooleanProperty {
 
+    /**
+     * {BooleanProperty} propertyToInvert
+     * @constructor
+     */
     constructor( propertyToInvert ) {
 
       assert && assert( propertyToInvert instanceof BooleanProperty );
