@@ -3,7 +3,7 @@
 /**
  * main file for the tambo library demo and test harness
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -65,7 +65,7 @@ define( function( require ) {
     );
   }
 
-  SimLauncher.launch( function() {
+  SimLauncher.launch( () => {
     new Sim( tamboTitleString, [
 
       // sim-like components screen

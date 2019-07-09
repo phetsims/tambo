@@ -11,14 +11,14 @@ define( require => {
   // modules
   const tambo = require( 'TAMBO/tambo' );
 
-  /**
-   * {Range} valueRange - the range of values covered by this mapper
-   * {number} numBins - the number of bins to which the value will be mapped
-   * {Object} [options]
-   * @constructor
-   */
   class BinMapper {
 
+    /**
+     * {Range} valueRange - the range of values covered by this mapper
+     * {number} numBins - the number of bins to which the value will be mapped
+     * {Object} [options]
+     * @constructor
+     */
     constructor( valueRange, numBins, options ) {
 
       // parameter checking

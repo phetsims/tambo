@@ -5,7 +5,7 @@
  * This exists because an audio context has a single "onstatechange" property, and we had the need to register multiple
  * listeners.
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -45,8 +45,8 @@ define( function( require ) {
         assert && assert( !audioContext.onstatechange, 'a listener function is already registered for this context' );
 
         // hook up a function that will fire all listeners on a state change
-        audioContext.onstatechange = function() {
-          _.clone( listenerArray ).forEach( function( listener ) {
+        audioContext.onstatechange = () => {
+          _.clone( listenerArray ).forEach( listener => {
             listener( audioContext.state );
           } );
         };

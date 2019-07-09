@@ -5,12 +5,11 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
   const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
-  const inherit = require( 'PHET_CORE/inherit' );
   const soundConstants = require( 'TAMBO/soundConstants' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
@@ -21,143 +20,141 @@ define( function( require ) {
   const MAX_PLAY_DEFER_TIME = 0.2; // seconds, max time to defer a play request while waiting for audio context state change
   const DEFAULT_TC = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
-  /**
-   * @param {Object} soundInfo - An object that includes *either* a "url" key with a value that points to the sound to
-   * be played *or* a "base64" key with a value that represents a base64-encoded version of the sound data.  The former
-   * is generally used when a sim is running in RequireJS mode, the latter is used in built versions.
-   * @param {Object} [options]
-   * @constructor
-   */
-  function SoundClip( soundInfo, options ) {
+  class SoundClip extends SoundGenerator {
 
-    options = _.extend( {
+    /**
+     * @param {Object} soundInfo - An object that includes *either* a "url" key with a value that points to the sound to
+     * be played *or* a "base64" key with a value that represents a base64-encoded version of the sound data.  The former
+     * is generally used when a sim is running in RequireJS mode, the latter is used in built versions.
+     * @param {Object} [options]
+     * @constructor
+     */
+    constructor( soundInfo, options ) {
 
-      // {boolean} - controls whether this sound will wrap around and start over when done or just be played once
-      loop: false,
+      options = _.extend( {
 
-      // {boolean} - controls whether the silence at the beginning and (in the case of loops) the end is removed
-      trimSilence: true,
+        // {boolean} - controls whether this sound will wrap around and start over when done or just be played once
+        loop: false,
 
-      // {boolean} - controls whether sound generation can be initiated when this sound generator is disabled.  This is
-      // useful for a one-shot sound that is long, so if the user does something that generally would cause a sound, but
-      // sound is disabled, but they immediately re-enable it, the "tail" of this sound would be heard.  This option is
-      // ignored for loops, since loops always allow initiation when disabled.
-      initiateWhenDisabled: false,
+        // {boolean} - controls whether the silence at the beginning and (in the case of loops) the end is removed
+        trimSilence: true,
 
-      // {boolean} - controls whether changes to the playback rate via the API causes changes to the sounds that are
-      // already in the process of playing or only those that are played in the future.  This is relevant for both loops
-      // and one-shot sounds, since a one-shot sound (especially one that is fairly long) could be in the process of
-      // playing when a playback rate change occurs.
-      rateChangesAffectPlayingSounds: true
-    }, options );
+        // {boolean} - controls whether sound generation can be initiated when this sound generator is disabled.  This is
+        // useful for a one-shot sound that is long, so if the user does something that generally would cause a sound, but
+        // sound is disabled, but they immediately re-enable it, the "tail" of this sound would be heard.  This option is
+        // ignored for loops, since loops always allow initiation when disabled.
+        initiateWhenDisabled: false,
 
-    SoundGenerator.call( this, options );
+        // {boolean} - controls whether changes to the playback rate via the API causes changes to the sounds that are
+        // already in the process of playing or only those that are played in the future.  This is relevant for both loops
+        // and one-shot sounds, since a one-shot sound (especially one that is fairly long) could be in the process of
+        // playing when a playback rate change occurs.
+        rateChangesAffectPlayingSounds: true
+      }, options );
 
-    // @private {boolean} - flag that controls whether this is a one-shot or loop sound
-    this.loop = options.loop;
+      super( options );
 
-    // @private {boolean} - flag that controls whether changes to the playback rate affects in-progress sounds
-    this.rateChangesAffectPlayingSounds = options.rateChangesAffectPlayingSounds;
+      // @private {boolean} - flag that controls whether this is a one-shot or loop sound
+      this.loop = options.loop;
 
-    // @public {boolean} - see description in options above
-    this.initiateWhenDisabled = options.initiateWhenDisabled;
+      // @private {boolean} - flag that controls whether changes to the playback rate affects in-progress sounds
+      this.rateChangesAffectPlayingSounds = options.rateChangesAffectPlayingSounds;
 
-    // @private {AudioBuffer} - decoded audio data in a form that is ready to play with Web Audio
-    this.audioBuffer = null;
+      // @public {boolean} - see description in options above
+      this.initiateWhenDisabled = options.initiateWhenDisabled;
 
-    // @private {function} - function to be invoked when sound buffer finishes loading
-    this.loadCompleteAction = null;
+      // @private {AudioBuffer} - decoded audio data in a form that is ready to play with Web Audio
+      this.audioBuffer = null;
 
-    // @private {number} - start and end points for the loop if this clip is used for looping
-    this.soundStart = 0;
-    this.soundEnd = null;
+      // @private {function} - function to be invoked when sound buffer finishes loading
+      this.loadCompleteAction = null;
 
-    // @private {AudioBufferSourceNode[]} - a list of active source buffer nodes, used so that this clip can be played
-    // again before previous play finishes
-    this.activeBufferSources = [];
+      // @private {number} - start and end points for the loop if this clip is used for looping
+      this.soundStart = 0;
+      this.soundEnd = null;
 
-    // @private {GainNode} - a gain node that is used to prevent clicks when stopping the sound
-    this.localGainNode = this.audioContext.createGain();
-    this.localGainNode.connect( this.masterGainNode );
+      // @private {AudioBufferSourceNode[]} - a list of active source buffer nodes, used so that this clip can be played
+      // again before previous play finishes
+      this.activeBufferSources = [];
 
-    // decode the audio data and place it in a sound buffer so it can be easily played
-    soundInfoDecoder.decode(
-      soundInfo,
-      this.audioContext,
-      decodedAudioData => {
+      // @private {GainNode} - a gain node that is used to prevent clicks when stopping the sound
+      this.localGainNode = this.audioContext.createGain();
+      this.localGainNode.connect( this.masterGainNode );
 
-        this.audioBuffer = decodedAudioData;
+      // decode the audio data and place it in a sound buffer so it can be easily played
+      soundInfoDecoder.decode(
+        soundInfo,
+        this.audioContext,
+        decodedAudioData => {
 
-        if ( options.trimSilence ) {
-          const loopBoundsInfo = SoundUtil.detectSoundBounds( decodedAudioData );
-          this.soundStart = loopBoundsInfo.soundStart;
-          this.soundEnd = loopBoundsInfo.soundEnd;
+          this.audioBuffer = decodedAudioData;
+
+          if ( options.trimSilence ) {
+            const loopBoundsInfo = SoundUtil.detectSoundBounds( decodedAudioData );
+            this.soundStart = loopBoundsInfo.soundStart;
+            this.soundEnd = loopBoundsInfo.soundEnd;
+          }
+
+          // perform the "load complete" actions, if any
+          this.loadCompleteAction && this.loadCompleteAction();
+          this.loadCompleteAction = null;
+        },
+        () => {
+
+          // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio file
+          // could cause it.  There is handling for both the RequireJS and build cases.
+          assert && assert( false, 'audio decode failed' );
+          console.error( 'unable to decode audio data, please check all encoded audio' );
         }
+      );
 
-        // perform the "load complete" actions, if any
-        this.loadCompleteAction && this.loadCompleteAction();
-        this.loadCompleteAction = null;
-      },
-      () => {
+      // @private {number} - rate at which clip is being played back, 1 is normal, above 1 is faster, below 1 is slower,
+      // see online docs for AudioBufferSourceNode.playbackRate for more information
+      this.playbackRate = 1;
 
-        // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio file
-        // could cause it.  There is handling for both the RequireJS and build cases.
-        assert && assert( false, 'audio decode failed' );
-        console.error( 'unable to decode audio data, please check all encoded audio' );
-      }
-    );
+      // @private {boolean} - flag that tracks whether the sound is being played
+      this._isPlaying = false;
 
-    // @private {number} - rate at which clip is being played back, 1 is normal, above 1 is faster, below 1 is slower,
-    // see online docs for AudioBufferSourceNode.playbackRate for more information
-    this.playbackRate = 1;
+      // @private {number} - time at which a deferred play request occurred, in milliseconds since epoch
+      this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
 
-    // @private {boolean} - flag that tracks whether the sound is being played
-    this._isPlaying = false;
+      // @private {function} - callback for when audio context isn't in 'running' state, see usage
+      this.audioContextStateChangeListener = state => {
 
-    // @private {number} - time at which a deferred play request occurred, in milliseconds since epoch
-    this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
+        if ( state === 'running' ) {
 
-    // @private {function} - callback for when audio context isn't in 'running' state, see usage
-    this.audioContextStateChangeListener = state => {
+          // initiate deferred play if this is a loop or if it hasn't been too long since the request was made
+          if ( this.loop || ( Date.now() - this.timeOfDeferredPlayRequest ) / 1000 < MAX_PLAY_DEFER_TIME ) {
 
-      if ( state === 'running' ) {
+            // Play the sound, but with a little bit of delay.  The delay was found to be needed because otherwise on
+            // some browsers the sound would be somewhat muted, probably due to some sort of fade in of the audio levels
+            // that the browser does automatically to avoid having the web page's sound start too abruptly.  The amount of
+            // delay was empirically determined by testing on multiple browsers.
+            this.play( 0.05 );
+          }
 
-        // initiate deferred play if this is a loop or if it hasn't been too long since the request was made
-        if ( this.loop || ( Date.now() - this.timeOfDeferredPlayRequest ) / 1000 < MAX_PLAY_DEFER_TIME ) {
-
-          // Play the sound, but with a little bit of delay.  The delay was found to be needed because otherwise on
-          // some browsers the sound would be somewhat muted, probably due to some sort of fade in of the audio levels
-          // that the browser does automatically to avoid having the web page's sound start too abruptly.  The amount of
-          // delay was empirically determined by testing on multiple browsers.
-          this.play( 0.05 );
+          // automatically remove after firing
+          audioContextStateChangeMonitor.removeStateChangeListener(
+            this.audioContext,
+            this.audioContextStateChangeListener
+          );
         }
+      };
 
-        // automatically remove after firing
-        audioContextStateChangeMonitor.removeStateChangeListener(
-          this.audioContext,
-          this.audioContextStateChangeListener
-        );
-      }
-    };
-
-    // listen to the Property that indicates whether we are fully enabled and stop one-shot sounds when it goes false
-    this.fullyEnabledProperty.lazyLink( fullyEnabled => {
-      if ( !this.loop && !fullyEnabled ) {
-        this.stop();
-      }
-    } );
-  }
-
-  tambo.register( 'SoundClip', SoundClip );
-
-  return inherit( SoundGenerator, SoundClip, {
+      // listen to the Property that indicates whether we are fully enabled and stop one-shot sounds when it goes false
+      this.fullyEnabledProperty.lazyLink( fullyEnabled => {
+        if ( !this.loop && !fullyEnabled ) {
+          this.stop();
+        }
+      } );
+    }
 
     /**
      * start playing the sound
      * @param {number} [delay] - optional delay parameter, in seconds
      * @public
      */
-    play: function( delay ) {
+    play( delay ) {
 
       if ( this.audioContext.state === 'running' ) {
 
@@ -232,14 +229,14 @@ define( function( require ) {
           );
         }
       }
-    },
+    }
 
     /**
      * stop playing the sound
      * {number} delay - the amount of time to wait before stopping, often used to prevent sudden stops, which can cause
      * audible clicks
      */
-    stop: function( delay ) {
+    stop( delay ) {
 
       delay = delay === undefined ? soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME : delay;
 
@@ -274,7 +271,7 @@ define( function( require ) {
           this.audioContextStateChangeListener
         );
       }
-    },
+    }
 
     /**
      * play sound and change the speed as playback occurs
@@ -282,7 +279,7 @@ define( function( require ) {
      * @param {number} [timeConstant] -  time-constant in seconds for the first-order filter (exponential) approach to
      * the target value. The larger this value is, the slower the transition will be.
      */
-    setPlaybackRate: function( playbackRate, timeConstant ) {
+    setPlaybackRate( playbackRate, timeConstant ) {
       timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TC : timeConstant;
       if ( this.rateChangesAffectPlayingSounds ) {
         this.activeBufferSources.forEach( bufferSource => {
@@ -290,7 +287,7 @@ define( function( require ) {
         } );
       }
       this.playbackRate = playbackRate;
-    },
+    }
 
     /**
      * indicates whether sound is currently being played
@@ -300,5 +297,9 @@ define( function( require ) {
       return this._isPlaying;
     }
 
-  } );
+  }
+
+  tambo.register( 'SoundClip', SoundClip );
+
+  return SoundClip;
 } );

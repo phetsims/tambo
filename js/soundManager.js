@@ -12,7 +12,7 @@
  *
  *  The singleton object must be initialized before sound generators can be added.
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -80,7 +80,6 @@ define( function( require ) {
     initialize( simVisibleProperty, simActiveProperty, options ) {
 
       assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
-      const self = this;
 
       options = _.extend( {
 
@@ -140,7 +139,7 @@ define( function( require ) {
       soundInfoDecoder.decode(
         reverbImpulseResponse,
         phetAudioContext,
-        decodedAudioData => { self.convolver.buffer = decodedAudioData; },
+        decodedAudioData => { this.convolver.buffer = decodedAudioData; },
         () => {
 
           // error handler, we haven't seen this happen, so for now just log a message to the console
@@ -229,7 +228,7 @@ define( function( require ) {
         else {
 
           // use a different event for iOS
-          const resumeAudioContext = function() {
+          const resumeAudioContext = () => {
 
             if ( phetAudioContext.state !== 'running' ) {
 
@@ -309,9 +308,10 @@ define( function( require ) {
       }
 
       // verify that this is not a duplicate addition
-      const duplicateAdd = _.some( this.soundGeneratorInfoArray, soundGeneratorInfo => {
-        return soundGeneratorInfo.soundGenerator === soundGenerator;
-      } );
+      const duplicateAdd = _.some(
+        this.soundGeneratorInfoArray,
+        soundGeneratorInfo => soundGeneratorInfo.soundGenerator === soundGenerator
+      );
       assert && assert( !duplicateAdd, 'can\'t add the same sound generator twice' );
 
       // default options
@@ -432,7 +432,7 @@ define( function( require ) {
       assert && assert( level >= 0 && level <= 1, 'output level value out of range: ' + level );
 
       this._masterOutputLevel = level;
-      if ( this.enabledProperty.get() ) {
+      if ( this.enabledProperty.value ) {
         this.masterGainNode.gain.linearRampToValueAtTime(
           level,
           phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
@@ -539,7 +539,7 @@ define( function( require ) {
      * @param {boolean} enabled
      */
     set enabled( enabled ) {
-      this.enabledProperty.set( enabled );
+      this.enabledProperty.value = enabled;
     }
 
     /**
@@ -559,7 +559,7 @@ define( function( require ) {
         _.includes( _.values( SoundLevelEnum ), sonificationLevel ),
         'invalid sonification level: ' + sonificationLevel
       );
-      this.enhancedSoundEnabledProperty.set( sonificationLevel === SoundLevelEnum.ENHANCED );
+      this.enhancedSoundEnabledProperty.value = sonificationLevel === SoundLevelEnum.ENHANCED;
     }
 
     /**
@@ -567,7 +567,7 @@ define( function( require ) {
      * @returns {string}
      */
     get sonificationLevel() {
-      return this.enhancedSoundEnabledProperty.get() ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
+      return this.enhancedSoundEnabledProperty.value ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
     }
 
     /**

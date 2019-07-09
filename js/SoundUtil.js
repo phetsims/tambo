@@ -3,7 +3,7 @@
 /**
  * a singleton object with functions for analyzing and manipulated sound data
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
@@ -27,7 +27,7 @@ define( function( require ) {
      * {AudioBuffer} audioBuffer
      * @returns {Object} - an object with values for the time at which the sound starts and ends
      */
-    detectSoundBounds: function( audioBuffer ) {
+    detectSoundBounds: audioBuffer => {
       logAnalysisInfo( '------------- entered detectLoopBounds --------------------' );
 
       const soundDataLength = audioBuffer.length;
