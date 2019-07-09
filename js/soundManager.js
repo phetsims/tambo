@@ -12,7 +12,7 @@
  *
  *  The singleton object must be initialized before sound generators can be added.
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules

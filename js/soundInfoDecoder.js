@@ -6,7 +6,7 @@
  * by the sound plugin generally provide either a URL to a sound or a base64 encoded audio string, and the code in this
  * file can handle either format.
  */
-define( function( require ) {
+define( require => {
   'use strict';
 
   // modules
