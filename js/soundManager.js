@@ -228,7 +228,7 @@ define( require => {
         else {
 
           // use a different event for iOS
-          const resumeAudioContext = function() {
+          const resumeAudioContext = () => {
 
             if ( phetAudioContext.state !== 'running' ) {
 
@@ -308,9 +308,10 @@ define( require => {
       }
 
       // verify that this is not a duplicate addition
-      const duplicateAdd = _.some( this.soundGeneratorInfoArray, soundGeneratorInfo => {
-        return soundGeneratorInfo.soundGenerator === soundGenerator;
-      } );
+      const duplicateAdd = _.some(
+        this.soundGeneratorInfoArray,
+        soundGeneratorInfo => soundGeneratorInfo.soundGenerator === soundGenerator
+      );
       assert && assert( !duplicateAdd, 'can\'t add the same sound generator twice' );
 
       // default options
