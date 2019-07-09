@@ -80,7 +80,6 @@ define( require => {
     initialize( simVisibleProperty, simActiveProperty, options ) {
 
       assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
-      const self = this;
 
       options = _.extend( {
 
@@ -140,7 +139,7 @@ define( require => {
       soundInfoDecoder.decode(
         reverbImpulseResponse,
         phetAudioContext,
-        decodedAudioData => { self.convolver.buffer = decodedAudioData; },
+        decodedAudioData => { this.convolver.buffer = decodedAudioData; },
         () => {
 
           // error handler, we haven't seen this happen, so for now just log a message to the console
@@ -432,7 +431,7 @@ define( require => {
       assert && assert( level >= 0 && level <= 1, 'output level value out of range: ' + level );
 
       this._masterOutputLevel = level;
-      if ( this.enabledProperty.get() ) {
+      if ( this.enabledProperty.value ) {
         this.masterGainNode.gain.linearRampToValueAtTime(
           level,
           phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
@@ -539,7 +538,7 @@ define( require => {
      * @param {boolean} enabled
      */
     set enabled( enabled ) {
-      this.enabledProperty.set( enabled );
+      this.enabledProperty.value = enabled;
     }
 
     /**
@@ -559,7 +558,7 @@ define( require => {
         _.includes( _.values( SoundLevelEnum ), sonificationLevel ),
         'invalid sonification level: ' + sonificationLevel
       );
-      this.enhancedSoundEnabledProperty.set( sonificationLevel === SoundLevelEnum.ENHANCED );
+      this.enhancedSoundEnabledProperty.value = sonificationLevel === SoundLevelEnum.ENHANCED;
     }
 
     /**
@@ -567,7 +566,7 @@ define( require => {
      * @returns {string}
      */
     get sonificationLevel() {
-      return this.enhancedSoundEnabledProperty.get() ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
+      return this.enhancedSoundEnabledProperty.value ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
     }
 
     /**
