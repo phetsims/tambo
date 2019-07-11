@@ -1,4 +1,4 @@
-// Copyright 2018, University of Colorado Boulder
+// Copyright 2018-2019, University of Colorado Boulder
 
 /**
  * Singleton utility object that provides a method for decoding soundInfo objects.  This is intended to simplify the
