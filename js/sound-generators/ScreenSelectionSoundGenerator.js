@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * generates sounds for when the user switches between screens
+ * generates sounds for when the user switches between screens and screen icons
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

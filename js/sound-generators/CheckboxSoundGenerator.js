@@ -2,7 +2,8 @@
 
 /**
  * sound generator for when check boxes are checked on unchecked
- * TODO: This is a stopgap object whose functionality should at some point be moved into the Checkbox type.
+ *
+ * TODO: This is a stopgap class whose functionality should at some point be moved into the Checkbox type.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

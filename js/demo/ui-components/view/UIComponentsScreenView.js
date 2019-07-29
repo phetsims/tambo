@@ -28,8 +28,9 @@ define( require => {
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const PlayPauseButton = require( 'SCENERY_PHET/buttons/PlayPauseButton' );
   const Property = require( 'AXON/Property' );
-  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
+  const RadioButtonSoundGenerator = require( 'TAMBO/sound-generators/RadioButtonSoundGenerator' );
   const Range = require( 'DOT/Range' );
+  const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
   const ScreenSelectionSoundGenerator = require( 'TAMBO/sound-generators/ScreenSelectionSoundGenerator' );
@@ -398,43 +399,8 @@ define( require => {
       } );
       this.addChild( buttonSoundHBox );
 
-      // create the sounds that can be played on radio box selections
-      const radioButtonSoundClips = [];
-      radioButtonSounds.forEach( sound => {
-        const radioButtonSoundClip = new SoundClip( sound );
-        soundManager.addSoundGenerator( radioButtonSoundClip );
-        radioButtonSoundClips.push( radioButtonSoundClip );
-      } );
-
-      // create a selector for choosing which radio button sound should be used
-      const selectedRadioButtonSoundProperty = new NumberProperty( 1 );
-      const radioButtonSoundNumberPicker = new NumberPicker(
-        selectedRadioButtonSoundProperty,
-        new Property( new Range( 1, radioButtonSoundClips.length ) ),
-        {
-          font: new PhetFont( 20 ),
-          arrowHeight: 6,
-          arrowYSpacing: 6
-        }
-      );
-
-      // TODO: I (jbphet) could probably consolidate the code for the radio button groups into a class that creates them
-
-      // function to play a radio button sound based on the selected clip and the radio button index
-      const playRadioButtonSound = ( selectionIndex ) => {
-        const clip = radioButtonSoundClips[ selectedRadioButtonSoundProperty.value - 1 ];
-
-        // calculate a playback rate that starts from the natural frequency of the sound and goes down by whole tones
-        const playbackRate = Math.pow( 2, -selectionIndex / 12 );
-        clip.setPlaybackRate( playbackRate );
-        clip.play();
-      };
-
+      // create a small group of radio buttons
       const smallerRadioButtonSelectorValueProperty = new NumberProperty( 0 );
-      smallerRadioButtonSelectorValueProperty.lazyLink( value => playRadioButtonSound( value ) );
-      const largerRadioButtonSelectorValueProperty = new NumberProperty( 0 );
-      largerRadioButtonSelectorValueProperty.lazyLink( value => playRadioButtonSound( value ) );
-
       const smallerRadioButtonGroupButtons = [];
       _.times( 2, index => {
         smallerRadioButtonGroupButtons.push( new AquaRadioButton(
@@ -450,6 +416,20 @@ define( require => {
         spacing: 10
       } );
 
+      // sound generation for smaller radio button group
+      const smallerRadioButtonSoundGenerators = [];
+      radioButtonSounds.forEach( sound => {
+        const radioButtonSoundGenerator = new RadioButtonSoundGenerator(
+          smallerRadioButtonSelectorValueProperty,
+          model.resetInProgressProperty,
+          { baseSound: sound }
+        );
+        soundManager.addSoundGenerator( radioButtonSoundGenerator );
+        smallerRadioButtonSoundGenerators.push( radioButtonSoundGenerator );
+      } );
+
+      // create a larger group of radio buttons
+      const largerRadioButtonSelectorValueProperty = new NumberProperty( 0 );
       const largerRadioButtonGroupButtons = [];
       _.times( 7, index => {
         largerRadioButtonGroupButtons.push( new AquaRadioButton(
@@ -463,6 +443,38 @@ define( require => {
         children: largerRadioButtonGroupButtons,
         align: 'left',
         spacing: 10
+      } );
+
+      // sound generation for larger radio button group
+      const largerRadioButtonSoundGenerators = [];
+      radioButtonSounds.forEach( sound => {
+        const radioButtonSoundGenerator = new RadioButtonSoundGenerator(
+          largerRadioButtonSelectorValueProperty,
+          model.resetInProgressProperty,
+          { baseSound: sound }
+        );
+        soundManager.addSoundGenerator( radioButtonSoundGenerator );
+        largerRadioButtonSoundGenerators.push( radioButtonSoundGenerator );
+      } );
+
+      // create a selector for choosing which radio button sound generators are in use and hook it up
+      const selectedRadioButtonSoundProperty = new NumberProperty( 1 );
+      const radioButtonSoundNumberPicker = new NumberPicker(
+        selectedRadioButtonSoundProperty,
+        new Property( new Range( 1, radioButtonSounds.length ) ),
+        {
+          font: new PhetFont( 20 ),
+          arrowHeight: 6,
+          arrowYSpacing: 6
+        }
+      );
+      selectedRadioButtonSoundProperty.link( selectedSoundNumber => {
+        smallerRadioButtonSoundGenerators.forEach( ( soundGenerator, index ) => {
+          soundGenerator.locallyEnabled = index === selectedSoundNumber - 1;
+        } );
+        largerRadioButtonSoundGenerators.forEach( ( soundGenerator, index ) => {
+          soundGenerator.locallyEnabled = index === selectedSoundNumber - 1;
+        } );
       } );
 
       // create a panel with the radio button sound selector and the radio button sets
@@ -618,6 +630,8 @@ define( require => {
           selectedPushButtonSoundProperty.reset();
           selectedPlayPauseSoundProperty.reset();
           selectedRadioButtonSoundProperty.reset();
+          smallerRadioButtonSelectorValueProperty.reset();
+          largerRadioButtonSelectorValueProperty.reset();
           grabbableNodePanel.reset();
         }
       } );
