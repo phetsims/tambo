@@ -13,7 +13,7 @@ define( require => {
   const tambo = require( 'TAMBO/tambo' );
 
   // sounds
-  const iconSelectedSound = require( 'sound!TAMBO/switching-screen-selector-icons.mp3' );
+  const iconSelectedSound = require( 'sound!TAMBO/switching-screen-selector-icons-v3.mp3' );
   const screenSelectedSound = require( 'sound!TAMBO/screen-selection.mp3' );
   const homeSelectedSound = require( 'sound!TAMBO/screen-selection-home-v3.mp3' );
 
