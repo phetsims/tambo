@@ -422,6 +422,7 @@ define( require => {
         const radioButtonSoundGenerator = new RadioButtonSoundGenerator(
           smallerRadioButtonSelectorValueProperty,
           model.resetInProgressProperty,
+          [ 0, 1 ],
           { baseSound: sound }
         );
         soundManager.addSoundGenerator( radioButtonSoundGenerator );
@@ -451,6 +452,7 @@ define( require => {
         const radioButtonSoundGenerator = new RadioButtonSoundGenerator(
           largerRadioButtonSelectorValueProperty,
           model.resetInProgressProperty,
+          [ 0, 1, 2, 3, 4, 5, 6 ],
           { baseSound: sound }
         );
         soundManager.addSoundGenerator( radioButtonSoundGenerator );

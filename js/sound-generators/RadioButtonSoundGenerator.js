@@ -22,10 +22,11 @@ define( require => {
     /**
      * @param {BooleanProperty} selectedIndexProperty - the property that is set by the radio buttons
      * @param {BooleanProperty} resetInProgressProperty - whether a reset is in progress
+     * @param {Object[]} items - see VerticalAquaRadioButtonGroup
      * @param {Object} [options]
      * @constructor
      */
-    constructor( selectedIndexProperty, resetInProgressProperty, options ) {
+    constructor( selectedIndexProperty, resetInProgressProperty, items, options ) {
 
       options = _.extend( {
         initialOutputLevel: 0.7,
@@ -34,10 +35,13 @@ define( require => {
 
       super( options.baseSound, options );
 
-      const playRadioButtonSound = ( selectionIndex ) => {
+      const playRadioButtonSound = ( selectedItem ) => {
+
+        const itemIndex = items.indexOf( selectedItem );
+        assert && assert( itemIndex >= 0 );
 
         // calculate a playback rate that starts from the natural frequency of the sound and goes down by whole tones
-        const playbackRate = Math.pow( 2, -selectionIndex / 12 );
+        const playbackRate = Math.pow( 2, -itemIndex / 12 );
         this.setPlaybackRate( playbackRate );
         this.play();
       };
