@@ -19,6 +19,7 @@ define( require => {
   // constants
   const MAX_PLAY_DEFER_TIME = 0.2; // seconds, max time to defer a play request while waiting for audio context state change
   const DEFAULT_TC = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
+  const DEFAULT_STOP_DELAY = 100;
 
   class SoundClip extends SoundGenerator {
 
@@ -233,20 +234,26 @@ define( require => {
 
     /**
      * stop playing the sound
-     * {number} delay - the amount of time to wait before stopping, often used to prevent sudden stops, which can cause
-     * audible clicks
+     * {number} delay - The amount of time to wait before stopping, generally used to prevent sudden stops, which can
+     * cause audible clicks.  If greater than zero (which it is by default), this method will try to fade out the sound
+     * fully prior to stopping the audio playback.
      */
     stop( delay ) {
 
-      delay = delay === undefined ? soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME : delay;
+      delay = delay === undefined ? DEFAULT_STOP_DELAY : delay;
 
       // make sure the decoding of the audio data has completed before stopping anything
       if ( this.audioBuffer ) {
 
+        // Calculate a time constant to fade output level by 99% by the stop time, see Web Audio time constant
+        // information to understand this calculation.
+        const fadeTimeConstant = delay > 0 ? delay / 4.61 : soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
+
         // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
         // down the gain, effectively doing a fade out, and then stopping playback.
-        const stopTime = this.audioContext.currentTime + delay;
-        this.localGainNode.gain.linearRampToValueAtTime( 0, stopTime );
+        const now = this.audioContext.currentTime;
+        const stopTime = now + delay;
+        this.localGainNode.gain.setTargetAtTime( 0, now, fadeTimeConstant );
         this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
 
         // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
