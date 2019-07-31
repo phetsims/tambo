@@ -19,7 +19,7 @@ define( require => {
   // constants
   const MAX_PLAY_DEFER_TIME = 0.2; // seconds, max time to defer a play request while waiting for audio context state change
   const DEFAULT_TC = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
-  const DEFAULT_STOP_DELAY = 100;
+  const DEFAULT_STOP_DELAY = 0.1;
 
   class SoundClip extends SoundGenerator {
 
@@ -170,10 +170,6 @@ define( require => {
           // make sure the decoding of the audio data is complete before trying to play the sound
           if ( this.audioBuffer ) {
 
-            // make sure the local gain is set to unity value
-            this.localGainNode.gain.cancelScheduledValues( now );
-            this.localGainNode.gain.setValueAtTime( 1, now );
-
             // create an audio buffer source node and connect it to the previously decoded audio data
             const bufferSource = this.audioContext.createBufferSource();
             bufferSource.buffer = this.audioBuffer;
@@ -182,6 +178,10 @@ define( require => {
             if ( this.soundEnd ) {
               bufferSource.loopEnd = this.soundEnd;
             }
+
+            // make sure the local gain is set to unity value
+            this.localGainNode.gain.cancelScheduledValues( now );
+            this.localGainNode.gain.setValueAtTime( 1, now );
 
             // connect this source node to the output
             bufferSource.connect( this.localGainNode );
@@ -234,6 +234,10 @@ define( require => {
 
     /**
      * stop playing the sound
+     *
+     * Note: Doing rapid stops and starts of a loop using this method can cause sound glitches.  If you have a need to
+     * do that, use volume fades combined with zero delay stops.
+     *
      * {number} delay - The amount of time to wait before stopping, generally used to prevent sudden stops, which can
      * cause audible clicks.  If greater than zero (which it is by default), this method will try to fade out the sound
      * fully prior to stopping the audio playback.
@@ -253,6 +257,7 @@ define( require => {
         // down the gain, effectively doing a fade out, and then stopping playback.
         const now = this.audioContext.currentTime;
         const stopTime = now + delay;
+        this.localGainNode.gain.cancelScheduledValues( now );
         this.localGainNode.gain.setTargetAtTime( 0, now, fadeTimeConstant );
         this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
 
