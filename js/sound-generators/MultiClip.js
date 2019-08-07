@@ -18,7 +18,6 @@ define( require => {
   'use strict';
 
   // modules
-  const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
   const tambo = require( 'TAMBO/tambo' );
@@ -29,100 +28,83 @@ define( require => {
   class MultiClip extends SoundGenerator {
 
     /**
-     * @param {Object[]} soundInfoList - A list of objects that includes *either* a 'url' key with a value that points
-     * to the sound to be played *or* a 'base64' key with a value that represents a base64-encoded version of the sound
-     * data. The former is generally used when a sim is running in RequireJS mode, the latter is used in built versions.
-     * This is the format that is provided when using the sound.js plugin.
+     * @param {Object[]} valueToSoundInfoMap - an array of objects that are used to associated values with sounds, where
+     * each object has a 'value' and a 'soundInfo' field.  The 'value' field can be anything, and the 'soundInfo' field
+     * must be a sound information object of the type returned by the PhET sound.js plugin.
      * @param {Object} [options]
      */
-    constructor( soundInfoList, options ) {
-
-      options = _.extend( {
-
-        // {Array.<*>} - a list of values that can be used through the playByValue method to associate values with sounds
-        orderedValueList: null
-
-      }, options );
+    constructor( valueToSoundInfoMap, options ) {
 
       // parameter checking
-      assert && assert(
-        options.orderedValueList === null || options.orderedValueList.length === soundInfoList.length,
-        'if provided, the length of the ordered value list must match the length of the sound info list'
-      );
+      assert && assert( Array.isArray( valueToSoundInfoMap ), 'valueToSoundInfoMap should be an array' );
+      valueToSoundInfoMap.forEach( valueToSoundInfoMapping => {
+        assert && assert( valueToSoundInfoMapping.value !== undefined, 'must supply a value for each mapping' );
+        assert && assert( valueToSoundInfoMapping.soundInfo !== undefined, 'must supply sound info for each value' );
+      } );
 
       super( options );
 
-      // @private {Array.<*>}
-      this.orderedValueList = options.orderedValueList;
+      // @private {Array.<Object>} - mapping of values to the buffers containing the decoded audio data
+      this.valueToAudioBufferMap = [];
 
-      // @private {number}
-      this.numberOfClips = soundInfoList.length;
-
-      // @private {AudioBuffer[]} - decoded audio data in a form that is ready to play with Web Audio
-      this.audioBuffers = [];
-
-      // @private {function} - function to be invoked when sound buffer finishes loading
-      this.loadCompleteAction = null;
-
-      // @private {AudioBufferSourceNode[]} - a list of active source buffer nodes, used so that this play can be re-
-      // initiated again before previous play finishes
+      // @private {AudioBufferSource[]} - buffer sources that are currently playing, used if they need to be stopped early
       this.activeBufferSources = [];
 
-      // @private {GainNode} - a gain node that is used to prevent clicks when stopping the sounds
-      this.localGainNode = this.audioContext.createGain();
-      this.localGainNode.connect( this.masterGainNode );
+      // decode the sound info objects and associate each with a value
+      valueToSoundInfoMap.forEach( valueToSoundInfoMapping => {
+        const valueToAudioBufferMapping = {
+          value: valueToSoundInfoMapping.value,
+          audioBuffer: null // will be filled in when sound info has been decoded (see below)
+        };
+        this.valueToAudioBufferMap.push( valueToAudioBufferMapping );
 
-      // decode the audio data and place it in a sound buffer so it can be easily played
-      soundInfoList.forEach( ( soundInfo, index ) => {
         soundInfoDecoder.decode(
-          soundInfo,
+          valueToSoundInfoMapping.soundInfo,
           this.audioContext,
           decodedAudioData => {
-
-            this.audioBuffers[ index ] = decodedAudioData;
-
-            // perform the "load complete" actions, if any
-            this.loadCompleteAction && this.loadCompleteAction();
-            this.loadCompleteAction = null;
+            valueToAudioBufferMapping.audioBuffer = decodedAudioData;
           },
           () => {
 
-            // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio
-            // file could cause it.  There is handling for both the RequireJS and build cases.
-            assert && assert( false, 'audio decode failed' );
+            // This is the error case for audio decode.  Generally this only occurs if the audio file was incorrectly
+            // specified.  There is handling for both the RequireJS and build cases.
+            assert && assert( false, 'audio decode failed, is file spec correct?' );
             console.error( 'unable to decode audio data, please check all encoded audio' );
           }
         );
       } );
 
-      // listen to the Property that indicates whether we are fully enabled and stop sounds when it goes false
+      // @private {GainNode} - a gain node that is used to prevent clicks when stopping the sounds
+      this.localGainNode = this.audioContext.createGain();
+      this.localGainNode.connect( this.masterGainNode );
+
+      // listen to the Property that indicates whether we are fully enabled and stop sounds if and when it goes false
       this.fullyEnabledProperty.lazyLink( fullyEnabled => {
-        if ( !this.loop && !fullyEnabled ) {
+        if ( !fullyEnabled ) {
           this.stopAll();
         }
       } );
     }
 
     /**
-     * play the specified sound clip
-     * @param {number} index - index of the sound clip to be played
-     * @param {number} [delay] - optional delay value for how long to wait before initiating play, in seconds
-     * @public
+     * play the sound associated with the provided value
+     * @param {*} value
      */
-    playByIndex( index, delay ) {
+    playAssociatedSound( value ) {
 
-      // parameter checking
-      assert && assert( index >= 0 && index < this.numberOfClips, 'clip index out of range' );
+      // get the audio buffer for this value
+      const valueToAudioBufferMapping = _.find( this.valueToAudioBufferMap, entry => { return entry.value === value; } );
 
-      const now = this.audioContext.currentTime;
+      // verify that we have a sound for the provided value
+      assert && assert( valueToAudioBufferMapping !== undefined, 'no sound found for provided value' );
 
-      // default delay is zero
-      delay = typeof delay === 'undefined' ? 0 : delay;
-
+      // play the sound (if enabled)
       if ( this.fullyEnabled ) {
 
+        const now = this.audioContext.currentTime;
+
         // make sure the decoding of the audio data is complete before trying to play the sound
-        if ( this.audioBuffers[ index ] ) {
+        if ( valueToAudioBufferMapping ) {
 
           // make sure the local gain is set to unity value
           this.localGainNode.gain.cancelScheduledValues( now );
@@ -130,7 +112,7 @@ define( require => {
 
           // create an audio buffer source node and connect it to the previously decoded audio data
           const bufferSource = this.audioContext.createBufferSource();
-          bufferSource.buffer = this.audioBuffers[ index ];
+          bufferSource.buffer = valueToAudioBufferMapping.audioBuffer;
 
           // connect this source node to the output
           bufferSource.connect( this.localGainNode );
@@ -149,31 +131,14 @@ define( require => {
           };
 
           // start the playback of the sound
-          bufferSource.start( now + delay, this.soundStart );
+          bufferSource.start( now );
         }
         else {
 
-          // the play method was called before the sound buffer finished loading, create an action that play the sound
-          // once the loading has completed
-          this.loadCompleteAction = () => { this.play( index, delay ); };
+          // note: if this happens and is a problem, support should be added for post-decode playing, like in SoundClip
+          console.warn( 'attempted to play audio buffer before decoding completed' );
         }
       }
-    }
-
-    /**
-     * play the sound associated with the provided value
-     * @param {*} value
-     * @param {number} [delay]
-     */
-    playByValue( value, delay ) {
-
-      // state checking
-      assert && assert( this.orderedValueList, 'can\t use playByValue without specifying the values at construction' );
-
-      const soundIndex = this.orderedValueList.indexOf( value );
-      assert && assert( soundIndex !== -1, 'specified value not found in ordered value list' );
-
-      this.playByIndex( soundIndex, delay );
     }
 
     /**
@@ -185,7 +150,7 @@ define( require => {
       if ( this.audioBuffer ) {
 
         // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
-        // down the gain, effectively doing a fade out, and then stopping playback.
+        // down the gain, effectively doing a fade out, before stopping playback.
         const stopTime = this.audioContext.currentTime + STOP_DELAY_TIME;
         this.localGainNode.gain.linearRampToValueAtTime( 0, stopTime );
         this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
@@ -194,20 +159,6 @@ define( require => {
         // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
         // code below is needed to clear the array of all active buffer sources.
         this.activeBufferSources.length = 0;
-      }
-      else {
-
-        // this was called before the sound finished loading, cancel any previously created actions
-        this.loadCompleteAction = null;
-      }
-
-      if ( audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
-
-        // remove the state change listener that was going to do a deferred play, since the sound has now been stopped
-        audioContextStateChangeMonitor.removeStateChangeListener(
-          this.audioContext,
-          this.audioContextStateChangeListener
-        );
       }
     }
   }

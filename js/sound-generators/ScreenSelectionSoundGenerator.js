@@ -30,9 +30,9 @@ define( require => {
 
       super(
         [
-          iconSelectedSound, // 0
-          homeSelectedSound, // 1
-          screenSelectedSound // 2
+          { value: 0, soundInfo: iconSelectedSound },
+          { value: 1, soundInfo: homeSelectedSound },
+          { value: 2, soundInfo: screenSelectedSound }
         ],
         options
       );
@@ -42,7 +42,7 @@ define( require => {
 
         // only play this sound when on the home screen
         if ( currentScreenProperty.value === null ) {
-          this.playByIndex( 0 );
+          this.playAssociatedSound( 0 );
         }
       } );
 
@@ -50,7 +50,7 @@ define( require => {
       currentScreenProperty.lazyLink( currentScreen => {
 
         // play one sound for the home screen, another for all other screens
-        this.playByIndex( currentScreen === null ? 1 : 2 );
+        this.playAssociatedSound( currentScreen === null ? 1 : 2 );
       } );
     }
   }

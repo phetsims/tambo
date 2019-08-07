@@ -33,11 +33,17 @@ define( require => {
         initialOutputLevel: 0.7
       }, options );
 
-      super( [ checkboxChecked, checkboxUnchecked ], options );
+      super(
+        [
+          { value: true, soundInfo: checkboxChecked },
+          { value: false, soundInfo: checkboxUnchecked }
+        ],
+        options
+      );
 
       const checkboxPropertyListener = value => {
         if ( !resetInProgressProperty.value ) {
-          this.playByValue( value );
+          this.playAssociatedSound( value );
         }
       };
       checkboxProperty.lazyLink( checkboxPropertyListener );
