@@ -62,13 +62,13 @@ define( require => {
       // start with the output level at zero so that the initial sound generation has a bit of fade in
       this.setOutputLevel( 0, 0 );
 
-      // function for starting the force sound or adjusting the volume
-      const listener = force => {
+      // function for starting the sound or adjusting the volume
+      const listener = value => {
 
         if ( !resetInProgressProperty.value ) {
 
-          // calculate the playback rate based on the amount of force, see the design document for detailed explanation
-          const normalizedValue = Math.log( force / range.min ) / Math.log( range.max / range.min );
+          // calculate the playback rate based on the value
+          const normalizedValue = Math.log( value / range.min ) / Math.log( range.max / range.min );
           const centerValue = normalizedValue - 0.5;
           const midiNote = options.pitchRangeInSemitones / 2 * centerValue + options.pitchCenterOffset;
           const playbackRate = Math.pow( 2, midiNote / 12 );
@@ -87,14 +87,14 @@ define( require => {
       property.lazyLink( listener );
 
       // @private {function}
-      this.disposeForceSoundGenerator = () => property.unlink( listener );
+      this.disposeContinuousPropertySoundGenerator = () => property.unlink( listener );
     }
 
     /**
      * @public
      */
     dispose() {
-      this.disposeForceSoundGenerator();
+      this.disposeContinuousPropertySoundGenerator();
       super.dispose();
     }
 
