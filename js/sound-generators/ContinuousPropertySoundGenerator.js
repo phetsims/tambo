@@ -25,7 +25,8 @@ define( require => {
      * @constructor
      */
     constructor( property, sound, range, resetInProgressProperty, options ) {
-      assert && assert( !options || !options.hasOwnProperty( 'loop' ), 'loop option should be supplied by ContinuousPropertySoundGenerator' );
+      assert && assert( !options || !options.hasOwnProperty( 'loop' ), 'loop option should be supplied by' +
+                                                                       ' ContinuousPropertySoundGenerator' );
 
       options = _.extend( {
         initialOutputLevel: 0.7,
@@ -39,7 +40,8 @@ define( require => {
       }, options );
 
       // TODO: there was a note in ForceSoundGenerator:
-      // TODO: The saturated sine loop is precisely optimized for good looping, which is why it is a .wav and not a .mp2 file
+      // TODO: The saturated sine loop is precisely optimized for good looping, which is why it is a .wav and not a
+      // TODO  *.mp2 file.
       // TODO: Some of our sounds are mp3 and have a "hitch" where no sound plays momentarily
       // TODO: Would that maybe be fixed if we used *.wav?
 
