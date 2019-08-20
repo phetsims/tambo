@@ -95,6 +95,14 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mike Winters of Georgia Tech for PhET"
   },
+  "220hz-saturated-sine-loop.mp3": {
+    "text": [
+      "Copyright 2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  },
   "bird-call.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"
@@ -535,6 +543,14 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
+  "strings-loop-middle-c-oscilloscope.mp3": {
+    "text": [
+      "Copyright 2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  },
   "switching-screen-selector-icons.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
@@ -574,5 +590,21 @@
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mike Winters (Georgia Tech) for use by PhET"
+  },
+  "winds-loop-c3-oscilloscope.mp3": {
+    "text": [
+      "Copyright 2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  },
+  "winds-loop-middle-c-oscilloscope.mp3": {
+    "text": [
+      "Copyright 2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   }
 }
