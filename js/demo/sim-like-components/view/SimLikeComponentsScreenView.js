@@ -132,7 +132,7 @@ define( require => {
       this.addChild( ballCountSpinner );
 
       // Creates a panel that demonstrates a ContinuousPropertySoundGenerator
-      const createTester = sound => {
+      const createTester = ( sound, max ) => {
         const numberProperty = new NumberProperty( 5 );
         const range = new Range( 1, 10 );
         const continuousPropertySoundGenerator = new ContinuousPropertySoundGenerator( numberProperty, sound, range, new BooleanProperty( false ), {} );
@@ -141,7 +141,7 @@ define( require => {
         let phase = 0;
         model.stepEmitter.addListener( dt => {
           if ( isOscillatingProperty.value ) {
-            numberProperty.value = ( Math.sin( Date.now() / 1000 - phase ) + 1 ) * ( range.max - range.min ) / 2 + range.min;
+            numberProperty.value = ( max * Math.sin( Date.now() / 1000 - phase ) + 1 ) * ( range.max - range.min ) / 2 + range.min;
           }
           continuousPropertySoundGenerator.step( dt );
         } );
@@ -162,10 +162,10 @@ define( require => {
 
       const panel = new VBox( {
         children: [
-          createTester( stringSound1 ),
-          createTester( windSound1 ),
-          createTester( windSound2 ),
-          createTester( sineSound )
+          createTester( stringSound1, 1 ),
+          createTester( windSound1, 0.5 ),
+          createTester( windSound2, 0.25 ),
+          createTester( sineSound, 1 )
         ]
       } );
       this.addChild( panel );
