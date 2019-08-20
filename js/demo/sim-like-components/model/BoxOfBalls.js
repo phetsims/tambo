@@ -37,7 +37,7 @@ define( require => {
     constructor( width, height ) {
 
       // @public (read-only) {Shape.rect} - the bounding box
-      this.box = Shape.rect( 0, 0, width, height );
+      this.box = Shape.rect( 50, 0, width, height );
 
       // @public (read-only) {ObservableArray}
       this.balls = new ObservableArray();
@@ -58,8 +58,8 @@ define( require => {
         BALL_RADIUS,
         createRandomColor(),
         new Vector2(
-          BALL_RADIUS + ( phet.joist.random.nextDouble() * ( this.box.bounds.width - 2 * BALL_RADIUS ) ),
-          BALL_RADIUS + ( phet.joist.random.nextDouble() * ( this.box.bounds.height - 2 * BALL_RADIUS ) )
+          BALL_RADIUS + ( phet.joist.random.nextDouble() * ( this.box.bounds.width - 2 * BALL_RADIUS ) + this.box.bounds.minX ),
+          BALL_RADIUS + ( phet.joist.random.nextDouble() * ( this.box.bounds.height - 2 * BALL_RADIUS ) + this.box.bounds.minY )
         ),
         velocity
       ) );

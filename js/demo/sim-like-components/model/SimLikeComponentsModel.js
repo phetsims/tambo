@@ -12,6 +12,7 @@ define( require => {
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const BoxOfBalls = require( 'TAMBO/demo/sim-like-components/model/BoxOfBalls' );
+  const Emitter = require( 'AXON/Emitter' );
   const NumberProperty = require( 'AXON/NumberProperty' );
   const tambo = require( 'TAMBO/tambo' );
 
@@ -48,6 +49,10 @@ define( require => {
           } );
         }
       } );
+
+      this.stepEmitter = new Emitter( {
+        parameters: [ { valueType: 'number' } ]
+      } );
     }
 
     /**
@@ -58,6 +63,7 @@ define( require => {
       if ( this.ballsMovingProperty.value ) {
         this.boxOfBalls.step( dt );
       }
+      this.stepEmitter.emit( dt );
     }
 
     /**

@@ -11,10 +11,15 @@ define( require => {
   // modules
   const ABSwitch = require( 'SUN/ABSwitch' );
   const BallNode = require( 'TAMBO/demo/sim-like-components/view/BallNode' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const Checkbox = require( 'SUN/Checkbox' );
   const DerivedProperty = require( 'AXON/DerivedProperty' );
   const Dimension2 = require( 'DOT/Dimension2' );
   const ModelViewTransform2 = require( 'PHETCOMMON/view/ModelViewTransform2' );
+  const NumberControl = require( 'SCENERY_PHET/NumberControl' );
+  const NumberProperty = require( 'AXON/NumberProperty' );
   const NumberSpinner = require( 'SUN/NumberSpinner' );
+  const Panel = require( 'SUN/Panel' );
   const Path = require( 'SCENERY/nodes/Path' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
   const PitchedPopGenerator = require( 'TAMBO/sound-generators/PitchedPopGenerator' );
@@ -22,11 +27,19 @@ define( require => {
   const Range = require( 'DOT/Range' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
   const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
+  const ContinuousPropertySoundGenerator = require( 'TAMBO/sound-generators/ContinuousPropertySoundGenerator' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const soundManager = require( 'TAMBO/soundManager' );
   const tambo = require( 'TAMBO/tambo' );
   const Text = require( 'SCENERY/nodes/Text' );
+  const VBox = require( 'SCENERY/nodes/VBox' );
   const Vector2 = require( 'DOT/Vector2' );
+
+  // sounds
+  const stringSound1 = require( 'sound!TAMBO/strings-loop-middle-c-oscilloscope.mp3' );
+  const windSound1 = require( 'sound!TAMBO/winds-loop-middle-c-oscilloscope.mp3' );
+  const windSound2 = require( 'sound!TAMBO/winds-loop-c3-oscilloscope.mp3' );
+  const sineSound = require( 'sound!TAMBO/220hz-saturated-sine-loop.mp3' );
 
   // constants
   const MAX_BALLS = 8;
@@ -118,6 +131,45 @@ define( require => {
         } );
       this.addChild( ballCountSpinner );
 
+      // Creates a panel that demonstrates a ContinuousPropertySoundGenerator
+      const createTester = sound => {
+        const numberProperty = new NumberProperty( 5 );
+        const range = new Range( 1, 10 );
+        const continuousPropertySoundGenerator = new ContinuousPropertySoundGenerator( numberProperty, sound, range, new BooleanProperty( false ), {} );
+        soundManager.addSoundGenerator( continuousPropertySoundGenerator );
+        const isOscillatingProperty = new BooleanProperty( false );
+        let phase = 0;
+        model.stepEmitter.addListener( dt => {
+          if ( isOscillatingProperty.value ) {
+            numberProperty.value = ( Math.sin( Date.now() / 1000 - phase ) + 1 ) * ( range.max - range.min ) / 2 + range.min;
+          }
+          continuousPropertySoundGenerator.step( dt );
+        } );
+        isOscillatingProperty.link( oscillate => {
+          phase = Date.now() / 1000;
+        } );
+
+        return new Panel( new VBox( {
+          children: [
+            new Checkbox( new Text( 'Oscillate' ), isOscillatingProperty ),
+            new NumberControl( 'Value', numberProperty, range, {
+              delta: 0.1,
+              numberDisplayOptions: { decimalPlaces: 1 }
+            } )
+          ]
+        } ) );
+      };
+
+      const panel = new VBox( {
+        children: [
+          createTester( stringSound1 ),
+          createTester( windSound1 ),
+          createTester( windSound2 ),
+          createTester( sineSound )
+        ]
+      } );
+      this.addChild( panel );
+
       // add the reset all button
       const resetAllButton = new ResetAllButton( {
         right: this.layoutBounds.maxX - 25,
@@ -127,7 +179,6 @@ define( require => {
       this.addChild( resetAllButton );
       soundManager.addSoundGenerator( new ResetAllSoundGenerator( model.resetInProgressProperty ) );
     }
-
   }
 
   tambo.register( 'SimLikeComponentsScreenView', SimLikeComponentsScreenView );
