@@ -39,7 +39,6 @@ define( require => {
 
         // @private {SoundClip}
         this.soundClip = new SoundClip( buttonSound, { initialOutputLevel: 0.7 } );
-        console.log( 'button sound constructed' );
 
         // automatically register this sound clip with the sound manager so that the client does have to
         soundManager.addSoundGenerator( this.soundClip );
