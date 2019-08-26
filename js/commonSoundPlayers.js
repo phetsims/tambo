@@ -22,6 +22,8 @@ define( require => {
 
   // sounds
   const buttonSoundInfo = require( 'sound!TAMBO/general-button-v4.mp3' );
+  const checkboxChecked = require( 'sound!TAMBO/check-box-checked.mp3' );
+  const checkboxUnchecked = require( 'sound!TAMBO/check-box-unchecked.mp3' );
   const resetAllSoundInfo = require( 'sound!TAMBO/reset-all.mp3' );
 
   /**
@@ -36,18 +38,37 @@ define( require => {
 
       // instances of common sound players, created when first requested (i.e. lazily)
       this._resetAllSoundPlayer = null;
+      this._checkboxCheckedSoundPlayer = null;
+      this._checkboxUncheckedSoundPlayer = null;
       this._pushButtonSoundPlayer = null;
     }
 
     /**
      * @public
-     * @returns {AutoRegisteringSoundClipProxy}
+     * @returns {SoundClipProxy}
      */
-    get resetAllSoundPlayer() {
-      if ( this._resetAllSoundPlayer === null ) {
-        this._resetAllSoundPlayer = new AutoRegisteringSoundClipProxy( resetAllSoundInfo, { initialOutputLevel: 0.7 } );
+    get checkboxCheckedSoundPlayer() {
+      if ( this._checkboxCheckedSoundPlayer === null ) {
+        this._checkboxCheckedSoundPlayer = new AutoRegisteringSoundClipProxy(
+          checkboxChecked,
+          { initialOutputLevel: 0.7 }
+        );
       }
-      return this._resetAllSoundPlayer;
+      return this._checkboxCheckedSoundPlayer;
+    }
+
+    /**
+     * @public
+     * @returns {SoundClipProxy}
+     */
+    get checkboxUncheckedSoundPlayer() {
+      if ( this._checkboxUncheckedSoundPlayer === null ) {
+        this._checkboxUncheckedSoundPlayer = new AutoRegisteringSoundClipProxy(
+          checkboxUnchecked,
+          { initialOutputLevel: 0.7 }
+        );
+      }
+      return this._checkboxUncheckedSoundPlayer;
     }
 
     /**
@@ -59,6 +80,17 @@ define( require => {
         this._pushButtonSoundPlayer = new AutoRegisteringSoundClipProxy( buttonSoundInfo, { initialOutputLevel: 0.7 } );
       }
       return this._pushButtonSoundPlayer;
+    }
+
+    /**
+     * @public
+     * @returns {AutoRegisteringSoundClipProxy}
+     */
+    get resetAllSoundPlayer() {
+      if ( this._resetAllSoundPlayer === null ) {
+        this._resetAllSoundPlayer = new AutoRegisteringSoundClipProxy( resetAllSoundInfo, { initialOutputLevel: 0.7 } );
+      }
+      return this._resetAllSoundPlayer;
     }
 
   }
