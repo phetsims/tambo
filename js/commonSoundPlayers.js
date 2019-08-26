@@ -2,8 +2,11 @@
 
 /**
  * The commonSoundPlayers singleton is both a factory and repository for sounds that are used in multiple places in the
- * code.  This is done because having a single instance of a sound clip or other sound generator reduces memory
- * consumption and load time versus creating a separate instance of the same sound clip.
+ * code.  The general idea is that the first time a sound player is requested it is constructed and a reference to the
+ * instance is retained, and on subsequent requests the previously constructed instance is returned.  By doing this, a
+ * reusable single instance of a sound player is made available for all common UI components that need it.  This is done
+ * because having a single instance of a sound clip or other sound generator reduces memory consumption and load time
+ * versus creating a separate instance of the same sound clip.
  *
  * Also, if sound is not enabled for this sim, loading and decoding of sound data is skipped altogether to minimize load
  * time and memory usage.
