@@ -25,6 +25,8 @@ define( require => {
   const checkboxChecked = require( 'sound!TAMBO/check-box-checked.mp3' );
   const checkboxUnchecked = require( 'sound!TAMBO/check-box-unchecked.mp3' );
   const resetAllSoundInfo = require( 'sound!TAMBO/reset-all.mp3' );
+  const playButtonSoundInfo = require( 'sound!TAMBO/play-pause-003.mp3' );
+  const pauseButtonSoundInfo = require( 'sound!TAMBO/pause.mp3' );
 
   /**
    * definition of the pushButtonSoundPlayer object
@@ -40,6 +42,8 @@ define( require => {
       this._resetAllSoundPlayer = null;
       this._checkboxCheckedSoundPlayer = null;
       this._checkboxUncheckedSoundPlayer = null;
+      this._pauseButtonSoundPlayer = null;
+      this._playButtonSoundPlayer = null;
       this._pushButtonSoundPlayer = null;
     }
 
@@ -69,6 +73,34 @@ define( require => {
         );
       }
       return this._checkboxUncheckedSoundPlayer;
+    }
+
+    /**
+     * @public
+     * @returns {SoundClipProxy}
+     */
+    get playButtonSoundPlayer() {
+      if ( this._playButtonSoundPlayer === null ) {
+        this._playButtonSoundPlayer = new AutoRegisteringSoundClipProxy(
+          playButtonSoundInfo,
+          { initialOutputLevel: 0.7 }
+        );
+      }
+      return this._playButtonSoundPlayer;
+    }
+
+    /**
+     * @public
+     * @returns {SoundClipProxy}
+     */
+    get pauseButtonSoundPlayer() {
+      if ( this._pauseButtonSoundPlayer === null ) {
+        this._pauseButtonSoundPlayer = new AutoRegisteringSoundClipProxy(
+          pauseButtonSoundInfo,
+          { initialOutputLevel: 0.7 }
+        );
+      }
+      return this._pauseButtonSoundPlayer;
     }
 
     /**
