@@ -24,6 +24,8 @@ define( require => {
   const buttonSoundInfo = require( 'sound!TAMBO/general-button-v4.mp3' );
   const checkboxChecked = require( 'sound!TAMBO/check-box-checked.mp3' );
   const checkboxUnchecked = require( 'sound!TAMBO/check-box-unchecked.mp3' );
+  const comboBoxCloseSoundInfo = require( 'sound!TAMBO/combo-box-close.mp3' );
+  const comboBoxOpenSoundInfo = require( 'sound!TAMBO/combo-box-open.mp3' );
   const resetAllSoundInfo = require( 'sound!TAMBO/reset-all.mp3' );
   const playButtonSoundInfo = require( 'sound!TAMBO/play-pause-003.mp3' );
   const pauseButtonSoundInfo = require( 'sound!TAMBO/pause.mp3' );
@@ -41,12 +43,14 @@ define( require => {
     constructor() {
 
       // instances of common sound players, created when first requested (i.e. lazily)
-      this._resetAllSoundPlayer = null;
       this._checkboxCheckedSoundPlayer = null;
       this._checkboxUncheckedSoundPlayer = null;
+      this._comboBoxOpenSoundPlayer = null;
+      this._comboBoxCloseSoundPlayer = null;
       this._pauseButtonSoundPlayer = null;
       this._playButtonSoundPlayer = null;
       this._pushButtonSoundPlayer = null;
+      this._resetAllSoundPlayer = null;
       this._stepBackwardButtonSoundPlayer = null;
       this._stepForwardButtonSoundPlayer = null;
     }
@@ -77,6 +81,34 @@ define( require => {
         );
       }
       return this._checkboxUncheckedSoundPlayer;
+    }
+
+    /**
+     * @public
+     * @returns {SoundClipProxy}
+     */
+    get comboBoxCloseSoundPlayer() {
+      if ( this._comboBoxCloseSoundPlayer === null ) {
+        this._comboBoxCloseSoundPlayer = new AutoRegisteringSoundClipProxy(
+          comboBoxCloseSoundInfo,
+          { initialOutputLevel: 0.7 }
+        );
+      }
+      return this._comboBoxCloseSoundPlayer;
+    }
+
+    /**
+     * @public
+     * @returns {SoundClipProxy}
+     */
+    get comboBoxOpenSoundPlayer() {
+      if ( this._comboBoxOpenSoundPlayer === null ) {
+        this._comboBoxOpenSoundPlayer = new AutoRegisteringSoundClipProxy(
+          comboBoxOpenSoundInfo,
+          { initialOutputLevel: 0.7 }
+        );
+      }
+      return this._comboBoxOpenSoundPlayer;
     }
 
     /**
