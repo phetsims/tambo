@@ -27,6 +27,8 @@ define( require => {
   const resetAllSoundInfo = require( 'sound!TAMBO/reset-all.mp3' );
   const playButtonSoundInfo = require( 'sound!TAMBO/play-pause-003.mp3' );
   const pauseButtonSoundInfo = require( 'sound!TAMBO/pause.mp3' );
+  const stepBackwardButtonSoundInfo = require( 'sound!TAMBO/step-back-v2.mp3' );
+  const stepForwardButtonSoundInfo = require( 'sound!TAMBO/step-forward-v2.mp3' );
 
   /**
    * definition of the pushButtonSoundPlayer object
@@ -45,6 +47,8 @@ define( require => {
       this._pauseButtonSoundPlayer = null;
       this._playButtonSoundPlayer = null;
       this._pushButtonSoundPlayer = null;
+      this._stepBackwardButtonSoundPlayer = null;
+      this._stepForwardButtonSoundPlayer = null;
     }
 
     /**
@@ -123,6 +127,34 @@ define( require => {
         this._resetAllSoundPlayer = new AutoRegisteringSoundClipProxy( resetAllSoundInfo, { initialOutputLevel: 0.7 } );
       }
       return this._resetAllSoundPlayer;
+    }
+
+    /**
+     * @public
+     * @returns {AutoRegisteringSoundClipProxy}
+     */
+    get stepForwardButtonSoundPlayer() {
+      if ( this._stepForwardButtonSoundPlayer === null ) {
+        this._stepForwardButtonSoundPlayer = new AutoRegisteringSoundClipProxy(
+          stepForwardButtonSoundInfo,
+          { initialOutputLevel: 0.7 }
+        );
+      }
+      return this._stepForwardButtonSoundPlayer;
+    }
+
+    /**
+     * @public
+     * @returns {AutoRegisteringSoundClipProxy}
+     */
+    get stepBackwardButtonSoundPlayer() {
+      if ( this._stepBackwardButtonSoundPlayer === null ) {
+        this._stepBackwardButtonSoundPlayer = new AutoRegisteringSoundClipProxy(
+          stepBackwardButtonSoundInfo,
+          { initialOutputLevel: 0.7 }
+        );
+      }
+      return this._stepBackwardButtonSoundPlayer;
     }
 
   }
