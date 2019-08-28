@@ -1,15 +1,18 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * The commonSoundPlayers singleton is both a factory and repository for sounds that are used in multiple places in the
- * code.  The general idea is that the first time a sound player is requested it is constructed and a reference to the
- * instance is retained, and on subsequent requests the previously constructed instance is returned.  By doing this, a
- * reusable single instance of a sound player is made available for all common UI components that need it.  This is done
- * because having a single instance of a sound clip or other sound generator reduces memory consumption and load time
- * versus creating a separate instance of the same sound clip.
+ * The commonSoundPlayers singleton is both a factory and repository for SoundClip-based sound players that are used in
+ * multiple places in the code.  The general idea is that the first time a sound player is requested it is constructed
+ * and a reference to the instance is retained, and on subsequent requests the previously constructed instance is
+ * returned.  By doing this, a reusable single instance of the sound clip is made available for all common UI components
+ * that need it.  This is done because having a single instance of a sound clip reduces memory consumption and load time
+ * versus creating multiple instances.
  *
  * Also, if sound is not enabled for this sim, loading and decoding of sound data is skipped altogether to minimize load
  * time and memory usage.
+ *
+ * During construction of the singleton instance, getters are added for each sound, so the usage looks like this:
+ *    const resetAllSoundPlayer = commonSoundPlayer.resetAll;
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -21,9 +24,9 @@ define( require => {
   const tambo = require( 'TAMBO/tambo' );
 
   // sounds
-  const buttonSoundInfo = require( 'sound!TAMBO/general-button-v4.mp3' );
-  const checkboxChecked = require( 'sound!TAMBO/check-box-checked.mp3' );
-  const checkboxUnchecked = require( 'sound!TAMBO/check-box-unchecked.mp3' );
+  const pushButtonSoundInfo = require( 'sound!TAMBO/general-button-v4.mp3' );
+  const checkboxCheckedSoundInfo = require( 'sound!TAMBO/check-box-checked.mp3' );
+  const checkboxUncheckedSoundInfo = require( 'sound!TAMBO/check-box-unchecked.mp3' );
   const comboBoxCloseSoundInfo = require( 'sound!TAMBO/combo-box-close.mp3' );
   const comboBoxOpenSoundInfo = require( 'sound!TAMBO/combo-box-open.mp3' );
   const resetAllSoundInfo = require( 'sound!TAMBO/reset-all.mp3' );
@@ -31,6 +34,9 @@ define( require => {
   const pauseButtonSoundInfo = require( 'sound!TAMBO/pause.mp3' );
   const stepBackwardButtonSoundInfo = require( 'sound!TAMBO/step-back-v2.mp3' );
   const stepForwardButtonSoundInfo = require( 'sound!TAMBO/step-forward-v2.mp3' );
+
+  // constants
+  const DEFAULT_OUTPUT_LEVEL = 0.7;
 
   /**
    * definition of the pushButtonSoundPlayer object
@@ -42,153 +48,79 @@ define( require => {
      */
     constructor() {
 
-      // instances of common sound players, created when first requested (i.e. lazily)
-      this._checkboxCheckedSoundPlayer = null;
-      this._checkboxUncheckedSoundPlayer = null;
-      this._comboBoxOpenSoundPlayer = null;
-      this._comboBoxCloseSoundPlayer = null;
-      this._pauseButtonSoundPlayer = null;
-      this._playButtonSoundPlayer = null;
-      this._pushButtonSoundPlayer = null;
-      this._resetAllSoundPlayer = null;
-      this._stepBackwardButtonSoundPlayer = null;
-      this._stepForwardButtonSoundPlayer = null;
+      // An object that maps the names of common sound players to the information needed to create them and the players
+      // themselves.  The players are not created until needed.  Please keep this alphabetical by key when adding new
+      // common sounds.
+      this.commonSoundPlayers = {
+        checkboxChecked: {
+          soundInfo: checkboxCheckedSoundInfo,
+          soundPlayer: null
+        },
+        checkboxUnchecked: {
+          soundInfo: checkboxUncheckedSoundInfo,
+          soundPlayer: null
+        },
+        comboBoxClose: {
+          soundInfo: comboBoxCloseSoundInfo,
+          soundPlayer: null
+        },
+        comboBoxOpen: {
+          soundInfo: comboBoxOpenSoundInfo,
+          soundPlayer: null
+        },
+        pauseButton: {
+          soundInfo: pauseButtonSoundInfo,
+          soundPlayer: null
+        },
+        playButton: {
+          soundInfo: playButtonSoundInfo,
+          soundPlayer: null
+        },
+        pushButton: {
+          soundInfo: pushButtonSoundInfo,
+          soundPlayer: null
+        },
+        resetAll: {
+          soundInfo: resetAllSoundInfo,
+          soundPlayer: null
+        },
+        stepBackwardButton: {
+          soundInfo: stepBackwardButtonSoundInfo,
+          soundPlayer: null
+        },
+        stepForwardButton: {
+          soundInfo: stepForwardButtonSoundInfo,
+          soundPlayer: null
+        }
+      };
+
+      // add a getter for each common sound generator
+      _.keys( this.commonSoundPlayers ).forEach( soundPlayerName => {
+        Object.defineProperty( this, soundPlayerName, {
+          get: () => {
+            return this.getSoundPlayerByName( soundPlayerName );
+          }
+        } );
+      } );
     }
 
     /**
+     * get the sound player using the specified name
+     * @param {string} name, see the common sound player hash defined above for a list of the possibilities
      * @public
-     * @returns {SoundClipProxy}
+     * TODO: Decide whether the getter pattern, the get-by-name pattern, or both are preferred by the dev team and
+     * modify this method accordingly.
      */
-    get checkboxCheckedSoundPlayer() {
-      if ( this._checkboxCheckedSoundPlayer === null ) {
-        this._checkboxCheckedSoundPlayer = new AutoRegisteringSoundClipProxy(
-          checkboxChecked,
-          { initialOutputLevel: 0.7 }
-        );
+    getSoundPlayerByName( name ) {
+      assert && assert( this.commonSoundPlayers[ name ], 'requested sound player does not exist: ' + name );
+      const playerInfo = this.commonSoundPlayers[ name ];
+      if ( !playerInfo.soundPlayer ) {
+        playerInfo.soundPlayer = new AutoRegisteringSoundClipProxy( playerInfo.soundInfo, {
+          initialOutputLevel: DEFAULT_OUTPUT_LEVEL
+        } );
       }
-      return this._checkboxCheckedSoundPlayer;
+      return playerInfo.soundPlayer;
     }
-
-    /**
-     * @public
-     * @returns {SoundClipProxy}
-     */
-    get checkboxUncheckedSoundPlayer() {
-      if ( this._checkboxUncheckedSoundPlayer === null ) {
-        this._checkboxUncheckedSoundPlayer = new AutoRegisteringSoundClipProxy(
-          checkboxUnchecked,
-          { initialOutputLevel: 0.7 }
-        );
-      }
-      return this._checkboxUncheckedSoundPlayer;
-    }
-
-    /**
-     * @public
-     * @returns {SoundClipProxy}
-     */
-    get comboBoxCloseSoundPlayer() {
-      if ( this._comboBoxCloseSoundPlayer === null ) {
-        this._comboBoxCloseSoundPlayer = new AutoRegisteringSoundClipProxy(
-          comboBoxCloseSoundInfo,
-          { initialOutputLevel: 0.7 }
-        );
-      }
-      return this._comboBoxCloseSoundPlayer;
-    }
-
-    /**
-     * @public
-     * @returns {SoundClipProxy}
-     */
-    get comboBoxOpenSoundPlayer() {
-      if ( this._comboBoxOpenSoundPlayer === null ) {
-        this._comboBoxOpenSoundPlayer = new AutoRegisteringSoundClipProxy(
-          comboBoxOpenSoundInfo,
-          { initialOutputLevel: 0.7 }
-        );
-      }
-      return this._comboBoxOpenSoundPlayer;
-    }
-
-    /**
-     * @public
-     * @returns {SoundClipProxy}
-     */
-    get playButtonSoundPlayer() {
-      if ( this._playButtonSoundPlayer === null ) {
-        this._playButtonSoundPlayer = new AutoRegisteringSoundClipProxy(
-          playButtonSoundInfo,
-          { initialOutputLevel: 0.7 }
-        );
-      }
-      return this._playButtonSoundPlayer;
-    }
-
-    /**
-     * @public
-     * @returns {SoundClipProxy}
-     */
-    get pauseButtonSoundPlayer() {
-      if ( this._pauseButtonSoundPlayer === null ) {
-        this._pauseButtonSoundPlayer = new AutoRegisteringSoundClipProxy(
-          pauseButtonSoundInfo,
-          { initialOutputLevel: 0.7 }
-        );
-      }
-      return this._pauseButtonSoundPlayer;
-    }
-
-    /**
-     * @public
-     * @returns {SoundClipProxy}
-     */
-    get pushButtonSoundPlayer() {
-      if ( this._pushButtonSoundPlayer === null ) {
-        this._pushButtonSoundPlayer = new AutoRegisteringSoundClipProxy( buttonSoundInfo, { initialOutputLevel: 0.7 } );
-      }
-      return this._pushButtonSoundPlayer;
-    }
-
-    /**
-     * @public
-     * @returns {AutoRegisteringSoundClipProxy}
-     */
-    get resetAllSoundPlayer() {
-      if ( this._resetAllSoundPlayer === null ) {
-        this._resetAllSoundPlayer = new AutoRegisteringSoundClipProxy( resetAllSoundInfo, { initialOutputLevel: 0.7 } );
-      }
-      return this._resetAllSoundPlayer;
-    }
-
-    /**
-     * @public
-     * @returns {AutoRegisteringSoundClipProxy}
-     */
-    get stepForwardButtonSoundPlayer() {
-      if ( this._stepForwardButtonSoundPlayer === null ) {
-        this._stepForwardButtonSoundPlayer = new AutoRegisteringSoundClipProxy(
-          stepForwardButtonSoundInfo,
-          { initialOutputLevel: 0.7 }
-        );
-      }
-      return this._stepForwardButtonSoundPlayer;
-    }
-
-    /**
-     * @public
-     * @returns {AutoRegisteringSoundClipProxy}
-     */
-    get stepBackwardButtonSoundPlayer() {
-      if ( this._stepBackwardButtonSoundPlayer === null ) {
-        this._stepBackwardButtonSoundPlayer = new AutoRegisteringSoundClipProxy(
-          stepBackwardButtonSoundInfo,
-          { initialOutputLevel: 0.7 }
-        );
-      }
-      return this._stepBackwardButtonSoundPlayer;
-    }
-
   }
 
   const commonSoundPlayers = new CommonSoundPlayers();
