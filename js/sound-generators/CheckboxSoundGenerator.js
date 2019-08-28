@@ -34,10 +34,10 @@ define( require => {
       }, options );
 
       super(
-        [
-          { value: true, soundInfo: checkboxChecked },
-          { value: false, soundInfo: checkboxUnchecked }
-        ],
+        new Map( [
+          [ true, checkboxChecked ],
+          [ false, checkboxUnchecked ]
+        ] ),
         options
       );
 

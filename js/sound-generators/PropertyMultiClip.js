@@ -16,9 +16,8 @@ define( require => {
 
     /**
      * @param {Property.<*>} property - the property for which sounds are played on value changes
-     * @param {Object[]} valueToSoundInfoMap - an array of objects that are used to associated values with sounds, where
-     * each object has a 'value' and a 'soundInfo' field.  The 'value' field can be anything, and the 'soundInfo' field
-     * must be a sound information object of the type returned by the PhET sound.js plugin.
+     * @param {Map<*,SoundInfo>} valueToSoundInfoMap - a map of values to SoundInfo objects (i.e. the type that is
+     * returned by the PhET "sound" RequireJS plugin) that is used to define the association between values and sounds.
      * @param {Object} [options]
      */
     constructor( property, valueToSoundInfoMap, options ) {

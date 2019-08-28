@@ -29,11 +29,7 @@ define( require => {
     constructor( currentScreenProperty, iconIndexProperty, options ) {
 
       super(
-        [
-          { value: 0, soundInfo: iconSelectedSound },
-          { value: 1, soundInfo: homeSelectedSound },
-          { value: 2, soundInfo: screenSelectedSound }
-        ],
+        new Map( [ [ 0, iconSelectedSound ], [ 1, homeSelectedSound ], [ 2, screenSelectedSound ] ] ),
         options
       );
 
