@@ -191,7 +191,7 @@ define( require => {
               } )
               .catch( err => {
                 const errorMessage = 'error when trying to resume audio context, err = ' + err;
-                console.err( errorMessage );
+                console.error( errorMessage );
                 alert( errorMessage );
               } );
           }
