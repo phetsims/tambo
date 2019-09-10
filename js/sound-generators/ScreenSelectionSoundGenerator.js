@@ -28,10 +28,13 @@ define( require => {
      */
     constructor( currentScreenProperty, iconIndexProperty, options ) {
 
-      super(
-        new Map( [ [ 0, iconSelectedSound ], [ 1, homeSelectedSound ], [ 2, screenSelectedSound ] ] ),
-        options
-      );
+      // create the map of screen index values to sounds
+      const valuesToSoundInfoMap = new Map(); // can't use initialization constructor since it's not supported in IE
+      valuesToSoundInfoMap.set( 0, iconSelectedSound );
+      valuesToSoundInfoMap.set( 1, homeSelectedSound );
+      valuesToSoundInfoMap.set( 2, screenSelectedSound );
+
+      super( valuesToSoundInfoMap, options );
 
       // play the sound when the user selects a different icon on the home screen
       iconIndexProperty.lazyLink( () => {

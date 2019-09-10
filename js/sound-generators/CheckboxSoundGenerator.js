@@ -33,13 +33,12 @@ define( require => {
         initialOutputLevel: 0.7
       }, options );
 
-      super(
-        new Map( [
-          [ true, checkboxChecked ],
-          [ false, checkboxUnchecked ]
-        ] ),
-        options
-      );
+      // create the map of boolean values to sounds
+      const valuesToSoundInfoMap = new Map(); // can't use initialization constructor since it's not supported in IE
+      valuesToSoundInfoMap.set( true, checkboxChecked );
+      valuesToSoundInfoMap.set( false, checkboxUnchecked );
+
+      super( valuesToSoundInfoMap, options );
 
       const checkboxPropertyListener = value => {
         if ( !resetInProgressProperty.value ) {
