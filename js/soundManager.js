@@ -175,6 +175,14 @@ define( require => {
       // context becomes more consistent across browsers, it may be possible to simplify this.
       if ( !phetAudioContext.isStubbed ) {
 
+        // function to remove the listeners, used to avoid code duplication
+        const removeUserInteractionListeners = () => {
+          window.removeEventListener( 'touchstart', resumeAudioContext, false );
+          if ( Display.userGestureEmitter.hasListener( resumeAudioContext ) ) {
+            Display.userGestureEmitter.removeListener( resumeAudioContext );
+          }
+        };
+
         // listener that resumes the audio context
         const resumeAudioContext = () => {
 
@@ -186,20 +194,18 @@ define( require => {
             phetAudioContext.resume()
               .then( () => {
                 phet.log && phet.log( 'resume appears to have succeeded, phetAudioContext.state = ' + phetAudioContext.state );
-                window.removeEventListener( 'touchstart', resumeAudioContext, false );
-                Display.userGestureEmitter.removeListener( resumeAudioContext );
+                removeUserInteractionListeners();
               } )
               .catch( err => {
                 const errorMessage = 'error when trying to resume audio context, err = ' + err;
                 console.err( errorMessage );
-                alert( errorMessage );
+                assert && alert( errorMessage );
               } );
           }
           else {
 
             // audio context is already running, no need to listen anymore
-            window.removeEventListener( 'touchstart', resumeAudioContext, false );
-            Display.userGestureEmitter.removeListener( resumeAudioContext );
+            removeUserInteractionListeners();
           }
         };
 
