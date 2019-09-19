@@ -35,7 +35,7 @@ define( require => {
 
       super( options.baseSound, options );
 
-      const playRadioButtonSound = ( selectedItem ) => {
+      const playRadioButtonSound = selectedItem => {
 
         const itemIndex = items.indexOf( selectedItem );
         assert && assert( itemIndex >= 0 );
