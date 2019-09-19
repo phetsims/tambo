@@ -94,7 +94,7 @@ define( require => {
       // validate the options
       assert && assert( typeof Array.isArray( options.classes ), 'unexpected type for options.classes' );
       assert && assert(
-        _.every( options.classes, className => { return typeof className === 'string'; } ),
+        _.every( options.classes, className => typeof className === 'string' ),
         'unexpected type of element in options.classes'
       );
 
