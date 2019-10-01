@@ -257,6 +257,19 @@ define( require => {
     }
 
     /**
+     * Returns true if the soundGenerator has been added to the soundManager.
+     * @param {SoundGenerator} soundGenerator
+     * @returns {boolean}
+     * @public
+     */
+    containsSoundGenerator( soundGenerator ) {
+      return _.some(
+        this.soundGeneratorInfoArray,
+        soundGeneratorInfo => soundGeneratorInfo.soundGenerator === soundGenerator
+      );
+    }
+
+    /**
      * add a sound generator, which connects it to the audio path, puts it on the list of sound generators, and creates
      * and returns a unique ID
      * @param {SoundGenerator} soundGenerator
@@ -273,11 +286,8 @@ define( require => {
       }
 
       // verify that this is not a duplicate addition
-      const duplicateAdd = _.some(
-        this.soundGeneratorInfoArray,
-        soundGeneratorInfo => soundGeneratorInfo.soundGenerator === soundGenerator
-      );
-      assert && assert( !duplicateAdd, 'can\'t add the same sound generator twice' );
+      const containsSoundGenerator = this.containsSoundGenerator( soundGenerator );
+      assert && assert( !containsSoundGenerator, 'can\'t add the same sound generator twice' );
 
       // default options
       options = _.extend( {
