@@ -262,7 +262,7 @@ define( require => {
      * @returns {boolean}
      * @public
      */
-    containsSoundGenerator( soundGenerator ) {
+    hasSoundGenerator( soundGenerator ) {
       return _.some(
         this.soundGeneratorInfoArray,
         soundGeneratorInfo => soundGeneratorInfo.soundGenerator === soundGenerator
@@ -286,8 +286,8 @@ define( require => {
       }
 
       // verify that this is not a duplicate addition
-      const containsSoundGenerator = this.containsSoundGenerator( soundGenerator );
-      assert && assert( !containsSoundGenerator, 'can\'t add the same sound generator twice' );
+      const hasSoundGenerator = this.hasSoundGenerator( soundGenerator );
+      assert && assert( !hasSoundGenerator, 'can\'t add the same sound generator twice' );
 
       // default options
       options = _.extend( {
