@@ -50,8 +50,6 @@ define( require => {
 
       }, options );
 
-      assert && assert( options.initialOutputLevel >= 0, 'initial output level must be positive' );
-
       options.enableControlProperties.forEach( enableControlProperty => {
         assert && assert(
           typeof enableControlProperty.value === 'boolean',
