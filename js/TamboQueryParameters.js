@@ -3,6 +3,8 @@
 /**
  * Query parameters supported by this simulation.
  *
+ * TODO: Move these into initialize-globals or delete them once tambo is more complete, see https://github.com/phetsims/tambo/issues/82.
+ *
  * @author John Blanco
  */
 define( require => {
