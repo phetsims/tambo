@@ -50,7 +50,7 @@ define( require => {
   const SLIDER_TRACK_SIZE = new Dimension2( 150, 5 );
   const SLIDER_THUMB_SIZE = new Dimension2( 22, 45 );
   const NUM_TICK_MARKS = SLIDER_MAX + 1;
-  const CHECK_BOX_SIZE = 16;
+  const CHECKBOX_SIZE = 16;
   const FONT = new PhetFont( 16 );
   const NUM_BINS_FOR_CONTINUOUS_SLIDER = 8;
   const BIN_SIZE_FOR_CONTINUOUS_SLIDER = SLIDER_MAX / NUM_BINS_FOR_CONTINUOUS_SLIDER;
@@ -292,7 +292,7 @@ define( require => {
       const thunderEnabledCheckbox = new Checkbox(
         new Text( 'Enabled', { font: FONT } ),
         thunderSoundClip.locallyEnabledProperty,
-        { boxWidth: CHECK_BOX_SIZE }
+        { boxWidth: CHECKBOX_SIZE }
       );
 
       thunderSoundClip.locallyEnabledProperty.lazyLink( enabled => {
@@ -310,7 +310,7 @@ define( require => {
       const initiateThunderWhenDisabledCheckbox = new Checkbox(
         new Text( 'Initiate when disabled', { font: FONT } ),
         initiateThunderWhenDisabledProperty,
-        { boxWidth: CHECK_BOX_SIZE }
+        { boxWidth: CHECKBOX_SIZE }
       );
 
       initiateThunderWhenDisabledProperty.lazyLink( enabled => {
