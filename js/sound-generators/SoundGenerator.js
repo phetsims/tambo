@@ -182,7 +182,8 @@ define( require => {
 
     /**
      * set output level of the sound generator
-     * @param {number} outputLevel - generally between 0 and 1, but doesn't have to be
+     * @param {number} outputLevel - generally between 0 and 1, but can be larger than 1 if necessary to amplify a small
+     * signal, and can be negative to invert the phase
      * @param {number} [timeConstant] - time constant for change, longer values mean slower transitions
      */
     setOutputLevel( outputLevel, timeConstant ) {
