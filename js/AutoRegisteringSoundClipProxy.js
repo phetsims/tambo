@@ -1,9 +1,9 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * AutoRegisteringSoundClipProxy is a light wrapper around SoundClip that acts as a "pass through" if sound is enabled for the
- * simulation, but skips loading and provides stubbed methods if sound is *not* enabled.  Its purpose is to keep load
- * times and memory usage minimized in cases where sound is not being utilized.
+ * AutoRegisteringSoundClipProxy is a light wrapper around SoundClip that acts as a "pass through" if sound is enabled
+ * for the simulation, but skips loading and provides stubbed methods if sound is *not* enabled.  Its purpose is to keep
+ * load times and memory usage minimized in cases where sound is not being utilized.
  *
  * Also, when sound is enabled for this sim, instances of this type automatically register the sound clip with the sound
  * manager upon construction so that the client doesn't have to be concerned about it.
