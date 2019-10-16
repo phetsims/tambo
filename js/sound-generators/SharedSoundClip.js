@@ -26,6 +26,11 @@ define( require => {
       this.soundInfo = soundInfo;
       this.soundOptions = options;
       this._soundClip = null;
+
+      // At the time of this writing (October 2019), it is a requirement that this type does not load and decode the
+      // sound if sound is not turned on for the sim.  Since the constructor is called during RequireJS time, the
+      // determination about whether sound is enabled can't be made, since the global phet.joist.sim is not yet
+      // available.  Therefore, the sound is instead loaded when the getter is first called.
     }
 
     get soundClip() {
