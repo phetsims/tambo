@@ -20,6 +20,7 @@ define( require => {
   const BooleanProperty = require( 'AXON/BooleanProperty' );
   const Display = require( 'SCENERY/display/Display' );
   const DisplayedProperty = require( 'SCENERY/util/DisplayedProperty' );
+  const merge = require( 'PHET_CORE/merge' );
   const phetAudioContext = require( 'TAMBO/phetAudioContext' );
   const Property = require( 'AXON/Property' );
   const soundConstants = require( 'TAMBO/soundConstants' );
@@ -82,7 +83,7 @@ define( require => {
 
       assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
 
-      options = _.extend( {
+      options = merge( {
 
         // Classes that can be used to group sound generators together and control their volume as a group - the names
         // can be anything that will work as a key for a JavaScript object, but initially we've chosen to use names
@@ -290,7 +291,7 @@ define( require => {
       assert && assert( !hasSoundGenerator, 'can\'t add the same sound generator twice' );
 
       // default options
-      options = _.extend( {
+      options = merge( {
 
         // {string} - The 'sonification level' is used to determine whether a given sound should be enabled given the
         // setting of the sonification level parameter for the sim.  Valid values are 'BASIC' or 'ENHANCED'.

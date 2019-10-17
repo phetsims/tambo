@@ -12,6 +12,7 @@ define( require => {
   const ComboBox = require( 'SUN/ComboBox' );
   const ComboBoxItem = require( 'SUN/ComboBoxItem' );
   const HBox = require( 'SCENERY/nodes/HBox' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const Panel = require( 'SUN/Panel' );
@@ -61,7 +62,7 @@ define( require => {
      */
     constructor( options ) {
 
-      options = _.extend( {
+      options = merge( {
         fill: '#f5d3b3',
         xMargin: 14,
         yMargin: 14

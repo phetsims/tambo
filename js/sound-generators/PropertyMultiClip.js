@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const merge = require( 'PHET_CORE/merge' );
   const MultiClip = require( 'TAMBO/sound-generators/MultiClip' );
   const tambo = require( 'TAMBO/tambo' );
 
@@ -22,7 +23,7 @@ define( require => {
      */
     constructor( property, valueToSoundInfoMap, options ) {
 
-      options = _.extend( {
+      options = merge( {
 
         // Controls whether the linkage to the property is "lazy", meaning that the first sound isn't played until a
         // change of value occurs.  If set to false, this will attempt to play a sound when the link is initially set up.

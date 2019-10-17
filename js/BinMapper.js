@@ -9,6 +9,7 @@ define( require => {
   'use strict';
 
   // modules
+  const merge = require( 'PHET_CORE/merge' );
   const tambo = require( 'TAMBO/tambo' );
 
   class BinMapper {
@@ -24,7 +25,7 @@ define( require => {
       // parameter checking
       assert && assert( numBins > 0 );
 
-      options = _.extend( {
+      options = merge( {
 
         // allow values that are outside the specified range (if false, an assert occurs on out-of-range values)
         tolerateOutOfRangeValues: false

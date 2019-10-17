@@ -11,6 +11,7 @@ define( require => {
   'use strict';
 
   // modules
+  const merge = require( 'PHET_CORE/merge' );
   const MultiClip = require( 'TAMBO/sound-generators/MultiClip' );
   const tambo = require( 'TAMBO/tambo' );
 
@@ -28,7 +29,7 @@ define( require => {
      */
     constructor( checkboxProperty, resetInProgressProperty, options ) {
 
-      options = _.extend( {
+      options = merge( {
         orderedValueList: [ true, false ],
         initialOutputLevel: 0.7
       }, options );

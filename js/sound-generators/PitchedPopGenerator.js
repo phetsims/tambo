@@ -10,6 +10,7 @@ define( require => {
   'use strict';
 
   // modules
+  const merge = require( 'PHET_CORE/merge' );
   const Range = require( 'DOT/Range' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const tambo = require( 'TAMBO/tambo' );
@@ -27,7 +28,7 @@ define( require => {
      */
     constructor( options ) {
 
-      options = _.extend( {
+      options = merge( {
 
         // the range of pitches that this pop generator will produce, in Hz
         pitchRange: new Range( 220, 660 ),

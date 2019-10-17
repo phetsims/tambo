@@ -13,6 +13,7 @@ define( require => {
   const ComboBoxItem = require( 'SUN/ComboBoxItem' );
   const HBox = require( 'SCENERY/nodes/HBox' );
   const HStrut = require( 'SCENERY/nodes/HStrut' );
+  const merge = require( 'PHET_CORE/merge' );
   const Node = require( 'SCENERY/nodes/Node' );
   const Panel = require( 'SUN/Panel' );
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
@@ -190,7 +191,7 @@ define( require => {
      */
     constructor( listParent, options ) {
 
-      options = _.extend( {
+      options = merge( {
         fill: '#CFE2CF',
         xMargin: 14,
         yMargin: 14

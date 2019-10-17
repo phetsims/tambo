@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const BooleanProperty = require( 'AXON/BooleanProperty' );
+  const merge = require( 'PHET_CORE/merge' );
   const ObservableArray = require( 'AXON/ObservableArray' );
   const phetAudioContext = require( 'TAMBO/phetAudioContext' );
   const soundConstants = require( 'TAMBO/soundConstants' );
@@ -27,7 +28,7 @@ define( require => {
      */
     constructor( options ) {
 
-      options = _.extend( {
+      options = merge( {
 
         // {number} Initial value for the output level.  Generally, this should always be between 0 and 1, but values
         // greater than 1 may be needed in some rare cases in order to create enough output to be audible

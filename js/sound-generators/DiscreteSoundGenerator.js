@@ -4,6 +4,7 @@ define( require => {
   'use strict';
 
   // modules
+  const merge = require( 'PHET_CORE/merge' );
   const Range = require( 'DOT/Range' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const tambo = require( 'TAMBO/tambo' );
@@ -21,7 +22,7 @@ define( require => {
      */
     constructor( valueProperty, valueRange, options ) {
 
-      options = _.extend( {
+      options = merge( {
 
         // sound - the sound to play as the value changes
         sound: defaultSound,

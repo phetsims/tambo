@@ -11,6 +11,7 @@ define( require => {
   'use strict';
 
   // modules
+  const merge = require( 'PHET_CORE/merge' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const tambo = require( 'TAMBO/tambo' );
 
@@ -28,7 +29,7 @@ define( require => {
       assert && assert( !options || !options.hasOwnProperty( 'loop' ), 'loop option should be supplied by' +
                                                                        ' ContinuousPropertySoundGenerator' );
 
-      options = _.extend( {
+      options = merge( {
         initialOutputLevel: 0.7,
         loop: true,
         trimSilence: false,

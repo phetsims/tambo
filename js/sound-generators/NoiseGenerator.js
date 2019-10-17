@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
+  const merge = require( 'PHET_CORE/merge' );
   const soundConstants = require( 'TAMBO/soundConstants' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const tambo = require( 'TAMBO/tambo' );
@@ -27,7 +28,7 @@ define( require => {
     constructor( options ) {
 
       // set up options using default values, see base class for additional options
-      options = _.extend( {
+      options = merge( {
         noiseType: 'pink', // valid values are 'white', 'pink', and 'brown'
 
         // {number} - low pass value in Hz, null (or any falsey value including zero) means no low pass filter is added

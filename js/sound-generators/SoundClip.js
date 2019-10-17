@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
+  const merge = require( 'PHET_CORE/merge' );
   const soundConstants = require( 'TAMBO/soundConstants' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
@@ -32,7 +33,7 @@ define( require => {
      */
     constructor( soundInfo, options ) {
 
-      options = _.extend( {
+      options = merge( {
 
         // {boolean} - controls whether this sound will wrap around and start over when done or just be played once
         loop: false,
