@@ -69,8 +69,8 @@ define( require => {
   const sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
   const sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
   const thunderSound = require( 'sound!TAMBO/thunder.mp3' );
-  const checkboxCheckedSound = require( 'sound!TAMBO/check-box-checked.mp3' );
-  const checkboxUncheckedSound = require( 'sound!TAMBO/check-box-unchecked.mp3' );
+  const checkboxCheckedSound = require( 'sound!TAMBO/checkbox-checked.mp3' );
+  const checkboxUncheckedSound = require( 'sound!TAMBO/checkbox-unchecked.mp3' );
   const pushButtonSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite

@@ -199,7 +199,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris for PhET"
   },
-  "check-box-checked.mp3": {
+  "checkbox-checked.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -207,7 +207,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris for use by PhET"
   },
-  "check-box-unchecked.mp3": {
+  "checkbox-unchecked.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],

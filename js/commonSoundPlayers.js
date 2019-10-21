@@ -25,8 +25,8 @@ define( require => {
 
   // sounds
   const pushButtonSoundInfo = require( 'sound!TAMBO/general-button-v4.mp3' );
-  const checkboxCheckedSoundInfo = require( 'sound!TAMBO/check-box-checked.mp3' );
-  const checkboxUncheckedSoundInfo = require( 'sound!TAMBO/check-box-unchecked.mp3' );
+  const checkboxCheckedSoundInfo = require( 'sound!TAMBO/checkbox-checked.mp3' );
+  const checkboxUncheckedSoundInfo = require( 'sound!TAMBO/checkbox-unchecked.mp3' );
   const comboBoxCloseSoundInfo = require( 'sound!TAMBO/combo-box-close.mp3' );
   const comboBoxOpenSoundInfo = require( 'sound!TAMBO/combo-box-open.mp3' );
   const resetAllSoundInfo = require( 'sound!TAMBO/reset-all.mp3' );

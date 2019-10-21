@@ -1,7 +1,7 @@
 // Copyright 2018-2019, University of Colorado Boulder
 
 /**
- * abstract base class for sound generators that work in conjunction with the sonification manager
+ * abstract base class for Web Audio based sound producing element that work in conjunction with the soundManager
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

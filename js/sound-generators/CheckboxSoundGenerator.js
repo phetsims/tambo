@@ -16,8 +16,8 @@ define( require => {
   const tambo = require( 'TAMBO/tambo' );
 
   // sounds
-  const checkboxChecked = require( 'sound!TAMBO/check-box-checked.mp3' );
-  const checkboxUnchecked = require( 'sound!TAMBO/check-box-unchecked.mp3' );
+  const checkboxChecked = require( 'sound!TAMBO/checkbox-checked.mp3' );
+  const checkboxUnchecked = require( 'sound!TAMBO/checkbox-unchecked.mp3' );
 
   class CheckboxSoundGenerator extends MultiClip {
 
