@@ -41,6 +41,11 @@ define( require => {
         // {boolean} - controls whether the silence at the beginning and (in the case of loops) the end is removed
         trimSilence: true,
 
+        // {boolean} - Playback rate for this clip, can be changed after construction via API.  This value is a
+        // multiplier, so 1 is the nominal playback rate, 0.5 is half speed (or an octave lower in musical terms) and a
+        // value of 2 is twice normal speed (or an octave higher in musical terms).
+        initialPlaybackRate: 1,
+
         // {boolean} - controls whether sound generation can be initiated when this sound generator is disabled.  This is
         // useful for a one-shot sound that is long, so if the user does something that generally would cause a sound, but
         // sound is disabled, but they immediately re-enable it, the "tail" of this sound would be heard.  This option is
@@ -112,7 +117,7 @@ define( require => {
 
       // @private {number} - rate at which clip is being played back, 1 is normal, above 1 is faster, below 1 is slower,
       // see online docs for AudioBufferSourceNode.playbackRate for more information
-      this.playbackRate = 1;
+      this.playbackRate = options.initialPlaybackRate;
 
       // @private {boolean} - flag that tracks whether the sound is being played
       this._isPlaying = false;
