@@ -56,10 +56,16 @@ define( require => {
         // already in the process of playing or only those that are played in the future.  This is relevant for both loops
         // and one-shot sounds, since a one-shot sound (especially one that is fairly long) could be in the process of
         // playing when a playback rate change occurs.
-        rateChangesAffectPlayingSounds: true
+        rateChangesAffectPlayingSounds: true,
+
+        // {AudioNode[]} Nodes that will be connected in the specified order, between the bufferSource and localGainNode
+        additionalNodes: []
       }, options );
 
       super( options );
+
+      // @private
+      this.additionalNodes = options.additionalNodes;
 
       // @private {boolean} - flag that controls whether this is a one-shot or loop sound
       this.loop = options.loop;
@@ -189,8 +195,13 @@ define( require => {
             this.localGainNode.gain.cancelScheduledValues( now );
             this.localGainNode.gain.setValueAtTime( 1, now );
 
-            // connect this source node to the output
-            bufferSource.connect( this.localGainNode );
+            // connect this source node to the output by way of other specified nodes
+            let lastNode = bufferSource;
+            for ( let i = 0; i < this.additionalNodes.length; i++ ) {
+              lastNode.connect( this.additionalNodes[ i ] );
+              lastNode = this.additionalNodes[ i ];
+            }
+            lastNode.connect( this.localGainNode );
 
             // add this to the list of active sources so that it can be stopped if necessary
             this.activeBufferSources.push( bufferSource );
