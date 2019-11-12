@@ -31,9 +31,7 @@ define( require => {
     credits: {
       leadDesign: 'John Blanco'
     },
-    keyboardHelpNode: keyboardHelpContent,
-    supportsEnhancedSound: true,
-    supportsSound: true
+    keyboardHelpNode: keyboardHelpContent
   };
 
   // helper function to create screen icons that aren't too bland
