@@ -5,6 +5,9 @@
  * library but is not actually a base class.  This is similar to the idea of an "interface" in Java.  A SoundInfo type
  * is returned from the sound.js plugin.
  *
+ * A SoundInfo instance has a "name" field that identifies the sound and then EITHER a "url" field for loading the sound
+ * (used in RequireJS mode) or a "base64" field that defines the sound (used in build mode).
+ *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
@@ -17,6 +20,7 @@ define( require => {
 
     static isSoundInfo( objectInstance ) {
       return typeof objectInstance === 'object' &&
+             typeof objectInstance.name === 'string' &&
              ( typeof objectInstance.url === 'string' || typeof objectInstance.base64 === 'string' );
     }
   }
