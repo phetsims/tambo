@@ -282,7 +282,9 @@ define( require => {
       // Check if initialization has been done.  This is not an assertion because the sound manager may not be
       // initialized if sound is not enabled for the sim.
       if ( !this.initialized ) {
-        console.warn( 'an attempt was made to add a sound generator to an uninitialized sound manager, ignoring (sound will not be produced)' );
+        phet.log && phet.log(
+          'ignoring attempt to add a sound generator to an uninitialized sound manager, sound will not be produced'
+        );
         return null;
       }
 
