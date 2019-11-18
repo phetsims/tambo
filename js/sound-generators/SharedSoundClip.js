@@ -2,7 +2,11 @@
 
 /**
  * SharedSoundClip is used to create sound clips that can be shared by multiple objects so that multiple instances don't
- * have to be created, which saves memory and load time.
+ * have to be created, which saves memory and load time.  This is essentially a singleton pattern, and also auto-
+ * registers the sound with the sound manager.
+ *
+ * This type wraps the sound clip an only passes through the "play()" method, since attributes of the shared clip, such
+ * as output level and playback rate, should not be altered.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -10,8 +14,9 @@ define( require => {
   'use strict';
 
   // modules
-  const AutoRegisteringSoundClipProxy = require( 'TAMBO/AutoRegisteringSoundClipProxy' );
   const tambo = require( 'TAMBO/tambo' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
+  const soundManager = require( 'TAMBO/soundManager' );
 
   class SharedSoundClip {
 
@@ -22,22 +27,20 @@ define( require => {
      */
     constructor( soundInfo, options ) {
 
-      // @private
-      this.soundInfo = soundInfo;
-      this.soundOptions = options;
-      this._soundClip = null;
+      // {SoundClip} @private
+      this.soundClip = new SoundClip( soundInfo, options );
 
-      // At the time of this writing (October 2019), it is a requirement that this type does not load and decode the
-      // sound if sound is not turned on for the sim.  Since the constructor is called during RequireJS time, the
-      // determination about whether sound is enabled can't be made, since the global phet.joist.sim is not yet
-      // available.  Therefore, the sound is instead loaded when the getter is first called.
+      // automatically register this sound clip with the sound manager
+      soundManager.addSoundGenerator( this.soundClip );
     }
 
-    get soundClip() {
-      if ( !this._soundClip ) {
-        this._soundClip = new AutoRegisteringSoundClipProxy( this.soundInfo, this.soundOptions );
-      }
-      return this._soundClip;
+    /**
+     * the only supported method is "play", since no clients should be changing things like the playback rate or output
+     * level
+     * @public
+     */
+    play() {
+      this.soundClip.play();
     }
   }
 

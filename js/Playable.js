@@ -21,7 +21,7 @@ define( require => {
   }
 
   // static value that is used to specify that no sound should be produced
-  Playable.NO_SOUND = Number.NEGATIVE_INFINITY;
+  Playable.NO_SOUND = { play() {} };
 
   return tambo.register( 'Playable', Playable );
 } );

@@ -14,19 +14,30 @@ define( require => {
 
   // modules
   const tambo = require( 'TAMBO/tambo' );
+  const packageJSON = require( 'JOIST/packageJSON' );
+
+
+  // constants
+
+  // {boolean} - true if sound is supported, used to minimize impact of sound loading when sound is not in use
+  const SOUND_SUPPORTED = packageJSON.phet.supportsSound || phet.chipper.queryParameters.supportsSound;
 
   // {HTMLAudioElement} - HTML DOM audio object that can be used to test sound formats
-  const soundElement = document.createElement( 'audio' );
+  const DOM_AUDIO_ELEMENT = document.createElement( 'audio' );
 
-  // Map where previously decoded audio is cached.  This maps either sound URLs or sound base64 references to an object
-  // of the format:
-  //   {
-  //     postDecodeSuccessCallbacks: {function[]},
-  //     postDecodeFailureCallbacks: {function[]},
-  //     decodedAudioData: {ArrayBuffer}
-  //   }
-  // This is used to determine if a given soundInfo URL or base64 definition has already been requested and, if so,
-  // either provide the data immediately (if it's already decoded) or queue up the callback (if it's not).
+  // sounds
+  const shortSilenceSoundInfo = require( 'sound!TAMBO/short-silence.wav' );
+
+  /**
+   * Map where previously decoded audio is cached.  This maps either sound URLs or sound base64 references to an object
+   * {
+   *   postDecodeSuccessCallbacks: {function[]},
+   *   postDecodeFailureCallbacks: {function[]},
+   *   decodedAudioData: {ArrayBuffer}
+   * }
+   * This is used to determine if a given soundInfo URL or base64 definition has already been requested and, if so,
+   * either provide the data immediately (if it's already decoded) or queue up the callback (if it's not).
+   */
   const audioDataCache = new Map();
 
   /**
@@ -41,6 +52,12 @@ define( require => {
      * @param {function} onError
      */
     decode: function( soundInfo, audioContext, onSuccess, onError ) {
+
+      // If sound is not supported, substitute silence for the sound info object.  This reduces memory usage and load
+      // time versus decoding the soundInfo object and not playing it.
+      if ( !SOUND_SUPPORTED ) {
+        soundInfo = shortSilenceSoundInfo;
+      }
 
       // parameter checking
       assert && assert(
@@ -88,7 +105,7 @@ define( require => {
           audioFormat = soundInfo.base64.slice( soundInfo.base64.indexOf( ':' ) + 1, soundInfo.base64.indexOf( ';' ) );
         }
 
-        if ( soundElement.canPlayType && soundElement.canPlayType( audioFormat ) ) {
+        if ( DOM_AUDIO_ELEMENT.canPlayType && DOM_AUDIO_ELEMENT.canPlayType( audioFormat ) ) {
 
           // create a cache entry for this sound
           const audioDataCacheEntry = {

@@ -16,9 +16,7 @@ define( require => {
   const checkboxUncheckedSoundInfo = require( 'sound!TAMBO/checkbox-unchecked.mp3' );
 
   // create the shared sound instance
-  const checkboxUncheckedSound = new SharedSoundClip( checkboxUncheckedSoundInfo, { initialOutputLevel: 0.7 } );
+  const checkboxUncheckedSoundPlayer = new SharedSoundClip( checkboxUncheckedSoundInfo, { initialOutputLevel: 0.7 } );
 
-  tambo.register( 'checkboxUncheckedSound', checkboxUncheckedSound );
-
-  return checkboxUncheckedSound;
+  return tambo.register( 'checkboxUncheckedSoundPlayer', checkboxUncheckedSoundPlayer );
 } );

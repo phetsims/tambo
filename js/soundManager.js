@@ -71,6 +71,10 @@ define( require => {
 
       // @private {boolean} - flag that tracks whether the sonification manager has been initialized
       this.initialized = false;
+
+      // @private {Object[]} - sound generators and options that were added before initialization and will be added once
+      // initialization is complete
+      this.soundGeneratorsAwaitingAdd = [];
     }
 
     /**
@@ -255,6 +259,12 @@ define( require => {
       }
 
       this.initialized = true;
+
+      // add any sound generators that were waiting for initialization to complete (must be done after init complete)
+      this.soundGeneratorsAwaitingAdd.forEach( soundGeneratorAwaitingAdd => {
+        this.addSoundGenerator( soundGeneratorAwaitingAdd.soundGenerator, soundGeneratorAwaitingAdd.options );
+      } );
+      this.soundGeneratorsAwaitingAdd.length = 0;
     }
 
     /**
@@ -279,13 +289,14 @@ define( require => {
      */
     addSoundGenerator( soundGenerator, options ) {
 
-      // Check if initialization has been done.  This is not an assertion because the sound manager may not be
-      // initialized if sound is not enabled for the sim.
+      // Check if initialization has been done and, if not, queue the sound generation and its options for addition
+      // once initialization is complete.  Note that when sound is not supported, initialization will never occur.
       if ( !this.initialized ) {
         phet.log && phet.log(
-          'ignoring attempt to add a sound generator to an uninitialized sound manager, sound will not be produced'
+          'addSoundGenerator called on an uninitialized sound manager, queueing for later'
         );
-        return null;
+        this.soundGeneratorsAwaitingAdd.push( { soundGenerator: soundGenerator, options: options } );
+        return;
       }
 
       // verify that this is not a duplicate addition
