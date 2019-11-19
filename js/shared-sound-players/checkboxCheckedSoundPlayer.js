@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * shared sound generator for checking a checkbox - essentially a singleton
+ * shared sound generator for checking a checkbox that uses the singleton pattern
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

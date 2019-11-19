@@ -26,7 +26,6 @@ define( require => {
   const Property = require( 'AXON/Property' );
   const Range = require( 'DOT/Range' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
   const ContinuousPropertySoundGenerator = require( 'TAMBO/sound-generators/ContinuousPropertySoundGenerator' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const soundManager = require( 'TAMBO/soundManager' );
@@ -177,7 +176,6 @@ define( require => {
         listener: () => { model.reset(); }
       } );
       this.addChild( resetAllButton );
-      soundManager.addSoundGenerator( new ResetAllSoundGenerator( model.resetInProgressProperty ) );
     }
   }
 

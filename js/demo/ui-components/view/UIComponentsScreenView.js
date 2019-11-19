@@ -32,7 +32,6 @@ define( require => {
   const Range = require( 'DOT/Range' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  const ResetAllSoundGenerator = require( 'TAMBO/sound-generators/ResetAllSoundGenerator' );
   const ScreenSelectionSoundGenerator = require( 'TAMBO/sound-generators/ScreenSelectionSoundGenerator' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
@@ -683,9 +682,8 @@ define( require => {
         }
       } );
 
-      // reset all button and sound
+      // reset all button
       this.addChild( resetAllButton );
-      soundManager.addSoundGenerator( new ResetAllSoundGenerator( model.resetInProgressProperty ) );
     }
 
   }

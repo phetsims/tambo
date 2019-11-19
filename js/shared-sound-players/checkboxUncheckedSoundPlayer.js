@@ -1,7 +1,7 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * shared sound generator for un-checking a checkbox
+ * shared sound generator for un-checking a checkbox, uses the singleton pattern
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

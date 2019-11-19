@@ -25,3 +25,5 @@ a separate `xxxScreenSoundView` file in the `view` subdirectory.  If, however, t
 the user is interacting with the controls, the sound generation can go into the view component.  An example of this is
 `MassControl.js`.  In this case, the nature of the sound generation depended in part on whether the mass value was
 being changed by slider dragging. 
+
+Integrate: resetInProgressProperty - when is it needed?
