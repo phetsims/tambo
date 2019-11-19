@@ -2,11 +2,8 @@
 
 /**
  * The radioButtonSoundPlayerFactor singleton is where sound players for common radio buttons sounds can be obtained.
- * By provided a factory for these sounds, we can avoid having to construct unique instances for each case where a
+ * By providing a factory for these sounds, we can avoid having to construct unique instances for each case where a
  * sound player is needed, thus conserving memory and minimizing load time.
- *
- * Also, if sound is not enabled for this sim, loading and decoding of sound data is skipped altogether to minimize load
- * time and memory usage.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -14,8 +11,9 @@ define( require => {
   'use strict';
 
   // modules
-  const AutoRegisteringSoundClipProxy = require( 'TAMBO/AutoRegisteringSoundClipProxy' );
+  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const tambo = require( 'TAMBO/tambo' );
+  const soundManager = require( 'TAMBO/soundManager' );
 
   // sounds
   const radioButtonSoundInfo = require( 'sound!TAMBO/radio-button-v2.mp3' );
@@ -43,10 +41,13 @@ define( require => {
      */
     getSoundPlayerInstance() {
       if ( !this._radioButtonSoundPlayer ) {
-        this._radioButtonSoundPlayer = new AutoRegisteringSoundClipProxy( radioButtonSoundInfo, {
+        this._radioButtonSoundPlayer = new SoundClip( radioButtonSoundInfo, {
           initialOutputLevel: 0.7,
           rateChangesAffectPlayingSounds: false
         } );
+
+        // automatically register the sound generator
+        soundManager.addSoundGenerator( this._radioButtonSoundPlayer );
       }
       return this._radioButtonSoundPlayer;
     }
