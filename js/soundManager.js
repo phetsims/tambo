@@ -292,9 +292,7 @@ define( require => {
       // Check if initialization has been done and, if not, queue the sound generation and its options for addition
       // once initialization is complete.  Note that when sound is not supported, initialization will never occur.
       if ( !this.initialized ) {
-        phet.log && phet.log(
-          'addSoundGenerator called on an uninitialized sound manager, queueing for later'
-        );
+        phet.log && phet.log( 'addSoundGenerator called on an uninitialized sound manager, queueing for later' );
         this.soundGeneratorsAwaitingAdd.push( { soundGenerator: soundGenerator, options: options } );
         return;
       }
