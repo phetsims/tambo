@@ -10,7 +10,8 @@ define( require => {
 
   // modules
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const RemoveAndDisposeTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeTestPanel' );
+  const RemoveAndDisposeCommonUIComponentsTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeCommonUIComponentsTestPanel' );
+  const RemoveAndDisposeSoundGeneratorsTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeSoundGeneratorsTestPanel' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const SoundEncodingComparisonPanel = require( 'TAMBO/demo/testing/view/SoundEncodingComparisonPanel' );
@@ -18,6 +19,9 @@ define( require => {
   const soundManager = require( 'TAMBO/soundManager' );
   const tambo = require( 'TAMBO/tambo' );
   const TextPushButton = require( 'SUN/buttons/TextPushButton' );
+
+  // constants
+  const PANEL_SPACING = 15;
 
   // sounds
   const loonCallSound = require( 'sound!TAMBO/loon-call.mp3' );
@@ -44,7 +48,7 @@ define( require => {
         listener: () => { loonCallSoundClip.play(); },
         baseColor: '#aad6cc',
         left: this.layoutBounds.left + 26,
-        top: this.layoutBounds.top + 26
+        top: this.layoutBounds.top + PANEL_SPACING
       } );
       this.addChild( playBasicSoundButton );
 
@@ -66,9 +70,17 @@ define( require => {
       this.addChild( soundComparisonPanel );
 
       // add a panel with controls that allow testing of add, remove, and dispose of sound generator
-      this.addChild( new RemoveAndDisposeTestPanel( {
+      const removeAndDisposeSoundGeneratorsTestPanel = new RemoveAndDisposeSoundGeneratorsTestPanel( {
         left: soundComparisonPanel.left,
-        top: soundComparisonPanel.bottom + 28
+        top: soundComparisonPanel.bottom + PANEL_SPACING
+      } );
+      this.addChild( removeAndDisposeSoundGeneratorsTestPanel );
+
+      // add a panel with controls that allow testing of add, remove, and dispose of sound generating common UI components
+      this.addChild( new RemoveAndDisposeCommonUIComponentsTestPanel( {
+        left: soundComparisonPanel.left,
+        top: removeAndDisposeSoundGeneratorsTestPanel.bottom + PANEL_SPACING,
+        comboBoxListParent: this
       } ) );
     }
 

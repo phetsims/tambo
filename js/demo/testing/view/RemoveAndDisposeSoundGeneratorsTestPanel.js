@@ -29,7 +29,7 @@ define( require => {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
-  const BUTTON_FONT = new PhetFont( 19 );
+  const BUTTON_FONT = new PhetFont( 18 );
   const COMBO_BOX_FONT = new PhetFont( 16 );
   const TOTAL_ADDED_TEMPLATE = 'Total Added: {{numSoundGenerators}}';
   const ADD_BUTTON_COLOR = '#C0D890';
@@ -54,7 +54,7 @@ define( require => {
     }
   };
 
-  class RemoveAndDisposeTestPanel extends Panel {
+  class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
 
     /**
      * @param {Object} [options]
@@ -76,7 +76,7 @@ define( require => {
 
       // informational text that goes at the top of the panel
       const infoText = new Text( 'Test addition, removal, and disposal of sound generators', {
-        font: new PhetFont( { size: 19, weight: 'bold' } )
+        font: new PhetFont( { size: 18, weight: 'bold' } )
       } );
 
       // create the combo box for selecting the type of sound generator to add
@@ -206,7 +206,7 @@ define( require => {
 
   }
 
-  tambo.register( 'RemoveAndDisposeTestPanel', RemoveAndDisposeTestPanel );
+  tambo.register( 'RemoveAndDisposeSoundGeneratorsTestPanel', RemoveAndDisposeSoundGeneratorsTestPanel );
 
-  return RemoveAndDisposeTestPanel;
+  return RemoveAndDisposeSoundGeneratorsTestPanel;
 } );

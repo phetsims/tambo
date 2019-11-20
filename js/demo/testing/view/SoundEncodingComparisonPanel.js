@@ -26,7 +26,7 @@ define( require => {
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
-  const BUTTON_FONT = new PhetFont( 19 );
+  const BUTTON_FONT = new PhetFont( 18 );
   const COMBO_BOX_FONT = new PhetFont( 16 );
   const PLAY_COLOR = '#66FF8C';
   const STOP_COLOR = '#FF4D4D';
