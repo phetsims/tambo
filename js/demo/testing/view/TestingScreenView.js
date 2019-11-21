@@ -10,7 +10,7 @@ define( require => {
 
   // modules
   const PhetFont = require( 'SCENERY_PHET/PhetFont' );
-  const RemoveAndDisposeCommonUIComponentsTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeCommonUIComponentsTestPanel' );
+  const CommonUIComponentsTestPanel = require( 'TAMBO/demo/testing/view/CommonUIComponentsTestPanel' );
   const RemoveAndDisposeSoundGeneratorsTestPanel = require( 'TAMBO/demo/testing/view/RemoveAndDisposeSoundGeneratorsTestPanel' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
@@ -77,7 +77,7 @@ define( require => {
       this.addChild( removeAndDisposeSoundGeneratorsTestPanel );
 
       // add a panel with controls that allow testing of add, remove, and dispose of sound generating common UI components
-      this.addChild( new RemoveAndDisposeCommonUIComponentsTestPanel( {
+      this.addChild( new CommonUIComponentsTestPanel( {
         left: soundComparisonPanel.left,
         top: removeAndDisposeSoundGeneratorsTestPanel.bottom + PANEL_SPACING,
         comboBoxListParent: this
