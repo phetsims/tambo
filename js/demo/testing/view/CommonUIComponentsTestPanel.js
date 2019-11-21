@@ -2,9 +2,9 @@
 
 /**
  * CommonUIComponentsTestPanel is a panel that allows the user to add sound-generating common UI components to the scene
- * graph, interact with them, and then remove and dispose them.  It is essentially a test harness for verifying that
- * creation and registration of the sounds associated with these components works and can be done after initialization,
- * that the basic operation is correct, and that disposal works.
+ * graph, interact with them (one at a time), and then remove and dispose them.  It is essentially a test harness for
+ * verifying that creation and registration of the sounds associated with these components works and can be done after
+ * initialization, that the basic operation is correct, and that disposal works.
  *
  * Note that this is intended to test sound-generating common user interface components, not all common UI components.
  * SoundGeneratingCommonUIComponentsTestPanel just seemed a little verbose.
