@@ -5,7 +5,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "07_Button_Reset_All_v3-16-kbps-mono.mp3": {
     "text": [
@@ -13,7 +13,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "07_Button_Reset_All_v3-24-kbps-mono.mp3": {
     "text": [
@@ -21,7 +21,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "07_Button_Reset_All_v3-48-kbps-mono.mp3": {
     "text": [
@@ -29,7 +29,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "07_Button_Reset_All_v3-64-kbps-mono.mp3": {
     "text": [
@@ -37,7 +37,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "07_Button_Reset_All_v3-128-kbps-mono.mp3": {
     "text": [
@@ -45,7 +45,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "20180213_Bright_Marimba-128-kbps-stereo.mp3": {
     "text": [
@@ -157,7 +157,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "Charges_In_Body_Better_Loop-48-kbps-mono.mp3": {
     "text": [
@@ -165,7 +165,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "Charges_In_Body_Better_Loop-64-kbps-mono.mp3": {
     "text": [
@@ -173,7 +173,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "Charges_In_Body_Better_Loop-24-kbps-mono.mp3": {
     "text": [
@@ -181,7 +181,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "Charges_In_Body_Better_Loop-16-kbps-mono.mp3": {
     "text": [
@@ -189,7 +189,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "Charges_In_Body_Better_Loop-8-kbps-mono.mp3": {
     "text": [
@@ -197,7 +197,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "checkbox-checked.mp3": {
     "text": [
@@ -205,7 +205,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for use by PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "checkbox-unchecked.mp3": {
     "text": [
@@ -213,15 +213,24 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for use by PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
+  "click-001.mp3": {
+    "text": [
+      "Copyright 2002-2019 University of Colorado Boulder"
+    ],
+    "projectURL": "http://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  },
+
   "combo-box-close.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for use by PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "combo-box-open.mp3": {
     "text": [
@@ -229,7 +238,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for use by PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "crickets-loop.mp3": {
     "text": [
@@ -413,7 +422,7 @@
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for use by PhET"
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "rhodes-chord.mp3": {
     "text": [
