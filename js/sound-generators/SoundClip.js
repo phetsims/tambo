@@ -10,6 +10,7 @@ define( require => {
 
   // modules
   const audioContextStateChangeMonitor = require( 'TAMBO/audioContextStateChangeMonitor' );
+  const BooleanProperty = require( 'AXON/BooleanProperty' );
   const merge = require( 'PHET_CORE/merge' );
   const soundConstants = require( 'TAMBO/soundConstants' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
@@ -125,8 +126,8 @@ define( require => {
       // see online docs for AudioBufferSourceNode.playbackRate for more information
       this.playbackRate = options.initialPlaybackRate;
 
-      // @private {boolean} - flag that tracks whether the sound is being played
-      this._isPlaying = false;
+      // @public (read-only) - BooleanProperty that indicates whether the sound is being played
+      this.isPlayingProperty = new BooleanProperty( false );
 
       // @private {number} - time at which a deferred play request occurred, in milliseconds since epoch
       this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
@@ -176,7 +177,7 @@ define( require => {
         // default delay is zero
         delay = typeof delay === 'undefined' ? 0 : delay;
 
-        if ( ( this.loop && this.fullyEnabled && !this._isPlaying ) ||
+        if ( ( this.loop && this.fullyEnabled && !this.isPlayingProperty.get() ) ||
              ( !this.loop && ( this.fullyEnabled || this.initiateWhenDisabled ) ) ) {
 
           // make sure the decoding of the audio data is complete before trying to play the sound
@@ -216,14 +217,14 @@ define( require => {
                 if ( indexOfSource > -1 ) {
                   this.activeBufferSources.splice( indexOfSource, 1 );
                 }
-                this._isPlaying = this.activeBufferSources.length > 0;
+                this.isPlayingProperty.value = this.activeBufferSources.length > 0;
               };
             }
 
             // set the playback rate and start playback
             bufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
             bufferSource.start( now + delay, this.soundStart );
-            this._isPlaying = true;
+            this.isPlayingProperty.value = true;
           }
           else {
 
@@ -284,7 +285,7 @@ define( require => {
         this.activeBufferSources.length = 0;
 
         // clear the flag
-        this._isPlaying = false;
+        this.isPlayingProperty.value = false;
       }
       else {
 
@@ -321,9 +322,10 @@ define( require => {
     /**
      * indicates whether sound is currently being played
      * @returns {boolean}
+     * @public
      */
     get isPlaying() {
-      return this._isPlaying;
+      return this.isPlayingProperty.value;
     }
 
   }
