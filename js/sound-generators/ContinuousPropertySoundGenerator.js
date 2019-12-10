@@ -1,8 +1,8 @@
 // Copyright 2019, University of Colorado Boulder
 
 /**
- * Sound generator that plays a pitch related to a Property value.  Fades out when the Property is not changing.
- * Ported from GRAVITY_FORCE_LAB_BASICS/ForceSoundGenerator
+ * Sound generator that plays a pitch related to a Property value.  Fades out when the Property value is not changing.
+ * Generalized from GRAVITY_FORCE_LAB_BASICS/ForceSoundGenerator.
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Sam Reid (PhET Interactive Simulations)
@@ -19,7 +19,8 @@ define( require => {
 
     /**
      * @param {Property.<number>} property
-     * @param {Object} sound - returned by the sound! plugin
+     * @param {Object} sound - returned by the sound! plugin, should be optimized for good continuous looping, which may
+     * require it to be a .wav file, since .mp3 files generally have a bit of silence at the beginning.
      * @param {Range} range
      * @param {Property.<boolean>} resetInProgressProperty
      * @param {Object} [options]
@@ -37,14 +38,18 @@ define( require => {
         pitchCenterOffset: 2,
         fadeStartDelay: 0.2, // in seconds, time to wait before starting fade
         fadeTime: 0.15, // in seconds, duration of fade out
-        delayBeforeStop: 0.1 // in seconds, amount of time from full fade to stop of sound, done to avoid glitches
-      }, options );
+        delayBeforeStop: 0.1, // in seconds, amount of time from full fade to stop of sound, done to avoid glitches
 
-      // TODO: there was a note in ForceSoundGenerator:
-      // TODO: The saturated sine loop is precisely optimized for good looping, which is why it is a .wav and not a
-      // TODO  *.mp3 file.
-      // TODO: Some of our sounds are mp3 and have a "hitch" where no sound plays momentarily
-      // TODO: Would that maybe be fixed if we used *.wav?
+        // {number} - number of octaves that the playback rate will span, larger numbers increase pitch range
+        playbackRateSpanOctaves: 2,
+
+        // {number} - Center offset of playback rate, positive numbers move the pitch range up, negative numbers move it
+        // down, and a value of zero indicates no offset, so the pitch range will center around the inherent pitch of
+        // the source loop.  This offset is added to the calculated playback rate, so a value of 1 would move the range
+        // up an octave, -1 would move it down an octave, 0.5 would move it up a perfect fifth, etc.
+        playbackRateCenterOffset: 0
+
+      }, options );
 
       super( sound, options );
 
@@ -68,11 +73,10 @@ define( require => {
 
         if ( !resetInProgressProperty.value ) {
 
-          // calculate the playback rate based on the value
+          // calculate the playback rate based on the amount of force, see the design document for detailed explanation
           const normalizedValue = Math.log( value / range.min ) / Math.log( range.max / range.min );
-          const centerValue = normalizedValue - 0.5;
-          const midiNote = options.pitchRangeInSemitones / 2 * centerValue + options.pitchCenterOffset;
-          const playbackRate = Math.pow( 2, midiNote / 12 );
+          const playbackRate = Math.pow( 2, ( normalizedValue - 0.5 ) * options.playbackRateSpanOctaves ) +
+                               options.playbackRateCenterOffset;
 
           this.setPlaybackRate( playbackRate );
           this.setOutputLevel( this.nonFadedOutputLevel );
