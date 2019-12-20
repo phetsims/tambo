@@ -115,8 +115,8 @@ define( require => {
         },
         () => {
 
-          // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio file
-          // could cause it.  There is handling for both the RequireJS and build cases.
+          // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio
+          // file could cause it.  There is handling for both the RequireJS and build cases.
           assert && assert( false, 'audio decode failed' );
           console.error( 'unable to decode audio data, please check all encoded audio' );
         }
