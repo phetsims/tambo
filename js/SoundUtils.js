@@ -1,4 +1,4 @@
-// Copyright 2018-2019, University of Colorado Boulder
+ // Copyright 2018-2019, University of Colorado Boulder
 
 /**
  * a singleton object with functions for analyzing and manipulated sound data
@@ -19,7 +19,7 @@ define( require => {
   /**
    * sound utility object definition
    */
-  const SoundUtil = {
+  const SoundUtils = {
 
     /**
      * helper function that sets the start and end points for a decoded set of sound samples based on where the sound
@@ -163,7 +163,7 @@ define( require => {
     }
   }
 
-  tambo.register( 'SoundUtil', SoundUtil );
+  tambo.register( 'SoundUtils', SoundUtils );
 
-  return SoundUtil;
+  return SoundUtils;
 } );

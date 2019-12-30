@@ -15,7 +15,7 @@ define( require => {
   const soundConstants = require( 'TAMBO/soundConstants' );
   const SoundGenerator = require( 'TAMBO/sound-generators/SoundGenerator' );
   const soundInfoDecoder = require( 'TAMBO/soundInfoDecoder' );
-  const SoundUtil = require( 'TAMBO/SoundUtil' );
+  const SoundUtils = require( 'TAMBO/SoundUtils' );
   const tambo = require( 'TAMBO/tambo' );
 
   // constants
@@ -104,7 +104,7 @@ define( require => {
           this.audioBuffer = decodedAudioData;
 
           if ( options.trimSilence ) {
-            const loopBoundsInfo = SoundUtil.detectSoundBounds( decodedAudioData );
+            const loopBoundsInfo = SoundUtils.detectSoundBounds( decodedAudioData );
             this.soundStart = loopBoundsInfo.soundStart;
             this.soundEnd = loopBoundsInfo.soundEnd;
           }
