@@ -85,7 +85,6 @@ define( require => {
           }
 
           // reset the fade countdown
-          // TODO: Would this be clearer if we call it elapsedFadeTime and count up?
           this.remainingFadeTime = options.fadeStartDelay + options.fadeTime + this.delayBeforeStop;
         }
       };

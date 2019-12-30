@@ -134,7 +134,8 @@ define( require => {
     constructor( model ) {
       super();
 
-      // TODO: This is a temporary way to get screen selection sounds to play, will eventually be integrated into joist
+      // TODO: This is a temporary way to get screen selection sounds to play, will eventually be integrated into joist,
+      // see https://github.com/phetsims/tambo/issues/91.
       soundManager.addSoundGenerator( new ScreenSelectionSoundGenerator(
         phet.joist.sim.currentScreenProperty,
         phet.joist.sim.screenIndexProperty,
