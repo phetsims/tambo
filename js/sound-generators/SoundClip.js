@@ -95,6 +95,21 @@ define( require => {
       this.localGainNode = this.audioContext.createGain();
       this.localGainNode.connect( this.masterGainNode );
 
+      // @private {Node} the node that will connect to the bufferSource
+      this.connectionNode = null;
+
+      // connect this source node to the output by way of other specified nodes
+      if ( this.additionalNodes.length > 0 ) {
+        this.connectionNode = this.additionalNodes[ 0 ];
+        for ( let i = 0; i < this.additionalNodes.length - 1; i++ ) {
+          this.additionalNodes[ i ].connect( this.additionalNodes[ i + 1 ] );
+        }
+        this.additionalNodes[ this.additionalNodes.length - 1 ].connect( this.localGainNode );
+      }
+      else {
+        this.connectionNode = this.localGainNode;
+      }
+
       // decode the audio data and place it in a sound buffer so it can be easily played
       soundInfoDecoder.decode(
         soundInfo,
@@ -196,13 +211,7 @@ define( require => {
             this.localGainNode.gain.cancelScheduledValues( now );
             this.localGainNode.gain.setValueAtTime( 1, now );
 
-            // connect this source node to the output by way of other specified nodes
-            let lastNode = bufferSource;
-            for ( let i = 0; i < this.additionalNodes.length; i++ ) {
-              lastNode.connect( this.additionalNodes[ i ] );
-              lastNode = this.additionalNodes[ i ];
-            }
-            lastNode.connect( this.localGainNode );
+            bufferSource.connect( this.connectionNode );
 
             // add this to the list of active sources so that it can be stopped if necessary
             this.activeBufferSources.push( bufferSource );
