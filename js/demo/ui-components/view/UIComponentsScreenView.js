@@ -41,7 +41,7 @@ define( require => {
   const tambo = require( 'TAMBO/tambo' );
   const Text = require( 'SCENERY/nodes/Text' );
   const TextPushButton = require( 'SUN/buttons/TextPushButton' );
-  const Util = require( 'DOT/Util' );
+  const Utils = require( 'DOT/Utils' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
   // constants
@@ -153,7 +153,7 @@ define( require => {
         thumbSize: SLIDER_THUMB_SIZE,
         left: 115,
         top: 115,
-        constrainValue: value => Util.roundSymmetric( value ),
+        constrainValue: value => Utils.roundSymmetric( value ),
         keyboardStep: 1
       } );
       _.times( NUM_TICK_MARKS, index => { discreteSlider.addMinorTick( index ); } );
