@@ -183,7 +183,7 @@ define( require => {
           // make sure the decoding of the audio data is complete before trying to play the sound
           if ( this.audioBuffer ) {
 
-            // create an audio buffer source node and connect it to the previously decoded audio data
+            // create an audio buffer source node that uses the previously decoded audio data
             const bufferSource = this.audioContext.createBufferSource();
             bufferSource.buffer = this.audioBuffer;
             bufferSource.loop = this.loop;
