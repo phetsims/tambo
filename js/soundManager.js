@@ -36,6 +36,7 @@ define( require => {
   // constants
   const DEFAULT_REVERB_LEVEL = 0.02;
   const LINEAR_GAIN_CHANGE_TIME = soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME; // in seconds
+  const SOUND_MANAGER_TANDEM = Tandem.GENERAL.createTandem( 'soundManager' );
 
   /**
    * sonification manager object definition
@@ -48,7 +49,7 @@ define( require => {
       this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
 
         // so that tambo can be used in a wrapper it is necessary to short circuit tandem creation in some cases
-        tandem: phet.inWrapper ? undefined : Tandem.GENERAL.createTandem('soundManager').createTandem( 'enabledProperty' )
+        tandem: phet.inWrapper ? undefined : SOUND_MANAGER_TANDEM.createTandem( 'enabledProperty' )
       } );
 
       // @public (read-only) {BooleanProperty} - enabled state for enhanced sounds
