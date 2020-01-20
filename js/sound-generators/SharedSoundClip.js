@@ -30,11 +30,6 @@ define( require => {
       // {SoundClip} @private
       this.soundClip = new SoundClip( soundInfo, options );
 
-      if ( soundInfo.url.indexOf( '-v4' ) >= 0 ) {
-        console.log( 'skipping add of ' + soundInfo.url );
-        return;
-      }
-
       // automatically register this sound clip with the sound manager
       soundManager.addSoundGenerator( this.soundClip, options.soundManagerOptions );
     }
