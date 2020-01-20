@@ -68,17 +68,6 @@ define( require => {
   const sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
   const sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
   const thunderSound = require( 'sound!TAMBO/thunder.mp3' );
-  const checkboxCheckedSound = require( 'sound!TAMBO/checkbox-checked.mp3' );
-  const checkboxUncheckedSound = require( 'sound!TAMBO/checkbox-unchecked.mp3' );
-  const pushButtonSounds = [
-
-    // the order here is important, since the first sound is meant to be the current favorite
-    require( 'sound!TAMBO/general-button-v4.mp3' ),
-    require( 'sound!TAMBO/general-button-v3.mp3' ),
-    require( 'sound!TAMBO/general-button-001.mp3' ),
-    require( 'sound!TAMBO/general-button-002.mp3' ),
-    require( 'sound!TAMBO/general-button-003.mp3' )
-  ];
   const playSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
@@ -141,12 +130,6 @@ define( require => {
         phet.joist.sim.screenIndexProperty,
         { initialOutputLevel: 0.5 }
       ) );
-
-      // create the check box sounds
-      const checkedClip = new SoundClip( checkboxCheckedSound );
-      soundManager.addSoundGenerator( checkedClip );
-      const uncheckedClip = new SoundClip( checkboxUncheckedSound );
-      soundManager.addSoundGenerator( uncheckedClip );
 
       // add a slider with snap-to-ticks behavior
       const discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
@@ -288,15 +271,6 @@ define( require => {
         { boxWidth: CHECKBOX_SIZE }
       );
 
-      thunderSoundClip.locallyEnabledProperty.lazyLink( enabled => {
-        if ( enabled ) {
-          checkedClip.play();
-        }
-        else {
-          uncheckedClip.play();
-        }
-      } );
-
       // a check box that controls whether the thunderSoundClip sound can be initiated when disabled
       const initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundClip.initiateWhenDisabled );
       initiateThunderWhenDisabledProperty.linkAttribute( thunderSoundClip, 'initiateWhenDisabled' );
@@ -305,15 +279,6 @@ define( require => {
         initiateThunderWhenDisabledProperty,
         { boxWidth: CHECKBOX_SIZE }
       );
-
-      initiateThunderWhenDisabledProperty.lazyLink( enabled => {
-        if ( enabled ) {
-          checkedClip.play();
-        }
-        else {
-          uncheckedClip.play();
-        }
-      } );
 
       // create a set of controls for the thunderSoundClip
       const thunderControl = new VBox( {
@@ -352,45 +317,14 @@ define( require => {
       // only show the lightning when the model indicates - this is done after the panel is created so the layout works
       model.lightningBoltVisibleProperty.linkAttribute( lightningBoltNode, 'visible' );
 
-      // create the button sound clips, which will be fired by the button press
-      const pushButtonSoundClips = [];
-      pushButtonSounds.forEach( buttonSound => {
-        const buttonSoundClip = new SoundClip( buttonSound );
-        soundManager.addSoundGenerator( buttonSoundClip );
-        pushButtonSoundClips.push( buttonSoundClip );
-      } );
-
-      // create a number picker for choosing the button sound
-      const selectedPushButtonSoundProperty = new NumberProperty( 1 );
-      const buttonSoundNumberPicker = new NumberPicker(
-        selectedPushButtonSoundProperty,
-        new Property( new Range( 1, pushButtonSoundClips.length ) ),
-        {
-          font: new PhetFont( 20 ),
-          arrowHeight: 6,
-          arrowYSpacing: 6
-        }
-      );
-
-      // add the button with a label and a sound selector
-      const buttonSoundHBox = new HBox( {
-        children: [
-          new TextPushButton( 'Play Sound', {
-            font: new PhetFont( 16 ),
-            baseColor: 'lightgreen',
-            listener: () => {
-              const soundIndex = Math.min( selectedPushButtonSoundProperty.value, pushButtonSoundClips.length ) - 1;
-              pushButtonSoundClips[ soundIndex ].play();
-            }
-          } ),
-          new Text( 'Selected Button Sound:', { font: new PhetFont( 16 ) } ),
-          buttonSoundNumberPicker
-        ],
-        spacing: 10,
+      // add a push button that will play the standard button sound
+      const playSoundButton = new TextPushButton( 'Play Standard Button Sound', {
+        font: new PhetFont( 16 ),
+        baseColor: 'lightgreen',
         left: lightningControlPanel.right + 60,
         top: discreteSlider.top
       } );
-      this.addChild( buttonSoundHBox );
+      this.addChild( playSoundButton );
 
       // create a small group of radio buttons
       const smallerRadioButtonSelectorValueProperty = new NumberProperty( 0 );
@@ -455,8 +389,8 @@ define( require => {
         ),
         {
           fill: '#FCFBE3',
-          left: buttonSoundHBox.left,
-          top: buttonSoundHBox.bottom + 30
+          left: playSoundButton.left,
+          top: playSoundButton.bottom + 30
         }
       );
       this.addChild( radioButtonSoundPanel );
@@ -576,7 +510,6 @@ define( require => {
         listener: () => {
           model.reset();
           thunderSoundClip.locallyEnabledProperty.reset();
-          selectedPushButtonSoundProperty.reset();
           selectedPlayPauseSoundProperty.reset();
           smallerRadioButtonSelectorValueProperty.reset();
           largerRadioButtonSelectorValueProperty.reset();

@@ -200,6 +200,7 @@ define( require => {
         this.masterGainNode.gain.setTargetAtTime( outputLevel, now, timeConstant );
       }
     }
+
     set outputLevel( outputLevel ) {
       this.setOutputLevel( outputLevel );
     }
@@ -213,6 +214,7 @@ define( require => {
     getOutputLevel() {
       return this._outputLevel;
     }
+
     get outputLevel() {
       return this.getOutputLevel();
     }
@@ -239,6 +241,7 @@ define( require => {
     get locallyEnabled() {
       return this.locallyEnabledProperty.value;
     }
+
     set locallyEnabled( locallyEnabled ) {
       this.locallyEnabledProperty.value = locallyEnabled;
     }

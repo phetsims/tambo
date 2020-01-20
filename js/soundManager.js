@@ -7,7 +7,7 @@
  *  - master gain control
  *  - enable/disable of sounds based on visibility of an associated Scenery node
  *  - enable/disable of sounds based on their assigned sonification level (e.g. "basic" or "enhanced")
- *  - gain control for sounds based on their assigned class, e.g. UI versus sim-specific sounds
+ *  - gain control for sounds based on their assigned category, e.g. UI versus sim-specific sounds
  *  - a shared reverb unit to add some spatialization and make all sounds seem to originate with the same space
  *
  *  The singleton object must be initialized before sound generators can be added.
@@ -66,9 +66,10 @@ define( require => {
       // methods for more info
       this._reverbLevel = DEFAULT_REVERB_LEVEL;
 
-      // @private {Object} - a map of class name to GainNode instances that control gains for that class name, will be
-      // filled in during init, see the usage of options.classes in the initialize function for more information.
-      this.gainNodesForClasses = {};
+      // @private {Object} - a map of category name to GainNode instances that control gains for that category name,
+      // will be filled in during init, see the usage of options.categories in the initialize function for more 
+      // information.
+      this.gainNodesForCategories = {};
 
       // @private {boolean} - flag that tracks whether the sonification manager has been initialized
       this.initialized = false;
@@ -90,18 +91,18 @@ define( require => {
 
       options = merge( {
 
-        // Classes that can be used to group sound generators together and control their volume as a group - the names
-        // can be anything that will work as a key for a JavaScript object, but initially we've chosen to use names
-        // with conventions similar to what is commonly seen for CSS classes.
-        classes: [ 'sim-specific', 'user-interface' ]
+        // Categories that can be used to group sound generators together and control their volume as a group - the
+        // names can be anything that will work as a key for a JavaScript object, but initially we've chosen to use
+        // names with conventions similar to what is commonly seen for CSS classes.
+        categories: [ 'sim-specific', 'user-interface' ]
 
       }, options );
 
       // validate the options
-      assert && assert( typeof Array.isArray( options.classes ), 'unexpected type for options.classes' );
+      assert && assert( typeof Array.isArray( options.categories ), 'unexpected type for options.categories' );
       assert && assert(
-        _.every( options.classes, className => typeof className === 'string' ),
-        'unexpected type of element in options.classes'
+        _.every( options.categories, categoryName => typeof categoryName === 'string' ),
+        'unexpected type of element in options.categories'
       );
 
       const now = phetAudioContext.currentTime;
@@ -149,12 +150,12 @@ define( require => {
         }
       );
 
-      // create and hook up gain nodes for each of the defined classes
-      options.classes.forEach( className => {
+      // create and hook up gain nodes for each of the defined categories
+      options.categories.forEach( categoryName => {
         const gainNode = phetAudioContext.createGain();
         gainNode.connect( this.convolver );
         gainNode.connect( this.dryGainNode );
-        this.gainNodesForClasses[ className ] = gainNode;
+        this.gainNodesForCategories[ categoryName ] = gainNode;
       } );
 
       // hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
@@ -285,7 +286,7 @@ define( require => {
      */
     addSoundGenerator( soundGenerator, options ) {
 
-      // Check if initialization has been done and, if not, queue the sound generation and its options for addition
+      // Check if initialization has been done and, if not, queue the sound generator and its options for addition
       // once initialization is complete.  Note that when sound is not supported, initialization will never occur.
       if ( !this.initialized ) {
         this.soundGeneratorsAwaitingAdd.push( { soundGenerator: soundGenerator, options: options } );
@@ -308,8 +309,8 @@ define( require => {
         // clip.
         associatedViewNode: null,
 
-        // {string} - class name for this sound, which can be used to group sounds together an control them as a group
-        className: null
+        // {string} - category name for this sound, which can be used to group sounds together an control them as a group
+        categoryName: null
       }, options );
 
       // validate the options
@@ -319,12 +320,12 @@ define( require => {
       );
 
       // connect the sound generator to an output path
-      if ( options.className === null ) {
+      if ( options.categoryName === null ) {
         soundGenerator.connect( this.convolver );
         soundGenerator.connect( this.dryGainNode );
       }
       else {
-        soundGenerator.connect( this.gainNodesForClasses[ options.className ] );
+        // soundGenerator.connect( this.gainNodesForCategories[ options.categoryName ] );
       }
 
       // keep a record of the sound generator along with additional information about it
@@ -386,7 +387,7 @@ define( require => {
       if ( soundGenerator.isConnectedTo( this.dryGainNode ) ) {
         soundGenerator.disconnect( this.dryGainNode );
       }
-      _.values( this.gainNodesForClasses ).forEach( gainNode => {
+      _.values( this.gainNodesForCategories ).forEach( gainNode => {
         if ( soundGenerator.isConnectedTo( gainNode ) ) {
           soundGenerator.disconnect( gainNode );
         }
@@ -439,49 +440,49 @@ define( require => {
     }
 
     /**
-     * set the output level for the specified class of sound generator
-     * @param {String} className - name of class to which this invocation applies
+     * set the output level for the specified category of sound generator
+     * @param {String} categoryName - name of category to which this invocation applies
      * @param {number} outputLevel - valid values from 0 through 1
      * @public
      */
-    setOutputLevelForClass( className, outputLevel ) {
+    setOutputLevelForCategory( categoryName, outputLevel ) {
 
       // Check if initialization has been done.  This is not an assertion because the sound manager may not be
       // initialized if sound is not enabled for the sim.
       if ( !this.initialized ) {
-        console.warn( 'an attempt was made to set the output level for a sound class on an uninitialized sound manager, ignoring' );
+        console.warn( 'an attempt was made to set the output level for a sound category on an uninitialized sound manager, ignoring' );
         return null;
       }
 
-      assert && assert( this.initialized, 'output levels for classes cannot be added until initialization has been done' );
+      assert && assert( this.initialized, 'output levels for categories cannot be added until initialization has been done' );
 
       // range check
       assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range: ' + outputLevel );
 
-      // verify that the specified class exists
-      assert && assert( this.gainNodesForClasses[ className ], 'no class with name = ' + className );
+      // verify that the specified category exists
+      assert && assert( this.gainNodesForCategories[ categoryName ], 'no category with name = ' + categoryName );
 
-      this.gainNodesForClasses[ className ].gain.setValueAtTime( outputLevel, phetAudioContext.currentTime );
+      this.gainNodesForCategories[ categoryName ].gain.setValueAtTime( outputLevel, phetAudioContext.currentTime );
     }
 
     /**
-     * get the output level for the specified sound generator class
-     * @param {String} className - name of class to which this invocation applies
+     * get the output level for the specified sound generator category
+     * @param {String} categoryName - name of category to which this invocation applies
      * @public
      */
-    getOutputLevelForClass( className ) {
+    getOutputLevelForCategory( categoryName ) {
 
       // Check if initialization has been done.  This is not an assertion because the sound manager may not be
       // initialized if sound is not enabled for the sim.
       if ( !this.initialized ) {
-        console.warn( 'an attempt was made to get the output level for a sound class on an uninitialized sound manager, returning 0' );
+        console.warn( 'an attempt was made to get the output level for a sound category on an uninitialized sound manager, returning 0' );
         return 0;
       }
 
-      // verify that the specified class exists
-      assert && assert( this.gainNodesForClasses[ className ], 'no class with name = ' + className );
+      // verify that the specified category exists
+      assert && assert( this.gainNodesForCategories[ categoryName ], 'no category with name = ' + categoryName );
 
-      return this.gainNodesForClasses[ className ].value;
+      return this.gainNodesForCategories[ categoryName ].value;
     }
 
     /**
