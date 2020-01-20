@@ -325,7 +325,7 @@ define( require => {
         soundGenerator.connect( this.dryGainNode );
       }
       else {
-        // soundGenerator.connect( this.gainNodesForCategories[ options.categoryName ] );
+        soundGenerator.connect( this.gainNodesForCategories[ options.categoryName ] );
       }
 
       // keep a record of the sound generator along with additional information about it
