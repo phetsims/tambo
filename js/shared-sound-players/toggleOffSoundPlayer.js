@@ -16,7 +16,10 @@ define( require => {
   const toggleOffSoundInfo = require( 'sound!TAMBO/step-back-v2.mp3' );
 
   // create the shared sound instance
-  const toggleOffSoundPlayer = new SharedSoundClip( toggleOffSoundInfo, { initialOutputLevel: 0.7 } );
+  const toggleOffSoundPlayer = new SharedSoundClip( toggleOffSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'toggleOffSoundPlayer', toggleOffSoundPlayer );
 } );

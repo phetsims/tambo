@@ -16,7 +16,10 @@ define( require => {
   const grabSoundInfo = require( 'sound!TAMBO/grab-v2.mp3' );
 
   // create the shared sound instance
-  const grabSoundPlayer = new SharedSoundClip( grabSoundInfo, { initialOutputLevel: 0.7 } );
+  const grabSoundPlayer = new SharedSoundClip( grabSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'grabSoundPlayer', grabSoundPlayer );
 } );

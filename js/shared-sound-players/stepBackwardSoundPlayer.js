@@ -16,7 +16,10 @@ define( require => {
   const stepBackwardSoundInfo = require( 'sound!TAMBO/step-back-v2.mp3' );
 
   // create the shared sound instance
-  const stepBackwardSoundPlayer = new SharedSoundClip( stepBackwardSoundInfo, { initialOutputLevel: 0.7 } );
+  const stepBackwardSoundPlayer = new SharedSoundClip( stepBackwardSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'stepBackwardSoundPlayer', stepBackwardSoundPlayer );
 } );

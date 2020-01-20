@@ -17,7 +17,10 @@ define( require => {
   const softClickSoundInfo = require( 'sound!TAMBO/click-001.mp3' );
 
   // create the shared sound instance
-  const softClickSoundPlayer = new SharedSoundClip( softClickSoundInfo, { initialOutputLevel: 0.2 } );
+  const softClickSoundPlayer = new SharedSoundClip( softClickSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'softClickSoundPlayer', softClickSoundPlayer );
 } );

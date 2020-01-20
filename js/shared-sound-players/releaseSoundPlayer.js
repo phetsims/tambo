@@ -16,7 +16,10 @@ define( require => {
   const releaseSoundInfo = require( 'sound!TAMBO/release-002.mp3' );
 
   // create the shared sound instance
-  const releaseSoundPlayer = new SharedSoundClip( releaseSoundInfo, { initialOutputLevel: 0.7 } );
+  const releaseSoundPlayer = new SharedSoundClip( releaseSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'releaseSoundPlayer', releaseSoundPlayer );
 } );

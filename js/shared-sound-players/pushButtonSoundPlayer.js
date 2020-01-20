@@ -16,7 +16,10 @@ define( require => {
   const pushButtonSoundInfo = require( 'sound!TAMBO/general-button-v4.mp3' );
 
   // create the shared sound instance
-  const pushButtonSoundPlayer = new SharedSoundClip( pushButtonSoundInfo, { initialOutputLevel: 0.7 } );
+  const pushButtonSoundPlayer = new SharedSoundClip( pushButtonSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'pushButtonSoundPlayer', pushButtonSoundPlayer );
 } );

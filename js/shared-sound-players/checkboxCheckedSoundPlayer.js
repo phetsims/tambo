@@ -16,7 +16,10 @@ define( require => {
   const checkboxCheckedSoundInfo = require( 'sound!TAMBO/checkbox-checked.mp3' );
 
   // create the shared sound instance
-  const checkboxCheckedSoundPlayer = new SharedSoundClip( checkboxCheckedSoundInfo, { initialOutputLevel: 0.7 } );
+  const checkboxCheckedSoundPlayer = new SharedSoundClip( checkboxCheckedSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'checkboxCheckedSoundPlayer', checkboxCheckedSoundPlayer );
 } );

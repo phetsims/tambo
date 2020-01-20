@@ -16,7 +16,10 @@ define( require => {
   const resetAllSoundInfo = require( 'sound!TAMBO/reset-all.mp3' );
 
   // create the shared sound instance
-  const resetAllSoundPlayer = new SharedSoundClip( resetAllSoundInfo, { initialOutputLevel: 0.7 } );
+  const resetAllSoundPlayer = new SharedSoundClip( resetAllSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'resetAllSoundPlayer', resetAllSoundPlayer );
 } );

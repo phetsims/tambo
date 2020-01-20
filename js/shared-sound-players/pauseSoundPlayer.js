@@ -16,7 +16,10 @@ define( require => {
   const pauseSoundInfo = require( 'sound!TAMBO/pause.mp3' );
 
   // create the shared sound instance
-  const pauseSoundPlayer = new SharedSoundClip( pauseSoundInfo, { initialOutputLevel: 0.7 } );
+  const pauseSoundPlayer = new SharedSoundClip( pauseSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'pauseSoundPlayer', pauseSoundPlayer );
 } );

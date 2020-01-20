@@ -16,7 +16,10 @@ define( require => {
   const stepForwardSoundInfo = require( 'sound!TAMBO/step-forward-v2.mp3' );
 
   // create the shared sound instance
-  const stepForwardSoundPlayer = new SharedSoundClip( stepForwardSoundInfo, { initialOutputLevel: 0.7 } );
+  const stepForwardSoundPlayer = new SharedSoundClip( stepForwardSoundInfo, {
+    soundClipOptions: { initialOutputLevel: 0.7 },
+    soundManagerOptions: { categoryName: 'user-interface' }
+  } );
 
   return tambo.register( 'stepForwardSoundPlayer', stepForwardSoundPlayer );
 } );
