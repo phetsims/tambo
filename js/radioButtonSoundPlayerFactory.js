@@ -47,7 +47,7 @@ define( require => {
         } );
 
         // automatically register the sound generator
-        soundManager.addSoundGenerator( this._radioButtonSoundPlayer );
+        soundManager.addSoundGenerator( this._radioButtonSoundPlayer, { categoryName: 'user-interface' } );
       }
       return this._radioButtonSoundPlayer;
     }
