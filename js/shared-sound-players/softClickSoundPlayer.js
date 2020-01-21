@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * shared sound generator that produces a soft click, often used to produce discrete sounds for some continuous

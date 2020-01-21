@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * SharedSoundClip is used to create sound clips that can be shared by multiple objects so that multiple instances don't
