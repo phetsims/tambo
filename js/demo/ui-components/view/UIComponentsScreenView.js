@@ -60,8 +60,6 @@ define( require => {
   const lightningImage = require( 'image!TAMBO/lightning.png' );
 
   // sounds
-  const comboBoxOpenSound = require( 'sound!TAMBO/combo-box-open.mp3' );
-  const comboBoxCloseSound = require( 'sound!TAMBO/combo-box-close.mp3' );
   const edgeBoundarySound = require( 'sound!TAMBO/edge-boundary-bottle.mp3' );
   const chargesInBodySound = require( 'sound!TAMBO/charges-in-body-better.mp3' );
   const marimbaSound = require( 'sound!TAMBO/bright-marimba.mp3' );
@@ -546,26 +544,9 @@ define( require => {
       );
       this.addChild( comboBox );
 
-      // create and hook up the sounds
-      const comboBoxOpenSoundClip = new SoundClip( comboBoxOpenSound );
-      soundManager.addSoundGenerator( comboBoxOpenSoundClip );
-      const comboBoxCloseSoundClip = new SoundClip( comboBoxCloseSound );
-      soundManager.addSoundGenerator( comboBoxCloseSoundClip );
-
-      // play sounds on open and close
-      comboBox.listBox.on( 'visibility', () => {
-        if ( comboBox.listBox.visible ) {
-          comboBoxOpenSoundClip.play();
-        }
-        else {
-          comboBoxCloseSoundClip.play();
-        }
-      } );
-
       // reset all button
       this.addChild( resetAllButton );
     }
-
   }
 
   // inner class for testing grab and release sounds

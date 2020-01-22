@@ -13,7 +13,7 @@ define( require => {
   const tambo = require( 'TAMBO/tambo' );
 
   // sounds
-  const generalOpenSoundInfo = require( 'sound!TAMBO/combo-box-open.mp3' );
+  const generalOpenSoundInfo = require( 'sound!TAMBO/general-open.mp3' );
 
   // create the shared sound instance
   const generalOpenSoundPlayer = new SharedSoundClip( generalOpenSoundInfo, {

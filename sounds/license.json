@@ -223,8 +223,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-
-  "combo-box-close.mp3": {
+  "general-close.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -232,7 +231,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "combo-box-open.mp3": {
+  "general-open.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
