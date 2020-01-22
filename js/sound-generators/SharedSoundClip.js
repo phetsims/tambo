@@ -28,7 +28,7 @@ define( require => {
     constructor( soundInfo, options ) {
 
       // {SoundClip} @private
-      this.soundClip = new SoundClip( soundInfo, options );
+      this.soundClip = new SoundClip( soundInfo, options.soundClipOptions );
 
       // automatically register this sound clip with the sound manager
       soundManager.addSoundGenerator( this.soundClip, options.soundManagerOptions );
