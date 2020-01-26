@@ -32,7 +32,6 @@ define( require => {
   const Range = require( 'DOT/Range' );
   const Rectangle = require( 'SCENERY/nodes/Rectangle' );
   const ResetAllButton = require( 'SCENERY_PHET/buttons/ResetAllButton' );
-  const ScreenSelectionSoundGenerator = require( 'TAMBO/sound-generators/ScreenSelectionSoundGenerator' );
   const ScreenView = require( 'JOIST/ScreenView' );
   const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
   const soundManager = require( 'TAMBO/soundManager' );
@@ -120,14 +119,6 @@ define( require => {
      */
     constructor( model ) {
       super();
-
-      // TODO: This is a temporary way to get screen selection sounds to play, will eventually be integrated into joist,
-      // see https://github.com/phetsims/tambo/issues/91.
-      soundManager.addSoundGenerator( new ScreenSelectionSoundGenerator(
-        phet.joist.sim.currentScreenProperty,
-        phet.joist.sim.screenIndexProperty,
-        { initialOutputLevel: 0.5 }
-      ) );
 
       // add a slider with snap-to-ticks behavior
       const discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
