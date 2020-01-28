@@ -49,7 +49,7 @@ define( require => {
       this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
 
         // so that tambo can be used in a wrapper it is necessary to short circuit tandem creation in some cases
-        tandem: phet.inWrapper ? undefined : SOUND_MANAGER_TANDEM.createTandem( 'enabledProperty' )
+        tandem: phet.inWrapper ? Tandem.OPT_OUT : SOUND_MANAGER_TANDEM.createTandem( 'enabledProperty' )
       } );
 
       // @public (read-only) {BooleanProperty} - enabled state for enhanced sounds
