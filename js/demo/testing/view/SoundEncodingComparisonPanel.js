@@ -25,13 +25,32 @@ define( require => {
   const Text = require( 'SCENERY/nodes/Text' );
   const VBox = require( 'SCENERY/nodes/VBox' );
 
+  // sounds
+  const marimba128Sound = require( 'sound!TAMBO/20180213_Bright_Marimba-128-kbps-stereo.mp3' );
+  const marimba64Sound = require( 'sound!TAMBO/20180213_Bright_Marimba-64-kbps-stereo.mp3' );
+  const marimba48Sound = require( 'sound!TAMBO/20180213_Bright_Marimba-48-kbps-stereo.mp3' );
+  const marimba24Sound = require( 'sound!TAMBO/20180213_Bright_Marimba-24-kbps-stereo.mp3' );
+  const marimba16Sound = require( 'sound!TAMBO/20180213_Bright_Marimba-16-kbps-stereo.mp3' );
+  const marimba8Sound = require( 'sound!TAMBO/20180213_Bright_Marimba-8-kbps-stereo.mp3' );
+  const resetAll128Sound = require( 'sound!TAMBO/07_Button_Reset_All_v3-128-kbps-mono.mp3' );
+  const resetAll64Sound = require( 'sound!TAMBO/07_Button_Reset_All_v3-64-kbps-mono.mp3' );
+  const resetAll48Sound = require( 'sound!TAMBO/07_Button_Reset_All_v3-48-kbps-mono.mp3' );
+  const resetAll24Sound = require( 'sound!TAMBO/07_Button_Reset_All_v3-24-kbps-mono.mp3' );
+  const resetAll16Sound = require( 'sound!TAMBO/07_Button_Reset_All_v3-16-kbps-mono.mp3' );
+  const resetAll8Sound = require( 'sound!TAMBO/07_Button_Reset_All_v3-8-kbps-mono.mp3' );
+  const charges128Sound = require( 'sound!TAMBO/Charges_In_Body_Better_Loop-128-kbps-mono.mp3' );
+  const charges64Sound = require( 'sound!TAMBO/Charges_In_Body_Better_Loop-64-kbps-mono.mp3' );
+  const charges48Sound = require( 'sound!TAMBO/Charges_In_Body_Better_Loop-48-kbps-mono.mp3' );
+  const charges24Sound = require( 'sound!TAMBO/Charges_In_Body_Better_Loop-24-kbps-mono.mp3' );
+  const charges16Sound = require( 'sound!TAMBO/Charges_In_Body_Better_Loop-16-kbps-mono.mp3' );
+  const charges8Sound = require( 'sound!TAMBO/Charges_In_Body_Better_Loop-8-kbps-mono.mp3' );
+
   // constants
   const BUTTON_FONT = new PhetFont( 18 );
   const COMBO_BOX_FONT = new PhetFont( 16 );
   const PLAY_COLOR = '#66FF8C';
   const STOP_COLOR = '#FF4D4D';
 
-  // sounds - these are defined in an object to simplify the process of adding or removing sounds to this panel
   const sounds = [
 
     {
@@ -42,42 +61,42 @@ define( require => {
           stereo: true,
           format: 'mp3',
           rate: '128 kbps',
-          sound: require( 'sound!TAMBO/20180213_Bright_Marimba-128-kbps-stereo.mp3' ),
+          sound: marimba128Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: true,
           format: 'mp3',
           rate: '64 kbps',
-          sound: require( 'sound!TAMBO/20180213_Bright_Marimba-64-kbps-stereo.mp3' ),
+          sound: marimba64Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: true,
           format: 'mp3',
           rate: '48 kbps',
-          sound: require( 'sound!TAMBO/20180213_Bright_Marimba-48-kbps-stereo.mp3' ),
+          sound: marimba48Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: true,
           format: 'mp3',
           rate: '24 kbps',
-          sound: require( 'sound!TAMBO/20180213_Bright_Marimba-24-kbps-stereo.mp3' ),
+          sound: marimba24Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: true,
           format: 'mp3',
           rate: '16 kbps',
-          sound: require( 'sound!TAMBO/20180213_Bright_Marimba-16-kbps-stereo.mp3' ),
+          sound: marimba16Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: true,
           format: 'mp3',
           rate: '8 kbps',
-          sound: require( 'sound!TAMBO/20180213_Bright_Marimba-8-kbps-stereo.mp3' ),
+          sound: marimba8Sound,
           soundGenerator: null // filled in during construction
         }
       ]
@@ -91,42 +110,42 @@ define( require => {
           stereo: false,
           format: 'mp3',
           rate: '128 kbps',
-          sound: require( 'sound!TAMBO/07_Button_Reset_All_v3-128-kbps-mono.mp3' ),
+          sound: resetAll128Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '64 kbps',
-          sound: require( 'sound!TAMBO/07_Button_Reset_All_v3-64-kbps-mono.mp3' ),
+          sound: resetAll64Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '48 kbps',
-          sound: require( 'sound!TAMBO/07_Button_Reset_All_v3-48-kbps-mono.mp3' ),
+          sound: resetAll48Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '24 kbps',
-          sound: require( 'sound!TAMBO/07_Button_Reset_All_v3-24-kbps-mono.mp3' ),
+          sound: resetAll24Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '16 kbps',
-          sound: require( 'sound!TAMBO/07_Button_Reset_All_v3-16-kbps-mono.mp3' ),
+          sound: resetAll16Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '8 kbps',
-          sound: require( 'sound!TAMBO/07_Button_Reset_All_v3-8-kbps-mono.mp3' ),
+          sound: resetAll8Sound,
           soundGenerator: null // filled in during construction
         }
       ]
@@ -140,42 +159,42 @@ define( require => {
           stereo: false,
           format: 'mp3',
           rate: '128 kbps',
-          sound: require( 'sound!TAMBO/Charges_In_Body_Better_Loop-128-kbps-mono.mp3' ),
+          sound: charges128Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '64 kbps',
-          sound: require( 'sound!TAMBO/Charges_In_Body_Better_Loop-64-kbps-mono.mp3' ),
+          sound: charges64Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '48 kbps',
-          sound: require( 'sound!TAMBO/Charges_In_Body_Better_Loop-48-kbps-mono.mp3' ),
+          sound: charges48Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '24 kbps',
-          sound: require( 'sound!TAMBO/Charges_In_Body_Better_Loop-24-kbps-mono.mp3' ),
+          sound: charges24Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '16 kbps',
-          sound: require( 'sound!TAMBO/Charges_In_Body_Better_Loop-16-kbps-mono.mp3' ),
+          sound: charges16Sound,
           soundGenerator: null // filled in during construction
         },
         {
           stereo: false,
           format: 'mp3',
           rate: '8 kbps',
-          sound: require( 'sound!TAMBO/Charges_In_Body_Better_Loop-8-kbps-mono.mp3' ),
+          sound: charges8Sound,
           soundGenerator: null // filled in during construction
         }
       ]
