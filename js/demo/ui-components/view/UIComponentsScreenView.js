@@ -65,51 +65,77 @@ define( require => {
   const sliderDecreaseClickSound = require( 'sound!TAMBO/slider-click-02.mp3' );
   const sliderIncreaseClickSound = require( 'sound!TAMBO/slider-click-01.mp3' );
   const thunderSound = require( 'sound!TAMBO/thunder.mp3' );
+  const playPause003Sound = require( 'sound!TAMBO/play-pause-003.mp3' );
+  const playPause001Sound = require( 'sound!TAMBO/play-pause-001.mp3' );
+  const playPause002Sound = require( 'sound!TAMBO/play-pause-002.mp3' );
+  const playPause004Sound = require( 'sound!TAMBO/play-pause-004.mp3' );
+  const pauseSound = require( 'sound!TAMBO/pause.mp3' );
+  const pause001Sound = require( 'sound!TAMBO/pause-001.mp3' );
+  const stepForwardV2Sound = require( 'sound!TAMBO/step-forward-v2.mp3' );
+  const stepForwardSound = require( 'sound!TAMBO/step-forward.mp3' );
+  const stepForward001Sound = require( 'sound!TAMBO/step-forward-001.mp3' );
+  const stepForward002Sound = require( 'sound!TAMBO/step-forward-002.mp3' );
+  const stepBackV2Sound = require( 'sound!TAMBO/step-back-v2.mp3' );
+  const stepBackSound = require( 'sound!TAMBO/step-back.mp3' );
+  const stepBack001Sound = require( 'sound!TAMBO/step-back-001.mp3' );
+  const stepBack002Sound = require( 'sound!TAMBO/step-back-002.mp3' );
+  const grabV2Sound = require( 'sound!TAMBO/grab-v2.mp3' );
+  const grab002Sound = require( 'sound!TAMBO/grab-002.mp3' );
+  const grab001Sound = require( 'sound!TAMBO/grab-001.mp3' );
+  const grabReleaseV2Sound = require( 'sound!TAMBO/grab-release-v2.mp3' );
+  const release002Sound = require( 'sound!TAMBO/release-002.mp3' );
+  const release001Sound = require( 'sound!TAMBO/release-001.mp3' );
+
   const playSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
-    require( 'sound!TAMBO/play-pause-003.mp3' ),
-    require( 'sound!TAMBO/play-pause-001.mp3' ),
-    require( 'sound!TAMBO/play-pause-002.mp3' ),
-    require( 'sound!TAMBO/play-pause-004.mp3' )
+    playPause003Sound,
+    playPause001Sound,
+    playPause002Sound,
+    playPause004Sound
   ];
+
   const pauseSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
-    require( 'sound!TAMBO/pause.mp3' ),
-    require( 'sound!TAMBO/pause-001.mp3' ),
-    require( 'sound!TAMBO/pause.mp3' ),
-    require( 'sound!TAMBO/pause-001.mp3' )
+    pauseSound,
+    pause001Sound,
+    pauseSound, // TODO: Why are these duplicated?
+    pause001Sound
   ];
+
   const stepForwardSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
-    require( 'sound!TAMBO/step-forward-v2.mp3' ),
-    require( 'sound!TAMBO/step-forward.mp3' ),
-    require( 'sound!TAMBO/step-forward-001.mp3' ),
-    require( 'sound!TAMBO/step-forward-002.mp3' )
+    stepForwardV2Sound,
+    stepForwardSound,
+    stepForward001Sound,
+    stepForward002Sound
   ];
+
   const stepBackwardSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
-    require( 'sound!TAMBO/step-back-v2.mp3' ),
-    require( 'sound!TAMBO/step-back.mp3' ),
-    require( 'sound!TAMBO/step-back-001.mp3' ),
-    require( 'sound!TAMBO/step-back-002.mp3' )
+    stepBackV2Sound,
+    stepBackSound,
+    stepBack001Sound,
+    stepBack002Sound
   ];
+
   const grabSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
-    require( 'sound!TAMBO/grab-v2.mp3' ),
-    require( 'sound!TAMBO/grab-002.mp3' ),
-    require( 'sound!TAMBO/grab-001.mp3' )
+    grabV2Sound,
+    grab002Sound,
+    grab001Sound
   ];
+
   const releaseSounds = [
 
     // the order here is important, since the first sound is meant to be the current favorite
-    require( 'sound!TAMBO/grab-release-v2.mp3' ),
-    require( 'sound!TAMBO/release-002.mp3' ),
-    require( 'sound!TAMBO/release-001.mp3' )
+    grabReleaseV2Sound,
+    release002Sound,
+    release001Sound
   ];
 
   class UIComponentsScreenView extends ScreenView {
