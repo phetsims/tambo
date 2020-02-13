@@ -24,11 +24,11 @@ define( require => {
   class ScreenSelectionSoundGenerator extends MultiClip {
 
     /**
-     * @param {Property.<Screen|null>} currentScreenProperty - indicates which sim screen is currently selected
-     * @param {Property.<number>} iconIndexProperty - indicates which icon on the home screen is currently selected
+     * @param {Property.<Screen>} screenProperty - indicates which sim screen is visible
+     * @param {HomeScreen|null} homeScreen - null if the HomeScreen was not created
      * @param {Object} [options]
      */
-    constructor( currentScreenProperty, iconIndexProperty, options ) {
+    constructor( screenProperty, homeScreen, options ) {
 
       // create the map of screen index values to sounds
       const valuesToSoundInfoMap = new Map();
@@ -41,19 +41,19 @@ define( require => {
       super( valuesToSoundInfoMap, options );
 
       // play the sound when the user selects a different icon on the home screen
-      iconIndexProperty.lazyLink( () => {
+      homeScreen && homeScreen.model.selectedScreenProperty.lazyLink( () => {
 
         // only play this sound when on the home screen
-        if ( currentScreenProperty.value === null ) {
+        if ( screenProperty.value === homeScreen ) {
           this.playAssociatedSound( SoundType.ICON_SELECTED );
         }
       } );
 
       // play sounds when the user navigates between screens and to/from the home screen
-      currentScreenProperty.lazyLink( currentScreen => {
+      screenProperty.lazyLink( currentScreen => {
 
         // play one sound for the home screen, another for all other screens
-        this.playAssociatedSound( currentScreen === null ? SoundType.HOME_SCREEN : SoundType.OTHER_SCREEN );
+        this.playAssociatedSound( homeScreen && currentScreen === homeScreen ? SoundType.HOME_SCREEN : SoundType.OTHER_SCREEN );
       } );
     }
   }
