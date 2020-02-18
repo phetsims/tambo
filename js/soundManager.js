@@ -50,7 +50,7 @@ define( require => {
 
         // so that tambo can be used in a wrapper it is necessary to short circuit tandem creation in some cases
         tandem: phet.inWrapper ? Tandem.OPT_OUT : SOUND_MANAGER_TANDEM.createTandem( 'enabledProperty' ),
-        phetioDocumentation: 'If this sim contains sound, then this Property will toggle whether sound is enabled or' +
+        phetioDocumentation: 'If the sim contains sound, then this Property will toggle whether sound is enabled or ' +
                              'disabled.'
       } );
 
