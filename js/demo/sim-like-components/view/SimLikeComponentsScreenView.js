@@ -106,8 +106,11 @@ define( require => {
         new Text( 'Paused', { font: FONT } ),
         true,
         new Text( 'Running', { font: FONT } ),
-        { switchSize: new Dimension2( 60, 30 ), centerX: boxNode.centerX, top: boxNode.bottom + 25 }
-      );
+        {
+          toggleSwitchOptions: { size: new Dimension2( 60, 30 ) },
+          centerX: boxNode.centerX,
+          top: boxNode.bottom + 25
+        } );
       this.addChild( ballsMovingSwitch );
 
       // add a number spinner for adding and removing balls

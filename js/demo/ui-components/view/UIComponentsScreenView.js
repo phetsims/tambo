@@ -188,8 +188,11 @@ define( require => {
         new Text( 'Off', { font: FONT } ),
         true,
         new Text( 'On', { font: FONT } ),
-        { switchSize: new Dimension2( 60, 30 ), centerX: discreteSlider.centerX, top: discreteSlider.bottom + 30 }
-      );
+        {
+          toggleSwitchOptions: { size: new Dimension2( 60, 30 ) },
+          centerX: discreteSlider.centerX,
+          top: discreteSlider.bottom + 30
+        } );
       this.addChild( abSwitch );
 
       // add a looping sound that is turned on/off by the switch
