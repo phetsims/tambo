@@ -47,8 +47,6 @@ define( require => {
 
       // @public (read-only) {BooleanProperty} - global enabled state for sound generation
       this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
-
-        // so that tambo can be used in a wrapper it is necessary to short circuit tandem creation in some cases
         tandem: SOUND_MANAGER_TANDEM.createTandem( 'enabledProperty' ),
         phetioFeatured: true,
         phetioDocumentation: 'If the sim contains sound, then this Property will toggle whether sound is enabled or ' +
