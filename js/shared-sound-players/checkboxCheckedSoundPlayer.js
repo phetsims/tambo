@@ -5,21 +5,18 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const SharedSoundClip = require( 'TAMBO/sound-generators/SharedSoundClip' );
-  const tambo = require( 'TAMBO/tambo' );
+import checkboxCheckedSoundInfo from '../../sounds/checkbox-checked_mp3.js';
+import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import tambo from '../tambo.js';
 
-  // sounds
-  const checkboxCheckedSoundInfo = require( 'sound!TAMBO/checkbox-checked.mp3' );
+// sounds
 
-  // create the shared sound instance
-  const checkboxCheckedSoundPlayer = new SharedSoundClip( checkboxCheckedSoundInfo, {
-    soundClipOptions: { initialOutputLevel: 0.7 },
-    soundManagerOptions: { categoryName: 'user-interface' }
-  } );
-
-  return tambo.register( 'checkboxCheckedSoundPlayer', checkboxCheckedSoundPlayer );
+// create the shared sound instance
+const checkboxCheckedSoundPlayer = new SharedSoundClip( checkboxCheckedSoundInfo, {
+  soundClipOptions: { initialOutputLevel: 0.7 },
+  soundManagerOptions: { categoryName: 'user-interface' }
 } );
+
+tambo.register( 'checkboxCheckedSoundPlayer', checkboxCheckedSoundPlayer );
+export default checkboxCheckedSoundPlayer;

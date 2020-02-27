@@ -5,21 +5,18 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const SharedSoundClip = require( 'TAMBO/sound-generators/SharedSoundClip' );
-  const tambo = require( 'TAMBO/tambo' );
+import toggleOnSoundInfo from '../../sounds/step-forward-v2_mp3.js';
+import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import tambo from '../tambo.js';
 
-  // sounds
-  const toggleOnSoundInfo = require( 'sound!TAMBO/step-forward-v2.mp3' );
+// sounds
 
-  // create the shared sound instance
-  const toggleOnSoundPlayer = new SharedSoundClip( toggleOnSoundInfo, {
-    soundClipOptions: { initialOutputLevel: 0.7 },
-    soundManagerOptions: { categoryName: 'user-interface' }
-  } );
-
-  return tambo.register( 'toggleOnSoundPlayer', toggleOnSoundPlayer );
+// create the shared sound instance
+const toggleOnSoundPlayer = new SharedSoundClip( toggleOnSoundInfo, {
+  soundClipOptions: { initialOutputLevel: 0.7 },
+  soundManagerOptions: { categoryName: 'user-interface' }
 } );
+
+tambo.register( 'toggleOnSoundPlayer', toggleOnSoundPlayer );
+export default toggleOnSoundPlayer;

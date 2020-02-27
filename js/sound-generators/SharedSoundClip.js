@@ -10,41 +10,37 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const tambo = require( 'TAMBO/tambo' );
-  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  const soundManager = require( 'TAMBO/soundManager' );
+import soundManager from '../soundManager.js';
+import tambo from '../tambo.js';
+import SoundClip from './SoundClip.js';
 
-  class SharedSoundClip {
+class SharedSoundClip {
 
-    /**
-     * @param {Object} soundInfo - object of the type returned by the sound plugin, see sound.js for details
-     * @param {Object} [options]
-     * @constructor
-     */
-    constructor( soundInfo, options ) {
+  /**
+   * @param {Object} soundInfo - object of the type returned by the sound plugin, see sound.js for details
+   * @param {Object} [options]
+   * @constructor
+   */
+  constructor( soundInfo, options ) {
 
-      // {SoundClip} @private
-      this.soundClip = new SoundClip( soundInfo, options.soundClipOptions );
+    // {SoundClip} @private
+    this.soundClip = new SoundClip( soundInfo, options.soundClipOptions );
 
-      // automatically register this sound clip with the sound manager
-      soundManager.addSoundGenerator( this.soundClip, options.soundManagerOptions );
-    }
-
-    /**
-     * the only supported method is "play", since no clients should be changing things like the playback rate or output
-     * level
-     * @public
-     */
-    play() {
-      this.soundClip.play();
-    }
+    // automatically register this sound clip with the sound manager
+    soundManager.addSoundGenerator( this.soundClip, options.soundManagerOptions );
   }
 
-  tambo.register( 'SharedSoundClip', SharedSoundClip );
+  /**
+   * the only supported method is "play", since no clients should be changing things like the playback rate or output
+   * level
+   * @public
+   */
+  play() {
+    this.soundClip.play();
+  }
+}
 
-  return SharedSoundClip;
-} );
+tambo.register( 'SharedSoundClip', SharedSoundClip );
+
+export default SharedSoundClip;

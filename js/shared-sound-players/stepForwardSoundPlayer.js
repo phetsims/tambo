@@ -5,21 +5,18 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const SharedSoundClip = require( 'TAMBO/sound-generators/SharedSoundClip' );
-  const tambo = require( 'TAMBO/tambo' );
+import stepForwardSoundInfo from '../../sounds/step-forward-v2_mp3.js';
+import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import tambo from '../tambo.js';
 
-  // sounds
-  const stepForwardSoundInfo = require( 'sound!TAMBO/step-forward-v2.mp3' );
+// sounds
 
-  // create the shared sound instance
-  const stepForwardSoundPlayer = new SharedSoundClip( stepForwardSoundInfo, {
-    soundClipOptions: { initialOutputLevel: 0.7 },
-    soundManagerOptions: { categoryName: 'user-interface' }
-  } );
-
-  return tambo.register( 'stepForwardSoundPlayer', stepForwardSoundPlayer );
+// create the shared sound instance
+const stepForwardSoundPlayer = new SharedSoundClip( stepForwardSoundInfo, {
+  soundClipOptions: { initialOutputLevel: 0.7 },
+  soundManagerOptions: { categoryName: 'user-interface' }
 } );
+
+tambo.register( 'stepForwardSoundPlayer', stepForwardSoundPlayer );
+export default stepForwardSoundPlayer;

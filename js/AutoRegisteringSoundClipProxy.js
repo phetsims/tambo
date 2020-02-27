@@ -10,49 +10,45 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  const soundManager = require( 'TAMBO/soundManager' );
-  const tambo = require( 'TAMBO/tambo' );
+import SoundClip from './sound-generators/SoundClip.js';
+import soundManager from './soundManager.js';
+import tambo from './tambo.js';
 
-  class AutoRegisteringSoundClipProxy {
+class AutoRegisteringSoundClipProxy {
 
-    constructor( soundInfo, options ) {
+  constructor( soundInfo, options ) {
 
-      // create the sound clip if sound is enabled for this sim, otherwise don't
-      if ( phet.joist.sim.supportsSound ) {
+    // create the sound clip if sound is enabled for this sim, otherwise don't
+    if ( phet.joist.sim.supportsSound ) {
 
-        // @private {SoundClip}
-        this.soundClip = new SoundClip( soundInfo, options );
+      // @private {SoundClip}
+      this.soundClip = new SoundClip( soundInfo, options );
 
-        // automatically register this sound clip with the sound manager so that the client does have to
-        soundManager.addSoundGenerator( this.soundClip );
-      }
-    }
-
-    // **NOTE** - not all SoundClip methods have been added proactively, feel free to add more if and when needed
-
-    /**
-     * play the sound if it was created, do nothing if not
-     * @public
-     */
-    play() {
-      this.soundClip && this.soundClip.play();
-    }
-
-    /**
-     * set the playback rate if the sound clip was created, do nothing if not
-     * @public
-     */
-    setPlaybackRate( rate ) {
-      this.soundClip && this.soundClip.setPlaybackRate( rate );
+      // automatically register this sound clip with the sound manager so that the client does have to
+      soundManager.addSoundGenerator( this.soundClip );
     }
   }
 
-  tambo.register( 'AutoRegisteringSoundClipProxy', AutoRegisteringSoundClipProxy );
+  // **NOTE** - not all SoundClip methods have been added proactively, feel free to add more if and when needed
 
-  return AutoRegisteringSoundClipProxy;
-} );
+  /**
+   * play the sound if it was created, do nothing if not
+   * @public
+   */
+  play() {
+    this.soundClip && this.soundClip.play();
+  }
+
+  /**
+   * set the playback rate if the sound clip was created, do nothing if not
+   * @public
+   */
+  setPlaybackRate( rate ) {
+    this.soundClip && this.soundClip.setPlaybackRate( rate );
+  }
+}
+
+tambo.register( 'AutoRegisteringSoundClipProxy', AutoRegisteringSoundClipProxy );
+
+export default AutoRegisteringSoundClipProxy;

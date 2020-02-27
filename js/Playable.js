@@ -8,20 +8,17 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-define( require => {
-  'use strict';
+import tambo from './tambo.js';
 
-  const tambo = require( 'TAMBO/tambo' );
+class Playable {
 
-  class Playable {
-
-    static isPlayable( objectInstance ) {
-      return typeof objectInstance.play === 'function';
-    }
+  static isPlayable( objectInstance ) {
+    return typeof objectInstance.play === 'function';
   }
+}
 
-  // static value that is used to specify that no sound should be produced
-  Playable.NO_SOUND = { play() {} };
+// static value that is used to specify that no sound should be produced
+Playable.NO_SOUND = { play() {} };
 
-  return tambo.register( 'Playable', Playable );
-} );
+tambo.register( 'Playable', Playable );
+export default Playable;

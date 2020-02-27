@@ -6,26 +6,22 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const GeneralKeyboardHelpSection = require( 'SCENERY_PHET/keyboard/help/GeneralKeyboardHelpSection' );
-  const HBox = require( 'SCENERY/nodes/HBox' );
-  const tambo = require( 'TAMBO/tambo' );
+import GeneralKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/GeneralKeyboardHelpSection.js';
+import HBox from '../../../scenery/js/nodes/HBox.js';
+import tambo from '../tambo.js';
 
-  class TamboKeyboardHelpContent extends HBox {
+class TamboKeyboardHelpContent extends HBox {
 
-    /**
-     * @constructor
-     */
-    constructor() {
-      super( { children: [ new GeneralKeyboardHelpSection() ], align: 'top', spacing: 30 } );
-    }
-
+  /**
+   * @constructor
+   */
+  constructor() {
+    super( { children: [ new GeneralKeyboardHelpSection() ], align: 'top', spacing: 30 } );
   }
 
-  tambo.register( 'TamboKeyboardHelpContent', TamboKeyboardHelpContent );
+}
 
-  return TamboKeyboardHelpContent;
-} );
+tambo.register( 'TamboKeyboardHelpContent', TamboKeyboardHelpContent );
+
+export default TamboKeyboardHelpContent;

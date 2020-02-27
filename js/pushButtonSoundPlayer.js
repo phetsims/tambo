@@ -7,67 +7,64 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const SoundClip = require( 'TAMBO/sound-generators/SoundClip' );
-  const soundManager = require( 'TAMBO/soundManager' );
-  const tambo = require( 'TAMBO/tambo' );
+import buttonSound from '../sounds/general-button-v4_mp3.js';
+import SoundClip from './sound-generators/SoundClip.js';
+import soundManager from './soundManager.js';
+import tambo from './tambo.js';
 
-  // sounds
-  const buttonSound = require( 'sound!TAMBO/general-button-v4.mp3' );
+// sounds
 
-  // the instance that is created the first time getInstance is called
-  let instance = null;
+// the instance that is created the first time getInstance is called
+let instance = null;
+
+/**
+ * definition of the pushButtonSoundPlayer object
+ */
+class pushButtonSoundPlayer {
 
   /**
-   * definition of the pushButtonSoundPlayer object
+   * @private
    */
-  class pushButtonSoundPlayer {
+  constructor() {
 
-    /**
-     * @private
-     */
-    constructor() {
+    // state checking
+    assert && assert( !instance, 'the constructor should only be invoked once' );
 
-      // state checking
-      assert && assert( !instance, 'the constructor should only be invoked once' );
+    // create the sound clip if sound is enabled for this sim, otherwise don't
+    if ( phet.joist.sim.supportsSound ) {
 
-      // create the sound clip if sound is enabled for this sim, otherwise don't
-      if ( phet.joist.sim.supportsSound ) {
+      // @private {SoundClip}
+      this.soundClip = new SoundClip( buttonSound, { initialOutputLevel: 0.7 } );
 
-        // @private {SoundClip}
-        this.soundClip = new SoundClip( buttonSound, { initialOutputLevel: 0.7 } );
-
-        // automatically register this sound clip with the sound manager so that the client does have to
-        soundManager.addSoundGenerator( this.soundClip );
-      }
-    }
-
-    static getInstance() {
-      if ( instance === null ) {
-        instance = new pushButtonSoundPlayer();
-      }
-      return instance;
-    }
-
-    /**
-     * play the sound if it was created
-     * @public
-     */
-    play() {
-      this.soundClip && this.soundClip.play();
-    }
-
-    /**
-     * set the playback rate if the sound clip was created
-     * @public
-     */
-    setPlaybackRate( rate ) {
-      this.soundClip && this.soundClip.setPlaybackRate( rate );
+      // automatically register this sound clip with the sound manager so that the client does have to
+      soundManager.addSoundGenerator( this.soundClip );
     }
   }
 
-  return tambo.register( 'pushButtonSoundPlayer', pushButtonSoundPlayer );
-} );
+  static getInstance() {
+    if ( instance === null ) {
+      instance = new pushButtonSoundPlayer();
+    }
+    return instance;
+  }
+
+  /**
+   * play the sound if it was created
+   * @public
+   */
+  play() {
+    this.soundClip && this.soundClip.play();
+  }
+
+  /**
+   * set the playback rate if the sound clip was created
+   * @public
+   */
+  setPlaybackRate( rate ) {
+    this.soundClip && this.soundClip.setPlaybackRate( rate );
+  }
+}
+
+tambo.register( 'pushButtonSoundPlayer', pushButtonSoundPlayer );
+export default pushButtonSoundPlayer;

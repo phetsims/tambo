@@ -6,79 +6,75 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const BoxOfBalls = require( 'TAMBO/demo/sim-like-components/model/BoxOfBalls' );
-  const Emitter = require( 'AXON/Emitter' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
-  const tambo = require( 'TAMBO/tambo' );
+import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
+import Emitter from '../../../../../axon/js/Emitter.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import tambo from '../../../tambo.js';
+import BoxOfBalls from './BoxOfBalls.js';
 
-  class SimLikeComponentsModel {
+class SimLikeComponentsModel {
 
-    /**
-     * @constructor
-     */
-    constructor() {
+  /**
+   * @constructor
+   */
+  constructor() {
 
-      // @public (read-only) {BoxOfBalls) - box containing bouncing balls, size empirically determined
-      this.boxOfBalls = new BoxOfBalls( 135, 80 );
+    // @public (read-only) {BoxOfBalls) - box containing bouncing balls, size empirically determined
+    this.boxOfBalls = new BoxOfBalls( 135, 80 );
 
-      // @public {NumberProperty} - controls the number of balls in the box
-      this.numberOfBallsProperty = new NumberProperty( 0 );
+    // @public {NumberProperty} - controls the number of balls in the box
+    this.numberOfBallsProperty = new NumberProperty( 0 );
 
-      // @public {BooleanProperty} - controls whether the balls are bouncing around in the box or still
-      this.ballsMovingProperty = new BooleanProperty( false );
+    // @public {BooleanProperty} - controls whether the balls are bouncing around in the box or still
+    this.ballsMovingProperty = new BooleanProperty( false );
 
-      // @public {BooleanProperty} - tracks whether a reset is happening
-      this.resetInProgressProperty = new BooleanProperty( false );
+    // @public {BooleanProperty} - tracks whether a reset is happening
+    this.resetInProgressProperty = new BooleanProperty( false );
 
-      // add or remove balls as the count changes
-      this.numberOfBallsProperty.link( desiredNumberOfBalls => {
-        const numberBallsInBox = this.boxOfBalls.balls.lengthProperty.get();
-        if ( desiredNumberOfBalls > numberBallsInBox ) {
-          _.times( desiredNumberOfBalls - numberBallsInBox, () => {
-            this.boxOfBalls.addRandomBall();
-          } );
-        }
-        else if ( desiredNumberOfBalls < numberBallsInBox ) {
-          _.times( numberBallsInBox - desiredNumberOfBalls, () => {
-            this.boxOfBalls.removeABall();
-          } );
-        }
-      } );
-
-      this.stepEmitter = new Emitter( {
-        parameters: [ { valueType: 'number' } ]
-      } );
-    }
-
-    /**
-     * @param {number} dt - delta time, in seconds
-     * @public
-     */
-    step( dt ) {
-      if ( this.ballsMovingProperty.value ) {
-        this.boxOfBalls.step( dt );
+    // add or remove balls as the count changes
+    this.numberOfBallsProperty.link( desiredNumberOfBalls => {
+      const numberBallsInBox = this.boxOfBalls.balls.lengthProperty.get();
+      if ( desiredNumberOfBalls > numberBallsInBox ) {
+        _.times( desiredNumberOfBalls - numberBallsInBox, () => {
+          this.boxOfBalls.addRandomBall();
+        } );
       }
-      this.stepEmitter.emit( dt );
-    }
+      else if ( desiredNumberOfBalls < numberBallsInBox ) {
+        _.times( numberBallsInBox - desiredNumberOfBalls, () => {
+          this.boxOfBalls.removeABall();
+        } );
+      }
+    } );
 
-    /**
-     * @public
-     */
-    reset() {
-      this.resetInProgressProperty.value = true;
-      this.numberOfBallsProperty.reset();
-      this.ballsMovingProperty.reset();
-      this.resetInProgressProperty.value = false;
-    }
-
+    this.stepEmitter = new Emitter( {
+      parameters: [ { valueType: 'number' } ]
+    } );
   }
 
-  tambo.register( 'SimLikeComponentsModel', SimLikeComponentsModel );
+  /**
+   * @param {number} dt - delta time, in seconds
+   * @public
+   */
+  step( dt ) {
+    if ( this.ballsMovingProperty.value ) {
+      this.boxOfBalls.step( dt );
+    }
+    this.stepEmitter.emit( dt );
+  }
 
-  return SimLikeComponentsModel;
-} );
+  /**
+   * @public
+   */
+  reset() {
+    this.resetInProgressProperty.value = true;
+    this.numberOfBallsProperty.reset();
+    this.ballsMovingProperty.reset();
+    this.resetInProgressProperty.value = false;
+  }
+
+}
+
+tambo.register( 'SimLikeComponentsModel', SimLikeComponentsModel );
+
+export default SimLikeComponentsModel;

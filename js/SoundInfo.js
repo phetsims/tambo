@@ -11,19 +11,16 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-define( require => {
-  'use strict';
+import tambo from './tambo.js';
 
-  const tambo = require( 'TAMBO/tambo' );
+class SoundInfo {
 
-  class SoundInfo {
-
-    static isSoundInfo( objectInstance ) {
-      return typeof objectInstance === 'object' &&
-             typeof objectInstance.name === 'string' &&
-             ( typeof objectInstance.url === 'string' || typeof objectInstance.base64 === 'string' );
-    }
+  static isSoundInfo( objectInstance ) {
+    return typeof objectInstance === 'object' &&
+           typeof objectInstance.name === 'string' &&
+           ( typeof objectInstance.url === 'string' || typeof objectInstance.base64 === 'string' );
   }
+}
 
-  return tambo.register( 'SoundInfo', SoundInfo );
-} );
+tambo.register( 'SoundInfo', SoundInfo );
+export default SoundInfo;

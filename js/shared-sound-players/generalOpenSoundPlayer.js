@@ -5,21 +5,18 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const SharedSoundClip = require( 'TAMBO/sound-generators/SharedSoundClip' );
-  const tambo = require( 'TAMBO/tambo' );
+import generalOpenSoundInfo from '../../sounds/general-open_mp3.js';
+import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import tambo from '../tambo.js';
 
-  // sounds
-  const generalOpenSoundInfo = require( 'sound!TAMBO/general-open.mp3' );
+// sounds
 
-  // create the shared sound instance
-  const generalOpenSoundPlayer = new SharedSoundClip( generalOpenSoundInfo, {
-    soundClipOptions: { initialOutputLevel: 0.4 },
-    soundManagerOptions: { categoryName: 'user-interface' }
-  } );
-
-  return tambo.register( 'generalOpenSoundPlayer', generalOpenSoundPlayer );
+// create the shared sound instance
+const generalOpenSoundPlayer = new SharedSoundClip( generalOpenSoundInfo, {
+  soundClipOptions: { initialOutputLevel: 0.4 },
+  soundManagerOptions: { categoryName: 'user-interface' }
 } );
+
+tambo.register( 'generalOpenSoundPlayer', generalOpenSoundPlayer );
+export default generalOpenSoundPlayer;

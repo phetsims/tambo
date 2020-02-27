@@ -5,21 +5,18 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const SharedSoundClip = require( 'TAMBO/sound-generators/SharedSoundClip' );
-  const tambo = require( 'TAMBO/tambo' );
+import resetAllSoundInfo from '../../sounds/reset-all_mp3.js';
+import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import tambo from '../tambo.js';
 
-  // sounds
-  const resetAllSoundInfo = require( 'sound!TAMBO/reset-all.mp3' );
+// sounds
 
-  // create the shared sound instance
-  const resetAllSoundPlayer = new SharedSoundClip( resetAllSoundInfo, {
-    soundClipOptions: { initialOutputLevel: 0.7 },
-    soundManagerOptions: { categoryName: 'user-interface' }
-  } );
-
-  return tambo.register( 'resetAllSoundPlayer', resetAllSoundPlayer );
+// create the shared sound instance
+const resetAllSoundPlayer = new SharedSoundClip( resetAllSoundInfo, {
+  soundClipOptions: { initialOutputLevel: 0.7 },
+  soundManagerOptions: { categoryName: 'user-interface' }
 } );
+
+tambo.register( 'resetAllSoundPlayer', resetAllSoundPlayer );
+export default resetAllSoundPlayer;

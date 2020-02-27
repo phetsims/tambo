@@ -5,18 +5,16 @@
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
-define( require => {
-  'use strict';
 
-  const tambo = require( 'TAMBO/tambo' );
+import tambo from './tambo.js';
 
-  const SoundLevelEnum = {
-    BASIC: 'BASIC',
-    ENHANCED: 'ENHANCED'
-  };
+const SoundLevelEnum = {
+  BASIC: 'BASIC',
+  ENHANCED: 'ENHANCED'
+};
 
-  // in development mode, catch any attempted changes to the enum
-  if ( assert ) { Object.freeze( SoundLevelEnum ); }
+// in development mode, catch any attempted changes to the enum
+if ( assert ) { Object.freeze( SoundLevelEnum ); }
 
-  return tambo.register( 'SoundLevelEnum', SoundLevelEnum );
-} );
+tambo.register( 'SoundLevelEnum', SoundLevelEnum );
+export default SoundLevelEnum;

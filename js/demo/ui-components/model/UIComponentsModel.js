@@ -6,84 +6,80 @@
  *
  * @author John Blanco
  */
-define( require => {
-  'use strict';
 
-  // modules
-  const BooleanProperty = require( 'AXON/BooleanProperty' );
-  const NumberProperty = require( 'AXON/NumberProperty' );
-  const tambo = require( 'TAMBO/tambo' );
+import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import tambo from '../../../tambo.js';
 
-  // constants
-  const LIGHTNING_SHOWN_TIME = 0.750; // in seconds
+// constants
+const LIGHTNING_SHOWN_TIME = 0.750; // in seconds
 
-  class UIComponentsModel {
+class UIComponentsModel {
 
-    /**
-     * @constructor
-     */
-    constructor() {
+  /**
+   * @constructor
+   */
+  constructor() {
 
-      // @public {NumberProperty} - a Property that is intended to be hooked up to a slider with discrete values
-      this.discreteValueProperty = new NumberProperty( 0 );
+    // @public {NumberProperty} - a Property that is intended to be hooked up to a slider with discrete values
+    this.discreteValueProperty = new NumberProperty( 0 );
 
-      // @public {NumberProperty} - a Property that is intended to be hooked up to a slider with continuous values
-      this.continuousValueProperty = new NumberProperty( 0 );
+    // @public {NumberProperty} - a Property that is intended to be hooked up to a slider with continuous values
+    this.continuousValueProperty = new NumberProperty( 0 );
 
-      // @public {BooleanProperty} - tracks whether the sound loop should be on
-      this.loopOnProperty = new BooleanProperty( false );
+    // @public {BooleanProperty} - tracks whether the sound loop should be on
+    this.loopOnProperty = new BooleanProperty( false );
 
-      // @public {BooleanProperty} - tracks whether the lightning bolt is visible
-      this.lightningBoltVisibleProperty = new BooleanProperty( false );
+    // @public {BooleanProperty} - tracks whether the lightning bolt is visible
+    this.lightningBoltVisibleProperty = new BooleanProperty( false );
 
-      // @private {Number} - countdown timer used to hide the lightning bolt, in seconds
-      this.lightningBoltVisibleTimer = 0;
+    // @private {Number} - countdown timer used to hide the lightning bolt, in seconds
+    this.lightningBoltVisibleTimer = 0;
 
-      // reload the countdown timer when the lightning bolt is set to be shown
-      this.lightningBoltVisibleProperty.link( visible => {
-        if ( visible ) {
-          this.lightningBoltVisibleTimer = LIGHTNING_SHOWN_TIME;
-        }
-      } );
-
-      // @public {BooleanProperty} - tracks whether a reset is happening
-      this.resetInProgressProperty = new BooleanProperty( false );
-    }
-
-    /**
-     * step the model forward in time, generally called by the framework
-     * @param {number} dt - time step, in seconds
-     * @public
-     */
-    step( dt ) {
-
-      // manage the lightning visibility timer
-      if ( this.lightningBoltVisibleTimer > 0 ) {
-        this.lightningBoltVisibleTimer -= dt;
-        if ( this.lightningBoltVisibleTimer <= 0 ) {
-
-          // countdown complete, set visibility to false
-          this.lightningBoltVisibleProperty.value = false;
-        }
+    // reload the countdown timer when the lightning bolt is set to be shown
+    this.lightningBoltVisibleProperty.link( visible => {
+      if ( visible ) {
+        this.lightningBoltVisibleTimer = LIGHTNING_SHOWN_TIME;
       }
-    }
+    } );
 
-    /**
-     * restore initial state
-     * @public
-     */
-    reset() {
-      this.resetInProgressProperty.value = true;
-      this.discreteValueProperty.reset();
-      this.continuousValueProperty.reset();
-      this.loopOnProperty.reset();
-      this.lightningBoltVisibleProperty.reset();
-      this.resetInProgressProperty.value = false;
-    }
-
+    // @public {BooleanProperty} - tracks whether a reset is happening
+    this.resetInProgressProperty = new BooleanProperty( false );
   }
 
-  tambo.register( 'UIComponentsModel', UIComponentsModel );
+  /**
+   * step the model forward in time, generally called by the framework
+   * @param {number} dt - time step, in seconds
+   * @public
+   */
+  step( dt ) {
 
-  return UIComponentsModel;
-} );
+    // manage the lightning visibility timer
+    if ( this.lightningBoltVisibleTimer > 0 ) {
+      this.lightningBoltVisibleTimer -= dt;
+      if ( this.lightningBoltVisibleTimer <= 0 ) {
+
+        // countdown complete, set visibility to false
+        this.lightningBoltVisibleProperty.value = false;
+      }
+    }
+  }
+
+  /**
+   * restore initial state
+   * @public
+   */
+  reset() {
+    this.resetInProgressProperty.value = true;
+    this.discreteValueProperty.reset();
+    this.continuousValueProperty.reset();
+    this.loopOnProperty.reset();
+    this.lightningBoltVisibleProperty.reset();
+    this.resetInProgressProperty.value = false;
+  }
+
+}
+
+tambo.register( 'UIComponentsModel', UIComponentsModel );
+
+export default UIComponentsModel;
