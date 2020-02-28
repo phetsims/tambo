@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * AutoRegisteringSoundClipProxy is a light wrapper around SoundClip that acts as a "pass through" if sound is enabled

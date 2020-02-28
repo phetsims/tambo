@@ -1,4 +1,4 @@
-// Copyright 2018-2019, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * a singleton instance of a Web Audio audio context that can be included using RequireJS, creates a stubbed version on

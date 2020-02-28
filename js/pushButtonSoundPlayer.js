@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * The pushButtonSoundPlayer singleton is used to play the default sound for buttons.  It loads the sound only once,

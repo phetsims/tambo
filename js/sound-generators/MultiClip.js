@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * MultiClip is a sound generator that plays one-shot sounds from a set of pre-recorded files that are provided upon

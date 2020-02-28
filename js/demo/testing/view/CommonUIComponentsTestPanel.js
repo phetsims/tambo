@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * CommonUIComponentsTestPanel is a panel that allows the user to add sound-generating common UI components to the scene

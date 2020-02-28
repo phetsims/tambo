@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * Playable is a "definition" type, based off of PaintDef.js, that defines a type that is used in the tambo sound

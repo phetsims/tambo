@@ -1,4 +1,4 @@
-// Copyright 2019, University of Colorado Boulder
+// Copyright 2019-2020, University of Colorado Boulder
 
 /**
  * Sound generator that plays a pitch related to a Property value.  Fades out when the Property value is not changing.

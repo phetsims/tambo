@@ -1,4 +1,4 @@
-// Copyright 2018-2019, University of Colorado Boulder
+// Copyright 2018-2020, University of Colorado Boulder
 
 /**
  * The soundInfoDecoder is a singleton utility object that provides a method for decoding soundInfo objects.  This is
