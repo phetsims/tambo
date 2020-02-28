@@ -58,7 +58,7 @@ define( require => {
       this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled, {
         tandem: SOUND_MANAGER_TANDEM.createTandem( 'enhancedSoundEnabledProperty' ),
         phetioDocumentation: 'If the sim contains sound, then this Property will toggle whether "enhanced" sound is ' +
-                             'enabled or disabled.'
+                             'enabled or disabled. Note that not all simulations that support sound also support enhanced sound.'
       } );
 
       // @private {Array.<{ soundGenerator:SoundGenerator, sonificationLevel:string }>} - array where the sound
