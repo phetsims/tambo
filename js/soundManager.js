@@ -33,7 +33,7 @@ import TamboQueryParameters from './TamboQueryParameters.js';
 // constants
 const DEFAULT_REVERB_LEVEL = 0.02;
 const LINEAR_GAIN_CHANGE_TIME = soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME; // in seconds
-const SOUND_MANAGER_TANDEM = Tandem.GENERAL.createTandem( 'soundManager' );
+const SOUND_MANAGER_TANDEM = Tandem.GENERAL_MODEL.createTandem( 'soundManager' );
 
 /**
  * sonification manager object definition
