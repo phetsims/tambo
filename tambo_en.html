@@ -7,7 +7,7 @@
   <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="phet-sim-level" content="development">
-  
+
   <title>tambo</title>
 </head>
 
@@ -19,29 +19,58 @@
 
   window.phet = window.phet || {};
   window.phet.chipper = window.phet.chipper || {};
-  window.phet.chipper.packageObject = {
-    "name": "tambo",
-    "version": "1.0.0-dev.13",
-    "license": "MIT",
-    "repository": { "type": "git", "url": "https://github.com/phetsims/tambo.git" },
-    "devDependencies": { "grunt": "~1.0.0" },
-    "phet": {
-      "requirejsNamespace": "TAMBO",
-      "phetLibs": [ "vegas" ],
-      "runnable": true,
-      "supportedBrands": [ "phet", "adapted-from-phet" ],
-      "supportsSound": true,
-      "supportsEnhancedSound": true
-    },
-    "eslintConfig": { "extends": "../chipper/eslint/sim_es6_eslintrc.js" }
-  };
-  window.phet.chipper.stringRepos = [ { "repo": "joist", "requirejsNamespace": "JOIST" }, {
-    "repo": "scenery-phet",
-    "requirejsNamespace": "SCENERY_PHET"
-  }, { "repo": "sun", "requirejsNamespace": "SUN" }, {
-    "repo": "tambo",
-    "requirejsNamespace": "TAMBO"
-  }, { "repo": "vegas", "requirejsNamespace": "VEGAS" } ];
+  window.phet.chipper.packageObject =
+    {
+      "name": "tambo",
+      "version": "1.0.0-dev.13",
+      "license": "MIT",
+      "repository": {
+        "type": "git",
+        "url": "https://github.com/phetsims/tambo.git"
+      },
+      "devDependencies": {
+        "grunt": "~1.0.0"
+      },
+      "phet": {
+        "requirejsNamespace": "TAMBO",
+        "phetLibs": [
+          "vegas"
+        ],
+        "runnable": true,
+        "supportedBrands": [
+          "phet",
+          "adapted-from-phet"
+        ],
+        "supportsSound": true,
+        "supportsEnhancedSound": true
+      },
+      "eslintConfig": {
+        "extends": "../chipper/eslint/sim_es6_eslintrc.js"
+      }
+    };
+  window.phet.chipper.stringRepos =
+    [
+      {
+        "repo": "joist",
+        "requirejsNamespace": "JOIST"
+      },
+      {
+        "repo": "scenery-phet",
+        "requirejsNamespace": "SCENERY_PHET"
+      },
+      {
+        "repo": "sun",
+        "requirejsNamespace": "SUN"
+      },
+      {
+        "repo": "tambo",
+        "requirejsNamespace": "TAMBO"
+      },
+      {
+        "repo": "vegas",
+        "requirejsNamespace": "VEGAS"
+      }
+    ];
 
   // Identify the brand (assume generated brand if not provided with query parameters)
   const brandMatch = location.search.match( /brand=([^&]+)/ );
