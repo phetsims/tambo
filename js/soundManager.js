@@ -85,9 +85,10 @@ class SoundManager {
    * Initialize the sonification manager. This function must be invoked before any sound generators can be added.
    * @param {BooleanProperty} simVisibleProperty
    * @param {BooleanProperty} simActiveProperty
+   * @param {BooleanProperty} simIsSettingPhetioStateProperty - to turn off sound when setting phet-io state, see https://github.com/phetsims/studio/issues/102
    * @param {Object} [options]
    */
-  initialize( simVisibleProperty, simActiveProperty, options ) {
+  initialize( simVisibleProperty, simActiveProperty, simIsSettingPhetioStateProperty, options ) {
 
     assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
 
@@ -163,9 +164,9 @@ class SoundManager {
     // hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
     // active
     Property.multilink(
-      [ this.enabledProperty, simVisibleProperty, simActiveProperty ],
-      ( enabled, simVisible, simActive ) => {
-        const gain = enabled && simVisible && simActive ? this._masterOutputLevel : 0;
+      [ this.enabledProperty, simVisibleProperty, simActiveProperty, simIsSettingPhetioStateProperty ],
+      ( enabled, simVisible, simActive, simIsSettingPhetioState ) => {
+        const gain = enabled && simVisible && simActive && !simIsSettingPhetioState ? this._masterOutputLevel : 0;
         this.masterGainNode.gain.linearRampToValueAtTime(
           gain,
           phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
