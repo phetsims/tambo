@@ -167,7 +167,7 @@ define( require => {
       // hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
       // active
       Property.multilink(
-        [ this.enabledProperty, simVisibleProperty, simActiveProperty ],
+        [ this.enabledProperty, simVisibleProperty, simActiveProperty, phet.joist.sim.isSettingPhetioStateProperty ],
         ( enabled, simVisible, simActive ) => {
           const gain = enabled && simVisible && simActive ? this._masterOutputLevel : 0;
           this.masterGainNode.gain.linearRampToValueAtTime(
