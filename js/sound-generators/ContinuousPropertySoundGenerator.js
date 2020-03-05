@@ -71,7 +71,7 @@ define( require => {
       // function for starting the sound or adjusting the volume
       const listener = value => {
 
-        if ( !resetInProgressProperty.value ) {
+        if ( !resetInProgressProperty.value && !phet.joist.sim.isSettingPhetioStateProperty.value ) {
 
           // calculate the playback rate based on the amount of force, see the design document for detailed explanation
           const normalizedValue = Math.log( value / range.min ) / Math.log( range.max / range.min );
