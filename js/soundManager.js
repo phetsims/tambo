@@ -18,6 +18,7 @@ import Property from '../../axon/js/Property.js';
 import merge from '../../phet-core/js/merge.js';
 import Display from '../../scenery/js/display/Display.js';
 import DisplayedProperty from '../../scenery/js/util/DisplayedProperty.js';
+import PhetioObject from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import reverbImpulseResponse from '../sounds/empty_apartment_bedroom_06_resampled_mp3.js';
 import audioContextStateChangeMonitor from './audioContextStateChangeMonitor.js';
@@ -33,18 +34,27 @@ import TamboQueryParameters from './TamboQueryParameters.js';
 // constants
 const DEFAULT_REVERB_LEVEL = 0.02;
 const LINEAR_GAIN_CHANGE_TIME = soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME; // in seconds
-const SOUND_MANAGER_TANDEM = Tandem.GENERAL_MODEL.createTandem( 'soundManager' );
 
 /**
  * sonification manager object definition
  */
-class SoundManager {
+class SoundManager extends PhetioObject {
 
-  constructor() {
+  /**
+   * @param {Tandem} tandem
+   */
+  constructor( tandem ) {
+
+    super( {
+      tandem: tandem,
+      phetioState: false,
+      phetioDocumentation: 'Controls the simulation\'s sound. Note that this only applies to ' +
+                           'sims that support sound.'
+    } );
 
     // @public (read-only) {BooleanProperty} - global enabled state for sound generation
     this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
-      tandem: SOUND_MANAGER_TANDEM.createTandem( 'enabledProperty' ),
+      tandem: tandem.createTandem( 'enabledProperty' ),
       phetioFeatured: true,
       phetioDocumentation: 'If the sim contains sound, then this Property will toggle whether sound is enabled or ' +
                            'disabled.'
@@ -52,7 +62,7 @@ class SoundManager {
 
     // @public (read-only) {BooleanProperty} - enabled state for enhanced sounds
     this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled, {
-      tandem: SOUND_MANAGER_TANDEM.createTandem( 'enhancedSoundEnabledProperty' ),
+      tandem: tandem.createTandem( 'enhancedSoundEnabledProperty' ),
       phetioDocumentation: 'If the sim contains sound, then this Property will toggle whether "enhanced" sound is ' +
                            'enabled or disabled. Note that not all simulations that support sound also support enhanced sound.'
     } );
@@ -606,6 +616,6 @@ class SoundManager {
   }
 }
 
-const soundManager = new SoundManager();
+const soundManager = new SoundManager( Tandem.GENERAL_VIEW.createTandem( 'soundManager' ) );
 tambo.register( 'soundManager', soundManager );
 export default soundManager;
