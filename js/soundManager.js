@@ -63,6 +63,7 @@ class SoundManager extends PhetioObject {
     // @public (read-only) {BooleanProperty} - enabled state for enhanced sounds
     this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled, {
       tandem: tandem.createTandem( 'enhancedSoundEnabledProperty' ),
+      phetioFeatured: true,
       phetioDocumentation: 'If the sim contains sound, then this Property will toggle whether "enhanced" sound is ' +
                            'enabled or disabled. Note that not all simulations that support sound also support enhanced sound.'
     } );
