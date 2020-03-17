@@ -68,6 +68,9 @@ class SoundManager extends PhetioObject {
                            'enabled or disabled. Note that not all simulations that support sound also support enhanced sound.'
     } );
 
+    // tracks whether sim initialization is complete, used to prevent sound generation before then
+    this.simInitializedProperty = new BooleanProperty( false );
+
     // @private {Array.<{ soundGenerator:SoundGenerator, sonificationLevel:string }>} - array where the sound
     // generators are stored along with information about how to manage them
     this.soundGeneratorInfoArray = [];
@@ -117,6 +120,11 @@ class SoundManager extends PhetioObject {
       _.every( options.categories, categoryName => typeof categoryName === 'string' ),
       'unexpected type of element in options.categories'
     );
+
+    // listen for the signal that the sim has been fully constructed and use it to unblock sound generation
+    window.phet.joist.sim.endedSimConstructionEmitter.addListener( () => {
+      this.simInitializedProperty.set( true );
+    } );
 
     const now = phetAudioContext.currentTime;
 
@@ -174,9 +182,21 @@ class SoundManager extends PhetioObject {
     // hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
     // active
     Property.multilink(
-      [ this.enabledProperty, simVisibleProperty, simActiveProperty, phet.joist.sim.isSettingPhetioStateProperty ],
-      ( enabled, simVisible, simActive, simIsSettingPhetioState ) => {
-        const gain = enabled && simVisible && simActive && !simIsSettingPhetioState ? this._masterOutputLevel : 0;
+      [
+        this.enabledProperty,
+        this.simInitializedProperty,
+        simVisibleProperty,
+        simActiveProperty,
+        phet.joist.sim.isSettingPhetioStateProperty
+      ],
+      ( enabled, initComplete, simVisible, simActive, simIsSettingPhetioState ) => {
+
+        // set gain to zero unless the monitored properties are all in the correct state to allow sound generation
+        const gain = enabled && initComplete && simVisible && simActive && !simIsSettingPhetioState ?
+                     this._masterOutputLevel :
+                     0;
+
+        // set the gain, but somewhat gradually in order to avoid rapid transients, which sound like clicks
         this.masterGainNode.gain.linearRampToValueAtTime(
           gain,
           phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
