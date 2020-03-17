@@ -24,7 +24,6 @@ const tamboTitleString = tamboStrings.tambo.title;
 // set up the simulation options
 const keyboardHelpContent = new TamboKeyboardHelpContent();
 const simOptions = {
-  accessibility: true,
   credits: {
     leadDesign: 'John Blanco'
   },
