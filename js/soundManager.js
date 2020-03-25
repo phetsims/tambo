@@ -191,10 +191,8 @@ class SoundManager extends PhetioObject {
       ],
       ( enabled, initComplete, simVisible, simActive, simIsSettingPhetioState ) => {
 
-        // set gain to zero unless the monitored properties are all in the correct state to allow sound generation
-        const gain = enabled && initComplete && simVisible && simActive && !simIsSettingPhetioState ?
-                     this._masterOutputLevel :
-                     0;
+        const fullyEnabled = enabled && initComplete && simVisible && simActive && !simIsSettingPhetioState;
+        const gain = fullyEnabled ? this._masterOutputLevel : 0;
 
         // set the gain, but somewhat gradually in order to avoid rapid transients, which sound like clicks
         this.masterGainNode.gain.linearRampToValueAtTime(
@@ -259,8 +257,10 @@ class SoundManager extends PhetioObject {
       // - https://github.com/phetsims/fractions-common/issues/82
       // - https://github.com/phetsims/friction/issues/173
       // - https://github.com/phetsims/resistance-in-a-wire/issues/190
+      // - https://github.com/phetsims/tambo/issues/90
       let previousAudioContextState = phetAudioContext.state;
       audioContextStateChangeMonitor.addStateChangeListener( phetAudioContext, state => {
+
         phet.log && phet.log(
           'audio context state changed, old state = ' +
           previousAudioContextState +
@@ -270,18 +270,13 @@ class SoundManager extends PhetioObject {
           phetAudioContext.currentTime
         );
 
-        if ( previousAudioContextState === 'running' && state !== 'running' ) {
+        if ( state !== 'running' ) {
 
-          phet.log && phet.log( 'attempting to resume audio context in ' + state + ' state' );
+          // add a listener that will resume the audio context on the next touchstart
+          window.addEventListener( 'touchstart', resumeAudioContext, false );
 
-          // the audio context isn't running, so tell it to resume
-          phetAudioContext.resume()
-            .then( () => {
-              phet.log && phet.log( 'resume of audio context completed, state = ' + phetAudioContext.state );
-            } )
-            .catch( err => {
-              assert && assert( false, 'error when trying to resume audio context, err = ' + err );
-            } );
+          // listen for other user gesture events too
+          Display.userGestureEmitter.addListener( resumeAudioContext );
         }
 
         previousAudioContextState = state;
