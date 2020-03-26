@@ -48,24 +48,25 @@ class SoundManager extends PhetioObject {
     super( {
       tandem: tandem,
       phetioState: false,
-      phetioDocumentation: 'Controls the simulation\'s sound. Note that this only applies to ' +
-                           'sims that support sound.'
+      phetioDocumentation: 'Controls the simulation\'s sound. For sims that do not support sound, this element and ' +
+                           'its children can be ignored.'
     } );
 
     // @public (read-only) {BooleanProperty} - global enabled state for sound generation
     this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
       tandem: tandem.createTandem( 'enabledProperty' ),
       phetioFeatured: true,
-      phetioDocumentation: 'If the sim contains sound, then this Property will toggle whether sound is enabled or ' +
-                           'disabled.'
+      phetioDocumentation: 'Determines whether sound is enabled.'
     } );
 
     // @public (read-only) {BooleanProperty} - enabled state for enhanced sounds
     this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled, {
       tandem: tandem.createTandem( 'enhancedSoundEnabledProperty' ),
       phetioFeatured: true,
-      phetioDocumentation: 'If the sim contains sound, then this Property will toggle whether "enhanced" sound is ' +
-                           'enabled or disabled. Note that not all simulations that support sound also support enhanced sound.'
+      phetioDocumentation: 'Determines whether enhanced sound is enabled. Enhanced sound is additional sounds that ' +
+                           'can serve to improve the learning experience for individuals with visual disabilities. ' +
+                           'Note that not all simulations that support sound also support enhanced sound. Also note ' +
+                           'that the value is irrelevant when enabledProperty is false.'
     } );
 
     // tracks whether sim initialization is complete, used to prevent sound generation before then
