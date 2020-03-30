@@ -119,12 +119,6 @@ class SoundManager extends PhetioObject {
       'unexpected type of element in options.categories'
     );
 
-    // listen for the signal that the sim has been fully constructed and use it to unblock sound generation
-    const simInitializedProperty = new BooleanProperty( false );
-    window.phet.joist.sim.endedSimConstructionEmitter.addListener( () => {
-      simInitializedProperty.set( true );
-    } );
-
     const now = phetAudioContext.currentTime;
 
     // the final stage is a dynamics compressor that is used essentially as a limiter to prevent clipping
@@ -183,7 +177,7 @@ class SoundManager extends PhetioObject {
     Property.multilink(
       [
         this.enabledProperty,
-        simInitializedProperty,
+        window.phet.joist.sim.isConstructionCompleteProperty,
         simVisibleProperty,
         simActiveProperty,
         phet.joist.sim.isSettingPhetioStateProperty
