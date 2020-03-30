@@ -69,9 +69,6 @@ class SoundManager extends PhetioObject {
                            'that the value is irrelevant when enabledProperty is false.'
     } );
 
-    // tracks whether sim initialization is complete, used to prevent sound generation before then
-    this.simInitializedProperty = new BooleanProperty( false );
-
     // @private {Array.<{ soundGenerator:SoundGenerator, sonificationLevel:string }>} - array where the sound
     // generators are stored along with information about how to manage them
     this.soundGeneratorInfoArray = [];
@@ -123,8 +120,9 @@ class SoundManager extends PhetioObject {
     );
 
     // listen for the signal that the sim has been fully constructed and use it to unblock sound generation
+    const simInitializedProperty = new BooleanProperty( false );
     window.phet.joist.sim.endedSimConstructionEmitter.addListener( () => {
-      this.simInitializedProperty.set( true );
+      simInitializedProperty.set( true );
     } );
 
     const now = phetAudioContext.currentTime;
@@ -185,7 +183,7 @@ class SoundManager extends PhetioObject {
     Property.multilink(
       [
         this.enabledProperty,
-        this.simInitializedProperty,
+        simInitializedProperty,
         simVisibleProperty,
         simActiveProperty,
         phet.joist.sim.isSettingPhetioStateProperty
