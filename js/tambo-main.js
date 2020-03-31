@@ -17,7 +17,7 @@ import TamboKeyboardHelpContent from './demo/TamboKeyboardHelpContent.js';
 import TestingScreenView from './demo/testing/view/TestingScreenView.js';
 import UIComponentsModel from './demo/ui-components/model/UIComponentsModel.js';
 import UIComponentsScreenView from './demo/ui-components/view/UIComponentsScreenView.js';
-import tamboStrings from './tambo-strings.js';
+import tamboStrings from './tamboStrings.js';
 
 const tamboTitleString = tamboStrings.tambo.title;
 
