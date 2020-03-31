@@ -182,9 +182,9 @@ class SoundManager extends PhetioObject {
         simActiveProperty,
         phet.joist.sim.isSettingPhetioStateProperty
       ],
-      ( enabled, initComplete, simVisible, simActive, simIsSettingPhetioState ) => {
+      ( enabled, simInitComplete, simVisible, simActive, simIsSettingPhetioState ) => {
 
-        const fullyEnabled = enabled && initComplete && simVisible && simActive && !simIsSettingPhetioState;
+        const fullyEnabled = enabled && simInitComplete && simVisible && simActive && !simIsSettingPhetioState;
         const gain = fullyEnabled ? this._masterOutputLevel : 0;
 
         // set the gain, but somewhat gradually in order to avoid rapid transients, which sound like clicks
