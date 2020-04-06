@@ -8,10 +8,9 @@
  */
 
 import tambo from './tambo.js';
-import TamboQueryParameters from './TamboQueryParameters.js';
 
 // constants
-const FORCE_STUBBED_AUDIO_CONTEXT = TamboQueryParameters.forceStubbedAudioContext; // used for testing, see below
+const FORCE_STUBBED_AUDIO_CONTEXT = phet.chipper.queryParameters.enhancedSoundInitiallyEnabled; // used for testing, see below
 
 // helper function for logging warnings
 function logUnimplementedWarning() {

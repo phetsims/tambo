@@ -1,11 +1,10 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
 /**
- * a singleton object with functions for analyzing and manipulated sound data
+ * a singleton object with functions for analyzing and manipulating sound data
  */
 
 import tambo from './tambo.js';
-import TamboQueryParameters from './TamboQueryParameters.js';
 
 // This threshold is used for analyzing individual decoded sound samples in order to find where the actual sound
 // values start and end.  Its value was determined through experimentation on a single loop (charges-in-body) at a
@@ -25,7 +24,6 @@ const SoundUtils = {
    * @returns {Object} - an object with values for the time at which the sound starts and ends
    */
   detectSoundBounds: audioBuffer => {
-    logAnalysisInfo( '------------- entered detectLoopBounds --------------------' );
 
     const soundDataLength = audioBuffer.length;
     const soundStartIndexes = [];
@@ -76,7 +74,6 @@ function findSoundStartIndex( soundData, length, threshold ) {
       found = true;
     }
   }
-  logAnalysisInfo( 'startThresholdIndex = ' + startThresholdIndex );
 
   // work backwards from the first threshold found to find the first zero or zero crossing
   let soundStartIndex = 0;
@@ -88,7 +85,6 @@ function findSoundStartIndex( soundData, length, threshold ) {
       found = true;
     }
   }
-  logAnalysisInfo( 'soundStartIndex = ' + soundStartIndex );
 
   // detect and log the peaks in the pre-start data, useful for determining what the threshold value should be
   let maxPreStartPeak = 0;
@@ -97,8 +93,6 @@ function findSoundStartIndex( soundData, length, threshold ) {
     maxPreStartPeak = Math.max( maxPreStartPeak, soundData[ dataIndex ] );
     minPreStartPeak = Math.min( minPreStartPeak, soundData[ dataIndex ] );
   }
-  logAnalysisInfo( 'maxPreStartPeak = ' + maxPreStartPeak );
-  logAnalysisInfo( 'minPreStartPeak = ' + minPreStartPeak );
 
   return soundStartIndex;
 }
@@ -124,8 +118,6 @@ function findSoundEndIndex( soundData, length, threshold ) {
     }
   }
 
-  logAnalysisInfo( 'endThresholdIndex = ' + endThresholdIndex );
-
   // work forward from the end threshold to find a zero or zero crossing that can work as the end of the loop
   let soundEndIndex = endThresholdIndex;
   found = false;
@@ -135,7 +127,6 @@ function findSoundEndIndex( soundData, length, threshold ) {
       found = true;
     }
   }
-  logAnalysisInfo( 'soundEndIndex = ' + soundEndIndex );
 
   // detect and log the peaks in the post-end data, useful for determining what the threshold value should be
   let maxPostEndPeak = 0;
@@ -144,20 +135,8 @@ function findSoundEndIndex( soundData, length, threshold ) {
     maxPostEndPeak = Math.max( maxPostEndPeak, soundData[ dataIndex ] );
     minPostEndPeak = Math.min( minPostEndPeak, soundData[ dataIndex ] );
   }
-  logAnalysisInfo( 'maxPostEndPeak = ' + maxPostEndPeak );
-  logAnalysisInfo( 'minPostEndPeak = ' + minPostEndPeak );
 
   return soundEndIndex;
-}
-
-/**
- * helper function for logging sound analysis information if said logging is enabled, useful for debugging
- * @param {String} string
- */
-function logAnalysisInfo( string ) {
-  if ( TamboQueryParameters.logLoopAnalysisInfo ) {
-    console.log( string );
-  }
 }
 
 tambo.register( 'SoundUtils', SoundUtils );

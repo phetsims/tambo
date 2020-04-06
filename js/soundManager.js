@@ -27,13 +27,13 @@ import soundConstants from './soundConstants.js';
 import soundInfoDecoder from './soundInfoDecoder.js';
 import SoundLevelEnum from './SoundLevelEnum.js';
 import tambo from './tambo.js';
-import TamboQueryParameters from './TamboQueryParameters.js';
 
 // sounds
 
 // constants
 const DEFAULT_REVERB_LEVEL = 0.02;
 const LINEAR_GAIN_CHANGE_TIME = soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME; // in seconds
+const GAIN_LOGGING_ENABLED = false;
 
 /**
  * sonification manager object definition
@@ -600,7 +600,7 @@ class SoundManager extends PhetioObject {
       }
     }
 
-    if ( TamboQueryParameters.gainLoggingEnabled ) {
+    if ( GAIN_LOGGING_ENABLED ) {
 
       // kick off the logging
       console.log( '------- start of gain logging -----' );
@@ -609,7 +609,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * log the value of the master gain as it changes
+   * log the value of the master gain as it changes, used primarily for debug
    * @param {number} duration - in seconds
    */
   logMasterGain( duration ) {
@@ -617,7 +617,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * log the value of the reverb gain as it changes
+   * log the value of the reverb gain as it changes, used primarily for debug
    * @param {number} duration - in seconds
    */
   logReverbGain( duration ) {
