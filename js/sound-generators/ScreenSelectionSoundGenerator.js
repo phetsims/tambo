@@ -1,7 +1,7 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
- * Generates sounds for when the user switches between screens and screen icons
+ * ScreenSelectionSoundGenerator generates sounds when the user switches between screens and screen icons.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
