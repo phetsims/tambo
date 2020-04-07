@@ -20,6 +20,74 @@ function logUnimplementedWarning() {
 // silent stub function, used in the stubbed audio context
 function silentStub() {}
 
+// Define stubbed objects and ultimately an entire stubbed AudioContext that can be used in cases where browsers don't
+// support Web Audio.  This was created manually by identifying what portions of the Web Audio API were being used in
+// tambo and adding those methods and properties. Please keep methods and properties are in alphabetical order for ease
+// of maintenance.  These objects will likely need to be updated periodically as tambo and our usage of Web Audio
+// evolves.  See https://github.com/phetsims/tambo/issues/10.
+
+const STUBBED_AUDIO_PARAM = {
+  cancelScheduledValues: silentStub,
+  linearRampToValueAtTime: silentStub,
+  setTargetAtTime: silentStub,
+  setValueAtTime: silentStub
+};
+
+const STUBBED_OSCILLATOR_NODE = {
+  connect: silentStub,
+  frequency: STUBBED_AUDIO_PARAM,
+  start: silentStub
+};
+
+const STUBBED_GAIN_NODE = {
+  connect: silentStub,
+  disconnect: silentStub,
+  gain: STUBBED_AUDIO_PARAM
+};
+
+const STUBBED_DYNAMICS_COMPRESSOR_NODE = {
+  attack: {
+    setValueAtTime: silentStub
+  },
+  connect: silentStub,
+  knee: {
+    setValueAtTime: silentStub
+  },
+  ratio: {
+    setValueAtTime: silentStub
+  },
+  release: {
+    setValueAtTime: silentStub
+  },
+  threshold: {
+    setValueAtTime: silentStub
+  }
+};
+
+const STUBBED_AUDIO_BUFFER_SOURCE_NODE = {
+  connect: silentStub,
+  disconnect: silentStub,
+  playbackRate: STUBBED_AUDIO_PARAM,
+  start: silentStub,
+  stop: silentStub
+};
+
+const STUBBED_CONVOLVER_NODE = {
+  connect: silentStub
+};
+
+const STUBBED_BIQUAD_FILTER_NODE = {
+  connect: silentStub,
+  frequency: STUBBED_AUDIO_PARAM,
+  Q: STUBBED_AUDIO_PARAM
+};
+
+const STUBBED_AUDIO_BUFFER = {
+  getChannelData: function() {
+    return {};
+  }
+};
+
 // Define a stubbed audio context (basically a subset of the API for AudioContext) that can be used in cases where
 // browsers don't support Web Audio.  This was created manually by identifying what portions of the Web Audio API were
 // being used in tambo and adding those methods and properties. This may need to be updated periodically as tambo and
@@ -27,102 +95,16 @@ function silentStub() {}
 const STUBBED_AUDIO_CONTEXT = {
 
   // methods and properties are in alphabetical order, please maintain this for ease of maintenance
-
-  createBiquadFilter: function() {
-    logUnimplementedWarning();
-    return {
-      connect: silentStub,
-      frequency: {
-        linearRampToValueAtTime: silentStub,
-        setTargetAtTime: silentStub,
-        setValueAtTime: silentStub
-      },
-      Q: {
-        linearRampToValueAtTime: silentStub,
-        setValueAtTime: silentStub
-      }
-    };
-  },
-  createBuffer: function() {
-    return {
-      getChannelData: function() {
-        return {};
-      }
-    };
-  },
-  createBufferSource: function() {
-    return {
-      connect: silentStub,
-      disconnect: silentStub,
-      start: silentStub,
-      stop: silentStub,
-      playbackRate: {
-        setValueAtTime: silentStub,
-        setTargetAtTime: silentStub
-      }
-    };
-  },
-  createConvolver: function() {
-    logUnimplementedWarning();
-    return {
-      connect: silentStub
-    };
-  },
-  createDynamicsCompressor: function() {
-    logUnimplementedWarning();
-    return {
-      attack: {
-        setValueAtTime: silentStub
-      },
-      connect: silentStub,
-      knee: {
-        setValueAtTime: silentStub
-      },
-      ratio: {
-        setValueAtTime: silentStub
-      },
-      release: {
-        setValueAtTime: silentStub
-      },
-      threshold: {
-        setValueAtTime: silentStub
-      }
-    };
-  },
-  createGain: function() {
-    logUnimplementedWarning();
-    return {
-      connect: silentStub,
-      disconnect: silentStub,
-      gain: {
-        cancelScheduledValues: silentStub,
-        linearRampToValueAtTime: silentStub,
-        setTargetAtTime: silentStub,
-        setValueAtTime: silentStub
-      }
-    };
-  },
-  createOscillator: function() {
-    logUnimplementedWarning();
-    return {
-      connect: silentStub,
-      start: silentStub,
-      frequency: {
-        linearRampToValueAtTime: silentStub,
-        setValueAtTime: silentStub
-      }
-    };
-  },
+  createBiquadFilter: () => STUBBED_BIQUAD_FILTER_NODE,
+  createBuffer: () => STUBBED_AUDIO_BUFFER,
+  createBufferSource: () => STUBBED_AUDIO_BUFFER_SOURCE_NODE,
+  createConvolver: () => STUBBED_CONVOLVER_NODE,
+  createDynamicsCompressor: () => STUBBED_DYNAMICS_COMPRESSOR_NODE,
+  createGain: () => STUBBED_GAIN_NODE,
+  createOscillator: () => STUBBED_OSCILLATOR_NODE,
   currentTime: 0,
-  decodeAudioData: function( arrayBuffer, successCallback, errorCallback ) {
-    logUnimplementedWarning();
-
-    // Fake success with a stubbed AudioBuffer.  The AudioBuffer is stubbed just enough to get by, add more stubby
-    // portions as needed.
-    successCallback( {
-      // TODO: temporary
-      stubbed: true
-    } );
+  decodeAudioData: ( arrayBuffer, successCallback, errorCallback ) => {
+    successCallback( {} );
   },
   destination: null,
   resume: logUnimplementedWarning,
@@ -144,7 +126,7 @@ else {
 
   // the browser doesn't support creating an audio context, so use a stubbed out version
   phetAudioContext = STUBBED_AUDIO_CONTEXT;
-  console.warn( 'warning: no support for Web Audio detected, using stubbed audio context' );
+  console.warn( 'warning: using stubbed audio context' );
 }
 
 // register for phet-io
