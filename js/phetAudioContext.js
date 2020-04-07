@@ -55,7 +55,11 @@ const STUBBED_AUDIO_CONTEXT = {
       connect: silentStub,
       disconnect: silentStub,
       start: silentStub,
-      stop: silentStub
+      stop: silentStub,
+      playbackRate: {
+        setValueAtTime: silentStub,
+        setTargetAtTime: silentStub
+      }
     };
   },
   createConvolver: function() {
@@ -110,7 +114,16 @@ const STUBBED_AUDIO_CONTEXT = {
     };
   },
   currentTime: 0,
-  decodeAudioData: logUnimplementedWarning,
+  decodeAudioData: function( arrayBuffer, successCallback, errorCallback ) {
+    logUnimplementedWarning();
+
+    // Fake success with a stubbed AudioBuffer.  The AudioBuffer is stubbed just enough to get by, add more stubby
+    // portions as needed.
+    successCallback( {
+      // TODO: temporary
+      stubbed: true
+    } );
+  },
   destination: null,
   resume: logUnimplementedWarning,
   state: 'running',
