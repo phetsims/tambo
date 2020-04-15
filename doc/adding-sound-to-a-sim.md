@@ -54,6 +54,11 @@ only produced when the "Enhanced Sound" option is checked (turned on) in the men
 The Options dialog can be used to allow sound design evaluators to choose between different sound options while running
 the sim. (TODO: add an example to tambo that can be easily leveraged for other sims)
 
+TODO: I (jbphet) should convert this to a checklist.
+
+item: Final mix
+item: Make sure .wav and any supporting files for sound generation are in the assets folder
+
 Overriding Default Sound Generation in Common UI Components
 -----------------------------------------------------------
 
