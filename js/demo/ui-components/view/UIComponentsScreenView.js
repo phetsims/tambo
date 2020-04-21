@@ -13,13 +13,10 @@ import Property from '../../../../../axon/js/Property.js';
 import Dimension2 from '../../../../../dot/js/Dimension2.js';
 import Range from '../../../../../dot/js/Range.js';
 import Utils from '../../../../../dot/js/Utils.js';
-import ScreenView from '../../../../../joist/js/ScreenView.js';
-import PlayPauseButton from '../../../../../scenery-phet/js/buttons/PlayPauseButton.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
-import StepBackwardButton from '../../../../../scenery-phet/js/buttons/StepBackwardButton.js';
-import StepForwardButton from '../../../../../scenery-phet/js/buttons/StepForwardButton.js';
 import NumberPicker from '../../../../../scenery-phet/js/NumberPicker.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
+import TimeControlNode from '../../../../../scenery-phet/js/TimeControlNode.js';
 import DragListener from '../../../../../scenery/js/listeners/DragListener.js';
 import HBox from '../../../../../scenery/js/nodes/HBox.js';
 import Image from '../../../../../scenery/js/nodes/Image.js';
@@ -28,11 +25,11 @@ import Rectangle from '../../../../../scenery/js/nodes/Rectangle.js';
 import Text from '../../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../../scenery/js/nodes/VBox.js';
 import ABSwitch from '../../../../../sun/js/ABSwitch.js';
-import AquaRadioButton from '../../../../../sun/js/AquaRadioButton.js';
+import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
+import RectangularPushButton from '../../../../../sun/js/buttons/RectangularPushButton.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
-import ComboBox from '../../../../../sun/js/ComboBox.js';
-import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
+import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
 import Panel from '../../../../../sun/js/Panel.js';
 import lightningImage from '../../../../images/lightning_png.js';
@@ -43,26 +40,11 @@ import grab001Sound from '../../../../sounds/grab-001_mp3.js';
 import grab002Sound from '../../../../sounds/grab-002_mp3.js';
 import grabReleaseV2Sound from '../../../../sounds/grab-release-v2_mp3.js';
 import grabV2Sound from '../../../../sounds/grab-v2_mp3.js';
-import pause001Sound from '../../../../sounds/pause-001_mp3.js';
-import pauseSound from '../../../../sounds/pause_mp3.js';
-import playPause001Sound from '../../../../sounds/play-pause-001_mp3.js';
-import playPause002Sound from '../../../../sounds/play-pause-002_mp3.js';
-import playPause003Sound from '../../../../sounds/play-pause-003_mp3.js';
-import playPause004Sound from '../../../../sounds/play-pause-004_mp3.js';
 import release001Sound from '../../../../sounds/release-001_mp3.js';
 import release002Sound from '../../../../sounds/release-002_mp3.js';
 import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js';
 import sliderDecreaseClickSound from '../../../../sounds/slider-click-02_mp3.js';
-import stepBack001Sound from '../../../../sounds/step-back-001_mp3.js';
-import stepBack002Sound from '../../../../sounds/step-back-002_mp3.js';
-import stepBackV2Sound from '../../../../sounds/step-back-v2_mp3.js';
-import stepBackSound from '../../../../sounds/step-back_mp3.js';
-import stepForward001Sound from '../../../../sounds/step-forward-001_mp3.js';
-import stepForward002Sound from '../../../../sounds/step-forward-002_mp3.js';
-import stepForwardV2Sound from '../../../../sounds/step-forward-v2_mp3.js';
-import stepForwardSound from '../../../../sounds/step-forward_mp3.js';
 import thunderSound from '../../../../sounds/thunder_mp3.js';
-import radioButtonSoundPlayerFactory from '../../../radioButtonSoundPlayerFactory.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
@@ -74,50 +56,12 @@ const SLIDER_THUMB_SIZE = new Dimension2( 22, 45 );
 const NUM_TICK_MARKS = SLIDER_MAX + 1;
 const CHECKBOX_SIZE = 16;
 const FONT = new PhetFont( 16 );
+const LABEL_FONT = new PhetFont( 20 );
 const NUM_BINS_FOR_CONTINUOUS_SLIDER = 8;
 const BIN_SIZE_FOR_CONTINUOUS_SLIDER = SLIDER_MAX / NUM_BINS_FOR_CONTINUOUS_SLIDER;
-const RADIO_BUTTON_FONT = new PhetFont( 14 );
-const RADIO_BUTTON_RADIUS = 6;
 
 
 // sounds
-
-const playSounds = [
-
-  // the order here is important, since the first sound is meant to be the current favorite
-  playPause003Sound,
-  playPause001Sound,
-  playPause002Sound,
-  playPause004Sound
-];
-
-const pauseSounds = [
-
-  // the order here is important, since the first sound is meant to be the current favorite
-  pauseSound,
-  pause001Sound,
-  pauseSound, // TODO: Why are these duplicated?
-  pause001Sound
-];
-
-const stepForwardSounds = [
-
-  // the order here is important, since the first sound is meant to be the current favorite
-  stepForwardV2Sound,
-  stepForwardSound,
-  stepForward001Sound,
-  stepForward002Sound
-];
-
-const stepBackwardSounds = [
-
-  // the order here is important, since the first sound is meant to be the current favorite
-  stepBackV2Sound,
-  stepBackSound,
-  stepBack001Sound,
-  stepBack002Sound
-];
-
 const grabSounds = [
 
   // the order here is important, since the first sound is meant to be the current favorite
@@ -134,20 +78,85 @@ const releaseSounds = [
   release001Sound
 ];
 
-class UIComponentsScreenView extends ScreenView {
+class UIComponentsScreenView extends DemosScreenView {
 
   /**
    * @constructor
    */
   constructor( model ) {
-    super();
+
+    const radioButtonItems = [
+      {
+        node: new Text( 'One Thing', { font: LABEL_FONT } ),
+        value: 0
+      },
+      {
+        node: new Text( 'Another Thing', { font: LABEL_FONT } ),
+        value: 1
+      },
+      {
+        node: new Text( 'An Entirely Different Thing', { font: LABEL_FONT } ),
+        value: 2
+      }
+    ];
+
+    const demos = [
+      {
+        label: 'PushButton',
+        createNode: layoutBounds => new RectangularPushButton( {
+          content: new Text( 'Push Me Already', { font: LABEL_FONT } ),
+          center: layoutBounds.center
+        } )
+      },
+      {
+        label: 'Checkbox',
+        createNode: layoutBounds => new Checkbox(
+          new Text( 'Check Me', { font: LABEL_FONT } ),
+          new BooleanProperty( false ),
+          {
+            center: layoutBounds.center
+          }
+        )
+      },
+      {
+        label: 'AquaRadioButtonGroup',
+        createNode: layoutBounds => new AquaRadioButtonGroup(
+          new NumberProperty( 0 ),
+          radioButtonItems,
+          {
+            orientation: 'vertical',
+            align: 'left',
+            spacing: 10,
+            center: layoutBounds.center
+          }
+        )
+      },
+      {
+        label: 'TimeControlNode',
+        createNode: layoutBounds => new TimeControlNode(
+          new BooleanProperty( true ),
+          {
+            center: layoutBounds.center,
+            includeStepBackwardButton: {
+              includeStepBackwardButton: true
+            }
+          }
+        )
+      },
+      {
+        label: 'ResetAllButton',
+        createNode: layoutBounds => new ResetAllButton( { center: layoutBounds.center } )
+      }
+    ];
+
+    super( demos );
 
     // add a slider with snap-to-ticks behavior
     const discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
       trackSize: SLIDER_TRACK_SIZE,
       thumbSize: SLIDER_THUMB_SIZE,
-      left: 115,
-      top: 115,
+      left: 50,
+      top: 300,
       constrainValue: value => Utils.roundSymmetric( value ),
       keyboardStep: 1
     } );
@@ -331,189 +340,13 @@ class UIComponentsScreenView extends ScreenView {
     // only show the lightning when the model indicates - this is done after the panel is created so the layout works
     model.lightningBoltVisibleProperty.linkAttribute( lightningBoltNode, 'visible' );
 
-    // add a push button that will play the standard button sound
-    const playSoundButton = new TextPushButton( 'Play Standard Button Sound', {
-      font: new PhetFont( 16 ),
-      baseColor: 'lightgreen',
-      left: lightningControlPanel.right + 60,
-      top: discreteSlider.top
-    } );
-    this.addChild( playSoundButton );
-
-    // create a small group of radio buttons
-    const smallerRadioButtonSelectorValueProperty = new NumberProperty( 0 );
-    const smallerRadioButtonGroupButtons = [];
-    _.times( 2, index => {
-      smallerRadioButtonGroupButtons.push( new AquaRadioButton(
-        smallerRadioButtonSelectorValueProperty,
-        index,
-        new Text( String.fromCharCode( 65 + index ), { font: RADIO_BUTTON_FONT } ),
-        {
-          radius: RADIO_BUTTON_RADIUS,
-          soundPlayer: radioButtonSoundPlayerFactory.getRadioButtonSoundPlayer( index )
-        }
-      ) );
-    } );
-
-    const smallerRadioButtonBox = new VBox( {
-      children: smallerRadioButtonGroupButtons,
-      align: 'left',
-      spacing: 10
-    } );
-
-    // create a larger group of radio buttons
-    const largerRadioButtonSelectorValueProperty = new NumberProperty( 0 );
-    const largerRadioButtonGroupButtons = [];
-    _.times( 7, index => {
-      largerRadioButtonGroupButtons.push( new AquaRadioButton(
-        largerRadioButtonSelectorValueProperty,
-        index,
-        new Text( String.fromCharCode( 65 + index ), { font: RADIO_BUTTON_FONT } ),
-        {
-          radius: RADIO_BUTTON_RADIUS,
-          soundPlayer: radioButtonSoundPlayerFactory.getRadioButtonSoundPlayer( index )
-        }
-      ) );
-    } );
-
-    const largerRadioButtonBox = new VBox( {
-      children: largerRadioButtonGroupButtons,
-      align: 'left',
-      spacing: 10
-    } );
-
-    // create a panel with the radio button sets
-    const radioButtonSoundPanel = new Panel(
-      new VBox(
-        {
-          children: [
-            new Text( 'Radio Buttons', { font: new PhetFont( 14 ) } ),
-            new HBox(
-              {
-                children: [
-                  smallerRadioButtonBox,
-                  largerRadioButtonBox
-                ],
-                spacing: 50
-              }
-            )
-          ],
-          spacing: 20
-        }
-      ),
-      {
-        fill: '#FCFBE3',
-        left: playSoundButton.left,
-        top: playSoundButton.bottom + 30
-      }
-    );
-    this.addChild( radioButtonSoundPanel );
-
-    //-----------------------------------------------------------------------------------------------------------------
-    // play/pause sounds
-    //-----------------------------------------------------------------------------------------------------------------
-
-    // create the sounds for play/pause/step
-    const playSoundClips = [];
-    playSounds.forEach( sound => {
-      const playPauseSoundClip = new SoundClip( sound );
-      soundManager.addSoundGenerator( playPauseSoundClip );
-      playSoundClips.push( playPauseSoundClip );
-    } );
-    const pauseSoundClips = [];
-    pauseSounds.forEach( sound => {
-      const pausePauseSoundClip = new SoundClip( sound );
-      soundManager.addSoundGenerator( pausePauseSoundClip );
-      pauseSoundClips.push( pausePauseSoundClip );
-    } );
-    const stepForwardSoundClips = [];
-    stepForwardSounds.forEach( sound => {
-      const stepForwardSoundClip = new SoundClip( sound );
-      soundManager.addSoundGenerator( stepForwardSoundClip );
-      stepForwardSoundClips.push( stepForwardSoundClip );
-    } );
-    const stepBackwardSoundClips = [];
-    stepBackwardSounds.forEach( sound => {
-      const stepBackwardSoundClip = new SoundClip( sound );
-      soundManager.addSoundGenerator( stepBackwardSoundClip );
-      stepBackwardSoundClips.push( stepBackwardSoundClip );
-    } );
-
-    // create a number picker for choosing the button sound
-    const selectedPlayPauseSoundProperty = new NumberProperty( 1 );
-    const playPauseSoundNumberPicker = new NumberPicker(
-      selectedPlayPauseSoundProperty,
-      new Property( new Range( 1, playSoundClips.length ) ),
-      {
-        font: new PhetFont( 20 ),
-        arrowHeight: 6,
-        arrowYSpacing: 6
-      }
-    );
-
-    const playingProperty = new BooleanProperty( true );
-    const playPauseButton = new PlayPauseButton( playingProperty, { radius: 25 } );
-    const stepBackwardButton = new StepBackwardButton( {
-      listener: () => {
-        stepBackwardSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
-      },
-      isPlayingProperty: playingProperty,
-      radius: 15
-    } );
-    const stepForwardButton = new StepForwardButton( {
-      listener: () => {
-        stepForwardSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
-      },
-      isPlayingProperty: playingProperty,
-      radius: 15
-    } );
-
-    // play the play-pause sound when the playing state changes
-    playingProperty.lazyLink( playing => {
-      if ( playing ) {
-        playSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
-      }
-      else {
-        pauseSoundClips[ selectedPlayPauseSoundProperty.value - 1 ].play();
-      }
-    } );
-
-    // create a text indicator of the current play/pause state (makes it easier to understand what's going on)
-    const playPauseStateIndicator = new Text( '', { font: new PhetFont( 18 ) } );
-    playingProperty.link( playing => { playPauseStateIndicator.text = playing ? 'playing' : 'paused'; } );
-
-    const playPauseSoundPanel = new Panel(
-      new VBox( {
-        children: [
-          new HBox( {
-            children: [
-              stepBackwardButton,
-              playPauseButton,
-              stepForwardButton,
-              playPauseSoundNumberPicker
-            ],
-            spacing: 20
-          } ),
-          playPauseStateIndicator
-        ],
-        spacing: 10,
-        align: 'left'
-      } ),
-      {
-        fill: '#FCFBE3',
-        left: radioButtonSoundPanel.left,
-        top: radioButtonSoundPanel.bottom + 30
-      }
-    );
-    this.addChild( playPauseSoundPanel );
-
     //-----------------------------------------------------------------------------------------------------------------
     // grab/release sounds
     //-----------------------------------------------------------------------------------------------------------------
 
     const grabbableNodePanel = new PanelWithGrabbableItem( {
-      left: radioButtonSoundPanel.right + 30,
-      top: radioButtonSoundPanel.top
+      right: this.layoutBounds.right - 100,
+      centerY: this.layoutBounds.centerY
     } );
     this.addChild( grabbableNodePanel );
 
@@ -524,43 +357,9 @@ class UIComponentsScreenView extends ScreenView {
       listener: () => {
         model.reset();
         thunderSoundClip.locallyEnabledProperty.reset();
-        selectedPlayPauseSoundProperty.reset();
-        smallerRadioButtonSelectorValueProperty.reset();
-        largerRadioButtonSelectorValueProperty.reset();
         grabbableNodePanel.reset();
       }
     } );
-
-    //---------------------------------------------------------------------------------------------------------------
-    // combo box and sounds
-    //---------------------------------------------------------------------------------------------------------------
-
-    // create the selection items for the range selection combo box
-    const comboBoxItems = [];
-    const items = [ 'this', 'that', 'the other' ];
-    const selectedItemProperty = new Property( items[ 0 ] );
-    items.forEach( label => {
-      comboBoxItems.push(
-        new ComboBoxItem( new Text( label, { font: new PhetFont( 16 ) } ), label )
-      );
-    } );
-
-    // combo box for selecting the range
-    const comboBox = new ComboBox(
-      comboBoxItems,
-      selectedItemProperty,
-      this,
-      {
-        xMargin: 13,
-        yMargin: 6,
-        cornerRadius: 4,
-        right: grabbableNodePanel.right,
-        top: grabbableNodePanel.bottom + 10
-      }
-    );
-    this.addChild( comboBox );
-
-    // reset all button
     this.addChild( resetAllButton );
   }
 }
