@@ -8,11 +8,11 @@ The general idea behind PhET's tambo library is to enable developers to add soun
 adding "sound generators" to the simulation.  There are numerous examples of common patterns that emerged during the
 initial work on adding sound to simulations, and developers should be able to leverage these through direct reuse and/or
 the following of similar examples.  One of the goals of the library is that a simple sound design can be implemented
-without the developer having to delve very deeply into the Web Audio API.  However, in cases where a unique or unusual
-sound design element is needed, tambo is designed such that Web Audio components can be used directly.  It is *not*
-intended to be a library that sits atop Web Audio and creates a layer of abstraction such that some other underlying
-audio generation could be used.  In other words, if Web Audio goes away, tambo - and most likely the sims that use it -
-will require significant revision. 
+without the developer having to delve very deeply into the [Web Audio API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API).
+However, in cases where a unique or unusual sound design element is needed, tambo is designed such that Web Audio
+components can be used directly.  It is *not* intended to be a library that sits atop Web Audio and creates a layer of
+abstraction such that some other underlying audio generation could be used.  In other words, if Web Audio goes away,
+tambo - and most likely the sims that use it - will require significant revision. 
 
 Background and History
 ======================
