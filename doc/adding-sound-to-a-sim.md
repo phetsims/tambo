@@ -14,6 +14,18 @@ components can be used directly.  It is *not* intended to be a library that sits
 abstraction such that some other underlying audio generation could be used.  In other words, if Web Audio goes away,
 tambo - and most likely the sims that use it - will require significant revision. 
 
+Terminology
+-----------
+
+Here are some terms that were essentially invented in the process of creating this library:
+
+- Sound Generator: An object that extends the `SoundGenerator` base class and can be added to the sound manager in
+order to make it audible.
+- Sound Manager: A singleton instance that hooks sound generators to the output audio path, keeps track of them, and
+mutes them if sound is disabled, if the sim becomes invisible, and in several other circumstances
+- Sound Clip: A sound generator that is based on a pre-recorded bit of audio.
+- 
+
 Background and History
 ======================
 
