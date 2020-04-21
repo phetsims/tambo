@@ -75,3 +75,14 @@ this is `MassControl.js`.  In this case, the nature of the sound generation depe
 was being changed by slider dragging or buttons. 
 
 Integrate: resetInProgressProperty - when is it needed?
+
+Using the "Options" Dialog to Compare Candidate Sounds
+------------------------------------------------------
+
+It is often useful to publish dev versions of simulations where the sound designers can choose between a set of sound
+options that are being considered for a given action.  To date, this has generally been implemented be adding an
+"Options" dialog (or enhancing the one that is already there), setting the value of a global variable, and then
+referencing that variable where the sound generation occurs.  For an example of this, please see
+`SoundOperationsDialogContent` in tambo, and search for its usages in the code.   
+
+
