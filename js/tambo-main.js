@@ -13,13 +13,15 @@ import LinearGradient from '../../scenery/js/util/LinearGradient.js';
 import RadialGradient from '../../scenery/js/util/RadialGradient.js';
 import SimLikeComponentsModel from './demo/sim-like-components/model/SimLikeComponentsModel.js';
 import SimLikeComponentsScreenView from './demo/sim-like-components/view/SimLikeComponentsScreenView.js';
+import SoundOptionsDialogContent from './demo/SoundOptionsDialogContent.js';
 import TamboKeyboardHelpContent from './demo/TamboKeyboardHelpContent.js';
 import TestingScreenView from './demo/testing/view/TestingScreenView.js';
 import UIComponentsModel from './demo/ui-components/model/UIComponentsModel.js';
 import UIComponentsScreenView from './demo/ui-components/view/UIComponentsScreenView.js';
 import tamboStrings from './tamboStrings.js';
 
-const tamboTitleString = tamboStrings.tambo.title;
+// constants
+const SOUND_OPTIONS_DIALOG_CONTENT = new SoundOptionsDialogContent();
 
 // set up the simulation options
 const keyboardHelpContent = new TamboKeyboardHelpContent();
@@ -27,7 +29,8 @@ const simOptions = {
   credits: {
     leadDesign: 'John Blanco'
   },
-  keyboardHelpNode: keyboardHelpContent
+  keyboardHelpNode: keyboardHelpContent,
+  createOptionsDialogContent: () => SOUND_OPTIONS_DIALOG_CONTENT
 };
 
 // helper function to create screen icons that aren't too bland
@@ -60,7 +63,7 @@ function createScreenIcon( color1, color2, gradientType ) {
 }
 
 SimLauncher.launch( () => {
-  new Sim( tamboTitleString, [
+  new Sim( tamboStrings.tambo.title, [
 
     // sim-like components screen
     new Screen(

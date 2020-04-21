@@ -6,12 +6,15 @@
 
 import Circle from '../../../../../scenery/js/nodes/Circle.js';
 import ceilingFloorContactSound from '../../../../sounds/ceiling-floor-contact_mp3.js';
-import wallContactSound from '../../../../sounds/wall-contact_mp3.js';
+import wallContactSound1 from '../../../../sounds/wall-contact_mp3.js';
+import wallContactSound2 from '../../../../sounds/boundary-reached_mp3.js';
+import wallContactSound3 from '../../../../sounds/ceiling-floor-contact_mp3.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 
-// sounds
+// constants
+const BALL_BOUNCE_OUTPUT_LEVEL = 0.3;
 
 class BallNode extends Circle {
 
@@ -31,20 +34,30 @@ class BallNode extends Circle {
       this.center = modelViewTransform.modelToViewPosition( position );
     } );
 
-    // add sounds
+    // @private - sounds for wall contact
+    this.wallContactSoundClips = [
+      new SoundClip( wallContactSound1, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } ),
+      new SoundClip( wallContactSound2, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } ),
+      new SoundClip( wallContactSound3, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } )
+    ];
 
-    // @public (read-only) {SoundClip} - make these available so that the output level can be adjusted
-    this.wallContactSoundClip = new SoundClip( wallContactSound, { initialOutputLevel: 0.3 } );
-    this.ceilingFloorContactSoundClip = new SoundClip( ceilingFloorContactSound, { initialOutputLevel: 0.3 } );
+    // @private - sound for ceiling contact
+    this.ceilingFloorContactSoundClip = new SoundClip( ceilingFloorContactSound, {
+      initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL
+    } );
 
     // add the sound generators
-    soundManager.addSoundGenerator( this.wallContactSoundClip );
+    this.wallContactSoundClips.forEach( clip => {
+      soundManager.addSoundGenerator( clip );
+    } );
     soundManager.addSoundGenerator( this.ceilingFloorContactSoundClip );
 
     // play bounces when the ball bounces
     const bounceListener = bounceSurface => {
       if ( bounceSurface === 'left-wall' || bounceSurface === 'right-wall' ) {
-        this.wallContactSoundClip.play();
+
+        // play the sound that was selected via the options dialog
+        this.wallContactSoundClips[ phet.tambo.soundIndexForWallBounceProperty.value ].play();
       }
       else if ( bounceSurface === 'floor' || bounceSurface === 'ceiling' ) {
         this.ceilingFloorContactSoundClip.play();
@@ -54,9 +67,11 @@ class BallNode extends Circle {
 
     this.disposeBallNode = () => {
       ball.bounceEmitter.removeListener( bounceListener );
-      this.wallContactSoundClip.stop();
+      this.wallContactSoundClips.forEach( clip => {
+        clip.stop();
+        soundManager.removeSoundGenerator( clip );
+      } );
       this.ceilingFloorContactSoundClip.stop();
-      soundManager.removeSoundGenerator( this.wallContactSoundClip );
       soundManager.removeSoundGenerator( this.ceilingFloorContactSoundClip );
     };
   }
