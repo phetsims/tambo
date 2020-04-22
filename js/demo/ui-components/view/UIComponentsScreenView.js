@@ -60,7 +60,6 @@ const LABEL_FONT = new PhetFont( 20 );
 const NUM_BINS_FOR_CONTINUOUS_SLIDER = 8;
 const BIN_SIZE_FOR_CONTINUOUS_SLIDER = SLIDER_MAX / NUM_BINS_FOR_CONTINUOUS_SLIDER;
 
-
 // sounds
 const grabSounds = [
 
