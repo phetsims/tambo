@@ -136,7 +136,7 @@ class UIComponentsScreenView extends DemosScreenView {
           new BooleanProperty( true ),
           {
             center: layoutBounds.center,
-            includeStepBackwardButton: {
+            playPauseStepButtonOptions: {
               includeStepBackwardButton: true
             }
           }
@@ -150,6 +150,13 @@ class UIComponentsScreenView extends DemosScreenView {
 
     super( demos );
 
+    //-----------------------------------------------------------------------------------------------------------------
+    // In mid-April 2020 this screen view was revised so be a demo of all of the common UI components that produce
+    // sound.  The code below this comment was left over when this change was made, and it is being retained until it
+    // can be moved to another screen or until it is decided that it isn't really helpful.  That's why all of the nodes
+    // below are set to be invisible.
+    //-----------------------------------------------------------------------------------------------------------------
+
     // add a slider with snap-to-ticks behavior
     const discreteSlider = new HSlider( model.discreteValueProperty, new Range( 0, SLIDER_MAX ), {
       trackSize: SLIDER_TRACK_SIZE,
@@ -157,7 +164,8 @@ class UIComponentsScreenView extends DemosScreenView {
       left: 50,
       top: 300,
       constrainValue: value => Utils.roundSymmetric( value ),
-      keyboardStep: 1
+      keyboardStep: 1,
+      visible: false
     } );
     _.times( NUM_TICK_MARKS, index => { discreteSlider.addMinorTick( index ); } );
     this.addChild( discreteSlider );
@@ -195,7 +203,8 @@ class UIComponentsScreenView extends DemosScreenView {
       {
         toggleSwitchOptions: { size: new Dimension2( 60, 30 ) },
         centerX: discreteSlider.centerX,
-        top: discreteSlider.bottom + 30
+        top: discreteSlider.bottom + 30,
+        visible: false
       } );
     this.addChild( abSwitch );
 
@@ -229,7 +238,8 @@ class UIComponentsScreenView extends DemosScreenView {
           sliderBeingDraggedByKeyboard = true;
         }
       },
-      endDrag: () => { sliderBeingDraggedByKeyboard = false; }
+      endDrag: () => { sliderBeingDraggedByKeyboard = false; },
+      visible: false
     } );
     this.addChild( continuousSlider );
 
@@ -321,7 +331,8 @@ class UIComponentsScreenView extends DemosScreenView {
         yMargin: 8,
         fill: '#FCFBE3',
         left: continuousSlider.left,
-        top: continuousSlider.bottom + 30
+        top: continuousSlider.bottom + 30,
+        visible: false
       }
     );
 
@@ -339,13 +350,10 @@ class UIComponentsScreenView extends DemosScreenView {
     // only show the lightning when the model indicates - this is done after the panel is created so the layout works
     model.lightningBoltVisibleProperty.linkAttribute( lightningBoltNode, 'visible' );
 
-    //-----------------------------------------------------------------------------------------------------------------
-    // grab/release sounds
-    //-----------------------------------------------------------------------------------------------------------------
-
     const grabbableNodePanel = new PanelWithGrabbableItem( {
       right: this.layoutBounds.right - 100,
-      centerY: this.layoutBounds.centerY
+      centerY: this.layoutBounds.centerY,
+      visible: false
     } );
     this.addChild( grabbableNodePanel );
 
