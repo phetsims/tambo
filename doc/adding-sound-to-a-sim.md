@@ -68,6 +68,7 @@ the sim. (TODO: add an example to tambo that can be easily leveraged for other s
 
 TODO: I (jbphet) should convert this to a checklist.
 
+item: enhanced vs basic sound
 item: Final mix
 item: Make sure .wav and any supporting files for sound generation are in the assets folder
 
