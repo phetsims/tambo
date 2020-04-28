@@ -455,14 +455,6 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by John Blanco (PhET)"
   },
-  "screen-selection-home-v2.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
   "short-silence.wav": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
@@ -554,22 +546,6 @@
   "strings-loop-middle-c-oscilloscope.mp3": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "switching-screen-selector-icons.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "http://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "switching-screen-selector-icons-v3.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
     ],
     "projectURL": "http://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
