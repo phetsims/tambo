@@ -6,7 +6,7 @@
  * is returned from the sound.js plugin.
  *
  * A SoundInfo instance has a "name" field that identifies the sound and then EITHER a "url" field for loading the sound
- * (used in RequireJS mode) or a "base64" field that defines the sound (used in build mode).
+ * (used in unbuilt mode) or a "base64" field that defines the sound (used in build mode).
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

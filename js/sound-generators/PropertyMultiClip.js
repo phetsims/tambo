@@ -14,8 +14,8 @@ class PropertyMultiClip extends MultiClip {
 
   /**
    * @param {Property.<*>} property - the property for which sounds are played on value changes
-   * @param {Map<*,SoundInfo>} valueToSoundInfoMap - a map of values to SoundInfo objects (i.e. the type that is
-   * returned by the PhET "sound" RequireJS plugin) that is used to define the association between values and sounds.
+   * @param {Map<*,SoundInfo>} valueToSoundInfoMap - a map of values to SoundInfo objects that is used to define the
+   * association between values and sounds.
    * @param {Object} [options]
    */
   constructor( property, valueToSoundInfoMap, options ) {

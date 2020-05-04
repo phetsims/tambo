@@ -1,8 +1,8 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
 /**
- * a singleton instance of a Web Audio audio context that can be included using RequireJS, creates a stubbed version on
- * platforms where Web Audio is not supported
+ * phetAudioContext is a singleton that is either a standard Web Audio AudioContext instance or a stubbed version.  The
+ * stubbed version is used on platforms where Web Audio is not supported.
  *
  * @author John Blanco
  */

@@ -25,7 +25,7 @@ class SoundClip extends SoundGenerator {
   /**
    * @param {Object} soundInfo - An object that includes *either* a "url" key with a value that points to the sound to
    * be played *or* a "base64" key with a value that represents a base64-encoded version of the sound data.  The former
-   * is generally used when a sim is running in RequireJS mode, the latter is used in built versions.
+   * is generally used when a sim is running in "unbuilt" mode, the latter is used in built versions.
    * @param {Object} [options]
    * @constructor
    */
@@ -128,7 +128,7 @@ class SoundClip extends SoundGenerator {
       () => {
 
         // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio
-        // file could cause it.  There is handling for both the RequireJS and build cases.
+        // file could cause it.  There is handling for both the unbuilt and built cases.
         assert && assert( false, 'audio decode failed' );
         console.error( 'unable to decode audio data, please check all encoded audio' );
       }

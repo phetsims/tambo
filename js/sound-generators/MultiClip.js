@@ -25,9 +25,9 @@ const STOP_DELAY_TIME = 0.1; // empirically determined to avoid clicks when stop
 class MultiClip extends SoundGenerator {
 
   /**
-   * @param {Map<*,SoundInfo>} valueToSoundInfoMap - a map of values to SoundInfo objects (i.e. the type that is
-   * returned by the PhET "sound" RequireJS plugin) that is used to associate a set of values with a set of sounds.
-   * The method defined below can than be used to play the sounds by specifying a value.
+   * @param {Map<*,SoundInfo>} valueToSoundInfoMap - a map of values to SoundInfo objects that is used to associate a
+   * set of values with a set of sounds. The method defined below can than be used to play the sounds by specifying a
+   * value.
    * @param {Object} [options]
    */
   constructor( valueToSoundInfoMap, options ) {
@@ -52,7 +52,7 @@ class MultiClip extends SoundGenerator {
         () => {
 
           // This is the error case for audio decode.  Generally this only occurs if the audio file was incorrectly
-          // specified.  There is handling for both the RequireJS and build cases.
+          // specified.  There is handling for both the unbuilt and built cases.
           assert && assert( false, 'audio decode failed, is file spec correct?' );
           console.error( 'unable to decode audio data, please check all encoded audio' );
         }
