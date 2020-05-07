@@ -7,7 +7,7 @@
 import Property from '../../axon/js/Property.js';
 import Screen from '../../joist/js/Screen.js';
 import Sim from '../../joist/js/Sim.js';
-import SimLauncher from '../../joist/js/SimLauncher.js';
+import simLauncher from '../../joist/js/simLauncher.js';
 import Rectangle from '../../scenery/js/nodes/Rectangle.js';
 import LinearGradient from '../../scenery/js/util/LinearGradient.js';
 import RadialGradient from '../../scenery/js/util/RadialGradient.js';
@@ -62,7 +62,7 @@ function createScreenIcon( color1, color2, gradientType ) {
   );
 }
 
-SimLauncher.launch( () => {
+simLauncher.launch( () => {
   new Sim( tamboStrings.tambo.title, [
 
     // sim-like components screen
