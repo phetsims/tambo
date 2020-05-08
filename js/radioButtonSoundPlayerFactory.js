@@ -93,6 +93,9 @@ class FixedSpeedSoundClipPlayer {
     this.playbackRate = playbackRate;
   }
 
+  /**
+   * @public
+   */
   play() {
     this.soundPlayer.setPlaybackRate( this.playbackRate );
     this.soundPlayer.play();

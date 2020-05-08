@@ -25,6 +25,7 @@ import loonCallSound from '../../../../sounds/loon-call_mp3.js';
 import rhodesChordSound from '../../../../sounds/rhodes-chord_mp3.js';
 import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js';
 import sliderDecreaseClickSound from '../../../../sounds/slider-click-02_mp3.js';
+import thunderSound from '../../../../sounds/thunder_mp3.js';
 import InvertedBooleanProperty from '../../../InvertedBooleanProperty.js';
 import Playable from '../../../Playable.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
@@ -33,7 +34,6 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
 import SoundEncodingComparisonPanel from './SoundEncodingComparisonPanel.js';
-import thunderSound from '../../../../sounds/thunder_mp3.js';
 
 // constants
 const CHECKBOX_SIZE = 16;
@@ -146,6 +146,10 @@ class BasicAndEnhancedSoundTestNode extends VBox {
     };
   }
 
+  /**
+   * @public
+   * @override
+   */
   dispose() {
     this.disposeBasicAndEnhancedSoundTestNode();
     super.dispose();

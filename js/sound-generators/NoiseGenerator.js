@@ -20,7 +20,7 @@ const LFO_DEPTH_CHANGE_TIME_CONSTANT = 0.05;
 class NoiseGenerator extends SoundGenerator {
 
   /**
-   * @constructor
+   * @param {Object} [options]
    */
   constructor( options ) {
 
@@ -208,6 +208,7 @@ class NoiseGenerator extends SoundGenerator {
   /**
    * start the noise source
    * @param {number} [delay] - optional delay for when to start the noise source, in seconds
+   * @public
    */
   start( delay ) {
 
@@ -245,6 +246,7 @@ class NoiseGenerator extends SoundGenerator {
   /**
    * stop the noise source
    * @param {number} [time] - optional audio context time at which this should be stopped
+   * @public
    */
   stop( time ) {
 
@@ -277,6 +279,7 @@ class NoiseGenerator extends SoundGenerator {
   /**
    * turn the low frequency amplitude modulation on/off
    * @param {boolean} enabled
+   * @public
    */
   setLfoEnabled( enabled ) {
     if ( enabled ) {
@@ -293,6 +296,7 @@ class NoiseGenerator extends SoundGenerator {
    * set the Q value for the band pass filter, assumes that noise generator was created with this filter enabled
    * @param frequency
    * @param timeConstant
+   * @public
    */
   setBandpassFilterCenterFrequency( frequency, timeConstant ) {
     timeConstant = timeConstant || PARAMETER_CHANGE_TIME_CONSTANT;

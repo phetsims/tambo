@@ -183,6 +183,7 @@ class SoundGenerator {
    * @param {number} outputLevel - generally between 0 and 1, but can be larger than 1 if necessary to amplify a small
    * signal, and can be negative to invert the phase
    * @param {number} [timeConstant] - time constant for change, longer values mean slower transitions
+   * @public
    */
   setOutputLevel( outputLevel, timeConstant ) {
     timeConstant = ( timeConstant === undefined ) ? DEFAULT_TIME_CONSTANT : timeConstant;
@@ -231,6 +232,7 @@ class SoundGenerator {
   /**
    * add a Property to the list of those used to control the enabled state of this sound generator
    * @param {BooleanProperty} enableControlProperty
+   * @public
    */
   addEnableControlProperty( enableControlProperty ) {
     this.enableControlProperties.push( enableControlProperty );
@@ -239,6 +241,7 @@ class SoundGenerator {
   /**
    * remove a Property from the list of those used to control the enabled state of this sound generator
    * @param {BooleanProperty} enableControlProperty
+   * @public
    */
   removeEnableControlProperty( enableControlProperty ) {
     this.enableControlProperties.remove( enableControlProperty );

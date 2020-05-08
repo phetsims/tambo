@@ -42,6 +42,10 @@ class pushButtonSoundPlayer {
     }
   }
 
+  /**
+   * @public
+   * @returns {pushButtonSoundPlayer}
+   */
   static getInstance() {
     if ( instance === null ) {
       instance = new pushButtonSoundPlayer();

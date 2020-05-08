@@ -115,6 +115,7 @@ class BinSelector {
    * put the provided value in a bin
    * @param value
    * @returns {number}
+   * @publi
    */
   selectBin( value ) {
     if ( !this.tolerateOutOfRangeValues ) {

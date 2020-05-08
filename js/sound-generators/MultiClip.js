@@ -74,6 +74,7 @@ class MultiClip extends SoundGenerator {
   /**
    * play the sound associated with the provided value
    * @param {*} value
+   * @public
    */
   playAssociatedSound( value ) {
 
@@ -128,6 +129,7 @@ class MultiClip extends SoundGenerator {
 
   /**
    * stop playing any sounds that are currently in progress
+   * @public
    */
   stopAll() {
 

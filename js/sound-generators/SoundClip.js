@@ -265,6 +265,7 @@ class SoundClip extends SoundGenerator {
    * {number} delay - The amount of time to wait before stopping, generally used to prevent sudden stops, which can
    * cause audible clicks.  If greater than zero (which it is by default), this method will try to fade out the sound
    * fully prior to stopping the audio playback.
+   * @public
    */
   stop( delay ) {
 
@@ -314,6 +315,7 @@ class SoundClip extends SoundGenerator {
    * @param {number} playbackRate - desired playback speed, 1 = normal speed
    * @param {number} [timeConstant] -  time-constant in seconds for the first-order filter (exponential) approach to
    * the target value. The larger this value is, the slower the transition will be.
+   * @public
    */
   setPlaybackRate( playbackRate, timeConstant ) {
     timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TC : timeConstant;
