@@ -15,6 +15,11 @@ import tambo from './tambo.js';
 
 class SoundInfo {
 
+  /**
+   * test whether an object meets the criteria for being a SoundInfo instance
+   * @param {Object} objectInstance
+   * @returns {boolean}
+   */
   static isSoundInfo( objectInstance ) {
     return typeof objectInstance === 'object' &&
            typeof objectInstance.name === 'string' &&

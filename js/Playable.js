@@ -12,12 +12,19 @@ import tambo from './tambo.js';
 
 class Playable {
 
+  /**
+   * see if an object is playable by testing whether it has a 'play' method
+   * @param objectInstance
+   * @returns {boolean}
+   * @public
+   */
   static isPlayable( objectInstance ) {
     return typeof objectInstance.play === 'function';
   }
 }
 
-// static value that is used to specify that no sound should be produced
+// A static value that is playable (i.e. has a play method) but produces no sound.  This is used as a constant in
+// sound-related code to specify that no sound should be produced.
 Playable.NO_SOUND = { play() {} };
 
 tambo.register( 'Playable', Playable );
