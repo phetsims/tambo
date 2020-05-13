@@ -10,7 +10,6 @@ import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import merge from '../../../phet-core/js/merge.js';
 import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
 import soundConstants from '../soundConstants.js';
-import soundInfoDecoder from '../soundInfoDecoder.js';
 import SoundUtils from '../SoundUtils.js';
 import tambo from '../tambo.js';
 import SoundGenerator from './SoundGenerator.js';
@@ -23,20 +22,18 @@ const DEFAULT_STOP_DELAY = 0.1;
 class SoundClip extends SoundGenerator {
 
   /**
-   * @param {Object} soundInfo - An object that includes *either* a "url" key with a value that points to the sound to
-   * be played *or* a "base64" key with a value that represents a base64-encoded version of the sound data.  The former
-   * is generally used when a sim is running in "unbuilt" mode, the latter is used in built versions.
+   * @param {WrappedAudioBuffer} wrappedAudioBuffer
    * @param {Object} [options]
    * @constructor
    */
-  constructor( soundInfo, options ) {
+  constructor( wrappedAudioBuffer, options ) {
 
     options = merge( {
 
       // {boolean} - controls whether this sound will wrap around and start over when done or just be played once
       loop: false,
 
-      // {boolean} - controls whether the silence at the beginning and (in the case of loops) the end is removed
+      // {boolean} - controls whether the silence at the beginning and (in the case of loops) the end is omitted
       trimSilence: true,
 
       // {boolean} - Playback rate for this clip, can be changed after construction via API.  This value is a
@@ -56,11 +53,16 @@ class SoundClip extends SoundGenerator {
       // playing when a playback rate change occurs.
       rateChangesAffectPlayingSounds: true,
 
-      // {AudioNode[]} Nodes that will be connected in the specified order, between the bufferSource and localGainNode
+      // {AudioNode[]} Audio nodes that will be connected in the specified order between the bufferSource and
+      // localGainNode, used to insert things like filters, compressors, etc.
       additionalNodes: []
+
     }, options );
 
     super( options );
+
+    // @private {WrappedAudioBuffer} - an object containing the audio buffer and flag that indicates readiness
+    this.wrappedAudioBuffer = wrappedAudioBuffer;
 
     // @private
     this.additionalNodes = options.additionalNodes;
@@ -74,18 +76,23 @@ class SoundClip extends SoundGenerator {
     // @public {boolean} - see description in options above
     this.initiateWhenDisabled = options.initiateWhenDisabled;
 
-    // @private {AudioBuffer} - decoded audio data in a form that is ready to play with Web Audio
-    this.audioBuffer = null;
-
-    // @private {function} - function to be invoked when sound buffer finishes loading
-    this.loadCompleteAction = null;
-
-    // @private {number} - start and end points for the loop if this clip is used for looping
+    // @private {number} - start and end points for playback of the sound data
     this.soundStart = 0;
     this.soundEnd = null;
+    if ( options.trimSilence ) {
+      const setStartAndEndPoints = loaded => {
+        if ( loaded ) {
+          const loopBoundsInfo = SoundUtils.detectSoundBounds( this.wrappedAudioBuffer.audioBuffer );
+          this.soundStart = loopBoundsInfo.soundStart;
+          this.soundEnd = loopBoundsInfo.soundEnd;
+          this.wrappedAudioBuffer.loadedProperty.unlink( setStartAndEndPoints );
+        }
+      };
+      this.wrappedAudioBuffer.loadedProperty.link( setStartAndEndPoints );
+    }
 
     // @private {AudioBufferSourceNode[]} - a list of active source buffer nodes, used so that this clip can be played
-    // again before previous play finishes
+    // multiple times without each initiation interfering with the other
     this.activeBufferSources = [];
 
     // @private {GainNode} - a gain node that is used to prevent clicks when stopping the sound
@@ -106,33 +113,6 @@ class SoundClip extends SoundGenerator {
     else {
       this.connectionNode = this.localGainNode;
     }
-
-    // decode the audio data and place it in a sound buffer so it can be easily played
-    soundInfoDecoder.decode(
-      soundInfo,
-      this.audioContext,
-      decodedAudioData => {
-
-        this.audioBuffer = decodedAudioData;
-
-        if ( options.trimSilence ) {
-          const loopBoundsInfo = SoundUtils.detectSoundBounds( decodedAudioData );
-          this.soundStart = loopBoundsInfo.soundStart;
-          this.soundEnd = loopBoundsInfo.soundEnd;
-        }
-
-        // perform the "load complete" actions, if any
-        this.loadCompleteAction && this.loadCompleteAction();
-        this.loadCompleteAction = null;
-      },
-      () => {
-
-        // This is the error case for audio decode.  We have not seen this happen, but presumably a corrupted audio
-        // file could cause it.  There is handling for both the unbuilt and built cases.
-        assert && assert( false, 'audio decode failed' );
-        console.error( 'unable to decode audio data, please check all encoded audio' );
-      }
-    );
 
     // @private {number} - rate at which clip is being played back, 1 is normal, above 1 is faster, below 1 is slower,
     // see online docs for AudioBufferSourceNode.playbackRate for more information
@@ -182,7 +162,7 @@ class SoundClip extends SoundGenerator {
    */
   play( delay ) {
 
-    if ( this.audioContext.state === 'running' ) {
+    if ( this.audioContext.state === 'running' && this.wrappedAudioBuffer.loadedProperty.value ) {
 
       const now = this.audioContext.currentTime;
 
@@ -192,55 +172,45 @@ class SoundClip extends SoundGenerator {
       if ( ( this.loop && this.fullyEnabled && !this.isPlayingProperty.get() ) ||
            ( !this.loop && ( this.fullyEnabled || this.initiateWhenDisabled ) ) ) {
 
-        // make sure the decoding of the audio data is complete before trying to play the sound
-        if ( this.audioBuffer ) {
-
-          // create an audio buffer source node that uses the previously decoded audio data
-          const bufferSource = this.audioContext.createBufferSource();
-          bufferSource.buffer = this.audioBuffer;
-          bufferSource.loop = this.loop;
-          bufferSource.loopStart = this.soundStart;
-          if ( this.soundEnd ) {
-            bufferSource.loopEnd = this.soundEnd;
-          }
-
-          // make sure the local gain is set to unity value
-          this.localGainNode.gain.cancelScheduledValues( now );
-          this.localGainNode.gain.setValueAtTime( 1, now );
-
-          bufferSource.connect( this.connectionNode );
-
-          // add this to the list of active sources so that it can be stopped if necessary
-          this.activeBufferSources.push( bufferSource );
-
-          if ( !this.loop ) {
-
-            // add a handler for when the sound finishes playing
-            bufferSource.onended = () => {
-
-              // remove the source from the list of active sources
-              const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
-              if ( indexOfSource > -1 ) {
-                this.activeBufferSources.splice( indexOfSource, 1 );
-              }
-              this.isPlayingProperty.value = this.activeBufferSources.length > 0;
-            };
-          }
-
-          // set the playback rate and start playback
-          bufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
-          bufferSource.start( now + delay, this.soundStart );
-          this.isPlayingProperty.value = true;
+        // create an audio buffer source node that uses the previously decoded audio data
+        const bufferSource = this.audioContext.createBufferSource();
+        bufferSource.buffer = this.wrappedAudioBuffer.audioBuffer;
+        bufferSource.loop = this.loop;
+        bufferSource.loopStart = this.soundStart;
+        if ( this.soundEnd ) {
+          bufferSource.loopEnd = this.soundEnd;
         }
-        else {
 
-          // the play method was called before the sound buffer finished loading, create an action that play the sound
-          // once the loading has completed
-          this.loadCompleteAction = () => { this.play(); };
+        // make sure the local gain is set to unity value
+        this.localGainNode.gain.cancelScheduledValues( now );
+        this.localGainNode.gain.setValueAtTime( 1, now );
+
+        bufferSource.connect( this.connectionNode );
+
+        // add this to the list of active sources so that it can be stopped if necessary
+        this.activeBufferSources.push( bufferSource );
+
+        if ( !this.loop ) {
+
+          // add a handler for when the sound finishes playing
+          bufferSource.onended = () => {
+
+            // remove the source from the list of active sources
+            const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
+            if ( indexOfSource > -1 ) {
+              this.activeBufferSources.splice( indexOfSource, 1 );
+            }
+            this.isPlayingProperty.value = this.activeBufferSources.length > 0;
+          };
         }
+
+        // set the playback rate and start playback
+        bufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
+        bufferSource.start( now + delay, this.soundStart );
+        this.isPlayingProperty.value = true;
       }
     }
-    else {
+    else if ( this.audioContext.state === 'suspended' ) {
 
       // The play method was called when the audio context was not yet running, so add a listener to play if and when
       // the audio context state changes.  This will start any loops, and will also play a one-shot sound if the time
@@ -271,34 +241,25 @@ class SoundClip extends SoundGenerator {
 
     delay = delay === undefined ? DEFAULT_STOP_DELAY : delay;
 
-    // make sure the decoding of the audio data has completed before stopping anything
-    if ( this.audioBuffer ) {
+    // Calculate a time constant to fade output level by 99% by the stop time, see Web Audio time constant
+    // information to understand this calculation.
+    const fadeTimeConstant = delay > 0 ? delay / 4.61 : soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
-      // Calculate a time constant to fade output level by 99% by the stop time, see Web Audio time constant
-      // information to understand this calculation.
-      const fadeTimeConstant = delay > 0 ? delay / 4.61 : soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
+    // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
+    // down the gain, effectively doing a fade out, and then stopping playback.
+    const now = this.audioContext.currentTime;
+    const stopTime = now + delay;
+    this.localGainNode.gain.cancelScheduledValues( now );
+    this.localGainNode.gain.setTargetAtTime( 0, now, fadeTimeConstant );
+    this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
 
-      // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
-      // down the gain, effectively doing a fade out, and then stopping playback.
-      const now = this.audioContext.currentTime;
-      const stopTime = now + delay;
-      this.localGainNode.gain.cancelScheduledValues( now );
-      this.localGainNode.gain.setTargetAtTime( 0, now, fadeTimeConstant );
-      this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
+    // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
+    // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
+    // code below is needed to clear the array of all active buffer sources.
+    this.activeBufferSources.length = 0;
 
-      // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
-      // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
-      // code below is needed to clear the array of all active buffer sources.
-      this.activeBufferSources.length = 0;
-
-      // clear the flag
-      this.isPlayingProperty.value = false;
-    }
-    else {
-
-      // this was called before the sound finished loading, cancel any previously created actions
-      this.loadCompleteAction = null;
-    }
+    // clear the flag
+    this.isPlayingProperty.value = false;
 
     if ( audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
 
@@ -335,7 +296,6 @@ class SoundClip extends SoundGenerator {
   get isPlaying() {
     return this.isPlayingProperty.value;
   }
-
 }
 
 tambo.register( 'SoundClip', SoundClip );

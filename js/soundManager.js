@@ -24,7 +24,6 @@ import reverbImpulseResponse from '../sounds/empty_apartment_bedroom_06_resample
 import audioContextStateChangeMonitor from './audioContextStateChangeMonitor.js';
 import phetAudioContext from './phetAudioContext.js';
 import soundConstants from './soundConstants.js';
-import soundInfoDecoder from './soundInfoDecoder.js';
 import SoundLevelEnum from './SoundLevelEnum.js';
 import tambo from './tambo.js';
 
@@ -136,6 +135,13 @@ class SoundManager extends PhetioObject {
 
     // convolver node, which will be used to create the reverb effect
     this.convolver = phetAudioContext.createConvolver();
+    const setConvolverBuffer = loaded => {
+      if ( loaded ) {
+        this.convolver.buffer = reverbImpulseResponse.audioBuffer;
+        reverbImpulseResponse.loadedProperty.unlink( setConvolverBuffer );
+      }
+    };
+    reverbImpulseResponse.loadedProperty.link( setConvolverBuffer );
 
     // gain node that will control the reverb level
     this.reverbGainNode = phetAudioContext.createGain();
@@ -151,18 +157,6 @@ class SoundManager extends PhetioObject {
       phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
     );
     this.dryGainNode.connect( this.masterGainNode );
-
-    // load the reverb impulse response into the convolver
-    soundInfoDecoder.decode(
-      reverbImpulseResponse,
-      phetAudioContext,
-      decodedAudioData => { this.convolver.buffer = decodedAudioData; },
-      () => {
-
-        // error handler, we haven't seen this happen, so for now just log a message to the console
-        console.log( 'Error: Unable to decode audio data.' );
-      }
-    );
 
     // create and hook up gain nodes for each of the defined categories
     options.categories.forEach( categoryName => {

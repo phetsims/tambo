@@ -6,14 +6,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import toggleOnSoundInfo from '../../sounds/step-forward-v2_mp3.js';
+import toggleOnSound from '../../sounds/step-forward-v2_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
 // sounds
 
 // create the shared sound instance
-const toggleOnSoundPlayer = new SharedSoundClip( toggleOnSoundInfo, {
+const toggleOnSoundPlayer = new SharedSoundClip( toggleOnSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

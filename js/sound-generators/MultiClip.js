@@ -15,7 +15,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import soundInfoDecoder from '../soundInfoDecoder.js';
 import tambo from '../tambo.js';
 import SoundGenerator from './SoundGenerator.js';
 
@@ -25,39 +24,20 @@ const STOP_DELAY_TIME = 0.1; // empirically determined to avoid clicks when stop
 class MultiClip extends SoundGenerator {
 
   /**
-   * @param {Map<*,SoundInfo>} valueToSoundInfoMap - a map of values to SoundInfo objects that is used to associate a
-   * set of values with a set of sounds. The method defined below can than be used to play the sounds by specifying a
-   * value.
+   * @param {Map<*,WrappedAudioBuffer>} valueToWrappedAudioBufferMap - a map of values to Web Audio AudioBuffer objects that is used
+   * to associate each item in a set of values with a sound. The object defines a method that can then be used to play
+   * the sound associated with the value.
    * @param {Object} [options]
    */
-  constructor( valueToSoundInfoMap, options ) {
+  constructor( valueToWrappedAudioBufferMap, options ) {
 
     super( options );
 
     // @private {AudioBufferSource[]} - buffer sources that are currently playing, used if they need to be stopped early
     this.activeBufferSources = [];
 
-    // @private
-    this.valueToAudioBufferMap = new Map();
-
-    // decode the sound info objects and associate each with a value
-    valueToSoundInfoMap.forEach( ( soundInfo, value ) => {
-
-      soundInfoDecoder.decode(
-        soundInfo,
-        this.audioContext,
-        decodedAudioData => {
-          this.valueToAudioBufferMap.set( value, decodedAudioData );
-        },
-        () => {
-
-          // This is the error case for audio decode.  Generally this only occurs if the audio file was incorrectly
-          // specified.  There is handling for both the unbuilt and built cases.
-          assert && assert( false, 'audio decode failed, is file spec correct?' );
-          console.error( 'unable to decode audio data, please check all encoded audio' );
-        }
-      );
-    } );
+    // @private {Map.<*,AudioBuffer>}
+    this.valueToWrappedAudioBufferMap = valueToWrappedAudioBufferMap;
 
     // @private {GainNode} - a gain node that is used to prevent clicks when stopping the sounds
     this.localGainNode = this.audioContext.createGain();
@@ -79,51 +59,42 @@ class MultiClip extends SoundGenerator {
   playAssociatedSound( value ) {
 
     // get the audio buffer for this value
-    const audioBuffer = this.valueToAudioBufferMap.get( value );
+    const wrappedAudioBuffer = this.valueToWrappedAudioBufferMap.get( value );
 
     // verify that we have a sound for the provided value
-    assert && assert( audioBuffer !== undefined, 'no sound found for provided value' );
+    assert && assert( wrappedAudioBuffer !== undefined, 'no sound found for provided value' );
 
-    // play the sound (if enabled)
-    if ( this.fullyEnabled ) {
+    // play the sound (if enabled and fully decoded)
+    if ( this.fullyEnabled && wrappedAudioBuffer.loadedProperty.value ) {
 
       const now = this.audioContext.currentTime;
 
-      // make sure the decoding of the audio data is complete before trying to play the sound
-      if ( audioBuffer ) {
+      // make sure the local gain is set to unity value
+      this.localGainNode.gain.cancelScheduledValues( now );
+      this.localGainNode.gain.setValueAtTime( 1, now );
 
-        // make sure the local gain is set to unity value
-        this.localGainNode.gain.cancelScheduledValues( now );
-        this.localGainNode.gain.setValueAtTime( 1, now );
+      // create an audio buffer source node and connect it to the previously data in the audio buffer
+      const bufferSource = this.audioContext.createBufferSource();
+      bufferSource.buffer = wrappedAudioBuffer.audioBuffer;
 
-        // create an audio buffer source node and connect it to the previously data in the audio buffer
-        const bufferSource = this.audioContext.createBufferSource();
-        bufferSource.buffer = audioBuffer;
+      // connect this source node to the output
+      bufferSource.connect( this.localGainNode );
 
-        // connect this source node to the output
-        bufferSource.connect( this.localGainNode );
+      // add this to the list of active sources so that it can be stopped if necessary
+      this.activeBufferSources.push( bufferSource );
 
-        // add this to the list of active sources so that it can be stopped if necessary
-        this.activeBufferSources.push( bufferSource );
+      // add a handler for when the sound finishes playing
+      bufferSource.onended = () => {
 
-        // add a handler for when the sound finishes playing
-        bufferSource.onended = () => {
+        // remove the source from the list of active sources
+        const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
+        if ( indexOfSource > -1 ) {
+          this.activeBufferSources.splice( indexOfSource, 1 );
+        }
+      };
 
-          // remove the source from the list of active sources
-          const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
-          if ( indexOfSource > -1 ) {
-            this.activeBufferSources.splice( indexOfSource, 1 );
-          }
-        };
-
-        // start the playback of the sound
-        bufferSource.start( now );
-      }
-      else {
-
-        // note: if this happens and is a problem, support should be added for post-decode playing, like in SoundClip
-        console.warn( 'attempted to play audio buffer before decoding completed' );
-      }
+      // start the playback of the sound
+      bufferSource.start( now );
     }
   }
 
@@ -133,20 +104,16 @@ class MultiClip extends SoundGenerator {
    */
   stopAll() {
 
-    // make sure the decoding of the audio data has completed before stopping anything
-    if ( this.audioBuffer ) {
+    // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
+    // down the gain, effectively doing a fade out, before stopping playback.
+    const stopTime = this.audioContext.currentTime + STOP_DELAY_TIME;
+    this.localGainNode.gain.linearRampToValueAtTime( 0, stopTime );
+    this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
 
-      // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
-      // down the gain, effectively doing a fade out, before stopping playback.
-      const stopTime = this.audioContext.currentTime + STOP_DELAY_TIME;
-      this.localGainNode.gain.linearRampToValueAtTime( 0, stopTime );
-      this.activeBufferSources.forEach( source => { source.stop( stopTime ); } );
-
-      // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
-      // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
-      // code below is needed to clear the array of all active buffer sources.
-      this.activeBufferSources.length = 0;
-    }
+    // The WebAudio spec is a bit unclear about whether stopping a sound will trigger an onended event.  In testing
+    // on Chrome in September 2018, I (jbphet) found that onended was NOT being fired when stop() was called, so the
+    // code below is needed to clear the array of all active buffer sources.
+    this.activeBufferSources.length = 0;
   }
 }
 

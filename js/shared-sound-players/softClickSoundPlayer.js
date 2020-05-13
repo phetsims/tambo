@@ -7,14 +7,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import softClickSoundInfo from '../../sounds/click-001_mp3.js';
+import softClickSound from '../../sounds/click-001_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
 // sounds
 
 // create the shared sound instance
-const softClickSoundPlayer = new SharedSoundClip( softClickSoundInfo, {
+const softClickSoundPlayer = new SharedSoundClip( softClickSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

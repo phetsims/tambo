@@ -8,7 +8,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import radioButtonSoundInfo from '../sounds/radio-button-v2_mp3.js';
+import radioButtonSound from '../sounds/radio-button-v2_mp3.js';
 import SoundClip from './sound-generators/SoundClip.js';
 import soundManager from './soundManager.js';
 import tambo from './tambo.js';
@@ -38,7 +38,7 @@ class RadioButtonSoundPlayerFactory {
    */
   getSoundPlayerInstance() {
     if ( !this._radioButtonSoundPlayer ) {
-      this._radioButtonSoundPlayer = new SoundClip( radioButtonSoundInfo, {
+      this._radioButtonSoundPlayer = new SoundClip( radioButtonSound, {
         initialOutputLevel: 0.7,
         rateChangesAffectPlayingSounds: false
       } );

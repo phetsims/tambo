@@ -18,14 +18,14 @@ import SoundClip from './SoundClip.js';
 class SharedSoundClip {
 
   /**
-   * @param {Object} soundInfo - object of the type returned by the sound plugin, see sound.js for details
+   * @param {WrappedAudioBuffer} wrappedAudioBuffer - a Web Audio audio buffer containing decoded audio samples
    * @param {Object} [options]
    * @constructor
    */
-  constructor( soundInfo, options ) {
+  constructor( wrappedAudioBuffer, options ) {
 
     // {SoundClip} @private
-    this.soundClip = new SoundClip( soundInfo, options.soundClipOptions );
+    this.soundClip = new SoundClip( wrappedAudioBuffer, options.soundClipOptions );
 
     // automatically register this sound clip with the sound manager
     soundManager.addSoundGenerator( this.soundClip, options.soundManagerOptions );

@@ -14,11 +14,11 @@ class PropertyMultiClip extends MultiClip {
 
   /**
    * @param {Property.<*>} property - the property for which sounds are played on value changes
-   * @param {Map<*,SoundInfo>} valueToSoundInfoMap - a map of values to SoundInfo objects that is used to define the
-   * association between values and sounds.
+   * @param {Map<*,WrappedAudioBuffer>} valueToSoundMap - a map of values to WrappedAudioBuffer objects that is used to
+   * define the association between values and sounds.
    * @param {Object} [options]
    */
-  constructor( property, valueToSoundInfoMap, options ) {
+  constructor( property, valueToSoundMap, options ) {
 
     options = merge( {
 
@@ -27,7 +27,7 @@ class PropertyMultiClip extends MultiClip {
       linkLazily: true
     }, options );
 
-    super( valueToSoundInfoMap, options );
+    super( valueToSoundMap, options );
 
     const playSoundForValue = value => { this.playAssociatedSound( value ); };
 

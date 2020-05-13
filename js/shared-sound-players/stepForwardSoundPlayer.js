@@ -6,14 +6,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import stepForwardSoundInfo from '../../sounds/step-forward-v2_mp3.js';
+import stepForwardSound from '../../sounds/step-forward-v2_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
 // sounds
 
 // create the shared sound instance
-const stepForwardSoundPlayer = new SharedSoundClip( stepForwardSoundInfo, {
+const stepForwardSoundPlayer = new SharedSoundClip( stepForwardSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

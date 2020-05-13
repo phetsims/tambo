@@ -6,14 +6,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import checkboxUncheckedSoundInfo from '../../sounds/checkbox-unchecked_mp3.js';
+import checkboxUncheckedSound from '../../sounds/checkbox-unchecked_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
 // sounds
 
 // create the shared sound instance
-const checkboxUncheckedSoundPlayer = new SharedSoundClip( checkboxUncheckedSoundInfo, {
+const checkboxUncheckedSoundPlayer = new SharedSoundClip( checkboxUncheckedSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

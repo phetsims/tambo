@@ -6,14 +6,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import releaseSoundInfo from '../../sounds/release-002_mp3.js';
+import releaseSound from '../../sounds/release-002_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
 // sounds
 
 // create the shared sound instance
-const releaseSoundPlayer = new SharedSoundClip( releaseSoundInfo, {
+const releaseSoundPlayer = new SharedSoundClip( releaseSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
