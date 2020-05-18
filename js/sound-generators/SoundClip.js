@@ -169,7 +169,7 @@ class SoundClip extends SoundGenerator {
       // default delay is zero
       delay = typeof delay === 'undefined' ? 0 : delay;
 
-      if ( ( this.loop && this.fullyEnabled && !this.isPlayingProperty.get() ) ||
+      if ( ( this.loop && !this.isPlayingProperty.get() ) ||
            ( !this.loop && ( this.fullyEnabled || this.initiateWhenDisabled ) ) ) {
 
         // create an audio buffer source node that uses the previously decoded audio data
