@@ -32,6 +32,7 @@ import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
+import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
 import SoundEncodingComparisonPanel from './SoundEncodingComparisonPanel.js';
 
@@ -83,6 +84,12 @@ class TestingScreenView extends DemosScreenView {
       {
         label: 'SliderSoundTest',
         createNode: layoutBounds => new SliderSoundTestNode( resetInProgressProperty, {
+          center: layoutBounds.center
+        } )
+      },
+      {
+        label: 'AmplitudeModulatorTest',
+        createNode: layoutBounds => new AmplitudeModulatorDemoNode( {
           center: layoutBounds.center
         } )
       }
