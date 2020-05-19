@@ -6,6 +6,7 @@
 
 import Property from '../../axon/js/Property.js';
 import Screen from '../../joist/js/Screen.js';
+import ScreenIcon from '../../joist/js/ScreenIcon.js';
 import Sim from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import Rectangle from '../../scenery/js/nodes/Rectangle.js';
@@ -72,7 +73,10 @@ simLauncher.launch( () => {
       {
         name: 'Sim-Like Components',
         backgroundColorProperty: new Property( '#f3fff3' ),
-        homeScreenIcon: createScreenIcon( '#a31515', '#b75e2a', 'radial' )
+        homeScreenIcon: new ScreenIcon( createScreenIcon( '#a31515', '#b75e2a', 'radial' ), {
+          maxIconWidthProportion: 1,
+          maxIconHeightProportion: 1
+        } )
       }
     ),
 
@@ -83,7 +87,10 @@ simLauncher.launch( () => {
       {
         name: 'UI Components',
         backgroundColorProperty: new Property( '#fff5ba' ),
-        homeScreenIcon: createScreenIcon( '#71ddbf', '#8d49e5', 'linear' )
+        homeScreenIcon: new ScreenIcon( createScreenIcon( '#71ddbf', '#8d49e5', 'linear' ), {
+          maxIconWidthProportion: 1,
+          maxIconHeightProportion: 1
+        } )
       }
     ),
 
@@ -94,7 +101,10 @@ simLauncher.launch( () => {
       {
         name: 'Testing',
         backgroundColorProperty: new Property( '#F0F8FF' ),
-        homeScreenIcon: createScreenIcon( '#ADFF2F', '#FFDAB9', 'radial' )
+        homeScreenIcon: new ScreenIcon( createScreenIcon( '#ADFF2F', '#FFDAB9', 'radial' ), {
+          maxIconWidthProportion: 1,
+          maxIconHeightProportion: 1
+        } )
       }
     )
 
