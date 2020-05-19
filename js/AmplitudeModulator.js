@@ -13,8 +13,8 @@ const DEFAULT_DEPTH = 0.9; // proportion
 const DEFAULT_WAVEFORM = 'sine'; // proportion
 
 /**
- * An AmplitudeModulator instance can be used to create low-frequency oscillation effects on a loop, oscillator, or
- * other steady sound source.  It is not a sound generator itself, and is instead intended to be used as a component
+ * AmplitudeModulator instances can be used to create low-frequency amplitude oscillation effects on a loop, oscillator,
+ * or other steady sound source.  It is not a sound generator itself, and is instead intended to be used as a component
  * within a sound generator.
  */
 class AmplitudeModulator {
@@ -57,7 +57,7 @@ class AmplitudeModulator {
       this.depthProperty = new NumberProperty( DEFAULT_DEPTH );
     }
 
-    // @public {NumberProperty}
+    // @public {StringProperty}
     this.waveformProperty = options.waveformProperty;
     if ( !this.waveformProperty ) {
       this.waveformProperty = new StringProperty( DEFAULT_WAVEFORM );
@@ -135,6 +135,7 @@ class AmplitudeModulator {
   /**
    * connect the output of this modulator to a destination
    * @param {AudioNode|AudioParam} destination
+   * @public
    */
   connect( destination ) {
     this.modulatedGainNode.connect( destination );

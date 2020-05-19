@@ -51,6 +51,17 @@ class AmplitudeModulatorDemo extends SoundGenerator {
       } );
     } );
   }
+
+  /**
+   * restore initial state
+   * @public
+   */
+  reset() {
+    this.amplitudeModulator.enabledProperty.reset();
+    this.amplitudeModulator.frequencyProperty.reset();
+    this.amplitudeModulator.depthProperty.reset();
+    this.amplitudeModulator.waveformProperty.reset();
+  }
 }
 
 tambo.register( 'AmplitudeModulatorDemo', AmplitudeModulatorDemo );
