@@ -8,7 +8,6 @@
  */
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
-import Emitter from '../../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import tambo from '../../../tambo.js';
 import BoxOfBalls from './BoxOfBalls.js';
@@ -46,10 +45,6 @@ class SimLikeComponentsModel {
         } );
       }
     } );
-
-    this.stepEmitter = new Emitter( {
-      parameters: [ { valueType: 'number' } ]
-    } );
   }
 
   /**
@@ -60,7 +55,6 @@ class SimLikeComponentsModel {
     if ( this.ballsMovingProperty.value ) {
       this.boxOfBalls.step( dt );
     }
-    this.stepEmitter.emit( dt );
   }
 
   /**

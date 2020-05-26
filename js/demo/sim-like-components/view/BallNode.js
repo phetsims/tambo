@@ -5,10 +5,10 @@
  */
 
 import Circle from '../../../../../scenery/js/nodes/Circle.js';
-import ceilingFloorContactSound from '../../../../sounds/ceiling-floor-contact_mp3.js';
-import wallContactSound1 from '../../../../sounds/wall-contact_mp3.js';
 import wallContactSound2 from '../../../../sounds/boundary-reached_mp3.js';
+import ceilingFloorContactSound from '../../../../sounds/ceiling-floor-contact_mp3.js';
 import wallContactSound3 from '../../../../sounds/ceiling-floor-contact_mp3.js';
+import wallContactSound1 from '../../../../sounds/wall-contact_mp3.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';

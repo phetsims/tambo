@@ -1,11 +1,11 @@
 // Copyright 2020, University of Colorado Boulder
 
-import AmplitudeModulator from '../../../AmplitudeModulator.js';
-import SoundClip from '../../../sound-generators/SoundClip.js';
-import SoundGenerator from '../../../sound-generators/SoundGenerator.js';
 import loop1 from '../../../../sounds/220hz-saturated-sine-loop_mp3.js';
 import loop2 from '../../../../sounds/winds-loop-c3-oscilloscope_mp3.js';
 import loop3 from '../../../../sounds/winds-loop-middle-c-oscilloscope_mp3.js';
+import AmplitudeModulator from '../../../AmplitudeModulator.js';
+import SoundClip from '../../../sound-generators/SoundClip.js';
+import SoundGenerator from '../../../sound-generators/SoundGenerator.js';
 import tambo from '../../../tambo.js';
 
 /**
