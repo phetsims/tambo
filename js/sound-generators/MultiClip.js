@@ -24,9 +24,9 @@ const STOP_DELAY_TIME = 0.1; // empirically determined to avoid clicks when stop
 class MultiClip extends SoundGenerator {
 
   /**
-   * @param {Map<*,WrappedAudioBuffer>} valueToWrappedAudioBufferMap - a map of values to Web Audio AudioBuffer objects that is used
-   * to associate each item in a set of values with a sound. The object defines a method that can then be used to play
-   * the sound associated with the value.
+   * @param {Map<*,WrappedAudioBuffer>} valueToWrappedAudioBufferMap - a map of values to Web Audio AudioBuffer objects
+   * that is used to associate each item in a set of values with a sound. The object defines a method that can then be
+   * used to play the sound associated with the value.
    * @param {Object} [options]
    */
   constructor( valueToWrappedAudioBufferMap, options ) {
