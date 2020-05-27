@@ -70,7 +70,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
 
       if ( !resetInProgressProperty.value && !phet.joist.sim.isSettingPhetioStateProperty.value ) {
 
-        // calculate the playback rate based on the amount of force, see the design document for detailed explanation
+        // calculate the playback rate
         const normalizedValue = Math.log( value / range.min ) / Math.log( range.max / range.min );
         const playbackRate = Math.pow( 2, ( normalizedValue - 0.5 ) * options.playbackRateSpanOctaves ) +
                              options.playbackRateCenterOffset;

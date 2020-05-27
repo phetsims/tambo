@@ -1,6 +1,7 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
+import Emitter from '../../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import timer from '../../../../../axon/js/timer.js';
 import Dimension2 from '../../../../../dot/js/Dimension2.js';
@@ -33,6 +34,7 @@ import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
+import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
 import SoundEncodingComparisonPanel from './SoundEncodingComparisonPanel.js';
 
@@ -92,10 +94,21 @@ class TestingScreenView extends DemosScreenView {
         createNode: layoutBounds => new AmplitudeModulatorDemoNode( {
           center: layoutBounds.center
         } )
+      },
+      {
+        label: 'ContinuousPropertySoundGeneratorTest',
+        createNode: layoutBounds => new ContinuousPropertySoundGeneratorTestNode( this.stepEmitter, {
+          center: layoutBounds.center
+        } )
       }
     ];
 
     super( demos );
+
+    // step emitter, needed by some of the demos
+    this.stepEmitter = new Emitter( {
+      parameters: [ { valueType: 'number' } ]
+    } );
 
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
@@ -107,6 +120,14 @@ class TestingScreenView extends DemosScreenView {
       }
     } );
     this.addChild( resetAllButton );
+  }
+
+  /**
+   * @override
+   * @param {number} dt
+   */
+  step( dt ) {
+    this.stepEmitter.emit( dt );
   }
 }
 
