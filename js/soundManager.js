@@ -513,11 +513,13 @@ class SoundManager extends PhetioObject {
       return null;
     }
 
-    assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1, 'reverb value out of range: ' + newReverbLevel );
-    const now = phetAudioContext.currentTime;
-    this.reverbGainNode.gain.linearRampToValueAtTime( newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
-    this.dryGainNode.gain.linearRampToValueAtTime( 1 - newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
-    this._reverbLevel = newReverbLevel;
+    if ( newReverbLevel !== this._reverbLevel ) {
+      assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1, 'reverb value out of range: ' + newReverbLevel );
+      const now = phetAudioContext.currentTime;
+      this.reverbGainNode.gain.linearRampToValueAtTime( newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
+      this.dryGainNode.gain.linearRampToValueAtTime( 1 - newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
+      this._reverbLevel = newReverbLevel;
+    }
   }
 
   set reverbLevel( reverbLevel ) {
