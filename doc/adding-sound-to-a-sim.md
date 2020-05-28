@@ -1,3 +1,5 @@
+# Checklist for Adding Sound to a PhET Simulation
+
 This checklist is intended to guide developers through the process of adding sound to a simulation.  It is written at
 a fairly high level, and assumes certain knowledge of how the tambo library works and of PhET's development processes.
 Before using this for the first time, it is highly recommended that a developer reads through the Users Guide.
