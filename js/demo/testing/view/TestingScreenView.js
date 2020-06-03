@@ -36,6 +36,7 @@ import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
 import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
+import SoundClipChordTestNode from './SoundClipChordTestNode.js';
 import SoundEncodingComparisonPanel from './SoundEncodingComparisonPanel.js';
 
 // constants
@@ -98,6 +99,12 @@ class TestingScreenView extends DemosScreenView {
       {
         label: 'ContinuousPropertySoundGeneratorTest',
         createNode: layoutBounds => new ContinuousPropertySoundGeneratorTestNode( this.stepEmitter, {
+          center: layoutBounds.center
+        } )
+      },
+      {
+        label: 'SoundClipChordTestNode',
+        createNode: layoutBounds => new SoundClipChordTestNode( {
           center: layoutBounds.center
         } )
       }
