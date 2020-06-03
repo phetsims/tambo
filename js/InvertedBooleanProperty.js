@@ -1,7 +1,8 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
- * a boolean property that is always the opposite of the provided boolean property
+ * A boolean property that is always the opposite of the provided boolean property
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
