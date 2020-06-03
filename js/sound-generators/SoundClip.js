@@ -80,6 +80,10 @@ class SoundClip extends SoundGenerator {
     this.soundStart = 0;
     this.soundEnd = null;
     if ( options.trimSilence ) {
+
+      // For sounds that are created statically during the module load phase this listener will interpret the audio
+      // data once the load of that data has completed.  For all sounds constructed after the module load phase has
+      // completed, this will process right away.
       const setStartAndEndPoints = loaded => {
         if ( loaded ) {
           const loopBoundsInfo = SoundUtils.detectSoundBounds( this.wrappedAudioBuffer.audioBuffer );
