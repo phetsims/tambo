@@ -1,27 +1,22 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
- * a boolean property that is always the opposite of the provided boolean property
+ * a derived boolean property that inverts the provided boolean property
  */
 
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../axon/js/DerivedProperty.js';
 import tambo from './tambo.js';
 
-class InvertedBooleanProperty extends BooleanProperty {
+class InvertedBooleanProperty extends DerivedProperty {
 
   /**
-   * {BooleanProperty} propertyToInvert
+   * {DerivedProperty} propertyToInvert
    * @constructor
    */
   constructor( propertyToInvert ) {
-
     assert && assert( propertyToInvert instanceof BooleanProperty );
-
-    super( !propertyToInvert.value );
-
-    propertyToInvert.link( value => {
-      this.set( !value );
-    } );
+    super( [ propertyToInvert ], x => !x );
   }
 }
 
