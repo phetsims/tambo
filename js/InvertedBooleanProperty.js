@@ -2,6 +2,7 @@
 
 /**
  * a derived boolean property that inverts the provided boolean property
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
