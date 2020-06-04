@@ -14,12 +14,16 @@ class WrappedAudioBuffer {
 
   constructor() {
 
-    // @public {AudioBuffer|null} - Web Audio AudioBuffer object, to be filled in when a sound is fully decoded
-    this.audioBuffer = null;
+    // @public {TinyProperty<AudioBuffer|null>} - A TinyProperty that is initially set to null and is set to an audio
+    // buffer, which contains audio data, when the decoding of that data is complete.
+    this.audioBufferProperty = new TinyProperty( null );
 
-    // @public {TinyProperty.<boolean>} - Switches from false to true once the audio buffer is set, should never change
-    // after that.
-    this.loadedProperty = new TinyProperty( false );
+    // Make sure that the audio buffer is only ever set once.
+    if ( assert ) {
+      this.audioBufferProperty.lazyLink( ( audioBuffer, previousAudioBuffer ) => {
+        assert( previousAudioBuffer === null && audioBuffer !== null );
+      } );
+    }
   }
 }
 

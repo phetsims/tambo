@@ -65,7 +65,7 @@ class MultiClip extends SoundGenerator {
     assert && assert( wrappedAudioBuffer !== undefined, 'no sound found for provided value' );
 
     // play the sound (if enabled and fully decoded)
-    if ( this.fullyEnabled && wrappedAudioBuffer.loadedProperty.value ) {
+    if ( this.fullyEnabled && wrappedAudioBuffer.audioBufferProperty.value ) {
 
       const now = this.audioContext.currentTime;
 
@@ -75,7 +75,7 @@ class MultiClip extends SoundGenerator {
 
       // create an audio buffer source node and connect it to the previously data in the audio buffer
       const bufferSource = this.audioContext.createBufferSource();
-      bufferSource.buffer = wrappedAudioBuffer.audioBuffer;
+      bufferSource.buffer = wrappedAudioBuffer.audioBufferProperty.value;
 
       // connect this source node to the output
       bufferSource.connect( this.localGainNode );

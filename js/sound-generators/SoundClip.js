@@ -84,15 +84,15 @@ class SoundClip extends SoundGenerator {
       // For sounds that are created statically during the module load phase this listener will interpret the audio
       // data once the load of that data has completed.  For all sounds constructed after the module load phase has
       // completed, this will process right away.
-      const setStartAndEndPoints = loaded => {
-        if ( loaded ) {
-          const loopBoundsInfo = SoundUtils.detectSoundBounds( this.wrappedAudioBuffer.audioBuffer );
+      const setStartAndEndPoints = audioBuffer => {
+        if ( audioBuffer ) {
+          const loopBoundsInfo = SoundUtils.detectSoundBounds( audioBuffer );
           this.soundStart = loopBoundsInfo.soundStart;
           this.soundEnd = loopBoundsInfo.soundEnd;
-          this.wrappedAudioBuffer.loadedProperty.unlink( setStartAndEndPoints );
+          this.wrappedAudioBuffer.audioBufferProperty.unlink( setStartAndEndPoints );
         }
       };
-      this.wrappedAudioBuffer.loadedProperty.link( setStartAndEndPoints );
+      this.wrappedAudioBuffer.audioBufferProperty.link( setStartAndEndPoints );
     }
 
     // @private {AudioBufferSourceNode[]} - a list of active source buffer nodes, used so that this clip can be played
@@ -166,7 +166,7 @@ class SoundClip extends SoundGenerator {
    */
   play( delay ) {
 
-    if ( this.audioContext.state === 'running' && this.wrappedAudioBuffer.loadedProperty.value ) {
+    if ( this.audioContext.state === 'running' && this.wrappedAudioBuffer.audioBufferProperty.value ) {
 
       const now = this.audioContext.currentTime;
 
@@ -178,7 +178,7 @@ class SoundClip extends SoundGenerator {
 
         // create an audio buffer source node that uses the previously decoded audio data
         const bufferSource = this.audioContext.createBufferSource();
-        bufferSource.buffer = this.wrappedAudioBuffer.audioBuffer;
+        bufferSource.buffer = this.wrappedAudioBuffer.audioBufferProperty.value;
         bufferSource.loop = this.loop;
         bufferSource.loopStart = this.soundStart;
         if ( this.soundEnd ) {

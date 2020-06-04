@@ -135,13 +135,13 @@ class SoundManager extends PhetioObject {
 
     // convolver node, which will be used to create the reverb effect
     this.convolver = phetAudioContext.createConvolver();
-    const setConvolverBuffer = loaded => {
-      if ( loaded ) {
-        this.convolver.buffer = reverbImpulseResponse.audioBuffer;
-        reverbImpulseResponse.loadedProperty.unlink( setConvolverBuffer );
+    const setConvolverBuffer = audioBuffer => {
+      if ( audioBuffer ) {
+        this.convolver.buffer = audioBuffer;
+        reverbImpulseResponse.audioBufferProperty.unlink( setConvolverBuffer );
       }
     };
-    reverbImpulseResponse.loadedProperty.link( setConvolverBuffer );
+    reverbImpulseResponse.audioBufferProperty.link( setConvolverBuffer );
 
     // gain node that will control the reverb level
     this.reverbGainNode = phetAudioContext.createGain();
