@@ -2,6 +2,7 @@
 
 /**
  * a derived boolean property that inverts the provided boolean property
+ *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
@@ -13,11 +14,12 @@ class InvertedBooleanProperty extends DerivedProperty {
 
   /**
    * {DerivedProperty} propertyToInvert
+   * @param {Object} [options] - see Property
    * @constructor
    */
-  constructor( propertyToInvert ) {
+  constructor( propertyToInvert, options ) {
     assert && assert( propertyToInvert instanceof BooleanProperty );
-    super( [ propertyToInvert ], x => !x );
+    super( [ propertyToInvert ], x => !x, options );
   }
 }
 
