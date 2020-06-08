@@ -13,7 +13,7 @@ import tambo from './tambo.js';
 class InvertedBooleanProperty extends DerivedProperty {
 
   /**
-   * {DerivedProperty} propertyToInvert
+   * @param {DerivedProperty} propertyToInvert
    * @param {Object} [options] - see Property
    * @constructor
    */
