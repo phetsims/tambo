@@ -97,6 +97,7 @@ class SoundManager extends PhetioObject {
    * @param {BooleanProperty} simVisibleProperty
    * @param {BooleanProperty} simActiveProperty
    * @param {Object} [options]
+   * @public
    */
   initialize( simVisibleProperty, simActiveProperty, options ) {
 
@@ -445,11 +446,11 @@ class SoundManager extends PhetioObject {
   /**
    * get the current output level setting
    * @returns {number}
+   * @public
    */
   getMasterOutputLevel() {
     return this._masterOutputLevel;
   }
-
   get masterOutputLevel() {
     return this.getMasterOutputLevel();
   }
@@ -503,6 +504,7 @@ class SoundManager extends PhetioObject {
   /**
    * set the amount of reverb
    * @param {number} newReverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
+   * @public
    */
   setReverbLevel( newReverbLevel ) {
 
@@ -521,15 +523,17 @@ class SoundManager extends PhetioObject {
       this._reverbLevel = newReverbLevel;
     }
   }
-
   set reverbLevel( reverbLevel ) {
     this.setReverbLevel( reverbLevel );
   }
 
+  /**
+   * @returns {number}
+   * @public
+   */
   getReverbLevel() {
     return this._reverbLevel;
   }
-
   get reverbLevel() {
     return this.getReverbLevel();
   }
@@ -580,6 +584,7 @@ class SoundManager extends PhetioObject {
    *
    * @param {GainNode} gainNode
    * @param {number} duration - duration for logging, in seconds
+   * @public
    */
   logGain( gainNode, duration ) {
 
@@ -607,6 +612,7 @@ class SoundManager extends PhetioObject {
   /**
    * log the value of the master gain as it changes, used primarily for debug
    * @param {number} duration - in seconds
+   * @public
    */
   logMasterGain( duration ) {
     this.logGain( this.masterGainNode, duration );
@@ -615,6 +621,7 @@ class SoundManager extends PhetioObject {
   /**
    * log the value of the reverb gain as it changes, used primarily for debug
    * @param {number} duration - in seconds
+   * @public
    */
   logReverbGain( duration ) {
     this.logGain( this.reverbGainNode, duration );

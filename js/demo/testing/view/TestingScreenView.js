@@ -132,6 +132,7 @@ class TestingScreenView extends DemosScreenView {
   /**
    * @override
    * @param {number} dt
+   * @public
    */
   step( dt ) {
     this.stepEmitter.emit( dt );
@@ -299,6 +300,10 @@ class LongSoundTestPanel extends Node {
     };
   }
 
+  /**
+   * release memory to avoid leaks
+   * @public
+   */
   dispose() {
     this.disposeLongSoundTestPanel();
     super.dispose();

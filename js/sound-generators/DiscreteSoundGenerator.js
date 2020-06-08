@@ -7,8 +7,6 @@ import defaultSound from '../../sounds/bright-marimba_mp3.js';
 import tambo from '../tambo.js';
 import SoundClip from './SoundClip.js';
 
-// sounds
-
 class DiscreteSoundGenerator extends SoundClip {
 
   /**
@@ -115,7 +113,7 @@ class BinSelector {
    * put the provided value in a bin
    * @param value
    * @returns {number}
-   * @publi
+   * @public
    */
   selectBin( value ) {
     if ( !this.tolerateOutOfRangeValues ) {
