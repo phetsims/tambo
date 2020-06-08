@@ -19,11 +19,9 @@ class WrappedAudioBuffer {
     this.audioBufferProperty = new TinyProperty( null );
 
     // Make sure that the audio buffer is only ever set once.
-    if ( assert ) {
-      this.audioBufferProperty.lazyLink( ( audioBuffer, previousAudioBuffer ) => {
-        assert( previousAudioBuffer === null && audioBuffer !== null );
-      } );
-    }
+    assert && this.audioBufferProperty.lazyLink( ( audioBuffer, previousAudioBuffer ) => {
+      assert( previousAudioBuffer === null && audioBuffer !== null, 'The audio buffer can only be set once' );
+    } );
   }
 }
 
