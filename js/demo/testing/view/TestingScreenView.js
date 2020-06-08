@@ -1,6 +1,7 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import timer from '../../../../../axon/js/timer.js';
@@ -27,7 +28,6 @@ import rhodesChordSound from '../../../../sounds/rhodes-chord_mp3.js';
 import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js';
 import sliderDecreaseClickSound from '../../../../sounds/slider-click-02_mp3.js';
 import thunderSound from '../../../../sounds/thunder_mp3.js';
-import InvertedBooleanProperty from '../../../InvertedBooleanProperty.js';
 import Playable from '../../../Playable.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
@@ -227,7 +227,7 @@ class LongSoundTestPanel extends Node {
 
     // sound generator for thunder
     const thunderSoundClip = new SoundClip( thunderSound, {
-      enableControlProperties: [ new InvertedBooleanProperty( resetInProgressProperty ) ],
+      enableControlProperties: [ DerivedProperty.not( resetInProgressProperty ) ],
       initiateWhenDisabled: true
     } );
     soundManager.addSoundGenerator( thunderSoundClip );
@@ -336,7 +336,7 @@ class SliderSoundTestNode extends HBox {
     _.times( numberOfTickMarks, index => { discreteSlider.addMinorTick( index ); } );
 
     // create an inverted version of the reset-in-progress Property, used to mute sounds during reset
-    const resetNotInProgressProperty = new InvertedBooleanProperty( resetInProgressProperty );
+    const resetNotInProgressProperty = DerivedProperty.not( resetInProgressProperty );
 
     // add sound generators that will play a sound when the value controlled by the slider changes
     const sliderIncreaseClickSoundClip = new SoundClip( sliderIncreaseClickSound );
