@@ -55,7 +55,7 @@ class SoundClip extends SoundGenerator {
 
       // {AudioNode[]} Audio nodes that will be connected in the specified order between the bufferSource and
       // localGainNode, used to insert things like filters, compressors, etc.
-      additionalNodes: []
+      additionalAudioNodes: []
 
     }, options );
 
@@ -63,9 +63,6 @@ class SoundClip extends SoundGenerator {
 
     // @private {WrappedAudioBuffer} - an object containing the audio buffer and flag that indicates readiness
     this.wrappedAudioBuffer = wrappedAudioBuffer;
-
-    // @private
-    this.additionalNodes = options.additionalNodes;
 
     // @private {boolean} - flag that controls whether this is a one-shot or loop sound
     this.loop = options.loop;
@@ -103,19 +100,14 @@ class SoundClip extends SoundGenerator {
     this.localGainNode = this.audioContext.createGain();
     this.localGainNode.connect( this.masterGainNode );
 
-    // @private {Node} the node that will connect to the bufferSource
-    this.connectionNode = null;
+    // @private {AudioNode} - the audio node to which the buffer source will connect, analogous to AudioContext.destination
+    this.internalDestination = this.localGainNode;
 
-    // connect this source node to the output by way of other specified nodes
-    if ( this.additionalNodes.length > 0 ) {
-      this.connectionNode = this.additionalNodes[ 0 ];
-      for ( let i = 0; i < this.additionalNodes.length - 1; i++ ) {
-        this.additionalNodes[ i ].connect( this.additionalNodes[ i + 1 ] );
-      }
-      this.additionalNodes[ this.additionalNodes.length - 1 ].connect( this.localGainNode );
-    }
-    else {
-      this.connectionNode = this.localGainNode;
+    // insert any additional audio nodes into the signal chain by iterating backwards through the provided list
+    for ( let i = options.additionalAudioNodes.length - 1; i >= 0; i-- ) {
+      const audioNode = this.additionalAudioNodes[ i ];
+      audioNode.connect( this.internalDestination );
+      this.internalDestination = audioNode;
     }
 
     // @private {number} - rate at which clip is being played back, 1 is normal, above 1 is faster, below 1 is slower,
@@ -189,7 +181,7 @@ class SoundClip extends SoundGenerator {
         this.localGainNode.gain.cancelScheduledValues( now );
         this.localGainNode.gain.setValueAtTime( 1, now );
 
-        bufferSource.connect( this.connectionNode );
+        bufferSource.connect( this.internalDestination );
 
         // add this to the list of active sources so that it can be stopped if necessary
         this.activeBufferSources.push( bufferSource );
