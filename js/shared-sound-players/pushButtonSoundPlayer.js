@@ -10,8 +10,6 @@ import pushButtonSound from '../../sounds/general-button-v4_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
-// sounds
-
 // create the shared sound instance
 const pushButtonSoundPlayer = new SharedSoundClip( pushButtonSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },

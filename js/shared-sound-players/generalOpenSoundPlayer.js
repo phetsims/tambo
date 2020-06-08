@@ -10,8 +10,6 @@ import generalOpenSound from '../../sounds/general-open_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
-// sounds
-
 // create the shared sound instance
 const generalOpenSoundPlayer = new SharedSoundClip( generalOpenSound, {
   soundClipOptions: { initialOutputLevel: 0.4 },

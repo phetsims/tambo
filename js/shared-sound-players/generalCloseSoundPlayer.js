@@ -10,8 +10,6 @@ import generalCloseSound from '../../sounds/general-close_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
-// sounds
-
 // create the shared sound instance
 const generalCloseSoundPlayer = new SharedSoundClip( generalCloseSound, {
   soundClipOptions: { initialOutputLevel: 0.4 },

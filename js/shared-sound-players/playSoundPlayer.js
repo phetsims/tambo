@@ -10,8 +10,6 @@ import playSound from '../../sounds/play-pause-003_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
-// sounds
-
 // create the shared sound instance
 const playSoundPlayer = new SharedSoundClip( playSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },

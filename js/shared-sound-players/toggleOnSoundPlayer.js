@@ -10,8 +10,6 @@ import toggleOnSound from '../../sounds/step-forward-v2_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
-// sounds
-
 // create the shared sound instance
 const toggleOnSoundPlayer = new SharedSoundClip( toggleOnSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },

@@ -10,8 +10,6 @@ import checkboxCheckedSound from '../../sounds/checkbox-checked_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
-// sounds
-
 // create the shared sound instance
 const checkboxCheckedSoundPlayer = new SharedSoundClip( checkboxCheckedSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },

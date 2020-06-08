@@ -27,8 +27,6 @@ const COMBO_BOX_FONT = new PhetFont( 16 );
 const TOTAL_ADDED_TEMPLATE = 'Total Added: {{numSoundGenerators}}';
 const ADD_BUTTON_COLOR = '#C0D890';
 
-// sounds
-
 // info needed for selecting and using different sound generators from the combo box
 const SOUND_GENERATOR_INFO = {
   recordedOneShot: {

@@ -10,8 +10,6 @@ import toggleOffSound from '../../sounds/step-back-v2_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
-// sounds
-
 // create the shared sound instance
 const toggleOffSoundPlayer = new SharedSoundClip( toggleOffSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },

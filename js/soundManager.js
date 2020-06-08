@@ -27,8 +27,6 @@ import soundConstants from './soundConstants.js';
 import SoundLevelEnum from './SoundLevelEnum.js';
 import tambo from './tambo.js';
 
-// sounds
-
 // constants
 const DEFAULT_REVERB_LEVEL = 0.02;
 const LINEAR_GAIN_CHANGE_TIME = soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME; // in seconds

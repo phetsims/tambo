@@ -10,8 +10,6 @@ import releaseSound from '../../sounds/release-002_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
-// sounds
-
 // create the shared sound instance
 const releaseSoundPlayer = new SharedSoundClip( releaseSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },

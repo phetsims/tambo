@@ -13,8 +13,6 @@ import SoundClip from './sound-generators/SoundClip.js';
 import soundManager from './soundManager.js';
 import tambo from './tambo.js';
 
-// sounds
-
 /**
  * definition of the pushButtonSoundPlayer object
  */

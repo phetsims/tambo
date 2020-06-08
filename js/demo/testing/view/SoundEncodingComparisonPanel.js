@@ -34,8 +34,6 @@ import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 
-// sounds
-
 // constants
 const BUTTON_FONT = new PhetFont( 18 );
 const COMBO_BOX_FONT = new PhetFont( 16 );
