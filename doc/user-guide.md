@@ -11,8 +11,7 @@ use it without needing to dig too deeply into the specific web standards on whic
 This document covers the terminology, general design, philosophy, history, and usage of this library.  Its intended
 audience is software developers that are endeavoring to add sound to simulations that are being built using PhET's
 software infrastructure and need to understand some of the background behind this library in order to use it
-effectively.  There is a [companion checklist document]
-(https://github.com/phetsims/tambo/blob/master/doc/adding-sound-to-a-sim.md) that lists the steps for adding sound to
+effectively.  There is a [companion checklist document](https://github.com/phetsims/tambo/blob/master/doc/adding-sound-to-a-sim.md) that lists the steps for adding sound to
 a PhET simulation in a compact, linear form.  That document should be used each time sound is added to, or included in,
 a simulation.  This one probably only needs to be read once and referenced thereafter.  
 
