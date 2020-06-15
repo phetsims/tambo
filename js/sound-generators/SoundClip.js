@@ -51,11 +51,7 @@ class SoundClip extends SoundGenerator {
       // already in the process of playing or only those that are played in the future.  This is relevant for both loops
       // and one-shot sounds, since a one-shot sound (especially one that is fairly long) could be in the process of
       // playing when a playback rate change occurs.
-      rateChangesAffectPlayingSounds: true,
-
-      // {AudioNode[]} Audio nodes that will be connected in the specified order between the bufferSource and
-      // localGainNode, used to insert things like filters, compressors, etc.
-      additionalAudioNodes: []
+      rateChangesAffectPlayingSounds: true
 
     }, options );
 
@@ -98,17 +94,7 @@ class SoundClip extends SoundGenerator {
 
     // @private {GainNode} - a gain node that is used to prevent clicks when stopping the sound
     this.localGainNode = this.audioContext.createGain();
-    this.localGainNode.connect( this.masterGainNode );
-
-    // @private {AudioNode} - the audio node to which the buffer source will connect, analogous to AudioContext.destination
-    this.internalDestination = this.localGainNode;
-
-    // insert any additional audio nodes into the signal chain by iterating backwards through the provided list
-    for ( let i = options.additionalAudioNodes.length - 1; i >= 0; i-- ) {
-      const audioNode = this.additionalAudioNodes[ i ];
-      audioNode.connect( this.internalDestination );
-      this.internalDestination = audioNode;
-    }
+    this.localGainNode.connect( this.soundSourceDestination );
 
     // @private {number} - rate at which clip is being played back, 1 is normal, above 1 is faster, below 1 is slower,
     // see online docs for AudioBufferSourceNode.playbackRate for more information
@@ -181,7 +167,7 @@ class SoundClip extends SoundGenerator {
         this.localGainNode.gain.cancelScheduledValues( now );
         this.localGainNode.gain.setValueAtTime( 1, now );
 
-        bufferSource.connect( this.internalDestination );
+        bufferSource.connect( this.soundSourceDestination );
 
         // add this to the list of active sources so that it can be stopped if necessary
         this.activeBufferSources.push( bufferSource );

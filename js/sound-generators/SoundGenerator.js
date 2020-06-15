@@ -38,13 +38,17 @@ class SoundGenerator {
 
       // This flag controls whether the output of this sound generator is immediately connected to the audio context
       // destination.  This is useful for testing, but should not be set to true if this sound generator is being used
-      // in conjunction with the sonification manager.
+      // in conjunction with the sound manager.
       connectImmediately: false,
 
       // {BooleanProperty[]} - An initial set of Properties that will be hooked to this sound generator's enabled state,
       // all of which must be true for sound to be produced.  More of these properties can be added after construction
       // via methods if needed.
-      enableControlProperties: []
+      enableControlProperties: [],
+
+      // {AudioNode[]} Audio nodes that will be connected in the specified order between the bufferSource and
+      // localGainNode, used to insert things like filters, compressors, etc.
+      additionalAudioNodes: []
 
     }, options );
 
@@ -136,6 +140,18 @@ class SoundGenerator {
         this.audioContext.currentTime + soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME
       );
     } );
+
+    // @protected {AudioNode} - The audio node to which the sound sources will connect, analogous to
+    // AudioContext.destination.  If no additional audio nodes were provided upon construction, this will be the
+    // master gain node.
+    this.soundSourceDestination = this.masterGainNode;
+
+    // Insert any additional audio nodes into the signal chain by iterating backwards through the provided list.
+    for ( let i = options.additionalAudioNodes.length - 1; i >= 0; i-- ) {
+      const audioNode = options.additionalAudioNodes[ i ];
+      audioNode.connect( this.soundSourceDestination );
+      this.soundSourceDestination = audioNode;
+    }
 
     // @private {function} - internally used disposal function
     this.disposeSoundGenerator = () => {

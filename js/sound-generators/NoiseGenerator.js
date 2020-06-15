@@ -165,7 +165,7 @@ class NoiseGenerator extends SoundGenerator {
     }
 
     // wire up the audio path, working our way from the output back to the sound source(s)
-    this.lfoControlledGainNode.connect( this.masterGainNode );
+    this.lfoControlledGainNode.connect( this.soundSourceDestination );
     let nextOutputToConnect = this.lfoControlledGainNode;
     if ( highPassFilter ) {
       highPassFilter.connect( nextOutputToConnect );

@@ -50,7 +50,7 @@ class PitchedPopGenerator extends SoundGenerator {
     dynamicsCompressorNode.ratio.setValueAtTime( 12, now );
     dynamicsCompressorNode.attack.setValueAtTime( 0, now );
     dynamicsCompressorNode.release.setValueAtTime( 0.25, now );
-    dynamicsCompressorNode.connect( this.masterGainNode );
+    dynamicsCompressorNode.connect( this.soundSourceDestination );
 
     // create the sources - several are created so that pops can be played in rapid succession if desired
     // @private {{oscillator:OscillatorNode, gainNode:GainNode}[]} - an array of sound source, several are created so

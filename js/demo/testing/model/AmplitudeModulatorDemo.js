@@ -25,7 +25,7 @@ class AmplitudeModulatorDemo extends SoundGenerator {
 
     // @public {AmplitudeModulator}
     this.amplitudeModulator = new AmplitudeModulator();
-    this.amplitudeModulator.connect( this.masterGainNode );
+    this.amplitudeModulator.connect( this.soundSourceDestination );
 
     // sound sources that will be modulated
     const soundLoops = [

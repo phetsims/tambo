@@ -23,16 +23,19 @@ import HSlider from '../../../../../sun/js/HSlider.js';
 import Panel from '../../../../../sun/js/Panel.js';
 import lightningImage from '../../../../images/lightning_png.js';
 import marimbaSound from '../../../../sounds/bright-marimba_mp3.js';
+import checkboxCheckedSound from '../../../../sounds/checkbox-checked_mp3.js';
 import loonCallSound from '../../../../sounds/loon-call_mp3.js';
 import rhodesChordSound from '../../../../sounds/rhodes-chord_mp3.js';
 import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js';
 import sliderDecreaseClickSound from '../../../../sounds/slider-click-02_mp3.js';
 import thunderSound from '../../../../sounds/thunder_mp3.js';
+import phetAudioContext from '../../../phetAudioContext.js';
 import Playable from '../../../Playable.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
+import reverbImpulseResponse from '../../../../sounds/empty_apartment_bedroom_06_resampled_mp3.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
 import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
@@ -93,6 +96,12 @@ class TestingScreenView extends DemosScreenView {
       {
         label: 'AmplitudeModulatorTest',
         createNode: layoutBounds => new AmplitudeModulatorDemoNode( {
+          center: layoutBounds.center
+        } )
+      },
+      {
+        label: 'AdditionalAudioNodesTestNode',
+        createNode: layoutBounds => new AdditionalAudioNodesTestNode( {
           center: layoutBounds.center
         } )
       },
@@ -179,6 +188,80 @@ class BasicAndEnhancedSoundTestNode extends VBox {
       loonCallSoundClip.dispose();
       soundManager.removeSoundGenerator( rhodesChordSoundClip );
       loonCallSoundClip.dispose();
+    };
+  }
+
+  /**
+   * @public
+   * @override
+   */
+  dispose() {
+    this.disposeBasicAndEnhancedSoundTestNode();
+    super.dispose();
+  }
+}
+
+/**
+ * A node with two buttons, one that plays a sound clip with no additional audio nodes and one that plays the same
+ * sound clip with a reverb (convolver) node added into the signal path through the additionalAudioNodes option.
+ */
+class AdditionalAudioNodesTestNode extends VBox {
+
+  constructor( options ) {
+
+    // convolver node, which will be used to create the reverb effect
+    const convolver = phetAudioContext.createConvolver();
+    convolver.buffer = reverbImpulseResponse.audioBufferProperty.value;
+
+    // sound clips to be played
+    const shortSoundNormal = new SoundClip( checkboxCheckedSound );
+    soundManager.addSoundGenerator( shortSoundNormal );
+    const shortSoundWithReverb = new SoundClip( checkboxCheckedSound, {
+      additionalAudioNodes: [ convolver ]
+    } );
+    soundManager.addSoundGenerator( shortSoundWithReverb );
+
+    // font for all buttons
+    const buttonFont = new PhetFont( 16 );
+
+    // add a button to play the plain sound
+    const playNormalSoundButton = new TextPushButton( 'Normal Sound Clip', {
+      baseColor: '#CCFF00',
+      font: buttonFont,
+      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      listener: () => { shortSoundNormal.play(); }
+    } );
+
+    // add button to play the sound with the reverb added in the signal path
+    const playSoundWithInsertedAudioNodeButton = new TextPushButton( 'Same Clip with In-Line Reverb Node', {
+      baseColor: '#CC99FF',
+      font: buttonFont,
+      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      listener: () => {shortSoundWithReverb.play();}
+    } );
+
+    // add button to play both sounds at the same time
+    const playBothSounds = new TextPushButton( 'Both Clips Simultaneously', {
+      baseColor: '#FF9999',
+      font: buttonFont,
+      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      listener: () => {
+        shortSoundNormal.play();
+        shortSoundWithReverb.play();
+      }
+    } );
+
+    super( merge( {
+      children: [ playNormalSoundButton, playSoundWithInsertedAudioNodeButton, playBothSounds ],
+      spacing: 20
+    }, options ) );
+
+    // @private - dispose function
+    this.disposeBasicAndEnhancedSoundTestNode = () => {
+      soundManager.removeSoundGenerator( shortSoundNormal );
+      shortSoundNormal.dispose();
+      soundManager.removeSoundGenerator( shortSoundWithReverb );
+      shortSoundWithReverb.dispose();
     };
   }
 

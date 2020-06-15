@@ -41,7 +41,7 @@ class MultiClip extends SoundGenerator {
 
     // @private {GainNode} - a gain node that is used to prevent clicks when stopping the sounds
     this.localGainNode = this.audioContext.createGain();
-    this.localGainNode.connect( this.masterGainNode );
+    this.localGainNode.connect( this.soundSourceDestination );
 
     // listen to the Property that indicates whether we are fully enabled and stop sounds if and when it goes false
     this.fullyEnabledProperty.lazyLink( fullyEnabled => {

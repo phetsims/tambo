@@ -37,7 +37,7 @@ class SoundClipChord extends SoundGenerator {
     // @private
     this.playbackSoundClips = options.chordPlaybackRates.map( playbackRate => {
       const soundClip = new SoundClip( sound, { initialPlaybackRate: playbackRate } );
-      soundClip.connect( this.masterGainNode );
+      soundClip.connect( this.soundSourceDestination );
       return soundClip;
     } );
 
