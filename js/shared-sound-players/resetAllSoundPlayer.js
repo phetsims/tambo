@@ -12,7 +12,7 @@ import tambo from '../tambo.js';
 
 // create the shared sound instance
 const resetAllSoundPlayer = new SharedSoundClip( resetAllSound, {
-  soundClipOptions: { initialOutputLevel: 0.7 },
+  soundClipOptions: { initialOutputLevel: 0.39 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
 
