@@ -81,7 +81,7 @@ class MultiClip extends SoundGenerator {
       // create an audio buffer source node and connect it to the previously data in the audio buffer
       const bufferSource = this.audioContext.createBufferSource();
       bufferSource.buffer = wrappedAudioBuffer.audioBufferProperty.value;
-      bufferSource.playbackRate.setTargetAtTime( this.playbackRate, this.audioContext.currentTime, DEFAULT_TC );
+      bufferSource.playbackRate.setTargetAtTime( this.playbackRate, this.audioContext.currentTime, 0 );
 
       // connect this source node to the output
       bufferSource.connect( this.localGainNode );
@@ -112,13 +112,7 @@ class MultiClip extends SoundGenerator {
    * TODO: duplicated from SoundClip.js
    * @public
    */
-  setPlaybackRate( playbackRate, timeConstant ) {
-    timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TC : timeConstant;
-    if ( this.rateChangesAffectPlayingSounds ) {
-      this.activeBufferSources.forEach( bufferSource => {
-        bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
-      } );
-    }
+  setPlaybackRate( playbackRate ) {
     this.playbackRate = playbackRate;
   }
 
