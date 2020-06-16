@@ -11,9 +11,10 @@ use it without needing to dig too deeply into the specific web standards on whic
 This document covers the terminology, general design, philosophy, history, and usage of this library.  Its intended
 audience is software developers that are endeavoring to add sound to simulations that are being built using PhET's
 software infrastructure and need to understand some of the background behind this library in order to use it
-effectively.  There is a [companion checklist document](https://github.com/phetsims/tambo/blob/master/doc/adding-sound-to-a-sim.md) that lists the steps for adding sound to
-a PhET simulation in a compact, linear form.  That document should be used each time sound is added to, or included in,
-a simulation.  This one probably only needs to be read once and referenced thereafter.  
+effectively.  There is a [companion checklist document](https://github.com/phetsims/tambo/blob/master/doc/adding-sound-to-a-sim.md)
+that lists the steps for adding sound to a PhET simulation in a compact, linear form.  That document should be used each 
+time sound is added to, or included in, a simulation.  This one probably only needs to be read once and referenced
+thereafter.  
 
 ## Overview
 
@@ -83,7 +84,7 @@ sufficient and no "custom" sound generators may be needed.
 
 ### Sound Clip
 
-The `SoundClip` is a specific subclass out `SoundGenerator` that allows playback of pre-recorded sampled sounds, and is
+The `SoundClip` is a specific subclass of `SoundGenerator` that allows playback of pre-recorded sampled sounds, and is
 the most commonly used sound generator. It can be used to play one-shot sounds that are generally fairly short, or it
 can be used to create repeating sound "loops" that can be started, stopped, sped up, and slowed down.
 
@@ -92,37 +93,86 @@ sounds, first as sound sources themselves, then in some complex combinations to 
 few exceptions, none of these sounds proved to be very enjoyable in simulations.  As of this writing, most sounds that
 are more than a few milliseconds long are generated as a sound clip.
 
+### Web Audio
+
+As mentioned previously, tambo is built atop the Web Audio API.  This API is fairly new and its implementation has
+evolved quite a bit while tambo was initially coming into being.  Sound designs that include sounds that make unique
+changes as the user interacts with the sim will likely require the developer to create unique sound generators, and this
+may require some ramping up on Web Audio.  There are a number of good references and tutorials online, such as 
+https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API, and as always, Stack Overflow can be helpful.  There
+will be a constantly increasing set of unique sound generators in the code base that can hopefully be leverages for such
+occasions.
+
 ## Adding Sim-Specific Sound Generation
 
-Rule of thumb: If a sound can be generated purely by watching model components, much the way the view is generated,
-then the sound generator should either go in the `xxxScreenView` type or, if there is a lot of sound generation, in
-a separate `xxxScreenSoundView` file in the `view` subdirectory.  If, however, the sound generation also needs to know
-about how the user is interacting with the controls, the sound generation can go into the view component.  An example of
-this is `MassControl.js`.  In this case, the nature of the sound generation depended in part on whether the mass value
-was being changed by slider dragging or buttons. 
+When sound is turned on for a simulation for which it was previously off, many of the common-code user interface
+components - such as the reset all button, check boxes, and radio buttons - will begin producing sounds.  The actions
+and events that are unique to the sim will, however, be silent.  This section covers the general ideas behind adding
+sim- specific sounds.
 
-TODO: resetInProgressProperty - when is it needed?
+The sim-specific sounds should be added based on the descriptions in the sound design document for the sim.  When
+starting to add these sounds, there is a fairly significant design decision that should be made: Should the sound
+generation code go in the "view" classes (e.g. `FrictionScreenView`) or in separate 'sound view' classes (e.g. 
+`WavesScreenSoundView`).  Both approaches have been used to date with no clear winner as to the superior approach. The
+decision should be made based on the complexity of the code that is needed and the level of inter-dependency with the
+visual components.  In other words, if the sound design is fairly simple and/or needs a lot of information about what's
+going on in the view, it is likely best to put the code in the view class.  If the sound design is complex and largely
+independent of the view, having the code in a separate class will keep the visual view and the sound view more modular
+and encapsulated, and thus more maintainable.
+
+Oftentimes sound generation code will need to go in a sim-specific view control because the way in which the user is
+interacting with the view component to effect changes to the model matters to how the sound behaves.  For instance, the
+ruler that is depicted by `ISLCRulerNode` could have a position in the model, but the sound design for this component
+required different behavior based upon whether the user was moving the ruler via the mouse or via keyboard interaction.
+Since the model position would have no information about how the position was being changed, the sound generation code
+had to go into the view code where that information was available.
+
+One common pattern that occurs fairly frequently is that a sound needs to be generated any time the value of a model
+property changes **except** if the change occurred as the result of a reset, since otherwise there could be a barrage of
+sounds every time the reset button was pressed (and in case you're wonder, yes, we did run into this a bunch in early
+sound design prototypes).  In support of this and other similar cases, sound generators can be constructed with an
+array of `enableControlProperties` that will prevent sound generation from being initiated when any of the enclosed
+values are `false`.  This is often used in conjunction with an inverted reset-in-progress property to prevent sound
+generation during a reset.  It generally looks something like this:
+```js
+soundManager.addSoundGenerator( new myCoolSoundGenerator( model.sonifiedThingProperty, {
+  enableControlProperties: [ DerivedProperty.not( model.resetInProgressProperty ) ]
+} ) );
+```
 
 ## Overriding Default Sound Generation in Common UI Components
 
-TODO: Fill in.
+As mentioned earlier, many common UI components generate sound be default when sound is turned on for a sim.  In some
+cases, the default sound may not be desirable, such as when pressing a button triggers some action that produces an
+immediate sound.  To turn off the default sound generation in a UI component, the `soundPlayer` option for the instance
+should be set to `Playable.NO_SOUND`.  It will look something like this:
 
-## Using the Web Audio API to Create Unique Sound Generators
-
-TODO: Fill in.
+```js
+    const startSomethingImportantButton = new TextPushButton( 'Do it.', {
+      font: new PhetFont( 16 ),
+      soundPlayer: Playable.NO_SOUND // turn off default sound generation
+    } );
+```
 
 ## Using the "Options" Dialog to Compare Candidate Sounds
 
 It is often useful to publish dev versions of simulations where the sound designers can choose between a set of sound
-options that are being considered for a given action.  To date, this has generally been implemented be adding an
+options that are being considered for a given action.  To date, this has generally been implemented by adding an
 "Options" dialog (or enhancing the one that is already there), setting the value of a global variable, and then
 referencing that variable where the sound generation occurs.  For an example of this, please see
-`SoundOperationsDialogContent` in tambo, and search for its usages in the code.  
+`SoundOperationsDialogContent` in tambo, and search for its usages in the code.  You can see it in action by running the
+tambo generator and selecting "Options" from the PhET menu.
 
 ## Some Common Patterns
 
+TODO: Fill this in.
 + Properties wired up to trigger sounds.
 
 # A Word About Browser Autoplay Policies 
 
 TODO: Fill this in.
+
+# A Request
+
+If you use this document to ramp up on adding sound to a simulation and have suggestions for improvements, please log
+the suggestions as GitHub issues at https://github.com/phetsims/tambo/issues.
