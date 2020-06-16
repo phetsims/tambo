@@ -15,11 +15,13 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import soundConstants from '../soundConstants.js';
 import tambo from '../tambo.js';
 import SoundGenerator from './SoundGenerator.js';
 
 // constants
 const STOP_DELAY_TIME = 0.1; // empirically determined to avoid clicks when stopping sounds
+const DEFAULT_TC = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
 class MultiClip extends SoundGenerator {
 
@@ -49,6 +51,9 @@ class MultiClip extends SoundGenerator {
         this.stopAll();
       }
     } );
+
+    // @private
+    this.playbackRate = DEFAULT_TC;
   }
 
   /**
@@ -76,6 +81,7 @@ class MultiClip extends SoundGenerator {
       // create an audio buffer source node and connect it to the previously data in the audio buffer
       const bufferSource = this.audioContext.createBufferSource();
       bufferSource.buffer = wrappedAudioBuffer.audioBufferProperty.value;
+      bufferSource.playbackRate.setTargetAtTime( this.playbackRate, this.audioContext.currentTime, DEFAULT_TC );
 
       // connect this source node to the output
       bufferSource.connect( this.localGainNode );
@@ -96,6 +102,24 @@ class MultiClip extends SoundGenerator {
       // start the playback of the sound
       bufferSource.start( now );
     }
+  }
+
+  /**
+   * play sound and change the speed as playback occurs
+   * @param {number} playbackRate - desired playback speed, 1 = normal speed
+   * @param {number} [timeConstant] -  time-constant in seconds for the first-order filter (exponential) approach to
+   * the target value. The larger this value is, the slower the transition will be.
+   * TODO: duplicated from SoundClip.js
+   * @public
+   */
+  setPlaybackRate( playbackRate, timeConstant ) {
+    timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TC : timeConstant;
+    if ( this.rateChangesAffectPlayingSounds ) {
+      this.activeBufferSources.forEach( bufferSource => {
+        bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
+      } );
+    }
+    this.playbackRate = playbackRate;
   }
 
   /**
