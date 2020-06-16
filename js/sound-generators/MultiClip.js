@@ -15,13 +15,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import soundConstants from '../soundConstants.js';
+import merge from '../../../phet-core/js/merge.js';
 import tambo from '../tambo.js';
 import SoundGenerator from './SoundGenerator.js';
 
 // constants
 const STOP_DELAY_TIME = 0.1; // empirically determined to avoid clicks when stopping sounds
-const DEFAULT_TC = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
 class MultiClip extends SoundGenerator {
 
@@ -32,6 +31,14 @@ class MultiClip extends SoundGenerator {
    * @param {Object} [options]
    */
   constructor( valueToWrappedAudioBufferMap, options ) {
+
+    options = merge( {
+
+      // {boolean} - Playback rate for this clip, can be changed after construction via API.  This value is a
+      // multiplier, so 1 is the nominal playback rate, 0.5 is half speed (or an octave lower in musical terms) and a
+      // value of 2 is twice normal speed (or an octave higher in musical terms).
+      initialPlaybackRate: 1
+    }, options );
 
     super( options );
 
@@ -53,7 +60,7 @@ class MultiClip extends SoundGenerator {
     } );
 
     // @private
-    this.playbackRate = DEFAULT_TC;
+    this.playbackRate = options.initialPlaybackRate;
   }
 
   /**
@@ -81,7 +88,7 @@ class MultiClip extends SoundGenerator {
       // create an audio buffer source node and connect it to the previously data in the audio buffer
       const bufferSource = this.audioContext.createBufferSource();
       bufferSource.buffer = wrappedAudioBuffer.audioBufferProperty.value;
-      bufferSource.playbackRate.setTargetAtTime( this.playbackRate, this.audioContext.currentTime, 0 );
+      bufferSource.playbackRate.setValueAtTime( this.playbackRate, this.audioContext.currentTime );
 
       // connect this source node to the output
       bufferSource.connect( this.localGainNode );
@@ -105,11 +112,9 @@ class MultiClip extends SoundGenerator {
   }
 
   /**
-   * play sound and change the speed as playback occurs
+   * Change the speed that the sound playback occurs. Note, this does not affect playing sounds, but will only affect
+   * newly subsequent plays of sounds.
    * @param {number} playbackRate - desired playback speed, 1 = normal speed
-   * @param {number} [timeConstant] -  time-constant in seconds for the first-order filter (exponential) approach to
-   * the target value. The larger this value is, the slower the transition will be.
-   * TODO: duplicated from SoundClip.js
    * @public
    */
   setPlaybackRate( playbackRate ) {
