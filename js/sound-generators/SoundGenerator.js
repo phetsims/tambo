@@ -207,6 +207,7 @@ class SoundGenerator {
     const now = this.audioContext.currentTime;
     if ( timeConstant === 0 ) {
       if ( outputLevel === 0 || this.fullyEnabledProperty.value ) {
+        this.masterGainNode.gain.cancelScheduledValues( now );
         this.masterGainNode.gain.setValueAtTime( outputLevel, now );
       }
     }
