@@ -15,6 +15,8 @@ import Text from '../../../../../scenery/js/nodes/Text.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import RectangularPushButton from '../../../../../sun/js/buttons/RectangularPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
+import ComboBox from '../../../../../sun/js/ComboBox.js';
+import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
 import tambo from '../../../tambo.js';
 
@@ -89,7 +91,21 @@ class UIComponentsScreenView extends DemosScreenView {
       {
         label: 'ResetAllButton',
         createNode: layoutBounds => new ResetAllButton( { center: layoutBounds.center } )
+      },
+      {
+        label: 'ComboBox',
+        createNode: layoutBounds => new ComboBox(
+          [
+            new ComboBoxItem( new Text( 'Rainbows', { font: LABEL_FONT } ), 0 ),
+            new ComboBoxItem( new Text( 'Unicorns', { font: LABEL_FONT } ), 1 ),
+            new ComboBoxItem( new Text( 'Butterflies', { font: LABEL_FONT } ), 2 )
+          ],
+          new NumberProperty( 0 ),
+          this,
+          { center: layoutBounds.center }
+        )
       }
+
     ];
 
     super( demos );
