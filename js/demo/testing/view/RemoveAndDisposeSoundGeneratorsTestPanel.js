@@ -154,7 +154,7 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
               // interim
               mostRecentlyAddedSoundGenerator.play();
               timer.setTimeout( () => {
-                if ( soundGenerators.contains( mostRecentlyAddedSoundGenerator ) ) {
+                if ( soundGenerators.includes( mostRecentlyAddedSoundGenerator ) ) {
                   mostRecentlyAddedSoundGenerator.stop();
                 }
               }, 3000 );
