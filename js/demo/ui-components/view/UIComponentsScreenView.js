@@ -11,13 +11,17 @@ import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../../scenery-phet/js/TimeControlNode.js';
+import Image from '../../../../../scenery/js/nodes/Image.js';
 import Text from '../../../../../scenery/js/nodes/Text.js';
+import AccordionBox from '../../../../../sun/js/AccordionBox.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
+import BooleanRectangularToggleButton from '../../../../../sun/js/buttons/BooleanRectangularToggleButton.js';
 import RectangularPushButton from '../../../../../sun/js/buttons/RectangularPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import ComboBox from '../../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
+import accordionImage from '../../../../images/accordion_png.js';
 import tambo from '../../../tambo.js';
 
 // constants
@@ -104,8 +108,33 @@ class UIComponentsScreenView extends DemosScreenView {
           this,
           { center: layoutBounds.center }
         )
+      },
+      {
+        label: 'BooleanRectangularToggleButton',
+        createNode: layoutBounds => new BooleanRectangularToggleButton(
+          new Text( 'Yep', { font: LABEL_FONT } ),
+          new Text( 'Nope', { font: LABEL_FONT } ),
+          new BooleanProperty( true ),
+          {
+            baseColor: '#B3FFEC',
+            center: layoutBounds.center
+          }
+        )
+      },
+      {
+        label: 'AccordionBox',
+        createNode: layoutBounds => new AccordionBox(
+          new Image( accordionImage, { maxWidth: 200 } ),
+          {
+            titleNode: new Text( 'Accordion Box', { font: LABEL_FONT } ),
+            expandedProperty: new BooleanProperty( false ),
+            contentXMargin: 30,
+            contentYMargin: 20,
+            contentYSpacing: 20,
+            center: layoutBounds.center
+          }
+        )
       }
-
     ];
 
     super( demos );
