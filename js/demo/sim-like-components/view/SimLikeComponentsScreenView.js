@@ -102,16 +102,20 @@ class SimLikeComponentsScreenView extends ScreenView {
       model.numberOfBallsProperty,
       new Property( new Range( 0, MAX_BALLS ) ),
       {
-        font: new PhetFont( 35 ),
+        numberDisplayOptions: {
+          backgroundFill: '#cccccc',
+          backgroundStroke: 'green',
+          backgroundLineWidth: 3,
+          align: 'center',
+          xMargin: 20,
+          textOptions: {
+            font: new PhetFont( 35 )
+          }
+        },
         arrowsPosition: 'bothBottom',
-        backgroundFill: '#cccccc',
-        backgroundStroke: 'green',
-        backgroundLineWidth: 3,
         arrowButtonFill: 'lightblue',
         arrowButtonStroke: 'blue',
         arrowButtonLineWidth: 0.2,
-        valueAlign: 'center',
-        xMargin: 20,
         centerX: ballsMovingSwitch.centerX,
         top: ballsMovingSwitch.bottom + 25
       } );
