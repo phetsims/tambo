@@ -108,6 +108,7 @@ class SimLikeComponentsScreenView extends ScreenView {
           backgroundLineWidth: 3,
           align: 'center',
           xMargin: 20,
+          yMargin: 3,
           textOptions: {
             font: new PhetFont( 35 )
           }
