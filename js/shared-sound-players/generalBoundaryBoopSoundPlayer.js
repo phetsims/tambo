@@ -6,12 +6,12 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import sliderBoundaryClickSound from '../../sounds/slider-clicks-idea-c-lower-end-click_mp3.js';
+import generalkBoundaryBoopSound from '../../sounds/general-boundary-boop_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const generalBoundaryBoopSoundPlayer = new SharedSoundClip( sliderBoundaryClickSound, {
+const generalBoundaryBoopSoundPlayer = new SharedSoundClip( generalkBoundaryBoopSound, {
   soundClipOptions: { initialOutputLevel: 0.2 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

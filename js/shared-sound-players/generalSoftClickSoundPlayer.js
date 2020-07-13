@@ -6,12 +6,12 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import sliderClickSound from '../../sounds/slider-clicks-idea-c-example_mp3.js';
+import generalSoftClipSound from '../../sounds/general-soft-click_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const generalSoftClickSoundPlayer = new SharedSoundClip( sliderClickSound, {
+const generalSoftClickSoundPlayer = new SharedSoundClip( generalSoftClipSound, {
   soundClipOptions: { initialOutputLevel: 0.2 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
