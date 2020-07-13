@@ -1,7 +1,7 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
- * The radioButtonSoundPlayerFactor singleton is where sound players for common radio buttons sounds can be obtained.
+ * The radioButtonSoundPlayerFactory singleton is where sound players for common radio buttons sounds can be obtained.
  * By providing a factory for these sounds, we can avoid having to construct unique instances for each case where a
  * sound player is needed, thus conserving memory and minimizing load time.
  *
@@ -13,9 +13,6 @@ import SoundClip from './sound-generators/SoundClip.js';
 import soundManager from './soundManager.js';
 import tambo from './tambo.js';
 
-/**
- * definition of the pushButtonSoundPlayer object
- */
 class RadioButtonSoundPlayerFactory {
 
   /**

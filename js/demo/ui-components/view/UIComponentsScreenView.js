@@ -53,7 +53,7 @@ class UIComponentsScreenView extends DemosScreenView {
       {
         label: 'PushButton',
         createNode: layoutBounds => new RectangularPushButton( {
-          content: new Text( 'You\'re So Pushy', { font: LABEL_FONT } ),
+          content: new Text( 'You\'re Pushing It.', { font: LABEL_FONT } ),
           center: layoutBounds.center
         } )
       },
