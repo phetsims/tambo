@@ -11,6 +11,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import merge from '../../../phet-core/js/merge.js';
 import soundManager from '../soundManager.js';
 import tambo from '../tambo.js';
 import SoundClip from './SoundClip.js';
@@ -23,6 +24,11 @@ class SharedSoundClip {
    * @constructor
    */
   constructor( wrappedAudioBuffer, options ) {
+
+    options = merge( {
+      soundClipOptions: null,
+      soundManagerOptions: null
+    }, options );
 
     // {SoundClip} @private
     this.soundClip = new SoundClip( wrappedAudioBuffer, options.soundClipOptions );
