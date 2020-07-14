@@ -18,6 +18,7 @@ file for this simulation. See https://github.com/phetsims/friction/blob/master/p
   - [ ] If the sound design includes enhanced sound, turn this on by adding the `enhancedSoundSupported: true` key-value
 pair to the `phet` sub-object in the package.json file for this simulation. The main effect that this is has is to add
 the 'Enhanced Sound' item to the PhET menu. See https://github.com/phetsims/friction/blob/master/package.json.
+  - [ ] Run `grunt update` to get the updated configuration into the HTML file.
 - [ ] Explicitly turn *off* sound for any common UI components that now produce sounds that are not needed, if there are
 any.  This is done by looking at the options and setting any sound players to `Playable.NO_SOUND`.  Search through the
 code base for example usages.
