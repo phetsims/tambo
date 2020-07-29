@@ -41,6 +41,8 @@ Here are some terms that were essentially invented in the process of creating th
 order to make it audible.
 - Sound Manager: A singleton instance that hooks sound generators to the output audio path, keeps track of them, and
 mutes them if sound is disabled, if the sim becomes invisible, and in several other circumstances
+- Sound Player: A sound generator that implements the `Playable` interface, meaning that it is triggered to produce its
+sound by invoking its `play` method.
 - Sound Clip: A sound generator that is based on a pre-recorded bit of audio.
 - Multi-Clip: A sound generator that can play one of several pre-recorded audio snippets in response to some event
 - Common UI Sound: A sound that is played by default by a common user interface component, such as a checkbox or a push
