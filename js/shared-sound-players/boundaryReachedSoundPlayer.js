@@ -6,12 +6,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import checkboxCheckedSound from '../../sounds/boundary-reached_mp3.js';
+import boundaryReachedSound from '../../sounds/boundary-reached_mp3.js';
 import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const boundaryReachedSoundPlayer = new SharedSoundClip( checkboxCheckedSound, {
+const boundaryReachedSoundPlayer = new SharedSoundClip( boundaryReachedSound, {
   soundClipOptions: { initialOutputLevel: 0.8 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
