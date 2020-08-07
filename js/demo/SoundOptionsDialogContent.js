@@ -8,7 +8,7 @@ import AquaRadioButtonGroup from '../../../sun/js/AquaRadioButtonGroup.js';
 import tambo from '../tambo.js';
 
 // constants
-const TEXT_OPTIONS = { font: new PhetFont( 18 ) };
+const TEXT_OPTIONS = { font: new PhetFont( 24 ) };
 
 /**
  * SoundOptionsDialogContent is intended as an example of a node that can serve as the content for an options dialog,
