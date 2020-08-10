@@ -54,6 +54,8 @@ sonify, all based on the sound design document.
   - [ ] Finalize the names of all sound files that have been added and get uncompressed versions of them and add them to
  the `assets` directory.  Make sure the names match, e.g. `bonk.mp3` in the `sounds` directory and `bonk.wav` in the
  `assets` directory.
+ - [ ] If an options dialog was added or if content was added to an existing options dialog to support comparitive
+ evaluation of sounds, remove said content
  - [ ] If there were individuals who were *only* involved in the sound design and thus not already on the `team` or
  other lists in the credits, add them using the `soundDesign` key.
  - [ ] Once the sound design is approved, mark the issue as `ready-for-testing` and have it tested with the other
