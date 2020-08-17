@@ -11,7 +11,7 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 
 /**
- * Test and demo of the ContinuousPropertySoundGenerator.
+ * Test and demo of the SoundClipChord.
  *
  * @author Michael Kauzamann (PhET Interactive Simulations)
  */
