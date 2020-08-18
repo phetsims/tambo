@@ -1,8 +1,12 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
- * Sound generator that plays a pitch related to a Property value.  Fades out when the Property value is not changing.
- * Generalized from GRAVITY_FORCE_LAB_BASICS/ForceSoundGenerator.
+ * ContinuousPropertySoundGenerator is a sound generator that alters the playback rate of a sound clip based on the
+ * value of a continuous numerical Property.  It is specifically designed to work with sound clips and does not support
+ * other types of sound production, such as oscillators.  It is implemented such that the sound fades in when changes
+ * occur in the Property's value and fades out out when the value doesn't change for some (configurable) amount of time.
+ * This was generalized from GRAVITY_FORCE_LAB_BASICS/ForceSoundGenerator, see
+ * https://github.com/phetsims/tambo/issues/76.
  *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Sam Reid (PhET Interactive Simulations)
@@ -16,21 +20,20 @@ class ContinuousPropertySoundGenerator extends SoundClip {
 
   /**
    * @param {Property.<number>} property
-   * @param {Object} sound - returned by the sound! plugin, should be optimized for good continuous looping, which may
-   * require it to be a .wav file, since .mp3 files generally have a bit of silence at the beginning.
-   * @param {Range} range
-   * @param {Property.<boolean>} resetInProgressProperty
+   * @param {Object} sound - returned by the import directive, should be optimized for good continuous looping, which
+   * may require it to be a .wav file, since .mp3 files generally have a bit of silence at the beginning.
+   * @param {Range} range - the range of values that the provided property can take on
    * @param {Object} [options]
    * @constructor
    */
-  constructor( property, sound, range, resetInProgressProperty, options ) {
+  constructor( property, sound, range, options ) {
     assert && assert( !options || !options.hasOwnProperty( 'loop' ), 'loop option should be supplied by' +
                                                                      ' ContinuousPropertySoundGenerator' );
 
     options = merge( {
       initialOutputLevel: 0.7,
       loop: true,
-      trimSilence: false,
+      trimSilence: true,
       pitchRangeInSemitones: 36,
       pitchCenterOffset: 2,
       fadeStartDelay: 0.2, // in seconds, time to wait before starting fade
@@ -44,7 +47,11 @@ class ContinuousPropertySoundGenerator extends SoundClip {
       // down, and a value of zero indicates no offset, so the pitch range will center around the inherent pitch of
       // the source loop.  This offset is added to the calculated playback rate, so a value of 1 would move the range
       // up an octave, -1 would move it down an octave, 0.5 would move it up a perfect fifth, etc.
-      playbackRateCenterOffset: 0
+      playbackRateCenterOffset: 0,
+
+      // {BooleanProperty|null} - If provided, this is used to prevent sound from being played during a reset, since
+      // the value of the provided Property will often change then, and sound generation may not be desired.
+      resetInProgressProperty: null
 
     }, options );
 
@@ -68,7 +75,9 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     // function for starting the sound or adjusting the volume
     const listener = value => {
 
-      if ( !resetInProgressProperty.value && !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      // Update the sound generation when the value changes.
+      if ( ( !options.resetInProgressProperty || !options.resetInProgressProperty.value ) &&
+           !phet.joist.sim.isSettingPhetioStateProperty.value ) {
 
         // calculate the playback rate
         const normalizedValue = Math.log( value / range.min ) / Math.log( range.max / range.min );
