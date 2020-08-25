@@ -12,7 +12,7 @@ import tambo from '../tambo.js';
 
 // create the shared sound instance
 const pushButtonSoundPlayer = new SharedSoundClip( pushButtonSound, {
-  soundClipOptions: { initialOutputLevel: 0.7 },
+  soundClipOptions: { initialOutputLevel: 0.5 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
 
