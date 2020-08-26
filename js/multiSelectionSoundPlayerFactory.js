@@ -1,9 +1,13 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
 /**
- * The radioButtonSoundPlayerFactory singleton is where sound players for common radio buttons sounds can be obtained.
- * By providing a factory for these sounds, we can avoid having to construct unique instances for each case where a
- * sound player is needed, thus conserving memory and minimizing load time.
+ * The multiSelectionSoundPlayerFactory singleton is used to create sound players that are similar but slightly
+ * different, and can be used to sonically indicate that a selection is being made from a group of available options.
+ * It was originally called radioButtonSoundPlayerFactory, but its usage was expanded to to combo boxes, so the name was
+ * generalized.  It may be appropriate to use in other contexts as well.
+ *
+ * By providing a factory for these sound players, we can avoid having to construct unique instances for each case where
+ * a sound player is needed, thus conserving memory and minimizing load time.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -13,15 +17,16 @@ import SoundClip from './sound-generators/SoundClip.js';
 import soundManager from './soundManager.js';
 import tambo from './tambo.js';
 
-class RadioButtonSoundPlayerFactory {
+class MultiSelectionSoundPlayerFactory {
 
   /**
    * @private
    */
   constructor() {
 
-    // @private - sound player, will be constructed the first time it is requested
-    this._radioButtonSoundPlayer = null;
+    // @private {SoundClip|null} - sound clip that will serve as the basis for all sound plays, will be constructed the
+    // first time it is requested
+    this._basisSoundClip = null;
 
     // @private - instances of sound players, indexed by position in radio button group, created as needed
     this.soundPlayers = [];
@@ -31,25 +36,27 @@ class RadioButtonSoundPlayerFactory {
    * get the single instance of the sound player, and create it if it doesn't exist yet
    * @private
    */
-  getSoundPlayerInstance() {
-    if ( !this._radioButtonSoundPlayer ) {
-      this._radioButtonSoundPlayer = new SoundClip( radioButtonSound, {
+  getSoundClipInstance() {
+    if ( !this._basisSoundClip ) {
+      this._basisSoundClip = new SoundClip( radioButtonSound, {
         initialOutputLevel: 0.7,
         rateChangesAffectPlayingSounds: false
       } );
 
       // automatically register the sound generator
-      soundManager.addSoundGenerator( this._radioButtonSoundPlayer, { categoryName: 'user-interface' } );
+      soundManager.addSoundGenerator( this._basisSoundClip, { categoryName: 'user-interface' } );
     }
-    return this._radioButtonSoundPlayer;
+    return this._basisSoundClip;
   }
 
   /**
-   * get a player that will play the sound clip at the specified rate
-   * @param {number} positionIndex - the position within the radio button group
+   * Get a sound player for the specified position that will produce a sound that varies from the primary sound based on
+   * provided parameter.
+   * @param {number} positionIndex - the position within the radio button group, combo box, or whatever
+   * @returns {Playable}
    * @public
    */
-  getRadioButtonSoundPlayer( positionIndex ) {
+  getSelectionSoundPlayer( positionIndex ) {
 
     if ( !this.soundPlayers[ positionIndex ] ) {
 
@@ -58,7 +65,7 @@ class RadioButtonSoundPlayerFactory {
 
       // create the sound player for this rate
       this.soundPlayers[ positionIndex ] = new FixedSpeedSoundClipPlayer(
-        this.getSoundPlayerInstance(),
+        this.getSoundClipInstance(),
         playbackRate
       );
     }
@@ -97,6 +104,6 @@ class FixedSpeedSoundClipPlayer {
   }
 }
 
-const radioButtonSoundPlayerFactory = new RadioButtonSoundPlayerFactory();
-tambo.register( 'radioButtonSoundPlayerFactory', radioButtonSoundPlayerFactory );
-export default radioButtonSoundPlayerFactory;
+const multiSelectionSoundPlayerFactory = new MultiSelectionSoundPlayerFactory();
+tambo.register( 'multiSelectionSoundPlayerFactory', multiSelectionSoundPlayerFactory );
+export default multiSelectionSoundPlayerFactory;
