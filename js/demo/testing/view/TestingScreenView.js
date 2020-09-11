@@ -4,7 +4,7 @@ import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../../axon/js/Emitter.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import timer from '../../../../../axon/js/timer.js';
+import stepTimer from '../../../../../axon/js/stepTimer.js';
 import Dimension2 from '../../../../../dot/js/Dimension2.js';
 import Range from '../../../../../dot/js/Range.js';
 import Utils from '../../../../../dot/js/Utils.js';
@@ -299,7 +299,7 @@ class LongSoundTestPanel extends Node {
       listener: () => {
         assert && assert( lightningBoltVisibleTimeout === null, 'timer should not be running when this fires' );
         lightningBoltVisibleProperty.value = true;
-        lightningBoltVisibleTimeout = timer.setTimeout( timeoutFiredListener, LIGHTNING_SHOWN_TIME * 1000 );
+        lightningBoltVisibleTimeout = stepTimer.setTimeout( timeoutFiredListener, LIGHTNING_SHOWN_TIME * 1000 );
       }
     } );
 
@@ -371,7 +371,7 @@ class LongSoundTestPanel extends Node {
 
     // handle reset
     const resetHandler = () => {
-      timer.clearTimeout( timeoutFiredListener );
+      stepTimer.clearTimeout( timeoutFiredListener );
     };
     resetInProgressProperty.link( resetHandler );
 
@@ -379,7 +379,7 @@ class LongSoundTestPanel extends Node {
     this.disposeLongSoundTestPanel = () => {
       resetInProgressProperty.unlink( resetHandler );
       soundManager.removeSoundGenerator( thunderSoundClip );
-      lightningBoltVisibleTimeout && timer.clearTimeout( lightningBoltVisibleTimeout );
+      lightningBoltVisibleTimeout && stepTimer.clearTimeout( lightningBoltVisibleTimeout );
     };
   }
 

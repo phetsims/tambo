@@ -2,7 +2,7 @@
 
 import ObservableArray from '../../../../../axon/js/ObservableArray.js';
 import Property from '../../../../../axon/js/Property.js';
-import timer from '../../../../../axon/js/timer.js';
+import stepTimer from '../../../../../axon/js/stepTimer.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
@@ -153,7 +153,7 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
               // play the loop for a fixed time and then stop, but make sure the sound generator wasn't removed in the
               // interim
               mostRecentlyAddedSoundGenerator.play();
-              timer.setTimeout( () => {
+              stepTimer.setTimeout( () => {
                 if ( soundGenerators.includes( mostRecentlyAddedSoundGenerator ) ) {
                   mostRecentlyAddedSoundGenerator.stop();
                 }
