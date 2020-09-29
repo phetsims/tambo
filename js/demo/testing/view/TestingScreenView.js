@@ -24,6 +24,7 @@ import Panel from '../../../../../sun/js/Panel.js';
 import lightningImage from '../../../../images/lightning_png.js';
 import marimbaSound from '../../../../sounds/bright-marimba_mp3.js';
 import checkboxCheckedSound from '../../../../sounds/checkbox-checked_mp3.js';
+import reverbImpulseResponse from '../../../../sounds/empty_apartment_bedroom_06_resampled_mp3.js';
 import loonCallSound from '../../../../sounds/loon-call_mp3.js';
 import rhodesChordSound from '../../../../sounds/rhodes-chord_mp3.js';
 import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js';
@@ -35,7 +36,6 @@ import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
-import reverbImpulseResponse from '../../../../sounds/empty_apartment_bedroom_06_resampled_mp3.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
 import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
@@ -64,56 +64,48 @@ class TestingScreenView extends DemosScreenView {
     // demo items, selected via the combo box in the parent class
     const demos = [
       {
-        label: 'BasicAndEnhancedSounds',
-        createNode: layoutBounds => new BasicAndEnhancedSoundTestNode( {
-          center: layoutBounds.center
-        } )
-      },
-      {
-        label: 'SoundEncodingComparisonPanel',
-        createNode: layoutBounds => new SoundEncodingComparisonPanel( this, {
-          center: layoutBounds.center
-        } )
-      },
-      {
-        label: 'LongSoundTest',
-        createNode: layoutBounds => new LongSoundTestPanel( resetInProgressProperty, {
-          center: layoutBounds.center
-        } )
-      },
-      {
-        label: 'RemoveAndDisposeSoundGenerators',
-        createNode: layoutBounds => new RemoveAndDisposeSoundGeneratorsTestPanel( {
-          center: layoutBounds.center
-        } )
-      },
-      {
-        label: 'SliderSoundTest',
-        createNode: layoutBounds => new SliderSoundTestNode( resetInProgressProperty, {
-          center: layoutBounds.center
-        } )
-      },
-      {
         label: 'AmplitudeModulatorTest',
         createNode: layoutBounds => new AmplitudeModulatorDemoNode( {
           center: layoutBounds.center
         } )
-      },
-      {
+      }, {
         label: 'AdditionalAudioNodesTestNode',
         createNode: layoutBounds => new AdditionalAudioNodesTestNode( {
           center: layoutBounds.center
         } )
-      },
-      {
+      }, {
+        label: 'BasicAndEnhancedSounds',
+        createNode: layoutBounds => new BasicAndEnhancedSoundTestNode( {
+          center: layoutBounds.center
+        } )
+      }, {
         label: 'ContinuousPropertySoundGeneratorTest',
         createNode: layoutBounds => new ContinuousPropertySoundGeneratorTestNode( this.stepEmitter, {
           center: layoutBounds.center
         } )
-      },
-      {
+      }, {
+        label: 'LongSoundTest',
+        createNode: layoutBounds => new LongSoundTestPanel( resetInProgressProperty, {
+          center: layoutBounds.center
+        } )
+      }, {
+        label: 'RemoveAndDisposeSoundGenerators',
+        createNode: layoutBounds => new RemoveAndDisposeSoundGeneratorsTestPanel( {
+          center: layoutBounds.center
+        } )
+      }, {
+        label: 'SliderSoundTest',
+        createNode: layoutBounds => new SliderSoundTestNode( resetInProgressProperty, {
+          center: layoutBounds.center
+        } )
+      }, {
         label: 'SoundClipChordTestNode',
         createNode: layoutBounds => new SoundClipChordTestNode( {
+          center: layoutBounds.center
+        } )
+      }, {
+        label: 'SoundEncodingComparisonPanel',
+        createNode: layoutBounds => new SoundEncodingComparisonPanel( this, {
           center: layoutBounds.center
         } )
       }
