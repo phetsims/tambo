@@ -24,8 +24,8 @@ class MultiSoundClip extends SoundGenerator {
     this.soundClips = [];
 
     for ( let i = 0; i < soundsAndOptionsTuples.length; i++ ) {
-      assert && assert( soundsAndOptionsTuples.hasOwnProperty( 'sound' ), 'sound is a required member of the tuples' );
       const soundAndOptions = soundsAndOptionsTuples[ i ];
+      assert && assert( soundAndOptions.hasOwnProperty( 'sound' ), 'sound is a required member of the tuples' );
       const soundClip = new SoundClip( soundAndOptions.sound, soundAndOptions.options );
       soundClip.connect( this.soundSourceDestination );
       this.soundClips.push( soundClip );
