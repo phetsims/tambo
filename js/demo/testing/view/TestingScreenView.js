@@ -38,6 +38,7 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
 import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
+import MultiSoundClipTestNode from './MultiSoundClipTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
 import SoundClipChordTestNode from './SoundClipChordTestNode.js';
 import SoundEncodingComparisonPanel from './SoundEncodingComparisonPanel.js';
@@ -86,6 +87,11 @@ class TestingScreenView extends DemosScreenView {
       }, {
         label: 'LongSoundTest',
         createNode: layoutBounds => new LongSoundTestPanel( resetInProgressProperty, {
+          center: layoutBounds.center
+        } )
+      }, {
+        label: 'MultiSoundClipTestNode',
+        createNode: layoutBounds => new MultiSoundClipTestNode( {
           center: layoutBounds.center
         } )
       }, {

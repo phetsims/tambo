@@ -2,6 +2,7 @@
 
 /**
  * Given a sound, make a chord based on it, and provided playback rates that correspond to notes.
+ *
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
