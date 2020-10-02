@@ -36,7 +36,7 @@ class BoxOfBalls {
     // @public (read-only) {Shape.rect} - the bounding box
     this.box = Shape.rect( 50, 0, width, height );
 
-    // @public (read-only) {ObservableArray}
+    // @public (read-only) {ObservableArrayDef}
     this.balls = createObservableArray();
   }
 

@@ -68,7 +68,7 @@ class SoundGenerator {
     // @private {AudioParam[]} - a list of all audio nodes to which this sound generator is connected
     this.connectionList = [];
 
-    // @private {ObservableArray.<BooleanProperty>} - A set of boolean Properties that collectively control whether the
+    // @private {ObservableArrayDef.<BooleanProperty>} - A set of boolean Properties that collectively control whether the
     // sound generator is enabled.  All of these must be true in order for the sound generator to be "fully
     // enabled", meaning that it will produce sound.
     this.enableControlProperties = createObservableArray();
