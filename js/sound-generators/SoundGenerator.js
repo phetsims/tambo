@@ -7,7 +7,7 @@
  */
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
-import ObservableArray from '../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../axon/js/createObservableArray.js';
 import merge from '../../../phet-core/js/merge.js';
 import phetAudioContext from '../phetAudioContext.js';
 import soundConstants from '../soundConstants.js';
@@ -71,7 +71,7 @@ class SoundGenerator {
     // @private {ObservableArray.<BooleanProperty>} - A set of boolean Properties that collectively control whether the
     // sound generator is enabled.  All of these must be true in order for the sound generator to be "fully
     // enabled", meaning that it will produce sound.
-    this.enableControlProperties = new ObservableArray();
+    this.enableControlProperties = createObservableArray();
 
     // @public (read-only) {BooleanProperty} - A Property that tracks whether this sound generator is fully enabled,
     // meaning that all the enable control Properties are in a state indicating that sound can be produced.  This

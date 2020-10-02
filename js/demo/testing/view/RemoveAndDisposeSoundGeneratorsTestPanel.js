@@ -1,6 +1,6 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
-import ObservableArray from '../../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../../axon/js/createObservableArray.js';
 import Property from '../../../../../axon/js/Property.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
 import merge from '../../../../../phet-core/js/merge.js';
@@ -63,7 +63,7 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
     }, options );
 
     // array of sound generators that have been added and not yet removed and disposed
-    const soundGenerators = new ObservableArray();
+    const soundGenerators = createObservableArray();
 
     // node where the content goes, needed so that ComboBox will have a good place to put its list
     const panelContentNode = new Node();

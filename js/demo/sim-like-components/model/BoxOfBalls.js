@@ -4,7 +4,7 @@
  * model of a box containing moving balls that bounce off the walls
  */
 
-import ObservableArray from '../../../../../axon/js/ObservableArray.js';
+import createObservableArray from '../../../../../axon/js/createObservableArray.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import Shape from '../../../../../kite/js/Shape.js';
 import Color from '../../../../../scenery/js/util/Color.js';
@@ -37,7 +37,7 @@ class BoxOfBalls {
     this.box = Shape.rect( 50, 0, width, height );
 
     // @public (read-only) {ObservableArray}
-    this.balls = new ObservableArray();
+    this.balls = createObservableArray();
   }
 
   /**
