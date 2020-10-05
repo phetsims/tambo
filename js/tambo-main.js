@@ -25,12 +25,11 @@ import tamboStrings from './tamboStrings.js';
 const SOUND_OPTIONS_DIALOG_CONTENT = new SoundOptionsDialogContent();
 
 // set up the simulation options
-const keyboardHelpContent = new TamboKeyboardHelpContent();
 const simOptions = {
   credits: {
     leadDesign: 'John Blanco'
   },
-  keyboardHelpNode: keyboardHelpContent,
+  hasKeyboardHelpContent: true,
   createOptionsDialogContent: () => SOUND_OPTIONS_DIALOG_CONTENT
 };
 
@@ -63,6 +62,8 @@ function createScreenIcon( color1, color2, gradientType ) {
   );
 }
 
+const keyboardHelpNode = new TamboKeyboardHelpContent();
+
 simLauncher.launch( () => {
   new Sim( tamboStrings.tambo.title, [
 
@@ -76,7 +77,8 @@ simLauncher.launch( () => {
         homeScreenIcon: new ScreenIcon( createScreenIcon( '#a31515', '#b75e2a', 'radial' ), {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
-        } )
+        } ),
+        keyboardHelpNode: keyboardHelpNode
       }
     ),
 
@@ -90,7 +92,8 @@ simLauncher.launch( () => {
         homeScreenIcon: new ScreenIcon( createScreenIcon( '#71ddbf', '#8d49e5', 'linear' ), {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
-        } )
+        } ),
+        keyboardHelpNode: keyboardHelpNode
       }
     ),
 
@@ -104,7 +107,8 @@ simLauncher.launch( () => {
         homeScreenIcon: new ScreenIcon( createScreenIcon( '#ADFF2F', '#FFDAB9', 'radial' ), {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
-        } )
+        } ),
+        keyboardHelpNode: keyboardHelpNode
       }
     )
 
