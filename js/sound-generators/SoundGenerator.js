@@ -81,7 +81,7 @@ class SoundGenerator {
     // listener that updates the state of fullyEnabledProperty
     const updateFullyEnabledState = () => {
       this.fullyEnabledProperty.value = _.every(
-        this.enableControlProperties.getArray(),
+        this.enableControlProperties,
         enableControlProperty => enableControlProperty.value
       );
     };
