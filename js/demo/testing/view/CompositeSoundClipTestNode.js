@@ -1,7 +1,7 @@
 // Copyright 2020, University of Colorado Boulder
 
 /**
- * Test and demo of the MultiSoundClip.
+ * Test and demo of the CompositeSoundClip.
  *
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
@@ -13,11 +13,11 @@ import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import brightMarimbaSound from '../../../../sounds/bright-marimba_mp3.js';
 import loonCallSound from '../../../../sounds/loon-call_mp3.js';
 import Playable from '../../../Playable.js';
-import MultiSoundClip from '../../../sound-generators/MultiSoundClip.js';
+import CompositeSoundClip from '../../../sound-generators/CompositeSoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 
-class MultiSoundClipTestNode extends VBox {
+class CompositeSoundClipTestNode extends VBox {
 
   /**
    * @param {Object} [options]
@@ -25,29 +25,29 @@ class MultiSoundClipTestNode extends VBox {
   constructor( options ) {
 
     // sound clips to be played
-    const multiSoundClip = new MultiSoundClip( [
+    const compositeSoundClip = new CompositeSoundClip( [
       { sound: brightMarimbaSound },
       { sound: brightMarimbaSound, options: { initialPlaybackRate: Math.pow( 2, 4 / 12 ) } },
       { sound: brightMarimbaSound, options: { initialPlaybackRate: 2 } },
       { sound: loonCallSound }
     ] );
 
-    soundManager.addSoundGenerator( multiSoundClip );
+    soundManager.addSoundGenerator( compositeSoundClip );
 
     // add a button to play a basic-mode sound
-    const playSoundClipChordButton = new TextPushButton( 'Play MultiSoundClip', {
+    const playSoundClipChordButton = new TextPushButton( 'Play CompositeSoundClip', {
       baseColor: '#aad6cc',
       font: new PhetFont( 16 ),
       soundPlayer: Playable.NO_SOUND, // turn off default sound generation
-      listener: () => { multiSoundClip.play(); }
+      listener: () => { compositeSoundClip.play(); }
     } );
 
     // add button to play enhanced-mode sound
-    const stopSoundClipChordButton = new TextPushButton( 'Stop MultiSoundClip', {
+    const stopSoundClipChordButton = new TextPushButton( 'Stop CompositeSoundClip', {
       baseColor: '#DBB1CD',
       font: new PhetFont( 16 ),
       soundPlayer: Playable.NO_SOUND, // turn off default sound generation
-      listener: () => { multiSoundClip.stop(); }
+      listener: () => { compositeSoundClip.stop(); }
     } );
 
     super( merge( {
@@ -56,9 +56,9 @@ class MultiSoundClipTestNode extends VBox {
     }, options ) );
 
     // @private - dispose function
-    this.disposeMultiSoundClipTestNode = () => {
-      soundManager.removeSoundGenerator( multiSoundClip );
-      multiSoundClip.dispose();
+    this.disposeCompositeSoundClipTestNode = () => {
+      soundManager.removeSoundGenerator( compositeSoundClip );
+      compositeSoundClip.dispose();
     };
   }
 
@@ -66,10 +66,10 @@ class MultiSoundClipTestNode extends VBox {
    * @public
    */
   dispose() {
-    this.disposeMultiSoundClipTestNode();
+    this.disposeCompositeSoundClipTestNode();
     super.dispose();
   }
 }
 
-tambo.register( 'MultiSoundClipTestNode', MultiSoundClipTestNode );
-export default MultiSoundClipTestNode;
+tambo.register( 'CompositeSoundClipTestNode', CompositeSoundClipTestNode );
+export default CompositeSoundClipTestNode;

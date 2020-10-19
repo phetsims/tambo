@@ -1,8 +1,8 @@
 // Copyright 2020, University of Colorado Boulder
 
 /**
- * A sound generator that supports playing and stopping multiple SoundClips at the same time. Basically this is a
- * container to create and control multiple SoundClip instances as one.
+ * A sound generator that is composed of multiple SoundClips that are all started and stopped at the same time.
+ * Basically, this is a container to create and control multiple SoundClip instances as one.
  *
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
@@ -11,7 +11,7 @@ import tambo from '../tambo.js';
 import SoundClip from './SoundClip.js';
 import SoundGenerator from './SoundGenerator.js';
 
-class MultiSoundClip extends SoundGenerator {
+class CompositeSoundClip extends SoundGenerator {
 
   /**
    * @param {Array.<{sound:WrappedAudioBuffer, [options]:Object}>} soundsAndOptionsTuples
@@ -77,6 +77,6 @@ class MultiSoundClip extends SoundGenerator {
   }
 }
 
-tambo.register( 'MultiSoundClip', MultiSoundClip );
+tambo.register( 'CompositeSoundClip', CompositeSoundClip );
 
-export default MultiSoundClip;
+export default CompositeSoundClip;
