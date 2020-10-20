@@ -1,9 +1,15 @@
 // Copyright 2020, University of Colorado Boulder
 
-import BooleanProperty from '../../axon/js/BooleanProperty.js';
+/**
+ * AmplitudeModulator instances can be used to create low-frequency amplitude oscillation effects on a loop, oscillator,
+ * or other steady sound source.  It is not a sound generator itself, and is instead intended to be used as a component
+ * within a sound generator.
+ */
+
 import NumberProperty from '../../axon/js/NumberProperty.js';
 import StringProperty from '../../axon/js/StringProperty.js';
 import merge from '../../phet-core/js/merge.js';
+import EnabledComponent from '../../sun/js/EnabledComponent.js';
 import phetAudioContext from './phetAudioContext.js';
 import tambo from './tambo.js';
 
@@ -12,19 +18,15 @@ const DEFAULT_FREQUENCY = 5; // Hz
 const DEFAULT_DEPTH = 0.9; // proportion
 const DEFAULT_WAVEFORM = 'sine'; // proportion
 
-/**
- * AmplitudeModulator instances can be used to create low-frequency amplitude oscillation effects on a loop, oscillator,
- * or other steady sound source.  It is not a sound generator itself, and is instead intended to be used as a component
- * within a sound generator.
- */
 class AmplitudeModulator {
 
+  /**
+   * @mixes EnabledComponent
+   * @param {Object} [options]
+   */
   constructor( options ) {
 
     options = merge( {
-
-      // {BooleanProperty} - Controls whether the oscillator is enabled.  When not enabled, this acts as a pass through.
-      enabledProperty: null,
 
       // {NumberProperty} - Controls the frequency of modulation, created if not supplied.
       frequencyProperty: null,
@@ -39,29 +41,17 @@ class AmplitudeModulator {
 
     }, options );
 
-    // @public {BooleanProperty}
-    this.enabledProperty = options.enabledProperty;
-    if ( !this.enabledProperty ) {
-      this.enabledProperty = new BooleanProperty( true );
-    }
+    // Initialize the mixin, which defines this.enabledProperty.
+    this.initializeEnabledComponent( options );
 
     // @public {NumberProperty}
-    this.frequencyProperty = options.frequencyProperty;
-    if ( !this.frequencyProperty ) {
-      this.frequencyProperty = new NumberProperty( DEFAULT_FREQUENCY );
-    }
+    this.frequencyProperty = options.frequencyProperty || new NumberProperty( DEFAULT_FREQUENCY );
 
     // @public {NumberProperty}
-    this.depthProperty = options.depthProperty;
-    if ( !this.depthProperty ) {
-      this.depthProperty = new NumberProperty( DEFAULT_DEPTH );
-    }
+    this.depthProperty = options.depthProperty || new NumberProperty( DEFAULT_DEPTH );
 
     // @public {StringProperty}
-    this.waveformProperty = options.waveformProperty;
-    if ( !this.waveformProperty ) {
-      this.waveformProperty = new StringProperty( DEFAULT_WAVEFORM );
-    }
+    this.waveformProperty = options.waveformProperty || new StringProperty( DEFAULT_WAVEFORM );
 
     // @private - the low frequency oscillator (LFO) that will control the modulation, created in the handler below
     let lowFrequencyOscillator = null;
@@ -76,7 +66,7 @@ class AmplitudeModulator {
     lfoAttenuator.connect( this.modulatedGainNode.gain );
 
     // hook up the LFO-control properties
-    this.enabledProperty.link( enabled => {
+    const enabledListener = enabled => {
       const now = phetAudioContext.currentTime;
       if ( enabled ) {
 
@@ -104,23 +94,46 @@ class AmplitudeModulator {
         // Set the gain to 1 so that this will act as a pass-through with no effect on the signal.
         this.modulatedGainNode.gain.setValueAtTime( 1, now );
       }
-    } );
-    this.depthProperty.link( depth => {
+    };
+    this.enabledProperty.link( enabledListener );
+
+    const depthListener = depth => {
       if ( lowFrequencyOscillator ) {
         lfoAttenuator.gain.setValueAtTime( depth / 2, phetAudioContext.currentTime );
         this.modulatedGainNode.gain.setValueAtTime( 1 - depth / 2, phetAudioContext.currentTime );
       }
-    } );
-    this.waveformProperty.link( waveform => {
+    };
+    this.depthProperty.link( depthListener );
+
+    const waveformListener =  waveform => {
       if ( lowFrequencyOscillator ) {
         lowFrequencyOscillator.type = waveform;
       }
-    } );
-    this.frequencyProperty.link( frequency => {
+    };
+    this.waveformProperty.link( waveformListener );
+
+    const frequencyListener = frequency => {
       if ( lowFrequencyOscillator ) {
         lowFrequencyOscillator.frequency.setValueAtTime( frequency, phetAudioContext.currentTime );
       }
-    } );
+    };
+    this.frequencyProperty.link( frequencyListener );
+
+    // @private
+    this.disposeAmplitudeModulator = () => {
+      this.enabledProperty.unlink( enabledListener );
+      this.depthProperty.unlink( depthListener );
+      this.waveformProperty.unlink( waveformListener );
+      this.frequencyProperty.unlink( frequencyListener );
+    };
+  }
+
+  /**
+   * @public
+   */
+  dispose() {
+    this.disposeAmplitudeModulator();
+    this.disposeEnabledComponent();
   }
 
   /**
@@ -141,6 +154,8 @@ class AmplitudeModulator {
     this.modulatedGainNode.connect( destination );
   }
 }
+
+EnabledComponent.mixInto( AmplitudeModulator );
 
 tambo.register( 'AmplitudeModulator', AmplitudeModulator );
 export default AmplitudeModulator;
