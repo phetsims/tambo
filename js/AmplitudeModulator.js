@@ -23,7 +23,7 @@ class AmplitudeModulator {
 
     options = merge( {
 
-      // {BooleanProperty} - Controls whether the oscillator is enabled.  Then not enabled, this acts as a pass through.
+      // {BooleanProperty} - Controls whether the oscillator is enabled.  When not enabled, this acts as a pass through.
       enabledProperty: null,
 
       // {NumberProperty} - Controls the frequency of modulation, created if not supplied.
