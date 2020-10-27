@@ -4,6 +4,8 @@
  * AmplitudeModulator instances can be used to create low-frequency amplitude oscillation effects on a loop, oscillator,
  * or other steady sound source.  It is not a sound generator itself, and is instead intended to be used as a component
  * within a sound generator.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import NumberProperty from '../../axon/js/NumberProperty.js';
