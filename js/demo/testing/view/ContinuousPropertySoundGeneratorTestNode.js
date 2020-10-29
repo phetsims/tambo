@@ -1,5 +1,12 @@
 // Copyright 2020, University of Colorado Boulder
 
+/**
+ * Test and demo of the ContinuousPropertySoundGenerator.
+ *
+ * @author Sam Reid (PhET Interactive Simulations)
+ * @author John Blanco (PhET Interactive Simulations)
+ */
+
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
@@ -17,12 +24,6 @@ import ContinuousPropertySoundGenerator from '../../../sound-generators/Continuo
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 
-/**
- * Test and demo of the ContinuousPropertySoundGenerator.
- *
- * @author Sam Reid (PhET Interactive Simulations)
- * @author John Blanco (PhET Interactive Simulations)
- */
 class ContinuousPropertySoundGeneratorTestNode extends VBox {
 
   /**

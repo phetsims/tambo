@@ -1,5 +1,11 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
+/**
+ * a panel that contains controls used to exercise the addition, removal, and disposal of sound generators
+ *
+ * @author John Blanco
+ */
+
 import Property from '../../../../../axon/js/Property.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
@@ -190,12 +196,6 @@ const sounds = [
   }
 ];
 
-
-/**
- * a panel that contains controls used to exercise the addition, removal, and disposal of sound generators
- *
- * @author John Blanco
- */
 class SoundEncodingComparisonPanel extends Panel {
 
   /**

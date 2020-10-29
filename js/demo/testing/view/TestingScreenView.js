@@ -1,5 +1,11 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
+/**
+ * view for a screen that allows testing and demonstration of various sound components and behaviors
+ *
+ * @author John Blanco (PhET Interactive Simulations)
+ */
+
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../../axon/js/Emitter.js';
@@ -48,11 +54,6 @@ const CHECKBOX_SIZE = 16;
 const FONT = new PhetFont( 16 );
 const LIGHTNING_SHOWN_TIME = 0.750; // in seconds
 
-/**
- * view for a screen that allows testing and demonstration of various sound components and behaviors
- *
- * @author John Blanco (PhET Interactive Simulations)
- */
 class TestingScreenView extends DemosScreenView {
 
   /**

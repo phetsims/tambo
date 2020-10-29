@@ -1,5 +1,11 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
+/**
+ * a panel that contains controls used to exercise the addition, removal, and disposal of sound generators
+ *
+ * @author John Blanco
+ */
+
 import createObservableArray from '../../../../../axon/js/createObservableArray.js';
 import Property from '../../../../../axon/js/Property.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
@@ -43,11 +49,6 @@ const SOUND_GENERATOR_INFO = {
   }
 };
 
-/**
- * a panel that contains controls used to exercise the addition, removal, and disposal of sound generators
- *
- * @author John Blanco
- */
 class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
 
   /**

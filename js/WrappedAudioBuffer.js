@@ -1,7 +1,5 @@
 // Copyright 2020, University of Colorado Boulder
 
-import TinyProperty from '../../axon/js/TinyProperty.js';
-
 /**
  * WrappedAudioBuffer is an object that contains a Web Audio AudioBuffer and a TinyProperty that indicates whether the
  * audio buffer has been decoded.  This is *only* intended for usage during the loading process, not during run time,
@@ -10,6 +8,9 @@ import TinyProperty from '../../axon/js/TinyProperty.js';
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
+
+import TinyProperty from '../../axon/js/TinyProperty.js';
+
 class WrappedAudioBuffer {
 
   constructor() {
