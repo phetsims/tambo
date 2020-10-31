@@ -20,10 +20,9 @@ const DEFAULT_FREQUENCY = 5; // Hz
 const DEFAULT_DEPTH = 0.9; // proportion
 const DEFAULT_WAVEFORM = 'sine'; // proportion
 
-class AmplitudeModulator {
+class AmplitudeModulator extends EnabledComponent {
 
   /**
-   * @mixes EnabledComponent
    * @param {Object} [options]
    */
   constructor( options ) {
@@ -43,8 +42,7 @@ class AmplitudeModulator {
 
     }, options );
 
-    // Initialize the mixin, which defines this.enabledProperty.
-    this.initializeEnabledComponent( options );
+    super( options );
 
     // @public {NumberProperty}
     this.frequencyProperty = options.frequencyProperty || new NumberProperty( DEFAULT_FREQUENCY );
@@ -107,7 +105,7 @@ class AmplitudeModulator {
     };
     this.depthProperty.link( depthListener );
 
-    const waveformListener =  waveform => {
+    const waveformListener = waveform => {
       if ( lowFrequencyOscillator ) {
         lowFrequencyOscillator.type = waveform;
       }
@@ -135,7 +133,7 @@ class AmplitudeModulator {
    */
   dispose() {
     this.disposeAmplitudeModulator();
-    this.disposeEnabledComponent();
+    super.dispose();
   }
 
   /**
@@ -156,8 +154,6 @@ class AmplitudeModulator {
     this.modulatedGainNode.connect( destination );
   }
 }
-
-EnabledComponent.mixInto( AmplitudeModulator );
 
 tambo.register( 'AmplitudeModulator', AmplitudeModulator );
 export default AmplitudeModulator;
