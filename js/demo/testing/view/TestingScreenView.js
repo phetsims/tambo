@@ -70,47 +70,56 @@ class TestingScreenView extends DemosScreenView {
         createNode: layoutBounds => new AmplitudeModulatorDemoNode( {
           center: layoutBounds.center
         } )
-      }, {
+      },
+      {
         label: 'AdditionalAudioNodesTestNode',
         createNode: layoutBounds => new AdditionalAudioNodesTestNode( {
           center: layoutBounds.center
         } )
-      }, {
+      },
+      {
         label: 'BasicAndEnhancedSounds',
         createNode: layoutBounds => new BasicAndEnhancedSoundTestNode( {
           center: layoutBounds.center
         } )
-      }, {
+      },
+      {
         label: 'ContinuousPropertySoundGeneratorTest',
         createNode: layoutBounds => new ContinuousPropertySoundGeneratorTestNode( this.stepEmitter, {
           center: layoutBounds.center
         } )
-      }, {
+      },
+      {
         label: 'LongSoundTest',
         createNode: layoutBounds => new LongSoundTestPanel( resetInProgressProperty, {
           center: layoutBounds.center
         } )
-      }, {
+      },
+      {
         label: 'CompositeSoundClipTestNode',
         createNode: layoutBounds => new CompositeSoundClipTestNode( {
           center: layoutBounds.center
         } )
-      }, {
+      },
+      {
         label: 'RemoveAndDisposeSoundGenerators',
         createNode: layoutBounds => new RemoveAndDisposeSoundGeneratorsTestPanel( {
           center: layoutBounds.center
         } )
-      }, {
+      },
+      {
         label: 'SliderSoundTest',
         createNode: layoutBounds => new SliderSoundTestNode( resetInProgressProperty, {
           center: layoutBounds.center
         } )
-      }, {
+      },
+      {
         label: 'SoundClipChordTestNode',
         createNode: layoutBounds => new SoundClipChordTestNode( {
           center: layoutBounds.center
         } )
-      }, {
+      },
+      {
         label: 'SoundEncodingComparisonPanel',
         createNode: layoutBounds => new SoundEncodingComparisonPanel( this, {
           center: layoutBounds.center
