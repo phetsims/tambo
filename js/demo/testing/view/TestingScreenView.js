@@ -27,6 +27,7 @@ import Checkbox from '../../../../../sun/js/Checkbox.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
 import Panel from '../../../../../sun/js/Panel.js';
+import VSlider from '../../../../../sun/js/VSlider.js';
 import lightningImage from '../../../../images/lightning_png.js';
 import marimbaSound from '../../../../sounds/bright-marimba_mp3.js';
 import checkboxCheckedSound from '../../../../sounds/checkbox-checked_mp3.js';
@@ -38,13 +39,14 @@ import sliderDecreaseClickSound from '../../../../sounds/slider-click-02_mp3.js'
 import thunderSound from '../../../../sounds/thunder_mp3.js';
 import phetAudioContext from '../../../phetAudioContext.js';
 import Playable from '../../../Playable.js';
+import FourierToneGenerator from '../../../sound-generators/FourierToneGenerator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
-import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
 import CompositeSoundClipTestNode from './CompositeSoundClipTestNode.js';
+import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
 import SoundClipChordTestNode from './SoundClipChordTestNode.js';
 import SoundEncodingComparisonPanel from './SoundEncodingComparisonPanel.js';
@@ -90,12 +92,6 @@ class TestingScreenView extends DemosScreenView {
         } )
       },
       {
-        label: 'LongSoundTest',
-        createNode: layoutBounds => new LongSoundTestPanel( resetInProgressProperty, {
-          center: layoutBounds.center
-        } )
-      },
-      {
         label: 'CompositeSoundClipTestNode',
         createNode: layoutBounds => new CompositeSoundClipTestNode( {
           center: layoutBounds.center
@@ -104,6 +100,18 @@ class TestingScreenView extends DemosScreenView {
       {
         label: 'RemoveAndDisposeSoundGenerators',
         createNode: layoutBounds => new RemoveAndDisposeSoundGeneratorsTestPanel( {
+          center: layoutBounds.center
+        } )
+      },
+      {
+        label: 'FourierToneGeneratorTestNode',
+        createNode: layoutBounds => new FourierToneGeneratorTestNode( resetInProgressProperty, {
+          center: layoutBounds.center
+        } )
+      },
+      {
+        label: 'LongSoundTest',
+        createNode: layoutBounds => new LongSoundTestPanel( resetInProgressProperty, {
           center: layoutBounds.center
         } )
       },
@@ -210,8 +218,7 @@ class BasicAndEnhancedSoundTestNode extends VBox {
 }
 
 /**
- * A node with two buttons, one that plays a sound clip with no additional audio nodes and one that plays the same
- * sound clip with a reverb (convolver) node added into the signal path through the additionalAudioNodes option.
+ * A node with buttons for playing sounds in conjunction with reverb nodes.
  */
 class AdditionalAudioNodesTestNode extends VBox {
 
@@ -279,6 +286,72 @@ class AdditionalAudioNodesTestNode extends VBox {
    */
   dispose() {
     this.disposeBasicAndEnhancedSoundTestNode();
+    super.dispose();
+  }
+}
+
+/**
+ * A node for testing the sound generator that will be used in the Fourier sim
+ */
+class FourierToneGeneratorTestNode extends VBox {
+
+  constructor( resetInProgressProperty, options ) {
+
+    // Create and hook up the tone generator.
+    const fourierToneGenerator = new FourierToneGenerator();
+    soundManager.addSoundGenerator( fourierToneGenerator );
+
+    // checkbox for enabling and disabling sound generation
+    const soundGenerationEnabled = new BooleanProperty( false );
+    const soundGenerationEnabledCheckbox = new Checkbox(
+      new Text( 'Enabled', { font: FONT } ),
+      soundGenerationEnabled,
+      { boxWidth: CHECKBOX_SIZE }
+    );
+    soundGenerationEnabled.link( enabled => {
+      if ( enabled ) {
+        fourierToneGenerator.play();
+      }
+      else {
+        fourierToneGenerator.stop();
+      }
+    } );
+
+    // Create a set of sliders to control the level of the various harmonics in the tone generator.
+    const harmonicControllersHBox = new HBox( { spacing: 3 } );
+    const harmonicLevelProperties = [];
+    _.times( 11, index => {
+      const harmonicLevelProperty = new NumberProperty( 0 );
+      harmonicLevelProperties.push( harmonicLevelProperty );
+      harmonicLevelProperty.link( level => fourierToneGenerator.setOscillatorOutputLevel( index, level ) );
+      const toneControlSlider = new VSlider( harmonicLevelProperty, new Range( -1, 1 ) );
+      harmonicControllersHBox.addChild( toneControlSlider );
+    } );
+
+    // Handle a reset.
+    resetInProgressProperty.link( resetInProgress => {
+      if ( resetInProgress ) {
+        soundGenerationEnabled.reset();
+        harmonicLevelProperties.forEach( harmonicLevelProperty => harmonicLevelProperty.reset() );
+      }
+    } );
+
+    super( merge( { children: [ soundGenerationEnabledCheckbox, harmonicControllersHBox ] }, options ) );
+
+    // @private - dispose function
+    this.disposeFourierToneGeneratorTestNode = () => {
+      soundManager.removeSoundGenerator( fourierToneGenerator );
+      fourierToneGenerator.dispose();
+      harmonicLevelProperties.forEach( harmonicLevelProperty => harmonicLevelProperty.dispose );
+    };
+  }
+
+  /**
+   * @public
+   * @override
+   */
+  dispose() {
+    this.disposeFourierToneGeneratorTestNode();
     super.dispose();
   }
 }
