@@ -52,7 +52,8 @@ class FourierToneGenerator extends SoundGenerator {
   }
 
   /**
-   * Set the output level for the specified oscillator.
+   * Set the output level for the specified oscillator.  Note that this does *not* set the overall output level - use
+   * `setOutputLevel` for that.
    * @param {number} oscillatorIndex
    * @param {number} outputLevel
    * @public
@@ -60,6 +61,17 @@ class FourierToneGenerator extends SoundGenerator {
   setOscillatorOutputLevel( oscillatorIndex, outputLevel ) {
     assert && assert( oscillatorIndex >= 0 && oscillatorIndex < this.oscillatorSoundGenerators.length );
     this.oscillatorSoundGenerators[ oscillatorIndex ].setOutputLevel( outputLevel );
+  }
+
+  /**
+   * Set the waveform used by all oscillators.
+   * @param waveformType
+   * @public
+   */
+  setWaveformType( waveformType ) {
+    this.oscillatorSoundGenerators.forEach(
+      oscillatorSoundGenerator => oscillatorSoundGenerator.setWaveformType( waveformType )
+    );
   }
 }
 
