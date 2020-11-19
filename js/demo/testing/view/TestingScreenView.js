@@ -9,6 +9,7 @@
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../../axon/js/Emitter.js';
+import EnumerationProperty from '../../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
 import Dimension2 from '../../../../../dot/js/Dimension2.js';
@@ -24,6 +25,8 @@ import Text from '../../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../../scenery/js/nodes/VBox.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
+import ComboBox from '../../../../../sun/js/ComboBox.js';
+import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
 import Panel from '../../../../../sun/js/Panel.js';
@@ -40,6 +43,7 @@ import thunderSound from '../../../../sounds/thunder_mp3.js';
 import phetAudioContext from '../../../phetAudioContext.js';
 import Playable from '../../../Playable.js';
 import FourierToneGenerator from '../../../sound-generators/FourierToneGenerator.js';
+import OscillatorSoundGenerator from '../../../sound-generators/OscillatorSoundGenerator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
@@ -105,7 +109,7 @@ class TestingScreenView extends DemosScreenView {
       },
       {
         label: 'FourierToneGeneratorTestNode',
-        createNode: layoutBounds => new FourierToneGeneratorTestNode( resetInProgressProperty, {
+        createNode: layoutBounds => new FourierToneGeneratorTestNode( resetInProgressProperty, this, {
           center: layoutBounds.center
         } )
       },
@@ -295,7 +299,9 @@ class AdditionalAudioNodesTestNode extends VBox {
  */
 class FourierToneGeneratorTestNode extends VBox {
 
-  constructor( resetInProgressProperty, options ) {
+  constructor( resetInProgressProperty, listBoxParent, options ) {
+
+    options = merge( { spacing: 20 }, options );
 
     // Create and hook up the tone generator.
     const fourierToneGenerator = new FourierToneGenerator();
@@ -317,6 +323,22 @@ class FourierToneGeneratorTestNode extends VBox {
       }
     } );
 
+    // combo box for selecting they type of wave that the oscillator should generate
+    const waveformTypeProperty = new EnumerationProperty(
+      OscillatorSoundGenerator.WaveformType,
+      OscillatorSoundGenerator.WaveformType.SINE
+    );
+    waveformTypeProperty.link( waveformType => {
+      fourierToneGenerator.setWaveformType( waveformType );
+    } );
+    const comboBoxItems = [
+      new ComboBoxItem( new Text( 'Sine', { font: FONT } ), OscillatorSoundGenerator.WaveformType.SINE ),
+      new ComboBoxItem( new Text( 'Square', { font: FONT } ), OscillatorSoundGenerator.WaveformType.SQUARE ),
+      new ComboBoxItem( new Text( 'Triangle', { font: FONT } ), OscillatorSoundGenerator.WaveformType.TRIANGLE ),
+      new ComboBoxItem( new Text( 'Sawtooth', { font: FONT } ), OscillatorSoundGenerator.WaveformType.SAWTOOTH )
+    ];
+    const waveformTypeComboBox = new ComboBox( comboBoxItems, waveformTypeProperty, listBoxParent );
+
     // Create a set of sliders to control the level of the various harmonics in the tone generator.
     const harmonicControllersHBox = new HBox( { spacing: 3 } );
     const harmonicLevelProperties = [];
@@ -330,15 +352,18 @@ class FourierToneGeneratorTestNode extends VBox {
       harmonicControllersHBox.addChild( toneControlSlider );
     } );
 
-    // Handle a reset.
+    // Handle reset.
     resetInProgressProperty.link( resetInProgress => {
       if ( resetInProgress ) {
         soundGenerationEnabled.reset();
+        waveformTypeProperty.reset();
         harmonicLevelProperties.forEach( harmonicLevelProperty => harmonicLevelProperty.reset() );
       }
     } );
 
-    super( merge( { children: [ soundGenerationEnabledCheckbox, harmonicControllersHBox ] }, options ) );
+    super(
+      merge( { children: [ soundGenerationEnabledCheckbox, waveformTypeComboBox, harmonicControllersHBox ] }, options )
+    );
 
     // @private - dispose function
     this.disposeFourierToneGeneratorTestNode = () => {

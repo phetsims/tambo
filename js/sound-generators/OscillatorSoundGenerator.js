@@ -7,10 +7,22 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import Enumeration from '../../../phet-core/js/Enumeration.js';
 import merge from '../../../phet-core/js/merge.js';
 import phetAudioContext from '../phetAudioContext.js';
 import tambo from '../tambo.js';
 import SoundGenerator from './SoundGenerator.js';
+
+// constants
+const WaveformType = Enumeration.byKeys( [ 'SINE', 'SQUARE', 'TRIANGLE', 'SAWTOOTH' ] );
+
+// map of the waveform type enum values to the values used by Web Audio oscillators
+const WAVEFORM_NAME_MAP = new Map( [
+  [ WaveformType.SINE, 'sine' ],
+  [ WaveformType.SQUARE, 'square' ],
+  [ WaveformType.TRIANGLE, 'triangle' ],
+  [ WaveformType.SAWTOOTH, 'sawtooth' ]
+] );
 
 class OscillatorSoundGenerator extends SoundGenerator {
 
@@ -22,7 +34,11 @@ class OscillatorSoundGenerator extends SoundGenerator {
 
     options = merge( {
 
-      initialFrequency: 440
+      // {number} - initial frequency in Hz, can be changed later
+      initialFrequency: 440,
+
+      // {WaveformType}
+      initialWaveformType: WaveformType.sine
 
     }, options );
 
@@ -34,16 +50,18 @@ class OscillatorSoundGenerator extends SoundGenerator {
 
     // @private
     this.frequency = options.initialFrequency;
+    this.waveformType = options.initialWaveformType;
   }
 
   /**
    * Start the oscillator.  The name 'play' is used because this is commonly used in the tambo library for sound
-   * generators.
+   * generators.  If the oscillator is already playing, this has no effect.
    * @public
    */
   play() {
     if ( !this.oscillatorNode ) {
       this.oscillatorNode = phetAudioContext.createOscillator();
+      this.oscillatorNode.type = WAVEFORM_NAME_MAP.get( this.waveformType );
       this.oscillatorNode.frequency.setValueAtTime( this.frequency, phetAudioContext.currentTime );
       this.oscillatorNode.connect( this.masterGainNode );
       this.oscillatorNode.start();
@@ -51,7 +69,20 @@ class OscillatorSoundGenerator extends SoundGenerator {
   }
 
   /**
-   * stop the oscillator (if it's playing)
+   * Set the waveform type.
+   * @param {WaveformType} waveformType
+   * @public
+   */
+  setWaveformType( waveformType ) {
+    assert && assert( WaveformType.includes( waveformType ), `invalid waveform type ${waveformType}` );
+    this.waveformType = waveformType;
+    if ( this.oscillatorNode ) {
+      this.oscillatorNode.type = WAVEFORM_NAME_MAP.get( waveformType );
+    }
+  }
+
+  /**
+   * Stop the oscillator.  If the oscillator isn't playing, this has no effect.
    * @public
    */
   stop() {
@@ -61,6 +92,9 @@ class OscillatorSoundGenerator extends SoundGenerator {
     }
   }
 }
+
+// statics
+OscillatorSoundGenerator.WaveformType = WaveformType;
 
 tambo.register( 'OscillatorSoundGenerator', OscillatorSoundGenerator );
 export default OscillatorSoundGenerator;
