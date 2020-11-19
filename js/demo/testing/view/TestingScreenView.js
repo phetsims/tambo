@@ -324,7 +324,9 @@ class FourierToneGeneratorTestNode extends VBox {
       const harmonicLevelProperty = new NumberProperty( 0 );
       harmonicLevelProperties.push( harmonicLevelProperty );
       harmonicLevelProperty.link( level => fourierToneGenerator.setOscillatorOutputLevel( index, level ) );
-      const toneControlSlider = new VSlider( harmonicLevelProperty, new Range( -1, 1 ) );
+      const toneControlSlider = new VSlider( harmonicLevelProperty, new Range( -1, 1 ), {
+        constrainValue: value => Math.abs( value ) < 0.1 ? 0 : value
+      } );
       harmonicControllersHBox.addChild( toneControlSlider );
     } );
 
