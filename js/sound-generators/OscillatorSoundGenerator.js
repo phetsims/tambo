@@ -54,8 +54,8 @@ class OscillatorSoundGenerator extends SoundGenerator {
   }
 
   /**
-   * Start the oscillator.  The name 'play' is used because this is commonly used in the tambo library for sound
-   * generators.  If the oscillator is already playing, this has no effect.
+   * Starts the oscillator. The name 'play' is used because this is commonly used in the tambo library for sound
+   * generators. If the oscillator is already playing, this has no effect.
    * @public
    */
   play() {
@@ -69,7 +69,18 @@ class OscillatorSoundGenerator extends SoundGenerator {
   }
 
   /**
-   * Set the waveform type.
+   * Stops the oscillator. If the oscillator isn't playing, this has no effect.
+   * @public
+   */
+  stop() {
+    if ( this.oscillatorNode ) {
+      this.oscillatorNode.stop();
+      this.oscillatorNode = null;
+    }
+  }
+
+  /**
+   * Sets the waveform type.
    * @param {WaveformType} waveformType
    * @public
    */
@@ -80,20 +91,9 @@ class OscillatorSoundGenerator extends SoundGenerator {
       this.oscillatorNode.type = WAVEFORM_NAME_MAP.get( waveformType );
     }
   }
-
-  /**
-   * Stop the oscillator.  If the oscillator isn't playing, this has no effect.
-   * @public
-   */
-  stop() {
-    if ( this.oscillatorNode ) {
-      this.oscillatorNode.stop();
-      this.oscillatorNode = null;
-    }
-  }
 }
 
-// statics
+// @public
 OscillatorSoundGenerator.WaveformType = WaveformType;
 
 tambo.register( 'OscillatorSoundGenerator', OscillatorSoundGenerator );
