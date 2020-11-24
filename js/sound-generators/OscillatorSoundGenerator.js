@@ -38,7 +38,7 @@ class OscillatorSoundGenerator extends SoundGenerator {
       initialFrequency: 440,
 
       // {WaveformType}
-      initialWaveformType: WaveformType.sine
+      initialWaveformType: WaveformType.SINE
 
     }, options );
 
