@@ -118,7 +118,7 @@ class SoundClip extends SoundGenerator {
           // some browsers the sound would be somewhat muted, probably due to some sort of fade in of the audio levels
           // that the browser does automatically to avoid having the web page's sound start too abruptly.  The amount of
           // delay was empirically determined by testing on multiple browsers.
-          this.play( 0.05 );
+          this.play( 0.1 );
         }
 
         // automatically remove after firing
