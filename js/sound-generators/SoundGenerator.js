@@ -214,7 +214,7 @@ class SoundGenerator {
     else if ( this.fullyEnabledProperty.value ) {
 
       // The setTargetAtTime method doesn't seem to work if the audio context isn't running, and the event doesn't seem
-      // be scheduled - it's just ignored.  So, if the audio context isn't running, use an alternative approach.  See
+      // to be scheduled - it's just ignored.  So, if the audio context isn't running, use an alternative approach.  See
       // https://github.com/phetsims/tambo/issues/74.
       if ( this.audioContext.state === 'running' ) {
         this.masterGainNode.gain.setTargetAtTime( outputLevel, now, timeConstant );
