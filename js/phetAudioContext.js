@@ -3,7 +3,6 @@
 /**
  * phetAudioContext is a singleton instance of a Web Audio context that is used for all Web Audio interaction
  *
- *
  * @author John Blanco
  */
 

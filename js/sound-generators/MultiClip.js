@@ -16,11 +16,13 @@
  */
 
 import merge from '../../../phet-core/js/merge.js';
+import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
 import tambo from '../tambo.js';
 import SoundGenerator from './SoundGenerator.js';
 
 // constants
 const STOP_DELAY_TIME = 0.1; // empirically determined to avoid clicks when stopping sounds
+const MAX_PLAY_DEFER_TIME = 0.2; // seconds, max time to defer a play request while waiting for audio context state change
 
 class MultiClip extends SoundGenerator {
 
@@ -61,14 +63,21 @@ class MultiClip extends SoundGenerator {
 
     // @private
     this.playbackRate = options.initialPlaybackRate;
+
+    // @private {function|null} - a listener for implementing deferred play requests, see usage for details
+    this.audioContextStateChangeListener = null;
+
+    // @private {number} - time at which a deferred play request occurred, in milliseconds since epoch
+    this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
   }
 
   /**
    * play the sound associated with the provided value
    * @param {*} value
+   * @param {number} delay
    * @public
    */
-  playAssociatedSound( value ) {
+  playAssociatedSound( value, delay = 0 ) {
 
     // get the audio buffer for this value
     const wrappedAudioBuffer = this.valueToWrappedAudioBufferMap.get( value );
@@ -76,38 +85,69 @@ class MultiClip extends SoundGenerator {
     // verify that we have a sound for the provided value
     assert && assert( wrappedAudioBuffer !== undefined, 'no sound found for provided value' );
 
-    // play the sound (if enabled and fully decoded)
-    if ( this.fullyEnabled && wrappedAudioBuffer.audioBufferProperty.value ) {
+    if ( this.audioContext.state === 'running' ) {
 
-      const now = this.audioContext.currentTime;
+      // play the sound (if enabled and fully decoded)
+      if ( this.fullyEnabled && wrappedAudioBuffer.audioBufferProperty.value ) {
 
-      // make sure the local gain is set to unity value
-      this.localGainNode.gain.cancelScheduledValues( now );
-      this.localGainNode.gain.setValueAtTime( 1, now );
+        const now = this.audioContext.currentTime;
 
-      // create an audio buffer source node and connect it to the previously data in the audio buffer
-      const bufferSource = this.audioContext.createBufferSource();
-      bufferSource.buffer = wrappedAudioBuffer.audioBufferProperty.value;
-      bufferSource.playbackRate.setValueAtTime( this.playbackRate, this.audioContext.currentTime );
+        // make sure the local gain is set to unity value
+        this.localGainNode.gain.cancelScheduledValues( now );
+        this.localGainNode.gain.setValueAtTime( 1, now );
 
-      // connect this source node to the output
-      bufferSource.connect( this.localGainNode );
+        // create an audio buffer source node and connect it to the previously data in the audio buffer
+        const bufferSource = this.audioContext.createBufferSource();
+        bufferSource.buffer = wrappedAudioBuffer.audioBufferProperty.value;
+        bufferSource.playbackRate.setValueAtTime( this.playbackRate, this.audioContext.currentTime );
 
-      // add this to the list of active sources so that it can be stopped if necessary
-      this.activeBufferSources.push( bufferSource );
+        // connect this source node to the output
+        bufferSource.connect( this.localGainNode );
 
-      // add a handler for when the sound finishes playing
-      bufferSource.onended = () => {
+        // add this to the list of active sources so that it can be stopped if necessary
+        this.activeBufferSources.push( bufferSource );
 
-        // remove the source from the list of active sources
-        const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
-        if ( indexOfSource > -1 ) {
-          this.activeBufferSources.splice( indexOfSource, 1 );
+        // add a handler for when the sound finishes playing
+        bufferSource.onended = () => {
+
+          // remove the source from the list of active sources
+          const indexOfSource = this.activeBufferSources.indexOf( bufferSource );
+          if ( indexOfSource > -1 ) {
+            this.activeBufferSources.splice( indexOfSource, 1 );
+          }
+        };
+
+        // start the playback of the sound
+        bufferSource.start( now + delay );
+      }
+    }
+    else {
+
+      // This method was called while the sound context was not yet running.  This can happen if the method is called
+      // due to the first interaction from the user, and also during fuzz testing.
+
+      // Remove previous listener if present.
+      if ( this.audioContextStateChangeListener ) {
+        audioContextStateChangeMonitor.removeStateChangeListener( this.audioContext, this.audioContextStateChangeListener );
+      }
+
+      // Create and add a listener to play the specified sound when the audio context changes to the 'running' state.
+      this.timeOfDeferredPlayRequest = Date.now();
+      this.audioContextStateChangeListener = () => {
+
+        // Only play the sound if it hasn't been too long, otherwise it may be irrelevant.
+        if ( ( Date.now() - this.timeOfDeferredPlayRequest ) / 1000 < MAX_PLAY_DEFER_TIME ) {
+
+          // Play the sound, but delayed a little bit so that the gain nodes can be fully turned up in time.
+          this.playAssociatedSound( value, 0.1 );
         }
+        audioContextStateChangeMonitor.removeStateChangeListener( this.audioContext, this.audioContextStateChangeListener );
+        this.audioContextStateChangeListener = null;
       };
-
-      // start the playback of the sound
-      bufferSource.start( now );
+      audioContextStateChangeMonitor.addStateChangeListener(
+        this.audioContext,
+        this.audioContextStateChangeListener
+      );
     }
   }
 
