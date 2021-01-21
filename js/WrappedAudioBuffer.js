@@ -15,7 +15,7 @@ class WrappedAudioBuffer {
 
   constructor() {
 
-    // @public {TinyProperty<AudioBuffer|null>} - A TinyProperty that is initially set to null and is set to an audio
+    // @public {TinyProperty.<AudioBuffer|null>} - A TinyProperty that is initially set to null and is set to an audio
     // buffer, which contains audio data, when the decoding of that data is complete.
     this.audioBufferProperty = new TinyProperty( null );
 

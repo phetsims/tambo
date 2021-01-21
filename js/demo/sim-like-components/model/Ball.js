@@ -24,10 +24,10 @@ class Ball {
     // @public read-only {Color}
     this.color = color;
 
-    // @public {Property<Vector2>}
+    // @public {Property.<Vector2>}
     this.positionProperty = new Property( initialPosition );
 
-    // @public {Property<Vector2>}
+    // @public {Property.<Vector2>}
     this.velocityProperty = new Property( initialVelocity );
 
     // @public (read-only) {Emitter} - emitter that fires when the ball bounces, indicates surface on which it bounced
