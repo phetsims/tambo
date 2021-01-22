@@ -5,6 +5,7 @@
  */
 
 import createObservableArray from '../../../../../axon/js/createObservableArray.js';
+import dotRandom from '../../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import Shape from '../../../../../kite/js/Shape.js';
 import Color from '../../../../../scenery/js/util/Color.js';
@@ -18,9 +19,9 @@ const MAX_X_OR_Y_VELOCITY = 60;
 
 // helper function
 function createRandomColor() {
-  const r = Math.floor( phet.joist.random.nextDouble() * 256 );
-  const g = Math.floor( phet.joist.random.nextDouble() * 256 );
-  const b = Math.floor( phet.joist.random.nextDouble() * 256 );
+  const r = Math.floor( dotRandom.nextDouble() * 256 );
+  const g = Math.floor( dotRandom.nextDouble() * 256 );
+  const b = Math.floor( dotRandom.nextDouble() * 256 );
   return new Color( r, g, b );
 }
 
@@ -46,17 +47,17 @@ class BoxOfBalls {
    */
   addRandomBall() {
 
-    let xVelocity = MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * ( MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY );
-    xVelocity = phet.joist.random.nextBoolean() ? xVelocity : -xVelocity;
-    let yVelocity = MIN_X_OR_Y_VELOCITY + phet.joist.random.nextDouble() * ( MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY );
-    yVelocity = phet.joist.random.nextBoolean() ? yVelocity : -yVelocity;
+    let xVelocity = MIN_X_OR_Y_VELOCITY + dotRandom.nextDouble() * ( MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY );
+    xVelocity = dotRandom.nextBoolean() ? xVelocity : -xVelocity;
+    let yVelocity = MIN_X_OR_Y_VELOCITY + dotRandom.nextDouble() * ( MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY );
+    yVelocity = dotRandom.nextBoolean() ? yVelocity : -yVelocity;
     const velocity = new Vector2( xVelocity, yVelocity );
     this.balls.push( new Ball(
       BALL_RADIUS,
       createRandomColor(),
       new Vector2(
-        BALL_RADIUS + ( phet.joist.random.nextDouble() * ( this.box.bounds.width - 2 * BALL_RADIUS ) + this.box.bounds.minX ),
-        BALL_RADIUS + ( phet.joist.random.nextDouble() * ( this.box.bounds.height - 2 * BALL_RADIUS ) + this.box.bounds.minY )
+        BALL_RADIUS + ( dotRandom.nextDouble() * ( this.box.bounds.width - 2 * BALL_RADIUS ) + this.box.bounds.minX ),
+        BALL_RADIUS + ( dotRandom.nextDouble() * ( this.box.bounds.height - 2 * BALL_RADIUS ) + this.box.bounds.minY )
       ),
       velocity
     ) );

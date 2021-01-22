@@ -9,6 +9,7 @@
 import createObservableArray from '../../../../../axon/js/createObservableArray.js';
 import Property from '../../../../../axon/js/Property.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
+import dotRandom from '../../../../../dot/js/dotRandom.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
@@ -168,7 +169,7 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
           }
         }
         else if ( mostRecentlyAddedSoundGenerator instanceof PitchedPopGenerator ) {
-          mostRecentlyAddedSoundGenerator.playPop( phet.joist.random.nextDouble() );
+          mostRecentlyAddedSoundGenerator.playPop( dotRandom.nextDouble() );
         }
       }
     } );
