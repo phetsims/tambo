@@ -7,8 +7,8 @@ Before using this for the first time, it is highly recommended that a developer 
 - [ ] Create a sound design document and work with the sound designer(s) to get to the point where enough has been
 worked out that it becomes desirable to start prototyping.  For an example, please see the [Molecules and Light Sound
 Design](https://docs.google.com/document/d/1LJ6maD9QGvRRIaukKi_s019Gc1V2YHi4CPbPNULLiRc/edit?usp=sharing) document.
-- [ ] Create an issue for adding sound to the simulation, use the title "Implement sound design".  Here is [an example
-GitHub issue](https://github.com/phetsims/friction/issues/148), though it doesn't use the suggested name.
+- [ ] Create an issue for adding sound to the simulation, use the title "Implement sound design". Here
+  is [an example GitHub issue](https://github.com/phetsims/faradays-law/issues/161).
 - [ ] Figure out if it's okay to turn sound on for the simulation.  This will hinge upon whether there will need to be
 releases made off of master before the sound implementation is complete.  Generally you'll want to turn sound on, but in
 cases where that isn't possible, skip the two sub-steps below, and the query parameters `supportsSound` and
