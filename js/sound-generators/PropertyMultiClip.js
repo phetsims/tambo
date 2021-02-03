@@ -14,7 +14,7 @@ class PropertyMultiClip extends MultiClip {
 
   /**
    * @param {Property.<*>} property - the property for which sounds are played on value changes
-   * @param {Map<*,WrappedAudioBuffer>} valueToSoundMap - a map of values to WrappedAudioBuffer objects that is used to
+   * @param {Map.<*,WrappedAudioBuffer>} valueToSoundMap - a map of values to WrappedAudioBuffer objects that is used to
    * define the association between values and sounds.
    * @param {Object} [options]
    */
