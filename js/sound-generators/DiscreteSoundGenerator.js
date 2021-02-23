@@ -1,5 +1,12 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
+/**
+ * DiscreteSoundGenerator produces sounds based on the value of a number property.  It monitors the property value and
+ * maps it to one of a finite number of bins, and produces a discrete sound when the bin to which the value is mapped
+ * changes.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
+ */
 
 import Range from '../../../dot/js/Range.js';
 import merge from '../../../phet-core/js/merge.js';
