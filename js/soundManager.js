@@ -78,7 +78,7 @@ class SoundManager extends PhetioObject {
     this._reverbLevel = DEFAULT_REVERB_LEVEL;
 
     // @private {Object} - a map of category name to GainNode instances that control gains for that category name,
-    // will be filled in during init, see the usage of options.categories in the initialize function for more 
+    // will be filled in during init, see the usage of options.categories in the initialize function for more
     // information.
     this.gainNodesForCategories = {};
 
@@ -449,6 +449,7 @@ class SoundManager extends PhetioObject {
   getMasterOutputLevel() {
     return this._masterOutputLevel;
   }
+
   get masterOutputLevel() {
     return this.getMasterOutputLevel();
   }
@@ -521,6 +522,7 @@ class SoundManager extends PhetioObject {
       this._reverbLevel = newReverbLevel;
     }
   }
+
   set reverbLevel( reverbLevel ) {
     this.setReverbLevel( reverbLevel );
   }
@@ -532,6 +534,7 @@ class SoundManager extends PhetioObject {
   getReverbLevel() {
     return this._reverbLevel;
   }
+
   get reverbLevel() {
     return this.getReverbLevel();
   }
