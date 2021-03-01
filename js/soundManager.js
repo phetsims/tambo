@@ -110,7 +110,7 @@ class SoundManager extends PhetioObject {
 
     }, options );
 
-    // validate the options
+    // options validation
     assert && assert( typeof Array.isArray( options.categories ), 'unexpected type for options.categories' );
     assert && assert(
       _.every( options.categories, categoryName => typeof categoryName === 'string' ),
@@ -119,7 +119,7 @@ class SoundManager extends PhetioObject {
 
     const now = phetAudioContext.currentTime;
 
-    // the final stage is a dynamics compressor that is used essentially as a limiter to prevent clipping
+    // The final stage is a dynamics compressor that is used essentially as a limiter to prevent clipping.
     const dynamicsCompressor = phetAudioContext.createDynamicsCompressor();
     dynamicsCompressor.threshold.setValueAtTime( -6, now );
     dynamicsCompressor.knee.setValueAtTime( 5, now );
@@ -128,7 +128,7 @@ class SoundManager extends PhetioObject {
     dynamicsCompressor.release.setValueAtTime( 0.25, now );
     dynamicsCompressor.connect( phetAudioContext.destination );
 
-    // create the master gain node for all sounds managed by this sonification manager
+    // Create the master gain node for all sounds managed by this sonification manager.
     this.masterGainNode = phetAudioContext.createGain();
     this.masterGainNode.connect( dynamicsCompressor );
 
@@ -157,7 +157,7 @@ class SoundManager extends PhetioObject {
     );
     this.dryGainNode.connect( this.masterGainNode );
 
-    // create and hook up gain nodes for each of the defined categories
+    // Create and hook up gain nodes for each of the defined categories.
     options.categories.forEach( categoryName => {
       const gainNode = phetAudioContext.createGain();
       gainNode.connect( this.convolver );
@@ -165,8 +165,8 @@ class SoundManager extends PhetioObject {
       this.gainNodesForCategories[ categoryName ] = gainNode;
     } );
 
-    // hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
-    // active
+    // Hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
+    // active.
     Property.multilink(
       [
         this.enabledProperty,
@@ -180,7 +180,7 @@ class SoundManager extends PhetioObject {
         const fullyEnabled = enabled && simInitComplete && simVisible && simActive && !simIsSettingPhetioState;
         const gain = fullyEnabled ? this._masterOutputLevel : 0;
 
-        // set the gain, but somewhat gradually in order to avoid rapid transients, which sound like clicks
+        // Set the gain, but somewhat gradually in order to avoid rapid transients, which can sound like clicks.
         this.masterGainNode.gain.linearRampToValueAtTime(
           gain,
           phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
@@ -271,7 +271,7 @@ class SoundManager extends PhetioObject {
 
     this.initialized = true;
 
-    // add any sound generators that were waiting for initialization to complete (must be done after init complete)
+    // Add any sound generators that were waiting for initialization to complete (must be done after init complete).
     this.soundGeneratorsAwaitingAdd.forEach( soundGeneratorAwaitingAdd => {
       this.addSoundGenerator( soundGeneratorAwaitingAdd.soundGenerator, soundGeneratorAwaitingAdd.options );
     } );
@@ -292,8 +292,8 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * add a sound generator, which connects it to the audio path, puts it on the list of sound generators, and creates
-   * and returns a unique ID
+   * Add a sound generator.  This connects the sound generator to the audio path, puts it on the list of sound
+   * generators, and creates and returns a unique ID.
    * @param {SoundGenerator} soundGenerator
    * @param {Object} [options]
    * @public
@@ -307,7 +307,7 @@ class SoundManager extends PhetioObject {
       return;
     }
 
-    // verify that this is not a duplicate addition
+    // Verify that this is not a duplicate addition.
     const hasSoundGenerator = this.hasSoundGenerator( soundGenerator );
     assert && assert( !hasSoundGenerator, 'can\'t add the same sound generator twice' );
 
@@ -318,7 +318,7 @@ class SoundManager extends PhetioObject {
       // setting of the sonification level parameter for the sim.  Valid values are 'BASIC' or 'ENHANCED'.
       sonificationLevel: SoundLevelEnum.BASIC,
 
-      // {Node|null} - A Scenery node that, if provided, must be visible in the display for the sound generator to be
+      // {Node|null} - a Scenery node that, if provided, must be visible in the display for the sound generator to be
       // enabled.  This is generally used only for sounds that can play for long durations, such as a looping sound
       // clip.
       associatedViewNode: null,
@@ -327,13 +327,13 @@ class SoundManager extends PhetioObject {
       categoryName: null
     }, options );
 
-    // validate the options
+    // option validation
     assert && assert(
       _.includes( _.values( SoundLevelEnum ), options.sonificationLevel ),
       'invalid value for sonification level: ' + options.sonificationLevel
     );
 
-    // connect the sound generator to an output path
+    // Connect the sound generator to an output path.
     if ( options.categoryName === null ) {
       soundGenerator.connect( this.convolver );
       soundGenerator.connect( this.dryGainNode );
@@ -342,22 +342,22 @@ class SoundManager extends PhetioObject {
       soundGenerator.connect( this.gainNodesForCategories[ options.categoryName ] );
     }
 
-    // keep a record of the sound generator along with additional information about it
+    // Keep a record of the sound generator along with additional information about it.
     const soundGeneratorInfo = {
       soundGenerator: soundGenerator,
       sonificationLevel: options.sonificationLevel
     };
     this.soundGeneratorInfoArray.push( soundGeneratorInfo );
 
-    // add the global enable Property to the list of Properties that enable this sound generator
+    // Add the global enable Property to the list of Properties that enable this sound generator.
     soundGenerator.addEnableControlProperty( this.enabledProperty );
 
-    // if this sound generator is only enabled in enhanced mode, add the enhanced mode Property as an enable control
+    // If this sound generator is only enabled in enhanced mode, add the enhanced mode Property as an enable control.
     if ( options.sonificationLevel === SoundLevelEnum.ENHANCED ) {
       soundGenerator.addEnableControlProperty( this.enhancedSoundEnabledProperty );
     }
 
-    // if a view node was specified, create and pass in a boolean Property that is true only when the node is displayed
+    // If a view node was specified, create and pass in a boolean Property that is true only when the node is displayed.
     if ( options.associatedViewNode ) {
       soundGenerator.addEnableControlProperty(
         new DisplayedProperty( options.associatedViewNode, phet.joist.display )
