@@ -421,7 +421,7 @@ class LongSoundTestPanel extends Node {
       enableControlProperties: [ DerivedProperty.not( resetInProgressProperty ) ],
       initiateWhenDisabled: true
     } );
-    soundManager.addSoundGenerator( thunderSoundClip );
+    soundManager.addSoundGenerator( thunderSoundClip, { associatedViewNode: fireLightningButton } );
     lightningBoltVisibleProperty.link( visible => {
       if ( visible ) {
         thunderSoundClip.play();

@@ -92,12 +92,18 @@ class SoundManager extends PhetioObject {
 
   /**
    * Initialize the sonification manager. This function must be invoked before any sound generators can be added.
-   * @param {BooleanProperty} simVisibleProperty
-   * @param {BooleanProperty} simActiveProperty
+   * @param {Property.<boolean>} simConstructionCompleteProperty
+   * @param {Property.<boolean>} simVisibleProperty
+   * @param {Property.<boolean>} simActiveProperty
+   * @param {Property.<boolean>} simSettingPhetioStateProperty
    * @param {Object} [options]
    * @public
    */
-  initialize( simVisibleProperty, simActiveProperty, options ) {
+  initialize( simConstructionCompleteProperty,
+              simVisibleProperty,
+              simActiveProperty,
+              simSettingPhetioStateProperty,
+              options ) {
 
     assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
 
@@ -170,14 +176,14 @@ class SoundManager extends PhetioObject {
     Property.multilink(
       [
         this.enabledProperty,
-        window.phet.joist.sim.isConstructionCompleteProperty,
+        simConstructionCompleteProperty,
         simVisibleProperty,
         simActiveProperty,
-        phet.joist.sim.isSettingPhetioStateProperty
+        simSettingPhetioStateProperty
       ],
-      ( enabled, simInitComplete, simVisible, simActive, simIsSettingPhetioState ) => {
+      ( enabled, simInitComplete, simVisible, simActive, simSettingPhetioState ) => {
 
-        const fullyEnabled = enabled && simInitComplete && simVisible && simActive && !simIsSettingPhetioState;
+        const fullyEnabled = enabled && simInitComplete && simVisible && simActive && !simSettingPhetioState;
         const gain = fullyEnabled ? this._masterOutputLevel : 0;
 
         // Set the gain, but somewhat gradually in order to avoid rapid transients, which can sound like clicks.
@@ -320,7 +326,7 @@ class SoundManager extends PhetioObject {
 
       // {Node|null} - a Scenery node that, if provided, must be visible in the display for the sound generator to be
       // enabled.  This is generally used only for sounds that can play for long durations, such as a looping sound
-      // clip.
+      // clip, that should be stopped when the associated visual representation is hidden.
       associatedViewNode: null,
 
       // {string} - category name for this sound, which can be used to group sounds together an control them as a group
