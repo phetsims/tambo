@@ -32,7 +32,7 @@ class AmplitudeModulator extends EnabledComponent {
       // {NumberProperty} - Controls the frequency of modulation, created if not supplied.
       frequencyProperty: null,
 
-      // (NumberProperty} - Controls the depth of modulation, 0 means no modulation, 1 is the max, create if not
+      // (NumberProperty} - Controls the depth of modulation, 0 means no modulation, 1 is the max, created if not
       // supplied.
       depthProperty: null,
 
@@ -44,13 +44,13 @@ class AmplitudeModulator extends EnabledComponent {
 
     super( options );
 
-    // @public {NumberProperty}
+    // @public {NumberProperty} - frequency of the oscillation, generally pretty low, like 1 to 20 or so
     this.frequencyProperty = options.frequencyProperty || new NumberProperty( DEFAULT_FREQUENCY );
 
-    // @public {NumberProperty}
+    // @public {NumberProperty} - 0 for no audible oscillation, 1 for full modulation
     this.depthProperty = options.depthProperty || new NumberProperty( DEFAULT_DEPTH );
 
-    // @public {StringProperty}
+    // @public {StringProperty} - Web Audio oscillator type
     this.waveformProperty = options.waveformProperty || new StringProperty( DEFAULT_WAVEFORM );
 
     // @private - the low frequency oscillator (LFO) that will control the modulation, created in the handler below
