@@ -366,7 +366,7 @@ class SoundManager extends PhetioObject {
     // If a view node was specified, create and pass in a boolean Property that is true only when the node is displayed.
     if ( options.associatedViewNode ) {
       soundGenerator.addEnableControlProperty(
-        new DisplayedProperty( options.associatedViewNode, phet.joist.display )
+        new DisplayedProperty( options.associatedViewNode )
       );
     }
   }
