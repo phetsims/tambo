@@ -76,8 +76,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     const listener = value => {
 
       // Update the sound generation when the value changes.
-      if ( ( !options.resetInProgressProperty || !options.resetInProgressProperty.value ) &&
-           !phet.joist.sim.isSettingPhetioStateProperty.value ) {
+      if ( !options.resetInProgressProperty || !options.resetInProgressProperty.value ) {
 
         // calculate the playback rate
         const normalizedValue = Math.log( value / range.min ) / Math.log( range.max / range.min );
