@@ -20,12 +20,12 @@ class SoundClipChord extends SoundGenerator {
    */
   constructor( sound, options ) {
     options = merge( {
-      initialOutputLevel: .7,
+      initialOutputLevel: 0.7,
 
       // When true, the chord will play with a delay between each note, starting with the first note in chordPlaybackRates
       // and ending with the last.
       arpeggiate: false,
-      arpeggiateTime: .10, // in seconds, the total time that it will take the chord to arpeggiate
+      arpeggiateTime: 0.10, // in seconds, the total time that it will take the chord to arpeggiate
       chordPlaybackRates: [ Math.pow( 2, 1 / 12 ), Math.pow( 2, 4 / 12 ), Math.pow( 2, 7 / 12 ) ] // default to major chord
     }, options );
 
