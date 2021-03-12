@@ -233,7 +233,7 @@ class SoundEncodingComparisonPanel extends Panel {
       soundDescriptor.encodings.forEach( ( encoding, encodingIndex ) => {
         const stereoMonoString = encoding.stereo ? '(stereo)' : '(mono)';
         encodingSelectorComboBoxItems.push( new ComboBoxItem(
-          new Text( encoding.format + ' ' + encoding.rate + ' ' + stereoMonoString, { font: COMBO_BOX_FONT } ),
+          new Text( `${encoding.format} ${encoding.rate} ${stereoMonoString}`, { font: COMBO_BOX_FONT } ),
           encodingIndex
         ) );
       } );

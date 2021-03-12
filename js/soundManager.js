@@ -213,16 +213,16 @@ class SoundManager extends PhetioObject {
 
         if ( phetAudioContext.state !== 'running' ) {
 
-          phet.log && phet.log( 'audio context not running, attempting to resume, state = ' + phetAudioContext.state );
+          phet.log && phet.log( `audio context not running, attempting to resume, state = ${phetAudioContext.state}` );
 
           // tell the audio context to resume
           phetAudioContext.resume()
             .then( () => {
-              phet.log && phet.log( 'resume appears to have succeeded, phetAudioContext.state = ' + phetAudioContext.state );
+              phet.log && phet.log( `resume appears to have succeeded, phetAudioContext.state = ${phetAudioContext.state}` );
               removeUserInteractionListeners();
             } )
             .catch( err => {
-              const errorMessage = 'error when trying to resume audio context, err = ' + err;
+              const errorMessage = `error when trying to resume audio context, err = ${err}`;
               console.error( errorMessage );
               assert && alert( errorMessage );
             } );
@@ -254,12 +254,12 @@ class SoundManager extends PhetioObject {
       audioContextStateChangeMonitor.addStateChangeListener( phetAudioContext, state => {
 
         phet.log && phet.log(
-          'audio context state changed, old state = ' +
-          previousAudioContextState +
-          ', new state = ' +
-          state +
-          ', audio context time = ' +
-          phetAudioContext.currentTime
+          `audio context state changed, old state = ${
+          previousAudioContextState
+          }, new state = ${
+          state
+          }, audio context time = ${
+          phetAudioContext.currentTime}`
         );
 
         if ( state !== 'running' ) {
@@ -336,7 +336,7 @@ class SoundManager extends PhetioObject {
     // option validation
     assert && assert(
       _.includes( _.values( SoundLevelEnum ), options.sonificationLevel ),
-      'invalid value for sonification level: ' + options.sonificationLevel
+      `invalid value for sonification level: ${options.sonificationLevel}`
     );
 
     // Connect the sound generator to an output path.
@@ -432,7 +432,7 @@ class SoundManager extends PhetioObject {
     }
 
     // range check
-    assert && assert( level >= 0 && level <= 1, 'output level value out of range: ' + level );
+    assert && assert( level >= 0 && level <= 1, `output level value out of range: ${level}` );
 
     this._masterOutputLevel = level;
     if ( this.enabledProperty.value ) {
@@ -478,10 +478,10 @@ class SoundManager extends PhetioObject {
     assert && assert( this.initialized, 'output levels for categories cannot be added until initialization has been done' );
 
     // range check
-    assert && assert( outputLevel >= 0 && outputLevel <= 1, 'output level value out of range: ' + outputLevel );
+    assert && assert( outputLevel >= 0 && outputLevel <= 1, `output level value out of range: ${outputLevel}` );
 
     // verify that the specified category exists
-    assert && assert( this.gainNodesForCategories[ categoryName ], 'no category with name = ' + categoryName );
+    assert && assert( this.gainNodesForCategories[ categoryName ], `no category with name = ${categoryName}` );
 
     this.gainNodesForCategories[ categoryName ].gain.setValueAtTime( outputLevel, phetAudioContext.currentTime );
   }
@@ -501,7 +501,7 @@ class SoundManager extends PhetioObject {
     }
 
     // verify that the specified category exists
-    assert && assert( this.gainNodesForCategories[ categoryName ], 'no category with name = ' + categoryName );
+    assert && assert( this.gainNodesForCategories[ categoryName ], `no category with name = ${categoryName}` );
 
     return this.gainNodesForCategories[ categoryName ].value;
   }
@@ -521,7 +521,7 @@ class SoundManager extends PhetioObject {
     }
 
     if ( newReverbLevel !== this._reverbLevel ) {
-      assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1, 'reverb value out of range: ' + newReverbLevel );
+      assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1, `reverb value out of range: ${newReverbLevel}` );
       const now = phetAudioContext.currentTime;
       this.reverbGainNode.gain.linearRampToValueAtTime( newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
       this.dryGainNode.gain.linearRampToValueAtTime( 1 - newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
@@ -568,7 +568,7 @@ class SoundManager extends PhetioObject {
   set sonificationLevel( sonificationLevel ) {
     assert && assert(
       _.includes( _.values( SoundLevelEnum ), sonificationLevel ),
-      'invalid sonification level: ' + sonificationLevel
+      `invalid sonification level: ${sonificationLevel}`
     );
     this.enhancedSoundEnabledProperty.value = sonificationLevel === SoundLevelEnum.ENHANCED;
   }
@@ -602,7 +602,7 @@ class SoundManager extends PhetioObject {
     function logGain() {
       const now = Date.now();
       const timeInMilliseconds = now - startTime;
-      console.log( 'Time (ms): ' + timeInMilliseconds.toFixed( 2 ) + ', Gain Value: ' + gainNode.gain.value );
+      console.log( `Time (ms): ${timeInMilliseconds.toFixed( 2 )}, Gain Value: ${gainNode.gain.value}` );
       if ( now - startTime < ( duration * 1000 ) ) {
         window.requestAnimationFrame( logGain );
       }

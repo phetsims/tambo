@@ -54,12 +54,12 @@ class NoiseGenerator extends SoundGenerator {
 
     assert && assert(
       [ 'white', 'pink', 'brown' ].indexOf( options.noiseType ) !== -1,
-      'invalid noise type: ' + options.noiseType
+      `invalid noise type: ${options.noiseType}`
     );
 
     assert && assert(
     options.lfoInitialDepth >= 0 && options.lfoInitialDepth <= 1,
-      'invalid value for lfoInitialDepth: ' + options.lfoInitialDepth
+      `invalid value for lfoInitialDepth: ${options.lfoInitialDepth}`
     );
 
     super( options );
@@ -133,7 +133,7 @@ class NoiseGenerator extends SoundGenerator {
       }
     }
     else {
-      throw new Error( 'unexpected value for noiseType: ' + options.noiseType );
+      throw new Error( `unexpected value for noiseType: ${options.noiseType}` );
     }
 
     // @private {AudioBufferSourceNode|null} - the source node from which the noise is played, set when play is called
