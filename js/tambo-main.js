@@ -69,8 +69,8 @@ simLauncher.launch( () => {
 
     // sim-like components screen
     new Screen(
-      function() { return new SimLikeComponentsModel(); },
-      function( model ) { return new SimLikeComponentsScreenView( model ); },
+      ( () => new SimLikeComponentsModel() ),
+      ( model => new SimLikeComponentsScreenView( model ) ),
       {
         name: 'Sim-Like Components',
         backgroundColorProperty: new Property( '#f3fff3' ),
@@ -84,8 +84,8 @@ simLauncher.launch( () => {
 
     // UI-components screen
     new Screen(
-      function() { return new UIComponentsModel(); },
-      function( model ) { return new UIComponentsScreenView( model ); },
+      ( () => new UIComponentsModel() ),
+      ( model => new UIComponentsScreenView( model ) ),
       {
         name: 'UI Components',
         backgroundColorProperty: new Property( '#fff5ba' ),
@@ -99,8 +99,10 @@ simLauncher.launch( () => {
 
     // screen with global controls for sonification
     new Screen(
-      function() { return {}; }, // no model needed, return a stub
-      function() { return new TestingScreenView(); },
+      ( () => {
+        return {};
+      } ), // no model needed, return a stub
+      ( () => new TestingScreenView() ),
       {
         name: 'Testing',
         backgroundColorProperty: new Property( '#F0F8FF' ),
