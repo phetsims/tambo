@@ -255,11 +255,11 @@ class SoundManager extends PhetioObject {
 
         phet.log && phet.log(
           `audio context state changed, old state = ${
-          previousAudioContextState
+            previousAudioContextState
           }, new state = ${
-          state
+            state
           }, audio context time = ${
-          phetAudioContext.currentTime}`
+            phetAudioContext.currentTime}`
         );
 
         if ( state !== 'running' ) {
