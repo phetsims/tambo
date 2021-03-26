@@ -15,6 +15,7 @@
 
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
 import Property from '../../axon/js/Property.js';
+import Utils from '../../dot/js/Utils.js';
 import merge from '../../phet-core/js/merge.js';
 import Display from '../../scenery/js/display/Display.js';
 import DisplayedProperty from '../../scenery/js/util/DisplayedProperty.js';
@@ -602,7 +603,7 @@ class SoundManager extends PhetioObject {
     function logGain() {
       const now = Date.now();
       const timeInMilliseconds = now - startTime;
-      console.log( `Time (ms): ${timeInMilliseconds.toFixed( 2 )}, Gain Value: ${gainNode.gain.value}` );
+      console.log( `Time (ms): ${Utils.toFixed( timeInMilliseconds, 2 )}, Gain Value: ${gainNode.gain.value}` );
       if ( now - startTime < ( duration * 1000 ) ) {
         window.requestAnimationFrame( logGain );
       }
