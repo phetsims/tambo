@@ -40,7 +40,6 @@ import rhodesChordSound from '../../../../sounds/rhodes-chord_mp3.js';
 import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js';
 import sliderDecreaseClickSound from '../../../../sounds/slider-click-02_mp3.js';
 import thunderSound from '../../../../sounds/thunder_mp3.js';
-import PeakDetectorAudioNode from '../../../PeakDetectorAudioNode.js';
 import phetAudioContext from '../../../phetAudioContext.js';
 import Playable from '../../../Playable.js';
 import FourierToneGenerator from '../../../sound-generators/FourierToneGenerator.js';
@@ -429,11 +428,6 @@ class LongSoundTestPanel extends Node {
       }
     } );
 
-    // Hook up a peak detector an monitor the output of the thunder sound.  The output of the peak detector will appear
-    // on the console.  This is intended primarily for demonstrating how to hook up and use the peak detector.
-    const peakDetector = new PeakDetectorAudioNode();
-    thunderSoundClip.connect( peakDetector );
-
     // check box that controls whether the thunderSoundClip sound is locally enabled
     const thunderEnabledCheckbox = new Checkbox(
       new Text( 'Enabled', { font: FONT } ),
@@ -494,7 +488,6 @@ class LongSoundTestPanel extends Node {
       resetInProgressProperty.unlink( resetHandler );
       soundManager.removeSoundGenerator( thunderSoundClip );
       lightningBoltVisibleTimeout && stepTimer.clearTimeout( lightningBoltVisibleTimeout );
-      thunderSoundClip.disconnect( peakDetector );
     };
   }
 
