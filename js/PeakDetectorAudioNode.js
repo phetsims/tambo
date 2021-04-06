@@ -3,8 +3,18 @@
 /**
  * PeakDetectorAudioNode is a Web Audio node that can be used to detect peak audio output values in an audio signal
  * chain.  The detected peak audio values are output to the console.  This file contains the portion that runs in the
- * main JavaScript thread, which appears to be referred to as the "AudioWorklet Node".  There is a counterpart portion
- * that runs in the Web Audio rendering thread that is referred to as the "AudioWorklet Processor".
+ * main JavaScript thread, which is referred to as the "AudioWorklet Node" in the online documentation.  There is a
+ * counterpart portion that runs in the Web Audio rendering thread that is referred to as the "AudioWorklet Processor".
+ *
+ * This is intended for diagnostic purposes only, and should not be included in production code.  It likely won't work
+ * in built code anyway, since it makes a direct file reference for including the worklet processor code.
+ *
+ * Also note that as of this writing (Apr 2021), audio worklets are not supported in Safari.
+ *
+ * To use, create an instance and connect the node whose output you want to measure.  Example:
+ *
+ *    const peakDetector = new PeakDetectorAudioNode();
+ *    this.masterGainNode.connect( peakDetector );
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
