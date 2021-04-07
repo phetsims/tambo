@@ -46,7 +46,7 @@ sonify, all based on the sound design document.
  be more difficult for people to imagine how they will like a sound in context than a visual design element, so be
  prepared for a lot of iteration, and use the 'Options' dialog if and when it can help.
  - [ ] Once all of the sounds have been finalized, do a "mix" step where the primary sound designer goes through the
- sim and sets the volume level for all sim-specific sounds.
+ sim and sets the volume level for all sim-specific sounds.  Create a separate sub-issue for this.
  - [ ] Once the sound design is thought to be complete, or nearly complete, publish a dev version and create a checklist
  of all of the sound designers and other stakeholders in the original sound design GitHub issue and ask them to either
  approve of the implementation or log their objections. Example: 
