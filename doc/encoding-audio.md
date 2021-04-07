@@ -9,7 +9,9 @@ current recommendations are:
 resolution is needed.  The one exception to this is if a loop is needed with continuous sound playing.  Due to the short
 silence that generally exists at the beginning of an .mp3 file, a .wav file is sometimes required. 
 + Mono sounds should be used unless there is a specific sound-design need for stereo sounds.
++ Sounds should be encoded such that their peak output is at -1 dBFS.  For amplitude (but not power), this is a
+  numerical value of about 0.891.
 
-See https://github.com/phetsims/tambo/issues/28 for more information about the history of and thought process behind
-these recommendations.
+See https://github.com/phetsims/tambo/issues/28 and https://github.com/phetsims/tambo/issues/5 for more information
+about the history of and thought processes behind these recommendations.
  
