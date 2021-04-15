@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2021, University of Colorado Boulder
 
 /**
  * A singleton object that registers sound generators, connects them to the audio output, and provides a number of
@@ -502,9 +502,10 @@ class SoundManager extends PhetioObject {
     }
 
     // verify that the specified category exists
-    assert && assert( this.gainNodesForCategories[ categoryName ], `no category with name = ${categoryName}` );
+    const gainNode = this.gainNodesForCategories[ categoryName ]; // {GainNode}
+    assert && assert( gainNode, `no category with name = ${categoryName}` );
 
-    return this.gainNodesForCategories[ categoryName ].value;
+    return gainNode.gain.value;
   }
 
   /**
