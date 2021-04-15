@@ -488,8 +488,9 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * get the output level for the specified sound generator category
+   * Get the output level for the specified sound generator category.
    * @param {String} categoryName - name of category to which this invocation applies
+   * @returns {number}
    * @public
    */
   getOutputLevelForCategory( categoryName ) {
