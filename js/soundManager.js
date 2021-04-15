@@ -502,8 +502,8 @@ class SoundManager extends PhetioObject {
       return 0;
     }
 
-    // verify that the specified category exists
-    const gainNode = this.gainNodesForCategories[ categoryName ]; // {GainNode}
+    // Get the GainNode for the specified category.
+    const gainNode = this.gainNodesForCategories[ categoryName ];
     assert && assert( gainNode, `no category with name = ${categoryName}` );
 
     return gainNode.gain.value;
