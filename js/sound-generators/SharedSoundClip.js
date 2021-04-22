@@ -1,11 +1,11 @@
-// Copyright 2019-2020, University of Colorado Boulder
+// Copyright 2021, University of Colorado Boulder
 
 /**
  * SharedSoundClip is used to create sound clips that can be shared by multiple objects so that multiple instances don't
  * have to be created, which saves memory and load time.  This is essentially a singleton pattern, and also auto-
  * registers the sound with the sound manager.
  *
- * This type wraps the sound clip an only passes through the "play()" method, since attributes of the shared clip, such
+ * This type wraps the sound clip and only supports the play and stop methods, since attributes of the shared clip, such
  * as output level and playback rate, should not be altered.
  *
  * @author John Blanco (PhET Interactive Simulations)
@@ -38,12 +38,19 @@ class SharedSoundClip {
   }
 
   /**
-   * the only supported method is "play", since no clients should be changing things like the playback rate or output
-   * level
+   * Plays the sound clip.
    * @public
    */
   play() {
     this.soundClip.play();
+  }
+
+  /**
+   * Stops the sound clip.
+   * @public
+   */
+  stop() {
+    this.soundClip.stop();
   }
 }
 
