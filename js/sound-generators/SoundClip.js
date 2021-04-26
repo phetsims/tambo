@@ -283,7 +283,7 @@ class SoundClip extends SoundGenerator {
   /**
    * Get the duration of the sound clip based on the data in the audio buffer and the current playback rate.  Note that
    * this does not account for silence at the end of a sound clip.
-   * @returns {number}
+   * @returns {number} - duration of the clip in seconds
    * @public
    */
   getDuration() {
