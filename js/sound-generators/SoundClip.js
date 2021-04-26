@@ -287,6 +287,11 @@ class SoundClip extends SoundGenerator {
    * @public
    */
   getDuration() {
+
+    // By design, audio buffers should be fully loaded before the sim code is started, but they could still be in the
+    // process of loading during the module load phase.  Therefore, this method can only be called in mainline sim code.
+    assert && assert( this.wrappedAudioBuffer.audioBufferProperty.value !== null, 'duration can\t be obtained yet' );
+
     return this.wrappedAudioBuffer.audioBufferProperty.value.duration / this.playbackRate;
   }
 
