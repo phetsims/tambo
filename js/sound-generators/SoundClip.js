@@ -261,6 +261,7 @@ class SoundClip extends SoundGenerator {
    * @public
    */
   setPlaybackRate( playbackRate, timeConstant ) {
+    assert && assert( playbackRate > 0 );
     timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TC : timeConstant;
     if ( this.rateChangesAffectPlayingSounds ) {
       this.activeBufferSources.forEach( bufferSource => {
@@ -277,6 +278,20 @@ class SoundClip extends SoundGenerator {
    */
   get isPlaying() {
     return this.isPlayingProperty.value;
+  }
+
+  /**
+   * Get the duration of the sound clip based on the data in the audio buffer and the current playback rate.  Note that
+   * this does not account for silence at the end of a sound clip.
+   * @returns {number}
+   * @public
+   */
+  getDuration() {
+    return this.wrappedAudioBuffer.audioBufferProperty.value.duration / this.playbackRate;
+  }
+
+  get duration() {
+    return this.getDuration();
   }
 }
 
