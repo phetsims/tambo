@@ -7,11 +7,11 @@
  */
 
 import accordionBoxClosedSound from '../../sounds/accordion-box-close_mp3.js';
-import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const accordionBoxClosedSoundPlayer = new SharedSoundClip( accordionBoxClosedSound, {
+const accordionBoxClosedSoundPlayer = new SoundClipPlayer( accordionBoxClosedSound, {
   soundClipOptions: { initialOutputLevel: 0.5 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

@@ -7,11 +7,11 @@
  */
 
 import resetAllSound from '../../sounds/reset-all_mp3.js';
-import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const resetAllSoundPlayer = new SharedSoundClip( resetAllSound, {
+const resetAllSoundPlayer = new SoundClipPlayer( resetAllSound, {
   soundClipOptions: { initialOutputLevel: 0.39 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
