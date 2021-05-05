@@ -11,7 +11,7 @@
 import NumberProperty from '../../axon/js/NumberProperty.js';
 import StringProperty from '../../axon/js/StringProperty.js';
 import merge from '../../phet-core/js/merge.js';
-import EnabledComponent from '../../sun/js/EnabledComponent.js';
+import EnabledComponent from '../../axon/js/EnabledComponent.js';
 import phetAudioContext from './phetAudioContext.js';
 import tambo from './tambo.js';
 
