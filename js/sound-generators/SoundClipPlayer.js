@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2019-2021, University of Colorado Boulder
 
 /**
  * SoundClipPlayer is a limited and automatically registered sound clip.  It is intended to be used in sound players

@@ -1,4 +1,4 @@
-// Copyright 2019-2020, University of Colorado Boulder
+// Copyright 2019-2021, University of Colorado Boulder
 
 /**
  * DiscreteSoundGenerator produces sounds based on the value of a number property.  It monitors the property value and
