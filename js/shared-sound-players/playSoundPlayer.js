@@ -7,11 +7,11 @@
  */
 
 import playSound from '../../sounds/play-pause-003_mp3.js';
-import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const playSoundPlayer = new SharedSoundClip( playSound, {
+const playSoundPlayer = new SoundClipPlayer( playSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

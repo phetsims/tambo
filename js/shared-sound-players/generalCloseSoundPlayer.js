@@ -7,11 +7,11 @@
  */
 
 import generalCloseSound from '../../sounds/general-close_mp3.js';
-import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const generalCloseSoundPlayer = new SharedSoundClip( generalCloseSound, {
+const generalCloseSoundPlayer = new SoundClipPlayer( generalCloseSound, {
   soundClipOptions: { initialOutputLevel: 0.4 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

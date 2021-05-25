@@ -8,11 +8,11 @@
  */
 
 import softClickSound from '../../sounds/click-001_mp3.js';
-import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const softClickSoundPlayer = new SharedSoundClip( softClickSound, {
+const softClickSoundPlayer = new SoundClipPlayer( softClickSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

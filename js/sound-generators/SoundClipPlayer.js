@@ -1,12 +1,12 @@
 // Copyright 2021, University of Colorado Boulder
 
 /**
- * SharedSoundClip is used to create sound clips that can be shared by multiple objects so that multiple instances don't
- * have to be created, which saves memory and load time.  This is essentially a singleton pattern, and also auto-
- * registers the sound with the sound manager.
+ * SoundClipPlayer is a limited and automatically registered sound clip.  It is intended to be used in sound players
+ * that can be shared in multiple places within a simulation so that the sound information doesn't need to be decoded
+ * and stored multiple times.  See resetAllSoundPlayer for an example.
  *
- * This type wraps the sound clip and only supports the play and stop methods, since attributes of the shared clip, such
- * as output level and playback rate, should not be altered.
+ * This type wraps the sound clip and only supports the play and stop methods so that attributes such as output level
+ * and playback rate can't be easily altered.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -16,7 +16,7 @@ import soundManager from '../soundManager.js';
 import tambo from '../tambo.js';
 import SoundClip from './SoundClip.js';
 
-class SharedSoundClip {
+class SoundClipPlayer {
 
   /**
    * @param {WrappedAudioBuffer} wrappedAudioBuffer - a Web Audio audio buffer containing decoded audio samples
@@ -54,6 +54,6 @@ class SharedSoundClip {
   }
 }
 
-tambo.register( 'SharedSoundClip', SharedSoundClip );
+tambo.register( 'SoundClipPlayer', SoundClipPlayer );
 
-export default SharedSoundClip;
+export default SoundClipPlayer;

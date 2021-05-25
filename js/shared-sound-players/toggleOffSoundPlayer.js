@@ -7,11 +7,11 @@
  */
 
 import toggleOffSound from '../../sounds/step-back-v2_mp3.js';
-import SharedSoundClip from '../sound-generators/SharedSoundClip.js';
+import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const toggleOffSoundPlayer = new SharedSoundClip( toggleOffSound, {
+const toggleOffSoundPlayer = new SoundClipPlayer( toggleOffSound, {
   soundClipOptions: { initialOutputLevel: 0.7 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

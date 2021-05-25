@@ -13,13 +13,13 @@ import tambo from './tambo.js';
 class Playable {
 
   /**
-   * see if an object is playable by testing whether it has a 'play' method
+   * See if an object is playable by testing whether it has a 'play' method and a 'stop' method.
    * @param objectInstance
    * @returns {boolean}
    * @public
    */
   static isPlayable( objectInstance ) {
-    return typeof objectInstance.play === 'function';
+    return typeof objectInstance.play === 'function' && typeof objectInstance.stop === 'function';
   }
 }
 
