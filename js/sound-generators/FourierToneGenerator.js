@@ -1,4 +1,4 @@
-// Copyright 2020, University of Colorado Boulder
+// Copyright 2020-2021, University of Colorado Boulder
 
 /**
  * FourierToneGenerator is a set of oscillators that play simultaneously and whose output levels can be independently
