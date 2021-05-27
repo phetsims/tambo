@@ -83,11 +83,8 @@ define( require => {
       // get the audio buffer for this value
       const audioBuffer = this.valueToAudioBufferMap.get( value );
 
-      // verify that we have a sound for the provided value
-      assert && assert( audioBuffer !== undefined, 'no sound found for provided value' );
-
       // play the sound (if enabled)
-      if ( this.fullyEnabled ) {
+      if ( this.fullyEnabled && audioBuffer !== undefined ) {
 
         const now = this.audioContext.currentTime;
 
