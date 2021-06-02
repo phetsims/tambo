@@ -19,9 +19,6 @@ import tambo from './tambo.js';
 
 class MultiSelectionSoundPlayerFactory {
 
-  /**
-   * @private
-   */
   constructor() {
 
     // @private {SoundClip|null} - sound clip that will serve as the basis for all sound plays, will be constructed the
