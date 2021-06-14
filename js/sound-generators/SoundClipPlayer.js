@@ -11,7 +11,7 @@
  *
  * If you're familiar with PhET graphics rendering library "scenery", this class is intended to support a feature that
  * is similar to the DAG (directed acyclic graph) feature in that library.  As with that feature, SoundClipPlayer can
- * get a little weird if not used directly as intended.
+ * get a little weird if not used as intended.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
