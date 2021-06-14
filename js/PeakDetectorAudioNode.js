@@ -53,12 +53,13 @@ class PeakDetectorAudioNode extends AudioWorkletNode {
 }
 
 // Load the worklet code that will run on the audio rendering thread.
+console.log( 'loading peak-detector module on audio rendering thread...' );
 phetAudioContext.audioWorklet.addModule( '../../tambo/js/peak-detector.js' )
   .then( () => {
     console.log( 'peak detector worklet loaded successfully' );
   } )
   .catch( err => {
-    console.log( `error while loading peak detector worklet: ${err}` );
+    console.warn( `error while loading peak detector worklet, peak detector probably won't work, error: ${err}` );
   } );
 
 tambo.register( 'PeakDetectorAudioNode', PeakDetectorAudioNode );
