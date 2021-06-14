@@ -16,6 +16,9 @@
  *    const peakDetector = new PeakDetectorAudioNode();
  *    this.masterGainNode.connect( peakDetector );
  *
+ * TODO: !!! This does not work on all of PhET's supported platforms, so it should not be incorporated into any
+ *       production code.  It should be used for debugging only.  See https://github.com/phetsims/tambo/issues/133#issuecomment-861042659.
+ *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
