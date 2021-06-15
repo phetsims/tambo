@@ -1,4 +1,4 @@
-// Copyright 2020, University of Colorado Boulder
+// Copyright 2021, University of Colorado Boulder
 
 /**
  * PeakDetectorAudioNode is a Web Audio node that can be used to detect peak audio output values in an audio signal
@@ -15,6 +15,9 @@
  *
  *    const peakDetector = new PeakDetectorAudioNode();
  *    this.masterGainNode.connect( peakDetector );
+ *
+ * TODO: !!! This does not work on all of PhET's supported platforms, so it should not be incorporated into any
+ *       production code.  It should be used for debugging only.  See https://github.com/phetsims/tambo/issues/133#issuecomment-861042659.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -53,12 +56,13 @@ class PeakDetectorAudioNode extends AudioWorkletNode {
 }
 
 // Load the worklet code that will run on the audio rendering thread.
+console.log( 'loading peak-detector module on audio rendering thread...' );
 phetAudioContext.audioWorklet.addModule( '../../tambo/js/peak-detector.js' )
   .then( () => {
     console.log( 'peak detector worklet loaded successfully' );
   } )
   .catch( err => {
-    console.log( `error while loading peak detector worklet: ${err}` );
+    console.warn( `error while loading peak detector worklet, peak detector probably won't work, error: ${err}` );
   } );
 
 tambo.register( 'PeakDetectorAudioNode', PeakDetectorAudioNode );

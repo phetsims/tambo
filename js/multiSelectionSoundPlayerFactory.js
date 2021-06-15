@@ -1,4 +1,4 @@
-// Copyright 2019-2020, University of Colorado Boulder
+// Copyright 2019-2021, University of Colorado Boulder
 
 /**
  * The multiSelectionSoundPlayerFactory singleton is used to create sound players that are similar but slightly
@@ -19,9 +19,6 @@ import tambo from './tambo.js';
 
 class MultiSelectionSoundPlayerFactory {
 
-  /**
-   * @private
-   */
   constructor() {
 
     // @private {SoundClip|null} - sound clip that will serve as the basis for all sound plays, will be constructed the
