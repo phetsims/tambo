@@ -298,6 +298,16 @@ class SoundClip extends SoundGenerator {
   get duration() {
     return this.getDuration();
   }
+
+  /**
+   * Get the number of instances of the audio buffer that are currently playing.  This can be greater than one because
+   * SoundClip supports multiple buffers playing at the same time.  This method is generally used to limit the number
+   * of instances that are playing at the same time.
+   * @public
+   */
+  getNumberOfPlayingInstances() {
+    return this.activeBufferSources.length;
+  }
 }
 
 tambo.register( 'SoundClip', SoundClip );
