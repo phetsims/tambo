@@ -1,7 +1,7 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
 /**
- * Content for the "Hot Keys and Help" dialog that can be brought up from the sim navigation bar.  This is stubbed,
+ * Content for the "Keyboard Shortcuts" dialog that can be brought up from the sim navigation bar.  This is stubbed,
  * since we need it for testing but this sim is not meant to be used outside of PhET.
  *
  * @author John Blanco
