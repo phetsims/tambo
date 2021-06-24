@@ -281,25 +281,6 @@ class SoundClip extends SoundGenerator {
   }
 
   /**
-   * Get the duration of the sound clip based on the data in the audio buffer and the current playback rate.  Note that
-   * this does not account for silence at the end of a sound clip.
-   * @returns {number} - duration of the clip in seconds
-   * @public
-   */
-  getDuration() {
-
-    // By design, audio buffers should be fully loaded before the sim code is started, but they could still be in the
-    // process of loading during the module load phase.  Therefore, this method can only be called in mainline sim code.
-    assert && assert( this.wrappedAudioBuffer.audioBufferProperty.value !== null, 'duration can\t be obtained yet' );
-
-    return this.wrappedAudioBuffer.audioBufferProperty.value.duration / this.playbackRate;
-  }
-
-  get duration() {
-    return this.getDuration();
-  }
-
-  /**
    * Get the number of instances of the audio buffer that are currently playing.  This can be greater than one because
    * SoundClip supports multiple buffers playing at the same time.  This method is generally used to limit the number
    * of instances that are playing at the same time.
