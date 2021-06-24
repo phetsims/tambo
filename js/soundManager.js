@@ -94,6 +94,7 @@ class SoundManager extends PhetioObject {
   /**
    * Initialize the sonification manager. This function must be invoked before any sound generators can be added.
    * @param {Property.<boolean>} simConstructionCompleteProperty
+   * @param {Property.<boolean>} simAllAudioEnabledProperty
    * @param {Property.<boolean>} simVisibleProperty
    * @param {Property.<boolean>} simActiveProperty
    * @param {Property.<boolean>} simSettingPhetioStateProperty
@@ -101,6 +102,7 @@ class SoundManager extends PhetioObject {
    * @public
    */
   initialize( simConstructionCompleteProperty,
+              simAllAudioEnabledProperty,
               simVisibleProperty,
               simActiveProperty,
               simSettingPhetioStateProperty,
@@ -177,14 +179,15 @@ class SoundManager extends PhetioObject {
     Property.multilink(
       [
         this.enabledProperty,
+        simAllAudioEnabledProperty,
         simConstructionCompleteProperty,
         simVisibleProperty,
         simActiveProperty,
         simSettingPhetioStateProperty
       ],
-      ( enabled, simInitComplete, simVisible, simActive, simSettingPhetioState ) => {
+      ( enabled, simAllAudioEnabled, simInitComplete, simVisible, simActive, simSettingPhetioState ) => {
 
-        const fullyEnabled = enabled && simInitComplete && simVisible && simActive && !simSettingPhetioState;
+        const fullyEnabled = enabled && simAllAudioEnabled && simInitComplete && simVisible && simActive && !simSettingPhetioState;
         const gain = fullyEnabled ? this._masterOutputLevel : 0;
 
         // Set the gain, but somewhat gradually in order to avoid rapid transients, which can sound like clicks.
