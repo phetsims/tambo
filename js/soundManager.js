@@ -387,7 +387,7 @@ class SoundManager extends PhetioObject {
     // simulation, but this method can still end up being invoked.
     if ( !this.initialized ) {
       console.warn( 'an attempt was made to remove a sound generator from an uninitialized sound manager, ignoring' );
-      return null;
+      return;
     }
 
     // find the info object for this sound generator
@@ -432,7 +432,7 @@ class SoundManager extends PhetioObject {
     // initialized if sound is not enabled for the sim.
     if ( !this.initialized ) {
       console.warn( 'an attempt was made to set the master output level on an uninitialized sound manager, ignoring' );
-      return null;
+      return;
     }
 
     // range check
@@ -476,7 +476,7 @@ class SoundManager extends PhetioObject {
     // initialized if sound is not enabled for the sim.
     if ( !this.initialized ) {
       console.warn( 'an attempt was made to set the output level for a sound category on an uninitialized sound manager, ignoring' );
-      return null;
+      return;
     }
 
     assert && assert( this.initialized, 'output levels for categories cannot be added until initialization has been done' );
@@ -523,7 +523,7 @@ class SoundManager extends PhetioObject {
     // initialized if sound is not enabled for the sim.
     if ( !this.initialized ) {
       console.warn( 'an attempt was made to set the reverb level on an uninitialized sound manager, ignoring' );
-      return null;
+      return;
     }
 
     if ( newReverbLevel !== this._reverbLevel ) {
