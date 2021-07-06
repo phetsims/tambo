@@ -19,7 +19,7 @@
       "phet",
       "adapted-from-phet"
     ],
-    "features":{
+    "features": {
       "supportsSound": true,
       "supportsEnhancedSound": true,
       "supportsInteractiveDescription": true
