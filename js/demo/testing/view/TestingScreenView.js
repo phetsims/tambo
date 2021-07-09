@@ -34,7 +34,7 @@ import VSlider from '../../../../../sun/js/VSlider.js';
 import lightningImage from '../../../../images/lightning_png.js';
 import marimbaSound from '../../../../sounds/bright-marimba_mp3.js';
 import checkboxCheckedSound from '../../../../sounds/checkbox-checked_mp3.js';
-import reverbImpulseResponse from '../../../../sounds/empty_apartment_bedroom_06_resampled_mp3.js';
+import reverbImpulseResponseSound from '../../../../sounds/empty_apartment_bedroom_06_resampled_mp3.js';
 import loonCallSound from '../../../../sounds/loon-call_mp3.js';
 import rhodesChordSound from '../../../../sounds/rhodes-chord_mp3.js';
 import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js';
@@ -230,7 +230,7 @@ class AdditionalAudioNodesTestNode extends VBox {
 
     // convolver node, which will be used to create the reverb effect
     const convolver = phetAudioContext.createConvolver();
-    convolver.buffer = reverbImpulseResponse.audioBufferProperty.value;
+    convolver.buffer = reverbImpulseResponseSound.audioBufferProperty.value;
 
     // sound clips to be played
     const shortSoundNormal = new SoundClip( checkboxCheckedSound );

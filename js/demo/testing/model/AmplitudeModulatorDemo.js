@@ -1,8 +1,8 @@
 // Copyright 2020, University of Colorado Boulder
 
-import loop1 from '../../../../sounds/220hz-saturated-sine-loop_mp3.js';
-import loop2 from '../../../../sounds/winds-loop-c3-oscilloscope_mp3.js';
-import loop3 from '../../../../sounds/winds-loop-middle-c-oscilloscope_mp3.js';
+import loop1Sound from '../../../../sounds/220hz-saturated-sine-loop_mp3.js';
+import loop2Sound from '../../../../sounds/winds-loop-c3-oscilloscope_mp3.js';
+import loop3Sound from '../../../../sounds/winds-loop-middle-c-oscilloscope_mp3.js';
 import AmplitudeModulator from '../../../AmplitudeModulator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundGenerator from '../../../sound-generators/SoundGenerator.js';
@@ -29,9 +29,9 @@ class AmplitudeModulatorDemo extends SoundGenerator {
 
     // sound sources that will be modulated
     const soundLoops = [
-      new SoundClip( loop1, { loop: true } ),
-      new SoundClip( loop2, { loop: true } ),
-      new SoundClip( loop3, { loop: true } )
+      new SoundClip( loop1Sound, { loop: true } ),
+      new SoundClip( loop2Sound, { loop: true } ),
+      new SoundClip( loop3Sound, { loop: true } )
     ];
 
     // hook each of the loops to the amplitude modulator
