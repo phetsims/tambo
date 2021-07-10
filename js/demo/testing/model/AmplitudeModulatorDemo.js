@@ -1,4 +1,4 @@
-// Copyright 2020, University of Colorado Boulder
+// Copyright 2020-2021, University of Colorado Boulder
 
 import loop1Sound from '../../../../sounds/220hz-saturated-sine-loop_mp3.js';
 import loop2Sound from '../../../../sounds/winds-loop-c3-oscilloscope_mp3.js';
