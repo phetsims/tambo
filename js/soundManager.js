@@ -51,11 +51,12 @@ class SoundManager extends PhetioObject {
     } );
 
     // @public (read-only) {BooleanProperty} - global enabled state for sound generation
-    this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.sound === 'enabled', {
-      tandem: tandem.createTandem( 'enabledProperty' ),
-      phetioFeatured: true,
-      phetioDocumentation: 'Determines whether sound is enabled.'
-    } );
+    this.enabledProperty = new BooleanProperty(
+      ( phet.chipper.queryParameters.sound === 'enabled' && phet.chipper.queryParameters.supportsSound ), {
+        tandem: tandem.createTandem( 'enabledProperty' ),
+        phetioFeatured: true,
+        phetioDocumentation: 'Determines whether sound is enabled.'
+      } );
 
     // @public (read-only) {BooleanProperty} - enabled state for enhanced sounds
     this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled, {
