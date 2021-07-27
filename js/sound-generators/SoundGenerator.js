@@ -195,16 +195,25 @@ class SoundGenerator {
   }
 
   /**
-   * set output level of the sound generator
+   * Set the output level of the sound generator.
    * @param {number} outputLevel - generally between 0 and 1, but can be larger than 1 if necessary to amplify a small
-   * signal, and can be negative to invert the phase
+   *                               signal, and can be negative to invert the phase
    * @param {number} [timeConstant] - time constant for change, longer values mean slower transitions, in seconds
    * @public
    */
-  setOutputLevel( outputLevel, timeConstant ) {
-    timeConstant = ( timeConstant === undefined ) ? DEFAULT_TIME_CONSTANT : timeConstant;
-    this._outputLevel = outputLevel;
+  setOutputLevel( outputLevel, timeConstant = DEFAULT_TIME_CONSTANT ) {
+
     const now = this.audioContext.currentTime;
+
+    // If this is indeed a change, cancel any scheduled changes from previous actions that might still be in progress.
+    if ( outputLevel !== this._outputLevel ) {
+      this.masterGainNode.gain.cancelScheduledValues( now );
+    }
+
+    // Set local copy of output level.
+    this._outputLevel = outputLevel;
+
+    // Set the output level on the gain node.  A different method is used for instant changes.
     if ( timeConstant === 0 ) {
       if ( outputLevel === 0 || this.fullyEnabledProperty.value ) {
         this.masterGainNode.gain.cancelScheduledValues( now );
