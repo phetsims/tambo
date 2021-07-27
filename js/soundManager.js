@@ -33,9 +33,6 @@ const DEFAULT_REVERB_LEVEL = 0.02;
 const LINEAR_GAIN_CHANGE_TIME = soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME; // in seconds
 const GAIN_LOGGING_ENABLED = false;
 
-/**
- * sonification manager object definition
- */
 class SoundManager extends PhetioObject {
 
   /**
@@ -377,7 +374,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * remove the specified sound generator
+   * Remove the specified sound generator.
    * @param {SoundGenerator} soundGenerator
    * @public
    */
@@ -423,7 +420,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * set the master output level for sonification
+   * Set the master output level for sonification.
    * @param {number} level - valid values from 0 (min) through 1 (max)
    * @public
    */
@@ -453,7 +450,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * get the current output level setting
+   * Get the current output level setting.
    * @returns {number}
    * @public
    */
@@ -466,7 +463,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * set the output level for the specified category of sound generator
+   * Set the output level for the specified category of sound generator.
    * @param {String} categoryName - name of category to which this invocation applies
    * @param {number} outputLevel - valid values from 0 through 1
    * @public
@@ -514,7 +511,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * set the amount of reverb
+   * Set the amount of reverb.
    * @param {number} newReverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
    * @public
    */
@@ -624,7 +621,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * log the value of the master gain as it changes, used primarily for debug
+   * Log the value of the master gain as it changes, used primarily for debug.
    * @param {number} duration - in seconds
    * @public
    */
@@ -633,7 +630,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * log the value of the reverb gain as it changes, used primarily for debug
+   * Log the value of the reverb gain as it changes, used primarily for debug.
    * @param {number} duration - in seconds
    * @public
    */
