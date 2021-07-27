@@ -41,7 +41,7 @@ Here are some terms that were essentially invented in the process of creating th
 order to make it audible.
 - Sound Manager: A singleton instance that hooks sound generators to the output audio path, keeps track of them, and
 mutes them if sound is disabled, if the sim becomes invisible, and in several other circumstances
-- Sound Player: A sound generator that implements the `Playable` interface, meaning that it is triggered to produce its
+- Sound Player: A sound generator that implements the `SoundPlayer` interface, meaning that it is triggered to produce its
 sound by invoking its `play` method.
 - Sound Clip: A sound generator that is based on a pre-recorded bit of audio.
 - Multi-Clip: A sound generator that can play one of several pre-recorded audio snippets in response to some event
@@ -147,13 +147,13 @@ soundManager.addSoundGenerator( new myCoolSoundGenerator( model.sonifiedThingPro
 As mentioned earlier, many common UI components generate sound be default when sound is turned on for a sim.  In some
 cases, the default sound may not be desirable, such as when pressing a button triggers some action that produces an
 immediate sound.  To turn off the default sound generation in a UI component, the `soundPlayer` option for the instance
-should be set to `Playable.NO_SOUND`.  It will look something like this:
+should be set to `SoundPlayer.NO_SOUND`.  It will look something like this:
 
 ```js
     const startSomethingImportantButton = new TextPushButton( 'Do it.', {
-      font: new PhetFont( 16 ),
-      soundPlayer: Playable.NO_SOUND // turn off default sound generation
-    } );
+  font: new PhetFont( 16 ),
+  soundPlayer: SoundPlayer.NO_SOUND // turn off default sound generation
+} );
 ```
 
 ## Using the "Options" Dialog to Compare Candidate Sounds

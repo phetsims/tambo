@@ -20,10 +20,10 @@ pair to the `phet` sub-object in the package.json file for this simulation. The 
 the 'Enhanced Sound' item to the PhET menu. See https://github.com/phetsims/friction/blob/master/package.json.
   - [ ] Run `grunt update` to get the updated configuration into the HTML file.
 - [ ] Explicitly turn *off* sound for any common UI components that now produce sounds that are not needed, if there are
-any.  This is done by looking at the options and setting any sound players to `Playable.NO_SOUND`.  Search through the
+any.  This is done by looking at the options and setting any sound players to `SoundPlayer.NO_SOUND`.  Search through the
 code base for example usages.
 - [ ] Add any behavior for any common-UI sound generation that is different from the default behavior.  This is done
-by creating a `Playable` (often a `SoundClip` instance) and passing it in as an option for the sound player.
+by creating a `SoundPlayer` (often a `SoundClip` instance) and passing it in as an option for the sound player.
 - [ ] Decide whether or not to have a separate "sound view" or to use the existing `ScreenView` files.  Both approaches
 have been used, and both are legit, and it probably depends on how much sound generation is needed and whether adding it
 all to the `ScreenView` file(s) is likely to make the file too large and/or difficult to maintain.  As of this writing,

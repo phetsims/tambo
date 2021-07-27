@@ -12,7 +12,7 @@ import VBox from '../../../../../scenery/js/nodes/VBox.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import brightMarimbaSound from '../../../../sounds/bright-marimba_mp3.js';
 import loonCallSound from '../../../../sounds/loon-call_mp3.js';
-import Playable from '../../../Playable.js';
+import SoundPlayer from '../../../SoundPlayer.js';
 import CompositeSoundClip from '../../../sound-generators/CompositeSoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
@@ -38,7 +38,7 @@ class CompositeSoundClipTestNode extends VBox {
     const playSoundClipChordButton = new TextPushButton( 'Play CompositeSoundClip', {
       baseColor: '#aad6cc',
       font: new PhetFont( 16 ),
-      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
       listener: () => { compositeSoundClip.play(); }
     } );
 
@@ -46,7 +46,7 @@ class CompositeSoundClipTestNode extends VBox {
     const stopSoundClipChordButton = new TextPushButton( 'Stop CompositeSoundClip', {
       baseColor: '#DBB1CD',
       font: new PhetFont( 16 ),
-      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
       listener: () => { compositeSoundClip.stop(); }
     } );
 

@@ -41,7 +41,7 @@ import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js'
 import sliderDecreaseClickSound from '../../../../sounds/slider-click-02_mp3.js';
 import thunderSound from '../../../../sounds/thunder_mp3.js';
 import phetAudioContext from '../../../phetAudioContext.js';
-import Playable from '../../../Playable.js';
+import SoundPlayer from '../../../SoundPlayer.js';
 import FourierToneGenerator from '../../../sound-generators/FourierToneGenerator.js';
 import OscillatorSoundGenerator from '../../../sound-generators/OscillatorSoundGenerator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
@@ -185,7 +185,7 @@ class BasicAndEnhancedSoundTestNode extends VBox {
     const playBasicSoundButton = new TextPushButton( 'Play Basic-Level Sound', {
       baseColor: '#aad6cc',
       font: new PhetFont( 16 ),
-      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
       listener: () => { loonCallSoundClip.play(); }
     } );
 
@@ -193,7 +193,7 @@ class BasicAndEnhancedSoundTestNode extends VBox {
     const playEnhancedSoundButton = new TextPushButton( 'Play Enhanced-Level Sound', {
       baseColor: '#DBB1CD',
       font: new PhetFont( 16 ),
-      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
       listener: () => { rhodesChordSoundClip.play(); }
     } );
 
@@ -247,7 +247,7 @@ class AdditionalAudioNodesTestNode extends VBox {
     const playNormalSoundButton = new TextPushButton( 'Normal Sound Clip', {
       baseColor: '#CCFF00',
       font: buttonFont,
-      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
       listener: () => { shortSoundNormal.play(); }
     } );
 
@@ -255,7 +255,7 @@ class AdditionalAudioNodesTestNode extends VBox {
     const playSoundWithInsertedAudioNodeButton = new TextPushButton( 'Same Clip with In-Line Reverb Node', {
       baseColor: '#CC99FF',
       font: buttonFont,
-      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
       listener: () => {shortSoundWithReverb.play();}
     } );
 
@@ -263,7 +263,7 @@ class AdditionalAudioNodesTestNode extends VBox {
     const playBothSounds = new TextPushButton( 'Both Clips Simultaneously', {
       baseColor: '#FF9999',
       font: buttonFont,
-      soundPlayer: Playable.NO_SOUND, // turn off default sound generation
+      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
       listener: () => {
         shortSoundNormal.play();
         shortSoundWithReverb.play();
