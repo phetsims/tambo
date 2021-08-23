@@ -9,7 +9,6 @@
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../../axon/js/Emitter.js';
-import EnumerationProperty from '../../../../../axon/js/EnumerationProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
 import Dimension2 from '../../../../../dot/js/Dimension2.js';
@@ -25,12 +24,9 @@ import Text from '../../../../../scenery/js/nodes/Text.js';
 import VBox from '../../../../../scenery/js/nodes/VBox.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
-import ComboBox from '../../../../../sun/js/ComboBox.js';
-import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
 import Panel from '../../../../../sun/js/Panel.js';
-import VSlider from '../../../../../sun/js/VSlider.js';
 import lightningImage from '../../../../images/lightning_png.js';
 import marimbaSound from '../../../../sounds/bright-marimba_mp3.js';
 import checkboxCheckedSound from '../../../../sounds/checkbox-checked_mp3.js';
@@ -41,12 +37,10 @@ import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js'
 import sliderDecreaseClickSound from '../../../../sounds/slider-click-02_mp3.js';
 import thunderSound from '../../../../sounds/thunder_mp3.js';
 import phetAudioContext from '../../../phetAudioContext.js';
-import SoundPlayer from '../../../SoundPlayer.js';
-import FourierToneGenerator from '../../../sound-generators/FourierToneGenerator.js';
-import OscillatorSoundGenerator from '../../../sound-generators/OscillatorSoundGenerator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
+import SoundPlayer from '../../../SoundPlayer.js';
 import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
 import CompositeSoundClipTestNode from './CompositeSoundClipTestNode.js';
@@ -104,12 +98,6 @@ class TestingScreenView extends DemosScreenView {
       {
         label: 'RemoveAndDisposeSoundGenerators',
         createNode: layoutBounds => new RemoveAndDisposeSoundGeneratorsTestPanel( {
-          center: layoutBounds.center
-        } )
-      },
-      {
-        label: 'FourierToneGeneratorTestNode',
-        createNode: layoutBounds => new FourierToneGeneratorTestNode( resetInProgressProperty, this, {
           center: layoutBounds.center
         } )
       },
@@ -290,95 +278,6 @@ class AdditionalAudioNodesTestNode extends VBox {
    */
   dispose() {
     this.disposeBasicAndEnhancedSoundTestNode();
-    super.dispose();
-  }
-}
-
-/**
- * A node for testing the sound generator that will be used in the Fourier sim
- */
-class FourierToneGeneratorTestNode extends VBox {
-
-  constructor( resetInProgressProperty, listBoxParent, options ) {
-
-    options = merge( { spacing: 20 }, options );
-
-    // Create and hook up the tone generator.
-    const fourierToneGenerator = new FourierToneGenerator();
-    soundManager.addSoundGenerator( fourierToneGenerator );
-
-    // checkbox for enabling and disabling sound generation
-    const soundGenerationEnabled = new BooleanProperty( false );
-    const soundGenerationEnabledCheckbox = new Checkbox(
-      new Text( 'Enabled', { font: FONT } ),
-      soundGenerationEnabled,
-      { boxWidth: CHECKBOX_SIZE }
-    );
-    soundGenerationEnabled.link( enabled => {
-      if ( enabled ) {
-        fourierToneGenerator.play();
-      }
-      else {
-        fourierToneGenerator.stop();
-      }
-    } );
-
-    // combo box for selecting they type of wave that the oscillator should generate
-    const waveformTypeProperty = new EnumerationProperty(
-      OscillatorSoundGenerator.WaveformType,
-      OscillatorSoundGenerator.WaveformType.SINE
-    );
-    waveformTypeProperty.link( waveformType => {
-      fourierToneGenerator.setWaveformType( waveformType );
-    } );
-    const comboBoxItems = [
-      new ComboBoxItem( new Text( 'Sine', { font: FONT } ), OscillatorSoundGenerator.WaveformType.SINE ),
-      new ComboBoxItem( new Text( 'Square', { font: FONT } ), OscillatorSoundGenerator.WaveformType.SQUARE ),
-      new ComboBoxItem( new Text( 'Triangle', { font: FONT } ), OscillatorSoundGenerator.WaveformType.TRIANGLE ),
-      new ComboBoxItem( new Text( 'Sawtooth', { font: FONT } ), OscillatorSoundGenerator.WaveformType.SAWTOOTH )
-    ];
-    const waveformTypeComboBox = new ComboBox( comboBoxItems, waveformTypeProperty, listBoxParent );
-
-    // Create a set of sliders to control the level of the various harmonics in the tone generator.
-    const harmonicControllersHBox = new HBox( { spacing: 3 } );
-    const harmonicLevelProperties = [];
-    _.times( 11, index => {
-      const harmonicLevelProperty = new NumberProperty( 0 );
-      harmonicLevelProperties.push( harmonicLevelProperty );
-      harmonicLevelProperty.link( level => fourierToneGenerator.setOscillatorOutputLevel( index, level ) );
-      const toneControlSlider = new VSlider( harmonicLevelProperty, new Range( -1, 1 ), {
-        constrainValue: value => Math.abs( value ) < 0.1 ? 0 : value
-      } );
-      harmonicControllersHBox.addChild( toneControlSlider );
-    } );
-
-    // Handle reset.
-    resetInProgressProperty.link( resetInProgress => {
-      if ( resetInProgress ) {
-        soundGenerationEnabled.reset();
-        waveformTypeProperty.reset();
-        harmonicLevelProperties.forEach( harmonicLevelProperty => harmonicLevelProperty.reset() );
-      }
-    } );
-
-    super(
-      merge( { children: [ soundGenerationEnabledCheckbox, waveformTypeComboBox, harmonicControllersHBox ] }, options )
-    );
-
-    // @private - dispose function
-    this.disposeFourierToneGeneratorTestNode = () => {
-      soundManager.removeSoundGenerator( fourierToneGenerator );
-      fourierToneGenerator.dispose();
-      harmonicLevelProperties.forEach( harmonicLevelProperty => harmonicLevelProperty.dispose );
-    };
-  }
-
-  /**
-   * @public
-   * @override
-   */
-  dispose() {
-    this.disposeFourierToneGeneratorTestNode();
     super.dispose();
   }
 }
