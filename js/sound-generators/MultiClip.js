@@ -153,7 +153,7 @@ class MultiClip extends SoundGenerator {
 
   /**
    * Change the speed that the sound playback occurs. Note, this does not affect playing sounds, but will only affect
-   * newly subsequent plays of sounds.
+   * subsequent plays of sounds.
    * @param {number} playbackRate - desired playback speed, 1 = normal speed
    * @public
    */

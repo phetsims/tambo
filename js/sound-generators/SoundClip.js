@@ -98,7 +98,7 @@ class SoundClip extends SoundGenerator {
 
     // @private {number} - rate at which clip is being played back, 1 is normal, above 1 is faster, below 1 is slower,
     // see online docs for AudioBufferSourceNode.playbackRate for more information
-    this.playbackRate = options.initialPlaybackRate;
+    this._playbackRate = options.initialPlaybackRate;
 
     // @public (read-only) - BooleanProperty that indicates whether the sound is being played
     this.isPlayingProperty = new BooleanProperty( false );
@@ -142,14 +142,11 @@ class SoundClip extends SoundGenerator {
    * @param {number} [delay] - optional delay parameter, in seconds
    * @public
    */
-  play( delay ) {
+  play( delay = 0 ) {
 
     if ( this.audioContext.state === 'running' && this.wrappedAudioBuffer.audioBufferProperty.value ) {
 
       const now = this.audioContext.currentTime;
-
-      // default delay is zero
-      delay = typeof delay === 'undefined' ? 0 : delay;
 
       if ( ( this.loop && !this.isPlayingProperty.get() ) ||
            ( !this.loop && ( this.fullyEnabled || this.initiateWhenDisabled ) ) ) {
@@ -187,7 +184,7 @@ class SoundClip extends SoundGenerator {
         }
 
         // set the playback rate and start playback
-        bufferSource.playbackRate.setValueAtTime( this.playbackRate, now );
+        bufferSource.playbackRate.setValueAtTime( this._playbackRate, now );
         bufferSource.start( now + delay, this.soundStart );
         this.isPlayingProperty.value = true;
       }
@@ -260,15 +257,35 @@ class SoundClip extends SoundGenerator {
    * the target value. The larger this value is, the slower the transition will be.
    * @public
    */
-  setPlaybackRate( playbackRate, timeConstant ) {
+  setPlaybackRate( playbackRate, timeConstant = DEFAULT_TC ) {
     assert && assert( playbackRate > 0 );
-    timeConstant = typeof timeConstant === 'undefined' ? DEFAULT_TC : timeConstant;
     if ( this.rateChangesAffectPlayingSounds ) {
+      const now = this.audioContext.currentTime;
       this.activeBufferSources.forEach( bufferSource => {
-        bufferSource.playbackRate.setTargetAtTime( playbackRate, this.audioContext.currentTime, timeConstant );
+        bufferSource.playbackRate.cancelScheduledValues( now );
+        bufferSource.playbackRate.setTargetAtTime( playbackRate, now, timeConstant );
       } );
     }
-    this.playbackRate = playbackRate;
+    this._playbackRate = playbackRate;
+  }
+
+  /**
+   * Get the current playback rate.  Note that it is possible that there are audio buffers that are playing that are not
+   * playing at the returned rate if the rate was recently changed.
+   * @returns {number}
+   * @public
+   */
+  getPlaybackRate() {
+    return this._playbackRate;
+  }
+
+  /**
+   * ES5 getter for playback rate
+   * @returns {number}
+   * @public
+   */
+  get playbackRate() {
+    return this.getPlaybackRate();
   }
 
   /**
