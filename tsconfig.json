@@ -16,7 +16,7 @@
     "images/**/*"
   ],
   "exclude": [
-    "js/**/*test*",
+    "js/**/*Test*",
     "js/tambo-main.js",
     "js/demo/**/*"
   ]
