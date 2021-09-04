@@ -1,0 +1,23 @@
+{
+  "extends": "../chipper/tsconfig-core.json",
+  "references": [
+    {
+      // Could potentially be relaxed somewhat. Doesn't depend on scenery directly, but uses
+      // some files scenery includes.
+      "path": "../scenery"
+    },
+    {
+      "path": "../chipper"
+    }
+  ],
+  "include": [
+    "js/**/*",
+    "sounds/**/*",
+    "images/**/*"
+  ],
+  "exclude": [
+    "js/**/*test*",
+    "js/tambo-main.js",
+    "js/demo/**/*"
+  ]
+}
