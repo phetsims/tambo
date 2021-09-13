@@ -13,9 +13,9 @@ Design](https://docs.google.com/document/d/1LJ6maD9QGvRRIaukKi_s019Gc1V2YHi4CPbP
 releases made off of master before the sound implementation is complete.  Generally you'll want to turn sound on, but in
 cases where that isn't possible, skip the two sub-steps below, and the query parameters `supportsSound` and
 `supportsEnhancedSound` can be used to turn sound on for testing during development. 
-  - [ ] Turn on sound by adding the `soundSupported: true` key-value pair to the `phet` sub-object in the package.json 
+  - [ ] Turn on sound by adding the `supportsSound: true` key-value pair to the `phet` sub-object in the package.json 
 file for this simulation. See https://github.com/phetsims/friction/blob/master/package.json.
-  - [ ] If the sound design includes enhanced sound, turn this on by adding the `enhancedSoundSupported: true` key-value
+  - [ ] If the sound design includes enhanced sound, turn this on by adding the `supportsEnhancedSound: true` key-value
 pair to the `phet` sub-object in the package.json file for this simulation. The main effect that this is has is to add
 the 'Enhanced Sound' item to the PhET menu. See https://github.com/phetsims/friction/blob/master/package.json.
   - [ ] Run `grunt update` to get the updated configuration into the HTML file.
