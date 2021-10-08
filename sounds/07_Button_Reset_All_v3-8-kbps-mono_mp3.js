@@ -6,16 +6,41 @@ import phetAudioContext from '../../tambo/js/phetAudioContext.js';
 
 const soundURI = 'data:audio/mpeg;base64,//MUxAAB0AbYAUAAAf/+iMw8fmPV6uZV//MUxAMC6ErwAY0YAVYbgywiyhpYov/r//MUxAIC8FLIAc0AADEYowxSCQDBn05e//MUxAECmF7EAAFeRBbUH0+9i6HhHVVl//MUxAECmHLQAAHSTNWlWwsHywLtMUrV//MUxAECaILQAABOZXQXYVDJuqDQfZe6//MUxAIB4G7UAABShFCQMMPh1dPqAEX5//MUxAUCCG7QAACSTAiDLKrzSAIBGKK+//MUxAcCGGrMAAJKZBTV+dB/hExZk4UZ//MUxAkCMGq4AAPKZKBxxrq4QteNkFhY//MUxAsCAEqoAACwYWqPCzddJn/UMCgC//MUxA4COFKYAACwYHtZlMyd7us4DXFJ//MUxBACaFKQAACeKHZEil/6FeGpfEBk//MUxBECGEqQAAgiJEPvzEHGKNalc47t//MUxBMCOFKIAABeDP9AYKFloV/Cg2oF//MUxBUCOGqIAAgaJIN8jQJfveK6zQCI//MUxBcCkGp4ABPKgE0m6D+bKhQAKABR//MUxBcA6EqQoAAKDPyVf8wVM2V//d/t//MUxB4AsEaIAAAMDPV9fTfd//4x/2Mu//MUxCYCiGpEABAgJO0sv//tchVS+xcX//MUxCYBqAKWQABEAo5iP//9aGeyj+rm//MUxCoCQEYsAABSKH/++IHv5e92rd////MUxCwAAAI4AABEAOKCqteqkV/47//X//MUxDcB8AH4AAAAAA1Vh354YR/lf//D//MUxDoCUAH4AAhGAEpMQU1FMy45OS4z//MUxDsCgAX4AAAAAKqqqqqqqqqqqqqq//MUxDwAAAIMAAAAAKqqqqqqqqqqqqqq//MUxEcCMAH4AAAAAKqqqqqqqqqqqqqq//MUxEkCWAH4AAAAAKqqqqqqqqqqqqqq//MUxEoCSAH0AAAAAKqqqqqqqqqqqqqq//MUxEsCWAHUAAAAAKqqqqqqqqqqqqqq';
 const soundByteArray = base64SoundToByteArray( phetAudioContext, soundURI );
-const unlock = simLauncher.createLock( soundURI );
+const unlock = asyncLoader.createLock( soundURI );
 const wrappedAudioBuffer = new WrappedAudioBuffer();
+
+// safe way to unlock
+let unlocked = false;
+const safeUnlock = () => {
+  if ( !unlocked ) {
+    unlock();
+    unlocked = true;
+  }
+};
+
 const onDecodeSuccess = decodedAudio => {
-  wrappedAudioBuffer.audioBufferProperty.set( decodedAudio );
-  unlock();
+  if ( wrappedAudioBuffer.audioBufferProperty.value === null ) {
+    wrappedAudioBuffer.audioBufferProperty.set( decodedAudio );
+    safeUnlock();
+  }
 };
 const onDecodeError = decodeError => {
   console.warn( 'decode of audio data failed, using stubbed sound, error: ' + decodeError );
   wrappedAudioBuffer.audioBufferProperty.set( phetAudioContext.createBuffer( 1, 1, phetAudioContext.sampleRate ) );
-  unlock();
+  safeUnlock();
 };
-phetAudioContext.decodeAudioData( soundByteArray.buffer, onDecodeSuccess, onDecodeError ).catch( e => { console.warn( 'promise rejection caught for audio decode, error = ' + e ) } );
+const decodePromise = phetAudioContext.decodeAudioData( soundByteArray.buffer, onDecodeSuccess, onDecodeError );
+if ( decodePromise ) {
+  decodePromise
+    .then( decodedAudio => {
+      if ( wrappedAudioBuffer.audioBufferProperty.value === null ) {
+        wrappedAudioBuffer.audioBufferProperty.set( decodedAudio );
+        safeUnlock();
+      }
+    } )
+    .catch( e => {
+      console.warn( 'promise rejection caught for audio decode, error = ' + e );
+      safeUnlock();
+    } );
+}
 export default wrappedAudioBuffer;
