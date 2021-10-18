@@ -22,12 +22,19 @@ class SoundClipChord extends SoundGenerator {
     options = merge( {
       initialOutputLevel: 0.7,
 
+      // {Object|null} - options passed along to each SoundClip used in the chord
+      soundClipOptions: null,
+
       // When true, the chord will play with a delay between each note, starting with the first note in chordPlaybackRates
       // and ending with the last.
       arpeggiate: false,
       arpeggiateTime: 0.10, // in seconds, the total time that it will take the chord to arpeggiate
       chordPlaybackRates: [ Math.pow( 2, 1 / 12 ), Math.pow( 2, 4 / 12 ), Math.pow( 2, 7 / 12 ) ] // default to major chord
     }, options );
+
+    if ( options.soundClipOptions ) {
+      assert && assert( options.soundClipOptions.initialPlaybackRate === undefined, 'SoundClipChord sets the initialPlaybackRate for its SoundClips' );
+    }
 
     super( options );
 
@@ -37,7 +44,9 @@ class SoundClipChord extends SoundGenerator {
 
     // @private
     this.playbackSoundClips = options.chordPlaybackRates.map( playbackRate => {
-      const soundClip = new SoundClip( sound, { initialPlaybackRate: playbackRate } );
+      const soundClip = new SoundClip( sound, merge( {
+        initialPlaybackRate: playbackRate
+      }, options.soundClipOptions ) );
       soundClip.connect( this.soundSourceDestination );
       return soundClip;
     } );
