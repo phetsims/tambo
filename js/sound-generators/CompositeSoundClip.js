@@ -14,7 +14,7 @@ import SoundGenerator from './SoundGenerator.js';
 class CompositeSoundClip extends SoundGenerator {
 
   /**
-   * @param {Array.<{sound:WrappedAudioBuffer, [options]:Object}>} soundsAndOptionsTuples
+   * @param {Array.<{sound:WrappedAudioBuffer, options?:Object}>} soundsAndOptionsTuples
    * @param {Object} [options]
    */
   constructor( soundsAndOptionsTuples, options ) {
