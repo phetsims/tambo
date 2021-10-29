@@ -216,9 +216,7 @@ class SoundClip extends SoundGenerator {
    * fully prior to stopping the audio playback.
    * @public
    */
-  stop( delay ) {
-
-    delay = delay === undefined ? DEFAULT_STOP_DELAY : delay;
+  stop( delay = DEFAULT_STOP_DELAY ) {
 
     // Calculate a time constant to fade output level by 99% by the stop time, see Web Audio time constant
     // information to understand this calculation.
