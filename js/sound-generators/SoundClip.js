@@ -211,7 +211,7 @@ class SoundClip extends SoundGenerator {
    * Note: Doing rapid stops and starts of a loop using this method can cause sound glitches.  If you have a need to
    * do that, use volume fades combined with zero delay stops.
    *
-   * {number} delay - The amount of time to wait before stopping, generally used to prevent sudden stops, which can
+   * @param {number} [delay] - The amount of time to wait before stopping, generally used to prevent sudden stops, which can
    * cause audible clicks.  If greater than zero (which it is by default), this method will try to fade out the sound
    * fully prior to stopping the audio playback.
    * @public
