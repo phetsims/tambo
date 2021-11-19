@@ -3,11 +3,17 @@
 /**
  * Auto-generated from modulify, DO NOT manually modify.
  */
-
+/* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
 import tambo from './tambo.js';
 
-const tamboStrings = getStringModule( 'TAMBO' );
+type StringsType = {
+  'tambo': {
+    'title': string
+  }
+};
+
+const tamboStrings = getStringModule( 'TAMBO' ) as StringsType;
 
 tambo.register( 'tamboStrings', tamboStrings );
 
