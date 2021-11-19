@@ -1,0 +1,13 @@
+{
+  "extends": "../chipper/tsconfig-core.json",
+  "references": [
+    {
+      "path": "../joist"
+    }
+  ],
+  "include": [
+    "js/tambo-main.js",
+    "js/demo/**/*",
+    "js/**/*Test*"
+  ]
+}
