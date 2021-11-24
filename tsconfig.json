@@ -8,6 +8,7 @@
   "include": [
     "js/tambo-main.js",
     "js/demo/**/*",
-    "js/**/*Test*"
+    "js/**/*Test*",
+    "js/**/*test*"
   ]
 }
