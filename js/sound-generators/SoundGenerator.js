@@ -257,7 +257,7 @@ class SoundGenerator {
 
   /**
    * add a Property to the list of those used to control the enabled state of this sound generator
-   * @param {BooleanProperty} enableControlProperty
+   * @param {Property<boolean>} enableControlProperty
    * @public
    */
   addEnableControlProperty( enableControlProperty ) {
