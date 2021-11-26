@@ -4,7 +4,7 @@
  * a Scenery node that represents a ball in the view
  */
 
-import Circle from '../../../../../scenery/js/nodes/Circle.js';
+import { Circle } from '../../../../../scenery/js/imports.js';
 import wallContact2Sound from '../../../../sounds/boundary-reached_mp3.js';
 import ceilingFloorContactSound from '../../../../sounds/ceiling-floor-contact_mp3.js';
 import wallContact3Sound from '../../../../sounds/ceiling-floor-contact_mp3.js';

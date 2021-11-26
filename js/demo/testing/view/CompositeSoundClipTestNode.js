@@ -8,7 +8,7 @@
 
 import merge from '../../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import VBox from '../../../../../scenery/js/nodes/VBox.js';
+import { VBox } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import brightMarimbaSound from '../../../../sounds/bright-marimba_mp3.js';
 import loonCallSound from '../../../../sounds/loon-call_mp3.js';

@@ -8,7 +8,7 @@
  */
 
 import GeneralKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/GeneralKeyboardHelpSection.js';
-import HBox from '../../../scenery/js/nodes/HBox.js';
+import { HBox } from '../../../scenery/js/imports.js';
 import tambo from '../tambo.js';
 
 class TamboKeyboardHelpContent extends HBox {
