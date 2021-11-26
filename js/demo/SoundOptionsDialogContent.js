@@ -1,4 +1,4 @@
-// Copyright 2020, University of Colorado Boulder
+// Copyright 2020-2021, University of Colorado Boulder
 
 import NumberProperty from '../../../axon/js/NumberProperty.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
