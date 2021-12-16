@@ -7,7 +7,7 @@
  * @author John Blanco
  */
 
-import GeneralKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/GeneralKeyboardHelpSection.js';
+import BasicActionsKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
 import { HBox } from '../../../scenery/js/imports.js';
 import tambo from '../tambo.js';
 
@@ -17,7 +17,7 @@ class TamboKeyboardHelpContent extends HBox {
    * @constructor
    */
   constructor() {
-    super( { children: [ new GeneralKeyboardHelpSection() ], align: 'top', spacing: 30 } );
+    super( { children: [ new BasicActionsKeyboardHelpSection() ], align: 'top', spacing: 30 } );
   }
 
 }
