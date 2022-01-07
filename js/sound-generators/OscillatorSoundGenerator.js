@@ -7,14 +7,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import Enumeration from '../../../phet-core/js/Enumeration.js';
+import EnumerationDeprecated from '../../../phet-core/js/EnumerationDeprecated.js';
 import merge from '../../../phet-core/js/merge.js';
 import phetAudioContext from '../phetAudioContext.js';
 import tambo from '../tambo.js';
 import SoundGenerator from './SoundGenerator.js';
 
 // constants
-const WaveformType = Enumeration.byKeys( [ 'SINE', 'SQUARE', 'TRIANGLE', 'SAWTOOTH' ] );
+const WaveformType = EnumerationDeprecated.byKeys( [ 'SINE', 'SQUARE', 'TRIANGLE', 'SAWTOOTH' ] );
 
 // map of the waveform type enum values to the values used by Web Audio oscillators
 const WAVEFORM_NAME_MAP = new Map( [
