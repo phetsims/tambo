@@ -47,13 +47,13 @@ class SoundManager extends PhetioObject {
                            'its children can be ignored.'
     } );
 
-    // @public (read-only) {BooleanProperty} - global enabled state for sound generation
+    // @public {BooleanProperty} - global enabled state for sound generation
     this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.supportsSound, {
       tandem: tandem.createTandem( 'enabledProperty' ),
       phetioDocumentation: 'Determines whether sound is enabled.'
     } );
 
-    // @public (read-only) {BooleanProperty} - enabled state for enhanced sounds
+    // @public {BooleanProperty} - enabled state for enhanced sounds
     this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled, {
       tandem: tandem.createTandem( 'enhancedSoundEnabledProperty' ),
       phetioDocumentation: 'Determines whether enhanced sound is enabled. Enhanced sound is additional sounds that ' +
