@@ -7,14 +7,18 @@
  */
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
+import DerivedProperty from '../../../axon/js/DerivedProperty.js';
 import createObservableArray from '../../../axon/js/createObservableArray.js';
 import merge from '../../../phet-core/js/merge.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import phetAudioContext from '../phetAudioContext.js';
 import soundConstants from '../soundConstants.js';
 import tambo from '../tambo.js';
 
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
+
+let notSettingPhetioState;
 
 class SoundGenerator {
 
@@ -151,6 +155,21 @@ class SoundGenerator {
       const audioNode = options.additionalAudioNodes[ i ];
       audioNode.connect( this.soundSourceDestination );
       this.soundSourceDestination = audioNode;
+    }
+
+    if ( Tandem.PHET_IO_ENABLED ) {
+      if ( Tandem.launched ) {
+        assert && assert( notSettingPhetioState, 'Should exist after launch' );
+        this.addEnableControlProperty( notSettingPhetioState );
+      }
+      else {
+        Tandem.addLaunchListener( () => {
+          if ( !notSettingPhetioState ) {
+            notSettingPhetioState = DerivedProperty.not( phet.phetio.phetioEngine.phetioStateEngine.isSettingStateProperty );
+          }
+          this.addEnableControlProperty( notSettingPhetioState );
+        } );
+      }
     }
 
     // @private {function} - internally used disposal function
