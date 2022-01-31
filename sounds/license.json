@@ -1,100 +1,4 @@
 {
-  "07_Button_Reset_All_v3-8-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "07_Button_Reset_All_v3-16-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "07_Button_Reset_All_v3-24-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "07_Button_Reset_All_v3-48-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "07_Button_Reset_All_v3-64-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "07_Button_Reset_All_v3-128-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "20180213_Bright_Marimba-128-kbps-stereo.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech for PhET"
-  },
-  "20180213_Bright_Marimba-64-kbps-stereo.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech for PhET"
-  },
-  "20180213_Bright_Marimba-48-kbps-stereo.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech for PhET"
-  },
-  "20180213_Bright_Marimba-24-kbps-stereo.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech for PhET"
-  },
-  "20180213_Bright_Marimba-16-kbps-stereo.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech for PhET"
-  },
-  "20180213_Bright_Marimba-8-kbps-stereo.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters of Georgia Tech for PhET"
-  },
   "220hz-saturated-sine-loop.mp3": {
     "text": [
       "Copyright 2019 University of Colorado Boulder"
@@ -159,62 +63,6 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mike Winters (Georgia Tech) and John Blanco"
   },
-  "charges-in-body-better.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris for use by PhET"
-  },
-  "Charges_In_Body_Better_Loop-128-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "Charges_In_Body_Better_Loop-48-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "Charges_In_Body_Better_Loop-64-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "Charges_In_Body_Better_Loop-24-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "Charges_In_Body_Better_Loop-16-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "Charges_In_Body_Better_Loop-8-kbps-mono.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
   "checkbox-checked.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
@@ -263,14 +111,6 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by John Blanco (PhET)"
   },
-  "edge-boundary-bottle.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
   "empty_apartment_bedroom_06_resampled.mp3": {
     "text": [
       "obtained from www.openairlib.net"
@@ -278,38 +118,6 @@
     "projectURL": "https://phet.colorado.edu",
     "license": "Public Domain Creative Commons",
     "notes": "downloaded from http://www.openairlib.net/auralizationdb/content/empty-apartment-bedroom, resampled to 44.1 kHz"
-  },
-  "general-button-001.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "general-button-002.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "general-button-003.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "general-button-v3.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
   "general-button-v4.mp3": {
     "text": [
@@ -327,31 +135,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "grab-001.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "grab-002.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
   "grab-v2.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "grab-release-v2.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -375,39 +159,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "pause-001.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "play-pause-001.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "play-pause-002.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
   "play-pause-003.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "play-pause-004.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -423,31 +175,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "proportion-random-clicks-single.mp3": {
-    "text": [
-      "Copyright 2002-2020 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
   "release.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "release-001.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "release-002.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -583,55 +311,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "step-back.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "step-back-001.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "step-back-002.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
   "step-back-v2.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "step-forward.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "step-forward-001.mp3": {
-    "text": [
-      "Copyright 2002-2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "step-forward-002.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],

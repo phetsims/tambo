@@ -47,7 +47,6 @@ import CompositeSoundClipTestNode from './CompositeSoundClipTestNode.js';
 import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
 import SoundClipChordTestNode from './SoundClipChordTestNode.js';
-import SoundEncodingComparisonPanel from './SoundEncodingComparisonPanel.js';
 
 // constants
 const CHECKBOX_SIZE = 16;
@@ -116,12 +115,6 @@ class TestingScreenView extends DemosScreenView {
       {
         label: 'SoundClipChordTestNode',
         createNode: layoutBounds => new SoundClipChordTestNode( {
-          center: layoutBounds.center
-        } )
-      },
-      {
-        label: 'SoundEncodingComparisonPanel',
-        createNode: layoutBounds => new SoundEncodingComparisonPanel( this, {
           center: layoutBounds.center
         } )
       }
