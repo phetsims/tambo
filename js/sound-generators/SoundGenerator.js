@@ -175,7 +175,7 @@ class SoundGenerator {
     // @private {function} - internally used disposal function
     this.disposeSoundGenerator = () => {
 
-      // clearing this observable array should cause the Properties within it to be unlinked
+      // Clearing this observable array should cause the Properties within it to be unlinked.
       this.enableControlProperties.clear();
     };
   }
