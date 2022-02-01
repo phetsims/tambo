@@ -18,7 +18,7 @@ import tambo from '../tambo.js';
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
-let notSettingPhetioState;
+let notSettingPhetioStateProperty;
 
 class SoundGenerator {
 
@@ -159,15 +159,24 @@ class SoundGenerator {
 
     if ( Tandem.PHET_IO_ENABLED ) {
       if ( Tandem.launched ) {
-        assert && assert( notSettingPhetioState, 'Should exist after launch' );
-        this.addEnableControlProperty( notSettingPhetioState );
+        assert && assert( notSettingPhetioStateProperty, 'Should exist after launch' );
+
+        // If this SoundGenerator is being constructed after PhET-iO has been started, add an enable-control Property to
+        // prevent sound during the setting of PhET-iO state.
+        this.addEnableControlProperty( notSettingPhetioStateProperty );
       }
       else {
+
+        // If this SoundGenerator is being constructed before PhET-iO is fully set up, add a listener, called once
+        // PhET-iO is ready, to then add an enable-control Property that will prevent sound during the setting of
+        // PhET-iO state.
         Tandem.addLaunchListener( () => {
-          if ( !notSettingPhetioState ) {
-            notSettingPhetioState = DerivedProperty.not( phet.phetio.phetioEngine.phetioStateEngine.isSettingStateProperty );
+          if ( !notSettingPhetioStateProperty ) {
+
+            // Store this for later instantiations of SoundGenerator
+            notSettingPhetioStateProperty = DerivedProperty.not( phet.phetio.phetioEngine.phetioStateEngine.isSettingStateProperty );
           }
-          this.addEnableControlProperty( notSettingPhetioState );
+          this.addEnableControlProperty( notSettingPhetioStateProperty );
         } );
       }
     }
