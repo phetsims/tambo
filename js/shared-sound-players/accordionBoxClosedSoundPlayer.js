@@ -6,12 +6,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import accordionBoxClosedSound from '../../sounds/accordion-box-close_mp3.js';
+import accordionBoxClose_mp3 from '../../sounds/accordionBoxClose_mp3.js';
 import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const accordionBoxClosedSoundPlayer = new SoundClipPlayer( accordionBoxClosedSound, {
+const accordionBoxClosedSoundPlayer = new SoundClipPlayer( accordionBoxClose_mp3, {
   soundClipOptions: { initialOutputLevel: 0.5 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

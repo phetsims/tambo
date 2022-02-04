@@ -10,7 +10,7 @@
 
 import Range from '../../../dot/js/Range.js';
 import merge from '../../../phet-core/js/merge.js';
-import defaultSound from '../../sounds/bright-marimba_mp3.js';
+import brightMarimba_mp3 from '../../sounds/brightMarimba_mp3.js';
 import tambo from '../tambo.js';
 import SoundClip from './SoundClip.js';
 
@@ -27,7 +27,7 @@ class DiscreteSoundGenerator extends SoundClip {
     options = merge( {
 
       // sound - the sound to play as the value changes
-      sound: defaultSound,
+      sound: brightMarimba_mp3,
 
       // {number} - initial level at which sounds will be produced, can be changed later
       initialOutputLevel: 1,

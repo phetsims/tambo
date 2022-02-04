@@ -21,7 +21,7 @@ import Checkbox from '../../../../../sun/js/Checkbox.js';
 import ComboBox from '../../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
-import accordionImage from '../../../../images/accordion_png.js';
+import accordion_png from '../../../../images/accordion_png.js';
 import tambo from '../../../tambo.js';
 
 // constants
@@ -124,7 +124,7 @@ class UIComponentsScreenView extends DemosScreenView {
       {
         label: 'AccordionBox',
         createNode: layoutBounds => new AccordionBox(
-          new Image( accordionImage, { maxWidth: 200 } ),
+          new Image( accordion_png, { maxWidth: 200 } ),
           {
             titleNode: new Text( 'Accordion Box', { font: LABEL_FONT } ),
             expandedProperty: new BooleanProperty( false ),

@@ -21,8 +21,8 @@ import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import ComboBox from '../../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import Panel from '../../../../../sun/js/Panel.js';
-import birdCallSound from '../../../../sounds/bird-call_mp3.js';
-import cricketsSound from '../../../../sounds/crickets-loop_mp3.js';
+import birdCall_mp3 from '../../../../sounds/birdCall_mp3.js';
+import cricketsLoop_mp3 from '../../../../sounds/cricketsLoop_mp3.js';
 import PitchedPopGenerator from '../../../sound-generators/PitchedPopGenerator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
@@ -38,11 +38,11 @@ const ADD_BUTTON_COLOR = '#C0D890';
 const SOUND_GENERATOR_INFO = {
   recordedOneShot: {
     comboBoxName: 'Recorded one shot',
-    createSoundGenerator: () => new SoundClip( birdCallSound )
+    createSoundGenerator: () => new SoundClip( birdCall_mp3 )
   },
   recordedLoop: {
     comboBoxName: 'Recorded loop',
-    createSoundGenerator: () => new SoundClip( cricketsSound, { loop: true } )
+    createSoundGenerator: () => new SoundClip( cricketsLoop_mp3, { loop: true } )
   },
   synthesizedSound: {
     comboBoxName: 'Synthesized sound',

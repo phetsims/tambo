@@ -6,12 +6,12 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
-import generalBoundaryBoopSound from '../../sounds/general-boundary-boop_mp3.js';
+import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
 import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const generalBoundaryBoopSoundPlayer = new SoundClipPlayer( generalBoundaryBoopSound, {
+const generalBoundaryBoopSoundPlayer = new SoundClipPlayer( generalBoundaryBoop_mp3, {
   soundClipOptions: { initialOutputLevel: 0.2 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

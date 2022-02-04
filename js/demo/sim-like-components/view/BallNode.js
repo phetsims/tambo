@@ -5,10 +5,9 @@
  */
 
 import { Circle } from '../../../../../scenery/js/imports.js';
-import wallContact2Sound from '../../../../sounds/boundary-reached_mp3.js';
-import ceilingFloorContactSound from '../../../../sounds/ceiling-floor-contact_mp3.js';
-import wallContact3Sound from '../../../../sounds/ceiling-floor-contact_mp3.js';
-import wallContact1Sound from '../../../../sounds/wall-contact_mp3.js';
+import boundaryReached_mp3 from '../../../../sounds/boundaryReached_mp3.js';
+import ceilingFloorContact_mp3 from '../../../../sounds/ceilingFloorContact_mp3.js';
+import wallContact_mp3 from '../../../../sounds/wallContact_mp3.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
@@ -36,13 +35,13 @@ class BallNode extends Circle {
 
     // @private - sounds for wall contact
     this.wallContactSoundClips = [
-      new SoundClip( wallContact1Sound, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } ),
-      new SoundClip( wallContact2Sound, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } ),
-      new SoundClip( wallContact3Sound, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } )
+      new SoundClip( wallContact_mp3, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } ),
+      new SoundClip( boundaryReached_mp3, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } ),
+      new SoundClip( ceilingFloorContact_mp3, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } )
     ];
 
     // @private - sound for ceiling contact
-    this.ceilingFloorContactSoundClip = new SoundClip( ceilingFloorContactSound, {
+    this.ceilingFloorContactSoundClip = new SoundClip( ceilingFloorContact_mp3, {
       initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL
     } );
 

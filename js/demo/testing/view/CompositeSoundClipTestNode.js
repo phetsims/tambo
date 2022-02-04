@@ -10,8 +10,8 @@ import merge from '../../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { VBox } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
-import brightMarimbaSound from '../../../../sounds/bright-marimba_mp3.js';
-import loonCallSound from '../../../../sounds/loon-call_mp3.js';
+import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
+import loonCall_mp3 from '../../../../sounds/loonCall_mp3.js';
 import SoundPlayer from '../../../SoundPlayer.js';
 import CompositeSoundClip from '../../../sound-generators/CompositeSoundClip.js';
 import soundManager from '../../../soundManager.js';
@@ -26,10 +26,10 @@ class CompositeSoundClipTestNode extends VBox {
 
     // sound clips to be played
     const compositeSoundClip = new CompositeSoundClip( [
-      { sound: brightMarimbaSound },
-      { sound: brightMarimbaSound, options: { initialPlaybackRate: Math.pow( 2, 4 / 12 ) } },
-      { sound: brightMarimbaSound, options: { initialPlaybackRate: 2 } },
-      { sound: loonCallSound }
+      { sound: brightMarimba_mp3 },
+      { sound: brightMarimba_mp3, options: { initialPlaybackRate: Math.pow( 2, 4 / 12 ) } },
+      { sound: brightMarimba_mp3, options: { initialPlaybackRate: 2 } },
+      { sound: loonCall_mp3 }
     ] );
 
     soundManager.addSoundGenerator( compositeSoundClip );

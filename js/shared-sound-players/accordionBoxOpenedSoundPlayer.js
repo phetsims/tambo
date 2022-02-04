@@ -6,12 +6,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import accordionBoxOpenedSound from '../../sounds/accordion-box-open_mp3.js';
+import accordionBoxOpen_mp3 from '../../sounds/accordionBoxOpen_mp3.js';
 import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const accordionBoxOpenedSoundPlayer = new SoundClipPlayer( accordionBoxOpenedSound, {
+const accordionBoxOpenedSoundPlayer = new SoundClipPlayer( accordionBoxOpen_mp3, {
   soundClipOptions: { initialOutputLevel: 0.5 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

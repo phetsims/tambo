@@ -21,7 +21,7 @@ import { Display } from '../../scenery/js/imports.js';
 import { DisplayedProperty } from '../../scenery/js/imports.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
-import reverbImpulseResponseSound from '../sounds/empty_apartment_bedroom_06_resampled_mp3.js';
+import emptyApartmentBedroom06Resampled_mp3 from '../sounds/emptyApartmentBedroom06Resampled_mp3.js';
 import audioContextStateChangeMonitor from './audioContextStateChangeMonitor.js';
 import phetAudioContext from './phetAudioContext.js';
 import soundConstants from './soundConstants.js';
@@ -141,10 +141,10 @@ class SoundManager extends PhetioObject {
     const setConvolverBuffer = audioBuffer => {
       if ( audioBuffer ) {
         this.convolver.buffer = audioBuffer;
-        reverbImpulseResponseSound.audioBufferProperty.unlink( setConvolverBuffer );
+        emptyApartmentBedroom06Resampled_mp3.audioBufferProperty.unlink( setConvolverBuffer );
       }
     };
-    reverbImpulseResponseSound.audioBufferProperty.link( setConvolverBuffer );
+    emptyApartmentBedroom06Resampled_mp3.audioBufferProperty.link( setConvolverBuffer );
 
     // gain node that will control the reverb level
     this.reverbGainNode = phetAudioContext.createGain();

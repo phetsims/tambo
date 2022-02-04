@@ -16,10 +16,10 @@ import { Text } from '../../../../../scenery/js/imports.js';
 import { VBox } from '../../../../../scenery/js/imports.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import Panel from '../../../../../sun/js/Panel.js';
-import sineSound from '../../../../sounds/220hz-saturated-sine-loop_mp3.js';
-import string1Sound from '../../../../sounds/strings-loop-middle-c-oscilloscope_mp3.js';
-import wind2Sound from '../../../../sounds/winds-loop-c3-oscilloscope_mp3.js';
-import wind1Sound from '../../../../sounds/winds-loop-middle-c-oscilloscope_mp3.js';
+import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220Hz_mp3.js';
+import stringsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/stringsLoopMiddleCOscilloscope_mp3.js';
+import windsLoopC3Oscilloscope_mp3 from '../../../../sounds/windsLoopC3Oscilloscope_mp3.js';
+import windsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/windsLoopMiddleCOscilloscope_mp3.js';
 import ContinuousPropertySoundGenerator from '../../../sound-generators/ContinuousPropertySoundGenerator.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
@@ -72,10 +72,10 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
 
     super( merge( {
       children: [
-        createTester( string1Sound, 1 ),
-        createTester( wind1Sound, 0.5 ),
-        createTester( wind2Sound, 0.25 ),
-        createTester( sineSound, 1 )
+        createTester( stringsLoopMiddleCOscilloscope_mp3, 1 ),
+        createTester( windsLoopMiddleCOscilloscope_mp3, 0.5 ),
+        createTester( windsLoopC3Oscilloscope_mp3, 0.25 ),
+        createTester( saturatedSineLoop220Hz_mp3, 1 )
       ],
       spacing: 15,
       align: 'left'

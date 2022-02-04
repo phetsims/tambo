@@ -12,7 +12,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import radioButtonSound from '../sounds/radio-button-v2_mp3.js';
+import radioButtonV2_mp3 from '../sounds/radioButtonV2_mp3.js';
 import SoundClip from './sound-generators/SoundClip.js';
 import soundManager from './soundManager.js';
 import tambo from './tambo.js';
@@ -35,7 +35,7 @@ class MultiSelectionSoundPlayerFactory {
    */
   getSoundClipInstance() {
     if ( !this._basisSoundClip ) {
-      this._basisSoundClip = new SoundClip( radioButtonSound, {
+      this._basisSoundClip = new SoundClip( radioButtonV2_mp3, {
         initialOutputLevel: 0.7,
         rateChangesAffectPlayingSounds: false
       } );

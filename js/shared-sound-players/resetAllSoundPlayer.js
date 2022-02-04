@@ -6,12 +6,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import resetAllSound from '../../sounds/reset-all_mp3.js';
+import resetAll_mp3 from '../../sounds/resetAll_mp3.js';
 import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const resetAllSoundPlayer = new SoundClipPlayer( resetAllSound, {
+const resetAllSoundPlayer = new SoundClipPlayer( resetAll_mp3, {
   soundClipOptions: { initialOutputLevel: 0.39 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

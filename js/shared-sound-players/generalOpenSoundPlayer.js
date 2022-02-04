@@ -6,12 +6,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import generalOpenSound from '../../sounds/general-open_mp3.js';
+import generalOpen_mp3 from '../../sounds/generalOpen_mp3.js';
 import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const generalOpenSoundPlayer = new SoundClipPlayer( generalOpenSound, {
+const generalOpenSoundPlayer = new SoundClipPlayer( generalOpen_mp3, {
   soundClipOptions: { initialOutputLevel: 0.4 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );

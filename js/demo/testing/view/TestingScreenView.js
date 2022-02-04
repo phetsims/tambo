@@ -27,15 +27,15 @@ import Checkbox from '../../../../../sun/js/Checkbox.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
 import Panel from '../../../../../sun/js/Panel.js';
-import lightningImage from '../../../../images/lightning_png.js';
-import marimbaSound from '../../../../sounds/bright-marimba_mp3.js';
-import checkboxCheckedSound from '../../../../sounds/checkbox-checked_mp3.js';
-import reverbImpulseResponseSound from '../../../../sounds/empty_apartment_bedroom_06_resampled_mp3.js';
-import loonCallSound from '../../../../sounds/loon-call_mp3.js';
-import rhodesChordSound from '../../../../sounds/rhodes-chord_mp3.js';
-import sliderIncreaseClickSound from '../../../../sounds/slider-click-01_mp3.js';
-import sliderDecreaseClickSound from '../../../../sounds/slider-click-02_mp3.js';
-import thunderSound from '../../../../sounds/thunder_mp3.js';
+import lightning_png from '../../../../images/lightning_png.js';
+import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
+import checkboxChecked_mp3 from '../../../../sounds/checkboxChecked_mp3.js';
+import emptyApartmentBedroom06Resampled_mp3 from '../../../../sounds/emptyApartmentBedroom06Resampled_mp3.js';
+import loonCall_mp3 from '../../../../sounds/loonCall_mp3.js';
+import rhodesChord_mp3 from '../../../../sounds/rhodesChord_mp3.js';
+import sliderClick01_mp3 from '../../../../sounds/sliderClick01_mp3.js';
+import sliderClick02_mp3 from '../../../../sounds/sliderClick02_mp3.js';
+import thunder_mp3 from '../../../../sounds/thunder_mp3.js';
 import phetAudioContext from '../../../phetAudioContext.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
@@ -157,9 +157,9 @@ class BasicAndEnhancedSoundTestNode extends VBox {
   constructor( options ) {
 
     // sound clips to be played
-    const loonCallSoundClip = new SoundClip( loonCallSound );
+    const loonCallSoundClip = new SoundClip( loonCall_mp3 );
     soundManager.addSoundGenerator( loonCallSoundClip );
-    const rhodesChordSoundClip = new SoundClip( rhodesChordSound );
+    const rhodesChordSoundClip = new SoundClip( rhodesChord_mp3 );
     soundManager.addSoundGenerator( rhodesChordSoundClip, { sonificationLevel: SoundLevelEnum.ENHANCED } );
 
     // add a button to play a basic-mode sound
@@ -211,12 +211,12 @@ class AdditionalAudioNodesTestNode extends VBox {
 
     // convolver node, which will be used to create the reverb effect
     const convolver = phetAudioContext.createConvolver();
-    convolver.buffer = reverbImpulseResponseSound.audioBufferProperty.value;
+    convolver.buffer = emptyApartmentBedroom06Resampled_mp3.audioBufferProperty.value;
 
     // sound clips to be played
-    const shortSoundNormal = new SoundClip( checkboxCheckedSound );
+    const shortSoundNormal = new SoundClip( checkboxChecked_mp3 );
     soundManager.addSoundGenerator( shortSoundNormal );
-    const shortSoundWithReverb = new SoundClip( checkboxCheckedSound, {
+    const shortSoundWithReverb = new SoundClip( checkboxChecked_mp3, {
       additionalAudioNodes: [ convolver ]
     } );
     soundManager.addSoundGenerator( shortSoundWithReverb );
@@ -309,7 +309,7 @@ class LongSoundTestPanel extends Node {
     } );
 
     // sound generator for thunder
-    const thunderSoundClip = new SoundClip( thunderSound, {
+    const thunderSoundClip = new SoundClip( thunder_mp3, {
       enableControlProperties: [ DerivedProperty.not( resetInProgressProperty ) ],
       initiateWhenDisabled: true
     } );
@@ -358,7 +358,7 @@ class LongSoundTestPanel extends Node {
     );
 
     // add the lightning bolt that will appear when commanded by the user (and make him/her feel like Zeus)
-    const lightningBoltNode = new Image( lightningImage, {
+    const lightningBoltNode = new Image( lightning_png, {
       left: lightningControlPanel.left + 25,
       top: lightningControlPanel.bottom - 3,
       maxHeight: 50
@@ -422,9 +422,9 @@ class SliderSoundTestNode extends HBox {
     const resetNotInProgressProperty = DerivedProperty.not( resetInProgressProperty );
 
     // add sound generators that will play a sound when the value controlled by the slider changes
-    const sliderIncreaseClickSoundClip = new SoundClip( sliderIncreaseClickSound );
+    const sliderIncreaseClickSoundClip = new SoundClip( sliderClick01_mp3 );
     soundManager.addSoundGenerator( sliderIncreaseClickSoundClip );
-    const sliderDecreaseClickSoundClip = new SoundClip( sliderDecreaseClickSound, {
+    const sliderDecreaseClickSoundClip = new SoundClip( sliderClick02_mp3, {
       initiateWhenDisabled: false,
       enableControlProperties: [ resetNotInProgressProperty ]
     } );
@@ -457,7 +457,7 @@ class SliderSoundTestNode extends HBox {
 
     // Play a sound when certain threshold values are crossed by the continuous Property value, or when a change occurs
     // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
-    const marimbaSoundClip = new SoundClip( marimbaSound, { enableControlProperties: [ resetNotInProgressProperty ] } );
+    const marimbaSoundClip = new SoundClip( brightMarimba_mp3, { enableControlProperties: [ resetNotInProgressProperty ] } );
     soundManager.addSoundGenerator( marimbaSoundClip );
 
     // define a function that will play the marimba sound at a pitch value based on the continuous value Property

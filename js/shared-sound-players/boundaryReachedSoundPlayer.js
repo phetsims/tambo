@@ -6,12 +6,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import boundaryReachedSound from '../../sounds/boundary-reached_mp3.js';
+import boundaryReached_mp3 from '../../sounds/boundaryReached_mp3.js';
 import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const boundaryReachedSoundPlayer = new SoundClipPlayer( boundaryReachedSound, {
+const boundaryReachedSoundPlayer = new SoundClipPlayer( boundaryReached_mp3, {
   soundClipOptions: { initialOutputLevel: 0.8 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
