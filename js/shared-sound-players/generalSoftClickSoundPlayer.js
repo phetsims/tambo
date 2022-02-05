@@ -1,4 +1,4 @@
-// Copyright 2020-2021, University of Colorado Boulder
+// Copyright 2020-2022, University of Colorado Boulder
 
 /**
  * A shared sound generator for soft UI-related clicks, like a slider thumb moving across a tick line.
