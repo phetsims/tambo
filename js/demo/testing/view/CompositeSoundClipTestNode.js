@@ -11,7 +11,7 @@ import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { VBox } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
-import loonCall_mp3 from '../../../../sounds/loonCall_mp3.js';
+import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
 import SoundPlayer from '../../../SoundPlayer.js';
 import CompositeSoundClip from '../../../sound-generators/CompositeSoundClip.js';
 import soundManager from '../../../soundManager.js';

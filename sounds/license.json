@@ -15,14 +15,6 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "birdCall.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by John Blanco (PhET)"
-  },
   "boundaryReached.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"
@@ -95,14 +87,6 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "cricketsLoop.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by John Blanco (PhET)"
-  },
   "emptyApartmentBedroom06Resampled.mp3": {
     "text": [
       "obtained from www.openairlib.net"
@@ -134,14 +118,6 @@
     "projectURL": "https://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "loonCall.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by John Blanco (PhET)"
   },
   "pause.mp3": {
     "text": [
@@ -182,14 +158,6 @@
     "projectURL": "https://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "rhodesChord.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by John Blanco (PhET)"
   },
   "saturatedSineLoop220Hz.mp3": {
     "text": [
@@ -327,22 +295,6 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "stringsLoopMiddleCOscilloscope.mp3": {
-    "text": [
-      "Copyright 2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "thunder.mp3": {
-    "text": [
-      "CC-BY"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "see https://freesound.org/people/InspectorJ/sounds/360328/, note that author says no need to credit for non-commercial projects"
-  },
   "wallContact.mp3": {
     "text": [
       "Copyright 2002-2018 University of Colorado Boulder"
@@ -350,21 +302,5 @@
     "projectURL": "https://phet.colorado.edu",
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Mike Winters (Georgia Tech) for use by PhET"
-  },
-  "windsLoopC3Oscilloscope.mp3": {
-    "text": [
-      "Copyright 2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
-  },
-  "windsLoopMiddleCOscilloscope.mp3": {
-    "text": [
-      "Copyright 2019 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   }
 }

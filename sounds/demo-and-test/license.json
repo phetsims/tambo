@@ -1,0 +1,66 @@
+{
+  "birdCall.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "https://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco (PhET)"
+  },
+  "cricketsLoop.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "https://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco (PhET)"
+  },
+  "loonCall.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "https://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco (PhET)"
+  },
+  "rhodesChord.mp3": {
+    "text": [
+      "Copyright 2002-2018 University of Colorado Boulder"
+    ],
+    "projectURL": "https://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by John Blanco (PhET)"
+  },
+  "stringsLoopMiddleCOscilloscope.mp3": {
+    "text": [
+      "Copyright 2019 University of Colorado Boulder"
+    ],
+    "projectURL": "https://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  },
+  "thunder.mp3": {
+    "text": [
+      "CC-BY"
+    ],
+    "projectURL": "https://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "see https://freesound.org/people/InspectorJ/sounds/360328/, note that author says no need to credit for non-commercial projects"
+  },
+  "windsLoopC3Oscilloscope.mp3": {
+    "text": [
+      "Copyright 2019 University of Colorado Boulder"
+    ],
+    "projectURL": "https://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  },
+  "windsLoopMiddleCOscilloscope.mp3": {
+    "text": [
+      "Copyright 2019 University of Colorado Boulder"
+    ],
+    "projectURL": "https://phet.colorado.edu",
+    "license": "contact phethelp@colorado.edu",
+    "notes": "created by Ashton Morris (PhET Interactive Simulations)"
+  }
+}
