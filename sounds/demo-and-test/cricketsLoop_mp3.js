@@ -1,5 +1,3 @@
-// Copyright 2022, University of Colorado Boulder
-
 /* eslint-disable */
 import asyncLoader from '../../../phet-core/js/asyncLoader.js';
 import base64SoundToByteArray from '../../../tambo/js/base64SoundToByteArray.js';

@@ -63,7 +63,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "click001.mp3": {
+  "click.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -95,7 +95,7 @@
     "license": "Public Domain Creative Commons",
     "notes": "downloaded from http://www.openairlib.net/auralizationdb/content/empty-apartment-bedroom, resampled to 44.1 kHz"
   },
-  "generalButtonV4.mp3": {
+  "generalButton.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -111,7 +111,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "grabV2.mp3": {
+  "grab2.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -127,7 +127,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "playPause003.mp3": {
+  "playPause.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -247,22 +247,6 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by John Blanco (PhET Interactive Simulations), WAV format used because it was smaller than MP3 in base64"
   },
-  "sliderClick01.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters (Georgia Tech) for use by PhET"
-  },
-  "sliderClick02.mp3": {
-    "text": [
-      "Copyright 2002-2018 University of Colorado Boulder"
-    ],
-    "projectURL": "https://phet.colorado.edu",
-    "license": "contact phethelp@colorado.edu",
-    "notes": "created by Mike Winters (Georgia Tech) for use by PhET"
-  },
   "generalSoftClick.mp3": {
     "text": [
       "Copyright 2002-2020 University of Colorado Boulder"
@@ -279,7 +263,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "stepBackV2.mp3": {
+  "stepBack.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],
@@ -287,7 +271,7 @@
     "license": "contact phethelp@colorado.edu",
     "notes": "created by Ashton Morris (PhET Interactive Simulations)"
   },
-  "stepForwardV2.mp3": {
+  "stepForward.mp3": {
     "text": [
       "Copyright 2002-2019 University of Colorado Boulder"
     ],

@@ -6,12 +6,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import generalButtonV4_mp3 from '../../sounds/generalButtonV4_mp3.js';
+import generalButton_mp3 from '../../sounds/generalButton_mp3.js';
 import SoundClipPlayer from '../sound-generators/SoundClipPlayer.js';
 import tambo from '../tambo.js';
 
 // create the shared sound instance
-const pushButtonSoundPlayer = new SoundClipPlayer( generalButtonV4_mp3, {
+const pushButtonSoundPlayer = new SoundClipPlayer( generalButton_mp3, {
   soundClipOptions: { initialOutputLevel: 0.5 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
