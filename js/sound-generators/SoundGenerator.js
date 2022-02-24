@@ -52,8 +52,11 @@ class SoundGenerator {
 
       // {AudioNode[]} Audio nodes that will be connected in the specified order between the bufferSource and
       // localGainNode, used to insert things like filters, compressors, etc.
-      additionalAudioNodes: []
+      additionalAudioNodes: [],
 
+      // {boolean} When false, an enable-control Property will be added that mutes the sound when setting PhET-iO state.
+      // Almost all sounds want this muting to occur, please test thoroughly before turning this option on.
+      enabledDuringPhetioStateSetting: false
     }, options );
 
     options.enableControlProperties.forEach( enableControlProperty => {
@@ -157,7 +160,7 @@ class SoundGenerator {
       this.soundSourceDestination = audioNode;
     }
 
-    if ( Tandem.PHET_IO_ENABLED ) {
+    if ( Tandem.PHET_IO_ENABLED && !options.enabledDuringPhetioStateSetting ) {
       if ( Tandem.launched ) {
         assert && assert( notSettingPhetioStateProperty, 'Should exist after launch' );
 
