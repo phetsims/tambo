@@ -8,11 +8,12 @@
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import Range from '../../../../../dot/js/Range.js';
+import Utils from '../../../../../dot/js/Utils.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../../scenery-phet/js/TimeControlNode.js';
-import { Image } from '../../../../../scenery/js/imports.js';
-import { Text } from '../../../../../scenery/js/imports.js';
+import { Image, Text, VBox } from '../../../../../scenery/js/imports.js';
 import AccordionBox from '../../../../../sun/js/AccordionBox.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import BooleanRectangularToggleButton from '../../../../../sun/js/buttons/BooleanRectangularToggleButton.js';
@@ -21,7 +22,11 @@ import Checkbox from '../../../../../sun/js/Checkbox.js';
 import ComboBox from '../../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
+import HSlider from '../../../../../sun/js/HSlider.js';
 import accordion_png from '../../../../images/accordion_png.js';
+import toggleOffSoundPlayer from '../../../shared-sound-players/toggleOffSoundPlayer.js';
+import toggleOnSoundPlayer from '../../../shared-sound-players/toggleOnSoundPlayer.js';
+import ValueChangeSoundGenerator from '../../../sound-generators/ValueChangeSoundGenerator.js';
 import tambo from '../../../tambo.js';
 
 // constants
@@ -134,6 +139,54 @@ class UIComponentsScreenView extends DemosScreenView {
             center: layoutBounds.center
           }
         )
+      },
+      {
+        label: 'Sliders',
+        createNode: layoutBounds => new VBox( {
+          children: [
+
+            new Text( 'Continuous', { font: LABEL_FONT } ),
+
+            // very basic slider with default sound
+            new HSlider( new NumberProperty( 0 ), new Range( 0, 100 ) ),
+
+            new Text( 'Discrete', { font: LABEL_FONT } ),
+
+            // discrete slider
+            new HSlider( new NumberProperty( 0 ), new Range( 0, 5 ), {
+              constrainValue: value => Utils.roundSymmetric( value ),
+              keyboardStep: 1,
+              thumbFill: 'green',
+              thumbFillHighlighted: '#80ff80'
+            } ),
+
+            new Text( 'Discrete with Tricky Values', { font: LABEL_FONT } ),
+
+            // The following is a discrete slider
+            new HSlider( new NumberProperty( 0 ), new Range( 0, 0.7 ), {
+              constrainValue: value => Utils.roundToInterval( value, 0.05 ),
+              keyboardStep: 1,
+              thumbFill: '#6600cc',
+              thumbFillHighlighted: '#b366ff',
+              soundGeneratorOptions: { numberOfMiddleThresholds: Utils.roundSymmetric( 0.7 / 0.05 ) - 1 }
+            } ),
+
+            new Text( 'Custom Sound', { font: LABEL_FONT } ),
+
+            // slider with custom sound generation
+            new HSlider( new NumberProperty( 0 ), new Range( 0, 100 ), {
+              soundGenerator: new ValueChangeSoundGenerator( new Range( 0, 100 ), {
+                middleMovementSoundPlayer: toggleOffSoundPlayer,
+                numberOfMiddleThresholds: 5,
+                minMaxSoundPlayer: toggleOnSoundPlayer
+              } ),
+              thumbFill: '#ff6666',
+              thumbFillHighlighted: '#ffb3b3'
+            } )
+          ],
+          spacing: 20,
+          center: layoutBounds.center
+        } )
       }
     ];
 

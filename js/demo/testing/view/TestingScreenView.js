@@ -17,11 +17,7 @@ import Utils from '../../../../../dot/js/Utils.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import { HBox } from '../../../../../scenery/js/imports.js';
-import { Image } from '../../../../../scenery/js/imports.js';
-import { Node } from '../../../../../scenery/js/imports.js';
-import { Text } from '../../../../../scenery/js/imports.js';
-import { VBox } from '../../../../../scenery/js/imports.js';
+import { HBox, Image, Node, Text, VBox } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
@@ -30,14 +26,15 @@ import Panel from '../../../../../sun/js/Panel.js';
 import lightning_png from '../../../../images/lightning_png.js';
 import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
 import checkboxChecked_mp3 from '../../../../sounds/checkboxChecked_mp3.js';
-import emptyApartmentBedroom06Resampled_mp3 from '../../../../sounds/emptyApartmentBedroom06Resampled_mp3.js';
 import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
 import rhodesChord_mp3 from '../../../../sounds/demo-and-test/rhodesChord_mp3.js';
 import sliderClick01_mp3 from '../../../../sounds/demo-and-test/sliderClick01_mp3.js';
 import sliderClick02_mp3 from '../../../../sounds/demo-and-test/sliderClick02_mp3.js';
 import thunder_mp3 from '../../../../sounds/demo-and-test/thunder_mp3.js';
+import emptyApartmentBedroom06Resampled_mp3 from '../../../../sounds/emptyApartmentBedroom06Resampled_mp3.js';
 import phetAudioContext from '../../../phetAudioContext.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
+import ValueChangeSoundGenerator from '../../../sound-generators/ValueChangeSoundGenerator.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
 import SoundPlayer from '../../../SoundPlayer.js';
@@ -414,7 +411,10 @@ class SliderSoundTestNode extends HBox {
       trackSize: sliderTrackSize,
       thumbSize: sliderThumbSize,
       constrainValue: value => Utils.roundSymmetric( value ),
-      keyboardStep: 1
+      keyboardStep: 1,
+
+      // Turn off default sound generation, since this does its own in a highly customized way.
+      soundGenerator: ValueChangeSoundGenerator.NO_SOUND
     } );
     _.times( numberOfTickMarks, index => { discreteSlider.addMinorTick( index ); } );
 
@@ -452,7 +452,10 @@ class SliderSoundTestNode extends HBox {
           sliderBeingDraggedByKeyboard = true;
         }
       },
-      endDrag: () => { sliderBeingDraggedByKeyboard = false; }
+      endDrag: () => { sliderBeingDraggedByKeyboard = false; },
+
+      // Turn off default sound generation, since this does its own in a highly customized way.
+      soundGenerator: ValueChangeSoundGenerator.NO_SOUND
     } );
 
     // Play a sound when certain threshold values are crossed by the continuous Property value, or when a change occurs
