@@ -13,7 +13,9 @@
   "include": [
     "js/**/*",
     "sounds/**/*",
-    "images/**/*"
+    "images/**/*",
+    "../chipper/phet-types.d.ts",
+    "../chipper/node_modules/@types/lodash/index.d.ts"
   ],
   "exclude": [
     "js/**/*Test*",

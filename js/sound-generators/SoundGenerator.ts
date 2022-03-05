@@ -8,56 +8,92 @@
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../axon/js/DerivedProperty.js';
-import createObservableArray from '../../../axon/js/createObservableArray.js';
-import merge from '../../../phet-core/js/merge.js';
+import createObservableArray, { ObservableArray } from '../../../axon/js/createObservableArray.js';
+import optionize from '../../../phet-core/js/optionize.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import phetAudioContext from '../phetAudioContext.js';
 import soundConstants from '../soundConstants.js';
 import tambo from '../tambo.js';
+import Property from '../../../axon/js/Property.js';
+import IProperty from '../../../axon/js/IProperty.js';
 
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
-let notSettingPhetioStateProperty;
+let notSettingPhetioStateProperty: Property<boolean>;
 
-class SoundGenerator {
+export type SoundGeneratorOptions = {
 
-  /**
-   * @param {Object} [options]
-   * @constructor
-   * @abstract
-   */
-  constructor( options ) {
+  // Initial value for the output level.  Generally, this should always be between 0 and 1, but values
+  // greater than 1 may be needed in some rare cases in order to create enough output to be audible
+  initialOutputLevel?: number;
 
-    options = merge( {
+  // By default, the shared audio context is used so that this sound can be registered with the
+  // sonification manager, but this can be overridden if desired.  In general, overriding will only be done for
+  // testing.
+  audioContext?: AudioContext;
 
-      // {number} Initial value for the output level.  Generally, this should always be between 0 and 1, but values
-      // greater than 1 may be needed in some rare cases in order to create enough output to be audible
+  // This flag controls whether the output of this sound generator is immediately connected to the audio context
+  // destination.  This is useful for testing, but should not be set to true if this sound generator is being used
+  // in conjunction with the sound manager.
+  connectImmediately?: boolean;
+
+  // An initial set of Properties that will be hooked to this sound generator's enabled state,
+  // all of which must be true for sound to be produced.  More of these properties can be added after construction
+  // via methods if needed.
+  enableControlProperties?: IProperty<boolean>[];
+
+  // Audio nodes that will be connected in the specified order between the bufferSource and
+  // localGainNode, used to insert things like filters, compressors, etc.
+  additionalAudioNodes?: AudioNode[];
+
+  // When false, an enable-control Property will be added that mutes the sound when setting PhET-iO state.
+  // Almost all sounds want this muting to occur, please test thoroughly before turning this option on.
+  enabledDuringPhetioStateSetting?: boolean;
+};
+
+abstract class SoundGenerator {
+
+  protected audioContext: AudioContext;
+  private _outputLevel: number;
+
+  // a list of all audio nodes to which this sound generator is connected
+  private connectionList: AudioParam[];
+
+  // A set of boolean Properties that collectively control whether the sound generator is enabled.  All of these must be
+  // true in order for the sound generator to be "fully enabled", meaning that it will produce sound.
+  protected enableControlProperties: ObservableArray<IProperty<boolean>>;
+
+  // A Property that tracks whether this sound generator is fully enabled, meaning that all the enable control
+  // Properties are in a state indicating that sound can be produced.  This should only be updated in the listener
+  // function defined below, no where else.
+  readonly fullyEnabledProperty: Property<boolean>;
+
+  // A Property that tracks whether this sound generator is "locally enabled",
+  // which means that it is internally set to produce sound.  Setting this to true does not guarantee that sound will
+  // be produced, since other Properties can all affect this, see fullyEnabledProperty.
+  locallyEnabledProperty: Property<boolean>;
+
+  // master gain control that will be used to control the volume of the sound
+  protected masterGainNode: GainNode;
+
+  // The audio node to which the sound sources will connect, analogous to AudioContext.destination.  If no additional
+  // audio nodes were provided upon construction, this will be the master gain node.
+  protected soundSourceDestination: AudioNode;
+
+  // internally used disposal function
+  private disposeSoundGenerator: () => void;
+
+  protected constructor( providedOptions?: SoundGeneratorOptions ) {
+
+    const options = optionize<SoundGeneratorOptions, SoundGeneratorOptions>( {
       initialOutputLevel: 1,
-
-      // {AudioContext} By default, the shared audio context is used so that this sound can be registered with the
-      // sonification manager, but this can be overridden if desired.  In general, overriding will only be done for
-      // testing.
       audioContext: phetAudioContext,
-
-      // This flag controls whether the output of this sound generator is immediately connected to the audio context
-      // destination.  This is useful for testing, but should not be set to true if this sound generator is being used
-      // in conjunction with the sound manager.
       connectImmediately: false,
-
-      // {BooleanProperty[]} - An initial set of Properties that will be hooked to this sound generator's enabled state,
-      // all of which must be true for sound to be produced.  More of these properties can be added after construction
-      // via methods if needed.
       enableControlProperties: [],
-
-      // {AudioNode[]} Audio nodes that will be connected in the specified order between the bufferSource and
-      // localGainNode, used to insert things like filters, compressors, etc.
       additionalAudioNodes: [],
-
-      // {boolean} When false, an enable-control Property will be added that mutes the sound when setting PhET-iO state.
-      // Almost all sounds want this muting to occur, please test thoroughly before turning this option on.
       enabledDuringPhetioStateSetting: false
-    }, options );
+    }, providedOptions );
 
     options.enableControlProperties.forEach( enableControlProperty => {
       assert && assert(
@@ -66,37 +102,24 @@ class SoundGenerator {
       );
     } );
 
-    // @protected {AudioContext}
     this.audioContext = options.audioContext;
-
-    // @private {number}
     this._outputLevel = options.initialOutputLevel;
-
-    // @private {AudioParam[]} - a list of all audio nodes to which this sound generator is connected
     this.connectionList = [];
-
-    // @private {ObservableArrayDef.<BooleanProperty>} - A set of boolean Properties that collectively control whether the
-    // sound generator is enabled.  All of these must be true in order for the sound generator to be "fully
-    // enabled", meaning that it will produce sound.
     this.enableControlProperties = createObservableArray();
-
-    // @public (read-only) {BooleanProperty} - A Property that tracks whether this sound generator is fully enabled,
-    // meaning that all the enable control Properties are in a state indicating that sound can be produced.  This
-    // should only be updated in the listener function defined below, no where else.
     this.fullyEnabledProperty = new BooleanProperty( true );
 
     // listener that updates the state of fullyEnabledProperty
     const updateFullyEnabledState = () => {
       this.fullyEnabledProperty.value = _.every(
         this.enableControlProperties,
-        enableControlProperty => enableControlProperty.value
+        ( enableControlProperty: IProperty<boolean> ) => enableControlProperty.value
       );
     };
 
     // listen for new enable control Properties and hook them up as they arrive
     this.enableControlProperties.addItemAddedListener( addedItem => {
       addedItem.link( updateFullyEnabledState );
-      const checkAndRemove = removedItem => {
+      const checkAndRemove = ( removedItem: IProperty<boolean> ) => {
         if ( removedItem === addedItem ) {
           removedItem.unlink( updateFullyEnabledState );
           this.enableControlProperties.removeItemRemovedListener( checkAndRemove );
@@ -110,15 +133,11 @@ class SoundGenerator {
       this.addEnableControlProperty( enableControlProperty );
     } );
 
-    // @public (read-only) {BooleanProperty} - A Property that tracks whether this sound generator is "locally enabled",
-    // which means that it is internally set to produce sound.  Setting this to true does not guarantee that sound will
-    // be produced, since other Properties can all affect this, see fullyEnabledProperty.
     this.locallyEnabledProperty = new BooleanProperty( true );
 
     // add the local Property to the list of enable controls
     this.addEnableControlProperty( this.locallyEnabledProperty );
 
-    // @protected {GainNode) - master gain control that will be used to control the volume of the sound
     this.masterGainNode = this.audioContext.createGain();
     this.masterGainNode.gain.setValueAtTime(
       this._outputLevel,
@@ -148,9 +167,6 @@ class SoundGenerator {
       );
     } );
 
-    // @protected {AudioNode} - The audio node to which the sound sources will connect, analogous to
-    // AudioContext.destination.  If no additional audio nodes were provided upon construction, this will be the
-    // master gain node.
     this.soundSourceDestination = this.masterGainNode;
 
     // Insert any additional audio nodes into the signal chain by iterating backwards through the provided list.
@@ -184,7 +200,6 @@ class SoundGenerator {
       }
     }
 
-    // @private {function} - internally used disposal function
     this.disposeSoundGenerator = () => {
 
       // Clearing this observable array should cause the Properties within it to be unlinked.
@@ -194,10 +209,8 @@ class SoundGenerator {
 
   /**
    * connect the sound generator to an audio parameter
-   * @param {AudioParam} audioParam
-   * @public
    */
-  connect( audioParam ) {
+  connect( audioParam: AudioParam ) {
     this.masterGainNode.connect( audioParam );
 
     // Track this sound generator's connections.  This is necessary because Web Audio doesn't support checking which
@@ -207,32 +220,26 @@ class SoundGenerator {
 
   /**
    * disconnect the sound generator from an audio parameter
-   * @param {AudioParam} audioParam
-   * @public
    */
-  disconnect( audioParam ) {
+  disconnect( audioParam: AudioParam ) {
     this.masterGainNode.disconnect( audioParam );
     this.connectionList = _.without( this.connectionList, audioParam );
   }
 
   /**
    * test if this sound generator is connected to the provided audio param
-   * @param {AudioParam} audioParam
-   * @returns {boolean}
-   * @public
    */
-  isConnectedTo( audioParam ) {
+  isConnectedTo( audioParam: AudioParam ): boolean {
     return this.connectionList.indexOf( audioParam ) >= 0;
   }
 
   /**
    * Set the output level of the sound generator.
-   * @param {number} outputLevel - generally between 0 and 1, but can be larger than 1 if necessary to amplify a small
-   *                               signal, and can be negative to invert the phase
-   * @param {number} [timeConstant] - time constant for change, longer values mean slower transitions, in seconds
-   * @public
+   * @param outputLevel - generally between 0 and 1, but can be larger than 1 if necessary to amplify a small
+   *                      signal, and can be negative to invert the phase
+   * @param [timeConstant] - time constant for change, longer values mean slower transitions, in seconds
    */
-  setOutputLevel( outputLevel, timeConstant = DEFAULT_TIME_CONSTANT ) {
+  setOutputLevel( outputLevel: number, timeConstant: number = DEFAULT_TIME_CONSTANT ) {
 
     const now = this.audioContext.currentTime;
 
@@ -268,64 +275,48 @@ class SoundGenerator {
     }
   }
 
-  set outputLevel( outputLevel ) {
+  set outputLevel( outputLevel: number ) {
     this.setOutputLevel( outputLevel );
   }
 
   /**
    * Get the current output level setting.  Note that if the sound generator is disabled, this could return a non-zero
    * value but the sound generator won't produce audible sound.
-   * @returns {number}
-   * @public
    */
-  getOutputLevel() {
+  getOutputLevel(): number {
     return this._outputLevel;
   }
 
-  get outputLevel() {
+  get outputLevel(): number {
     return this.getOutputLevel();
   }
 
   /**
    * add a Property to the list of those used to control the enabled state of this sound generator
-   * @param {Property<boolean>} enableControlProperty
-   * @public
    */
-  addEnableControlProperty( enableControlProperty ) {
+  addEnableControlProperty( enableControlProperty: IProperty<boolean> ) {
     this.enableControlProperties.push( enableControlProperty );
   }
 
   /**
    * remove a Property from the list of those used to control the enabled state of this sound generator
-   * @param {BooleanProperty} enableControlProperty
-   * @public
    */
-  removeEnableControlProperty( enableControlProperty ) {
+  removeEnableControlProperty( enableControlProperty: IProperty<boolean> ) {
     this.enableControlProperties.remove( enableControlProperty );
   }
 
-  /**
-   * @public
-   */
-  get locallyEnabled() {
+  get locallyEnabled(): boolean {
     return this.locallyEnabledProperty.value;
   }
 
-  set locallyEnabled( locallyEnabled ) {
+  set locallyEnabled( locallyEnabled: boolean ) {
     this.locallyEnabledProperty.value = locallyEnabled;
   }
 
-  /**
-   * public
-   * @returns {boolean}
-   */
-  get fullyEnabled() {
+  get fullyEnabled(): boolean {
     return this.fullyEnabledProperty.value;
   }
 
-  /**
-   * @public
-   */
   dispose() {
     this.disposeSoundGenerator();
   }
