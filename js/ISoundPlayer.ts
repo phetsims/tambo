@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2022, University of Colorado Boulder
 
 /**
  * SoundPlayer is a "definition" type, based off of PaintDef.js, that defines a type that is used in the tambo sound

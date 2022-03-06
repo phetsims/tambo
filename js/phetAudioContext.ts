@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2018-2022, University of Colorado Boulder
 
 /**
  * phetAudioContext is a singleton instance of a Web Audio context that is used for all Web Audio interaction
