@@ -26,7 +26,8 @@ type SelfOptions = {
   // The sound player that will potentially be played when changes occur that are not to the min or max values.
   middleMovementSoundPlayer?: ISoundPlayer;
 
-  // The number of thresholds where the sound will be played during mouse- or touch-based dragging.
+  // The number of thresholds that, when reached or crossed, will cause a sound to be played when checking value changes
+  // against thresholds.  In other words, this is the number of thresholds that exist between the min and max values.
   numberOfMiddleThresholds?: number;
 
   // This function is used to constrain the threshold values that are used to decide when to play
