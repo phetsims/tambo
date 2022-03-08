@@ -34,7 +34,6 @@ import thunder_mp3 from '../../../../sounds/demo-and-test/thunder_mp3.js';
 import emptyApartmentBedroom06Resampled_mp3 from '../../../../sounds/emptyApartmentBedroom06Resampled_mp3.js';
 import phetAudioContext from '../../../phetAudioContext.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
-import ValueChangeSoundGenerator from '../../../sound-generators/ValueChangeSoundGenerator.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
 import SoundPlayer from '../../../SoundPlayer.js';
@@ -414,7 +413,7 @@ class SliderSoundTestNode extends HBox {
       keyboardStep: 1,
 
       // Turn off default sound generation, since this does its own in a highly customized way.
-      soundGenerator: ValueChangeSoundGenerator.NO_SOUND
+      soundGenerator: null
     } );
     _.times( numberOfTickMarks, index => { discreteSlider.addMinorTick( index ); } );
 
@@ -455,7 +454,7 @@ class SliderSoundTestNode extends HBox {
       endDrag: () => { sliderBeingDraggedByKeyboard = false; },
 
       // Turn off default sound generation, since this does its own in a highly customized way.
-      soundGenerator: ValueChangeSoundGenerator.NO_SOUND
+      soundGenerator: null
     } );
 
     // Play a sound when certain threshold values are crossed by the continuous Property value, or when a change occurs
