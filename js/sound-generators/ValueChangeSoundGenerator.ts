@@ -21,11 +21,33 @@ import tambo from '../tambo.js';
 import ISoundPlayer from '../ISoundPlayer.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 import phetAudioContext from '../phetAudioContext.js';
+import SoundClipPlayer from './SoundClipPlayer.js';
+import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
+import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
+
+// constants
+const DEFAULT_MIN_SOUND_PLAYER = new SoundClipPlayer( generalBoundaryBoop_mp3, {
+  soundClipOptions: {
+    initialOutputLevel: 0.2,
+    initialPlaybackRate: 1 / Math.pow( 2, 1 / 6 ) // a major second lower
+  },
+  soundManagerOptions: { categoryName: 'user-interface' }
+} );
+const DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER = new SoundClipPlayer( generalSoftClick_mp3, {
+  soundClipOptions: {
+    initialOutputLevel: 0.2,
+    initialPlaybackRate: 1 / Math.pow( 2, 1 / 6 ) // a major second lower
+  },
+  soundManagerOptions: { categoryName: 'user-interface' }
+} );
 
 type SelfOptions = {
 
-  // The sound player that will potentially be played when changes occur that are not to the min or max values.
-  middleMovementSoundPlayer?: ISoundPlayer;
+  // The sound player for movement in the middle of the range in the up direction.
+  middleMovingUpSoundPlayer?: ISoundPlayer;
+
+  // The sound player for movement in the middle of the range in the down direction.
+  middleMovingDownSoundPlayer?: ISoundPlayer;
 
   // The number of thresholds that, when reached or crossed, will cause a sound to be played when checking value changes
   // against thresholds.  In other words, this is the number of thresholds that exist between the min and max values.
@@ -38,12 +60,15 @@ type SelfOptions = {
   // possible to use the same constraint function in such cases.
   constrainThresholds?: ( n: number ) => number;
 
-  // The sound played when a min or max value is hit.
-  minMaxSoundPlayer?: ISoundPlayer;
+  // The sound player that is used to indicate the minimum value.
+  minSoundPlayer?: ISoundPlayer;
+
+  // The sound player that is used to indicate the maximum value.
+  maxSoundPlayer?: ISoundPlayer;
 
   // The minimum amount of time that must pass after a middle sound is played before another can be played.  This is
   // helpful when a lot of value changes can occur rapidly and thus create an overwhelming amount of sound.
-  minimumInterMiddleSoundTime?: number
+  minimumInterMiddleSoundTime?: number,
 };
 
 export type ValueChangeSoundGeneratorOptions = SelfOptions & SoundGeneratorOptions;
@@ -56,11 +81,17 @@ class ValueChangeSoundGenerator extends SoundGenerator {
   // range of values that this should expect to handle
   private readonly valueRange: Range;
 
-  // sound player for movement above the min and below the max
-  private readonly middleMovementSoundPlayer: ISoundPlayer;
+  // sound player for movement in the middle of the range (i.e. not at min or max) and moving up
+  private readonly middleMovingUpSoundPlayer: ISoundPlayer;
 
-  // sound player for the max and min values
-  private readonly minMaxSoundPlayer: ISoundPlayer;
+  // sound player for movement in the middle of the range (i.e. not at min or max) and moving down
+  private readonly middleMovingDownSoundPlayer: ISoundPlayer;
+
+  // sound player for min values
+  private readonly minSoundPlayer: ISoundPlayer;
+
+  // sound player for max values
+  private readonly maxSoundPlayer: ISoundPlayer;
 
   // min time between playing one middle sound and the next
   private readonly minimumInterMiddleSoundTime: number;
@@ -75,17 +106,21 @@ class ValueChangeSoundGenerator extends SoundGenerator {
   constructor( valueRange: Range, providedOptions?: ValueChangeSoundGeneratorOptions ) {
 
     const options = optionize<ValueChangeSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>( {
-      middleMovementSoundPlayer: generalSoftClickSoundPlayer,
+      middleMovingUpSoundPlayer: generalSoftClickSoundPlayer,
+      middleMovingDownSoundPlayer: DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER,
       numberOfMiddleThresholds: 9,
       constrainThresholds: _.identity,
-      minMaxSoundPlayer: generalBoundaryBoopSoundPlayer,
+      minSoundPlayer: DEFAULT_MIN_SOUND_PLAYER,
+      maxSoundPlayer: generalBoundaryBoopSoundPlayer,
       minimumInterMiddleSoundTime: 0.035 // empirically determined
     }, providedOptions );
 
     // option validity checks
-    assert && assert( SoundPlayer.isSoundPlayer( options.middleMovementSoundPlayer ) );
-    assert && assert( SoundPlayer.isSoundPlayer( options.minMaxSoundPlayer ) );
     assert && assert( Number.isInteger( options.numberOfMiddleThresholds ), 'numberOfMiddleThresholds must be an integer' );
+    assert && assert(
+    options.minimumInterMiddleSoundTime >= 0 && options.minimumInterMiddleSoundTime < 1,
+      `unreasonable value for minimumInterMiddleSoundTime: ${options.minimumInterMiddleSoundTime}`
+    );
 
     super( options );
 
@@ -102,8 +137,10 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     );
 
     this.valueRange = valueRange;
-    this.middleMovementSoundPlayer = options.middleMovementSoundPlayer;
-    this.minMaxSoundPlayer = options.minMaxSoundPlayer;
+    this.middleMovingUpSoundPlayer = options.middleMovingUpSoundPlayer;
+    this.middleMovingDownSoundPlayer = options.middleMovingDownSoundPlayer;
+    this.minSoundPlayer = options.minSoundPlayer;
+    this.maxSoundPlayer = options.maxSoundPlayer;
     this.minimumInterMiddleSoundTime = options.minimumInterMiddleSoundTime;
     this.timeOfMostRecentMiddleSound = 0;
   }
@@ -127,15 +164,23 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    */
   playSoundForValueChange( newValue: number, oldValue: number ) {
     if ( newValue !== oldValue ) {
-      if ( newValue === this.valueRange.min || newValue === this.valueRange.max ) {
-        this.minMaxSoundPlayer.play();
+      if ( newValue === this.valueRange.min ) {
+        this.minSoundPlayer.play();
+      }
+      else if ( newValue === this.valueRange.max ) {
+        this.maxSoundPlayer.play();
       }
       else {
 
         // Play a middle-range sound, but only if enough time has passed since the last one was played.
         const now = phetAudioContext.currentTime;
         if ( now - this.timeOfMostRecentMiddleSound > this.minimumInterMiddleSoundTime ) {
-          this.middleMovementSoundPlayer.play();
+          if ( newValue > oldValue ) {
+            this.middleMovingUpSoundPlayer.play();
+          }
+          else {
+            this.middleMovingDownSoundPlayer.play();
+          }
           this.timeOfMostRecentMiddleSound = now;
         }
       }
@@ -146,8 +191,9 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    * Static instance that makes no sound.  This is generally used as an option value to turn off sound generation.
    */
   static NO_SOUND = new ValueChangeSoundGenerator( new Range( 0, 1 ), {
-    middleMovementSoundPlayer: SoundPlayer.NO_SOUND,
-    minMaxSoundPlayer: SoundPlayer.NO_SOUND
+    middleMovingUpSoundPlayer: SoundPlayer.NO_SOUND,
+    minSoundPlayer: SoundPlayer.NO_SOUND,
+    maxSoundPlayer: SoundPlayer.NO_SOUND
   } )
 }
 

@@ -24,8 +24,10 @@ import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
 import accordion_png from '../../../../images/accordion_png.js';
-import toggleOffSoundPlayer from '../../../shared-sound-players/toggleOffSoundPlayer.js';
-import toggleOnSoundPlayer from '../../../shared-sound-players/toggleOnSoundPlayer.js';
+import brightMarimbaShort_mp3 from '../../../../sounds/brightMarimbaShort_mp3.js';
+import birdCall_mp3 from '../../../../sounds/demo-and-test/birdCall_mp3.js';
+import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
+import SoundClipPlayer from '../../../sound-generators/SoundClipPlayer.js';
 import ValueChangeSoundGenerator from '../../../sound-generators/ValueChangeSoundGenerator.js';
 import tambo from '../../../tambo.js';
 
@@ -171,14 +173,28 @@ class UIComponentsScreenView extends DemosScreenView {
               soundGeneratorOptions: { numberOfMiddleThresholds: Utils.roundSymmetric( 0.7 / 0.05 ) - 1 }
             } ),
 
-            new Text( 'Custom Sound', { font: LABEL_FONT } ),
+            new Text( 'Custom Sounds', { font: LABEL_FONT } ),
 
-            // slider with custom sound generation
+            // slider with custom sound generation, intended to be a little "out there"
             new HSlider( new NumberProperty( 0 ), new Range( 0, 100 ), {
               soundGenerator: new ValueChangeSoundGenerator( new Range( 0, 100 ), {
-                middleMovementSoundPlayer: toggleOffSoundPlayer,
+                middleMovingUpSoundPlayer: new SoundClipPlayer( brightMarimbaShort_mp3, {
+                  soundClipOptions: { initialOutputLevel: 0.2 },
+                  soundManagerOptions: { categoryName: 'user-interface' }
+                } ),
+                middleMovingDownSoundPlayer: new SoundClipPlayer( brightMarimbaShort_mp3, {
+                  soundClipOptions: { initialOutputLevel: 0.2, initialPlaybackRate: 0.5 },
+                  soundManagerOptions: { categoryName: 'user-interface' }
+                } ),
                 numberOfMiddleThresholds: 5,
-                minMaxSoundPlayer: toggleOnSoundPlayer
+                minSoundPlayer: new SoundClipPlayer( birdCall_mp3, {
+                  soundClipOptions: { initialOutputLevel: 0.2 },
+                  soundManagerOptions: { categoryName: 'user-interface' }
+                } ),
+                maxSoundPlayer: new SoundClipPlayer( loonCall_mp3, {
+                  soundClipOptions: { initialOutputLevel: 0.2 },
+                  soundManagerOptions: { categoryName: 'user-interface' }
+                } )
               } ),
               thumbFill: '#ff6666',
               thumbFillHighlighted: '#ffb3b3'
