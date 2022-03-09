@@ -137,7 +137,6 @@ class ValueChangeSoundGenerator extends SoundGenerator {
         if ( now - this.timeOfMostRecentMiddleSound > this.minimumInterMiddleSoundTime ) {
           this.middleMovementSoundPlayer.play();
           this.timeOfMostRecentMiddleSound = now;
-          console.log( 'play' );
         }
       }
     }
