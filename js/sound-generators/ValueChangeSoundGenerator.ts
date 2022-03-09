@@ -20,6 +20,7 @@ import SoundPlayer from '../SoundPlayer.js';
 import tambo from '../tambo.js';
 import ISoundPlayer from '../ISoundPlayer.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
+import phetAudioContext from '../phetAudioContext.js';
 
 type SelfOptions = {
 
@@ -39,6 +40,10 @@ type SelfOptions = {
 
   // The sound played when a min or max value is hit.
   minMaxSoundPlayer?: ISoundPlayer;
+
+  // The minimum amount of time that must pass after a middle sound is played before another can be played.  This is
+  // helpful when a lot of value changes can occur rapidly and thus create an overwhelming amount of sound.
+  minimumInterMiddleSoundTime?: number
 };
 
 export type ValueChangeSoundGeneratorOptions = SelfOptions & SoundGeneratorOptions;
@@ -46,12 +51,22 @@ export type ValueChangeSoundGeneratorOptions = SelfOptions & SoundGeneratorOptio
 class ValueChangeSoundGenerator extends SoundGenerator {
 
   // thresholds that will be used to decide when to play sounds in some cases
-  private thresholds: number[]
+  private readonly thresholds: number[]
 
-  // values necessary for the methods to do their things
-  private valueRange: Range;
-  private middleMovementSoundPlayer: ISoundPlayer;
-  private minMaxSoundPlayer: ISoundPlayer;
+  // range of values that this should expect to handle
+  private readonly valueRange: Range;
+
+  // sound player for movement above the min and below the max
+  private readonly middleMovementSoundPlayer: ISoundPlayer;
+
+  // sound player for the max and min values
+  private readonly minMaxSoundPlayer: ISoundPlayer;
+
+  // min time between playing one middle sound and the next
+  private readonly minimumInterMiddleSoundTime: number;
+
+  // time of most recently played middle sound, used to moderate the rate at which these sounds are played
+  private timeOfMostRecentMiddleSound: number;
 
   /**
    * @param valueRange - the range of values expected and over which sounds will be played
@@ -63,7 +78,8 @@ class ValueChangeSoundGenerator extends SoundGenerator {
       middleMovementSoundPlayer: generalSoftClickSoundPlayer,
       numberOfMiddleThresholds: 9,
       constrainThresholds: _.identity,
-      minMaxSoundPlayer: generalBoundaryBoopSoundPlayer
+      minMaxSoundPlayer: generalBoundaryBoopSoundPlayer,
+      minimumInterMiddleSoundTime: 0.035 // empirically determined
     }, providedOptions );
 
     // option validity checks
@@ -88,6 +104,8 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     this.valueRange = valueRange;
     this.middleMovementSoundPlayer = options.middleMovementSoundPlayer;
     this.minMaxSoundPlayer = options.minMaxSoundPlayer;
+    this.minimumInterMiddleSoundTime = options.minimumInterMiddleSoundTime;
+    this.timeOfMostRecentMiddleSound = 0;
   }
 
   /**
@@ -113,7 +131,14 @@ class ValueChangeSoundGenerator extends SoundGenerator {
         this.minMaxSoundPlayer.play();
       }
       else {
-        this.middleMovementSoundPlayer.play();
+
+        // Play a middle-range sound, but only if enough time has passed since the last one was played.
+        const now = phetAudioContext.currentTime;
+        if ( now - this.timeOfMostRecentMiddleSound > this.minimumInterMiddleSoundTime ) {
+          this.middleMovementSoundPlayer.play();
+          this.timeOfMostRecentMiddleSound = now;
+          console.log( 'play' );
+        }
       }
     }
   }
