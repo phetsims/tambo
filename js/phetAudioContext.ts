@@ -6,7 +6,7 @@
  * @author John Blanco
  */
 
-import IntentionalAny from '../../phet-core/js/IntentionalAny.js';
+import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
 import tambo from './tambo.js';
 
 // create a Web Audio context
