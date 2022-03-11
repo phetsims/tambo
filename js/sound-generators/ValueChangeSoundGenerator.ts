@@ -131,10 +131,11 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     } );
 
     // Make sure that the constraint function didn't constrain the thresholds too much.
-    assert && assert(
-      _.uniq( this.thresholds ).length === options.numberOfMiddleThresholds,
-      'not enough unique thresholds were produced - is the constraint function too constraining?'
-    );
+
+    // assert && assert(
+    //   _.uniq( this.thresholds ).length === options.numberOfMiddleThresholds,
+    //   'not enough unique thresholds were produced - is the constraint function too constraining?'
+    // );
 
     this.valueRange = valueRange;
     this.middleMovingUpSoundPlayer = options.middleMovingUpSoundPlayer;
