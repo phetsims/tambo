@@ -24,8 +24,10 @@ import phetAudioContext from '../phetAudioContext.js';
 import SoundClipPlayer from './SoundClipPlayer.js';
 import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
 import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
+import Utils from '../../../dot/js/Utils.js';
 
 // constants
+const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary
 const DEFAULT_MIN_SOUND_PLAYER = new SoundClipPlayer( generalBoundaryBoop_mp3, {
   soundClipOptions: {
     initialOutputLevel: 0.2,
@@ -41,6 +43,11 @@ const DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER = new SoundClipPlayer( generalSoft
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
 
+// Define a default constraint function.  During the development of this class, it was found to be needed to do some
+// constraining of the values by default to avoid problems with floating point errors.  The interval value used here is
+// somewhat arbitrary, but was found to work in all the test cases at the time.
+const DEFAULT_VALUE_CONSTRAINT = ( value: number ) => Utils.roundToInterval( value, 0.000000001 );
+
 type SelfOptions = {
 
   // The sound player for movement in the middle of the range in the up direction.
@@ -51,14 +58,20 @@ type SelfOptions = {
 
   // The number of thresholds that, when reached or crossed, will cause a sound to be played when checking value changes
   // against thresholds.  In other words, this is the number of thresholds that exist between the min and max values.
-  numberOfMiddleThresholds?: number;
+  // This assumes symmetric spacing of the thresholds, and is not compatible with explicitly setting of the 'delta'
+  // value.
+  numberOfMiddleThresholds?: number | null;
 
-  // This function is used to constrain the threshold values that are used to decide when to play
-  // sounds.  This was found to be needed in cases where the length of the provided range and the number of
-  // thresholds led to floating point errors that could cause sounds not to be played when they should be.
-  // This should only be used when needed, and comes up most often when using constrained slider values.  It may be
-  // possible to use the same constraint function in such cases.
-  constrainThresholds?: ( n: number ) => number;
+  // The delta value between thresholds that are used to determine when sounds are played.  This is an alternative way
+  // to specify the thresholds and should only be used when they need to be asymmetric.  This was initially added to
+  // support NumberControl, see https://github.com/phetsims/sun/issues/697.  This is incompatible with specifying
+  // numberOfMiddleThresholds.
+  interThresholdDelta?: number | null;
+
+  // This function is used to constrain the values used for thresholds and value comparisons.  Without this, there can
+  // sometimes be cases where slight value differences, such as those caused by floating point inaccuracies, can cause
+  // sounds not to be generated when they should.  Use _.identity for a "no-op" if needed.
+  constrainValues?: ( n: number ) => number;
 
   // The sound player that is used to indicate the minimum value.
   minSoundPlayer?: ISoundPlayer;
@@ -96,6 +109,9 @@ class ValueChangeSoundGenerator extends SoundGenerator {
   // min time between playing one middle sound and the next
   private readonly minimumInterMiddleSoundTime: number;
 
+  // function to constrain the values used for thresholds and comparisons
+  private readonly constrainValues: ( n: number ) => number;
+
   // time of most recently played middle sound, used to moderate the rate at which these sounds are played
   private timeOfMostRecentMiddleSound: number;
 
@@ -108,34 +124,55 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     const options = optionize<ValueChangeSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>( {
       middleMovingUpSoundPlayer: generalSoftClickSoundPlayer,
       middleMovingDownSoundPlayer: DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER,
-      numberOfMiddleThresholds: 9,
-      constrainThresholds: _.identity,
+      numberOfMiddleThresholds: null,
+      interThresholdDelta: null,
+      constrainValues: DEFAULT_VALUE_CONSTRAINT,
       minSoundPlayer: DEFAULT_MIN_SOUND_PLAYER,
       maxSoundPlayer: generalBoundaryBoopSoundPlayer,
       minimumInterMiddleSoundTime: 0.035 // empirically determined
     }, providedOptions );
 
     // option validity checks
-    assert && assert( Number.isInteger( options.numberOfMiddleThresholds ), 'numberOfMiddleThresholds must be an integer' );
     assert && assert(
     options.minimumInterMiddleSoundTime >= 0 && options.minimumInterMiddleSoundTime < 1,
       `unreasonable value for minimumInterMiddleSoundTime: ${options.minimumInterMiddleSoundTime}`
     );
+    assert && assert(
+      options.numberOfMiddleThresholds === null || options.interThresholdDelta === null,
+      'cannot specify both the number of middle thresholds and the inter-threshold delta'
+    );
+    assert && assert(
+      options.numberOfMiddleThresholds === null || Number.isInteger( options.numberOfMiddleThresholds ),
+      'numberOfMiddleThresholds must be an integer if specified'
+    );
+
+    // Set defaults if necessary.
+    if ( options.numberOfMiddleThresholds === null && options.interThresholdDelta === null ) {
+      options.numberOfMiddleThresholds = DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS;
+    }
 
     super( options );
 
     this.thresholds = [];
-    const interThresholdDistance = valueRange.getLength() / ( options.numberOfMiddleThresholds + 1 );
-    _.times( options.numberOfMiddleThresholds, index => {
-      this.thresholds.push( options.constrainThresholds( valueRange.min + ( index + 1 ) * interThresholdDistance ) );
-    } );
+    if ( options.numberOfMiddleThresholds !== null ) {
+      const interThresholdDistance = valueRange.getLength() / ( options.numberOfMiddleThresholds + 1 );
+      _.times( options.numberOfMiddleThresholds, index => {
+        this.thresholds.push( options.constrainValues( valueRange.min + ( index + 1 ) * interThresholdDistance ) );
+      } );
 
-    // Make sure that the constraint function didn't constrain the thresholds too much.
-
-    // assert && assert(
-    //   _.uniq( this.thresholds ).length === options.numberOfMiddleThresholds,
-    //   'not enough unique thresholds were produced - is the constraint function too constraining?'
-    // );
+      // Make sure that the constraint function didn't constrain the thresholds too much.
+      assert && assert(
+        _.uniq( this.thresholds ).length === options.numberOfMiddleThresholds,
+        'not enough unique thresholds were produced - is the constraint function too constraining?'
+      );
+    }
+    else if ( options.interThresholdDelta !== null ) {
+      _.times( Math.floor( valueRange.getLength() / options.interThresholdDelta ), index => {
+        this.thresholds.push(
+          options.constrainValues( valueRange.min + ( index + 1 ) * options.interThresholdDelta! )
+        );
+      } );
+    }
 
     this.valueRange = valueRange;
     this.middleMovingUpSoundPlayer = options.middleMovingUpSoundPlayer;
@@ -144,18 +181,23 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     this.maxSoundPlayer = options.maxSoundPlayer;
     this.minimumInterMiddleSoundTime = options.minimumInterMiddleSoundTime;
     this.timeOfMostRecentMiddleSound = 0;
+    this.constrainValues = options.constrainValues;
   }
 
   /**
    * Check if the new value has reached threshold and, if so, play the appropriate sound.
    */
   playSoundIfThresholdReached( newValue: number, oldValue: number ) {
-    if ( newValue !== oldValue ) {
+    const constrainedNewValue = this.constrainValues( newValue );
+    const constrainedOldValue = this.constrainValues( oldValue );
+    if ( constrainedNewValue !== constrainedOldValue ) {
       const crossedOrReachedThreshold = this.thresholds.find( threshold =>
-        oldValue < threshold && newValue >= threshold || oldValue > threshold && newValue <= threshold
+        constrainedOldValue < threshold && constrainedNewValue >= threshold ||
+        constrainedOldValue > threshold && constrainedNewValue <= threshold
       );
-      if ( crossedOrReachedThreshold || newValue === this.valueRange.min || newValue === this.valueRange.max ) {
-        this.playSoundForValueChange( newValue, oldValue );
+      if ( crossedOrReachedThreshold !== undefined || constrainedNewValue === this.valueRange.min ||
+           constrainedNewValue === this.valueRange.max ) {
+        this.playSoundForValueChange( constrainedNewValue, constrainedOldValue );
       }
     }
   }
@@ -164,11 +206,13 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    * Play the appropriate sound for the change in value indicated by the provided new and old values.
    */
   playSoundForValueChange( newValue: number, oldValue: number ) {
-    if ( newValue !== oldValue ) {
-      if ( newValue === this.valueRange.min ) {
+    const constrainedNewValue = this.constrainValues( newValue );
+    const constrainedOldValue = this.constrainValues( oldValue );
+    if ( constrainedNewValue !== constrainedOldValue ) {
+      if ( constrainedNewValue === this.valueRange.min ) {
         this.minSoundPlayer.play();
       }
-      else if ( newValue === this.valueRange.max ) {
+      else if ( constrainedNewValue === this.valueRange.max ) {
         this.maxSoundPlayer.play();
       }
       else {
@@ -176,7 +220,7 @@ class ValueChangeSoundGenerator extends SoundGenerator {
         // Play a middle-range sound, but only if enough time has passed since the last one was played.
         const now = phetAudioContext.currentTime;
         if ( now - this.timeOfMostRecentMiddleSound > this.minimumInterMiddleSoundTime ) {
-          if ( newValue > oldValue ) {
+          if ( constrainedNewValue > constrainedOldValue ) {
             this.middleMovingUpSoundPlayer.play();
           }
           else {

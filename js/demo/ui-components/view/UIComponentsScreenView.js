@@ -11,6 +11,7 @@ import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
 import Utils from '../../../../../dot/js/Utils.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
+import NumberControl from '../../../../../scenery-phet/js/NumberControl.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../../scenery-phet/js/TimeControlNode.js';
 import { Image, Text, VBox } from '../../../../../scenery/js/imports.js';
@@ -199,6 +200,21 @@ class UIComponentsScreenView extends DemosScreenView {
               thumbFill: '#ff6666',
               thumbFillHighlighted: '#ffb3b3'
             } )
+          ],
+          spacing: 20,
+          center: layoutBounds.center
+        } )
+      },
+      {
+        label: 'NumberControl',
+        createNode: layoutBounds => new VBox( {
+          children: [
+
+            new NumberControl( 'Basic Number Control', new NumberProperty( 0 ), new Range( 0, 10 ), { delta: 2 } ),
+
+            // This is an example of a number control that has a delta value that leads to thresholds in the sound
+            // player that are not all equally sized.  See https://github.com/phetsims/sun/issues/697.
+            new NumberControl( 'Asymmetric Number Control', new NumberProperty( 0 ), new Range( 0, 100 ), { delta: 22 } )
           ],
           spacing: 20,
           center: layoutBounds.center
