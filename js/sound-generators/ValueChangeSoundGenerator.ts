@@ -188,16 +188,17 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    * Check if the new value has reached threshold and, if so, play the appropriate sound.
    */
   playSoundIfThresholdReached( newValue: number, oldValue: number ) {
-    const constrainedNewValue = this.constrainValues( newValue );
-    const constrainedOldValue = this.constrainValues( oldValue );
-    if ( constrainedNewValue !== constrainedOldValue ) {
+    if ( newValue !== oldValue ) {
+      const constrainedNewValue = this.constrainValues( newValue );
+      const constrainedOldValue = this.constrainValues( oldValue );
       const crossedOrReachedThreshold = this.thresholds.find( threshold =>
         constrainedOldValue < threshold && constrainedNewValue >= threshold ||
         constrainedOldValue > threshold && constrainedNewValue <= threshold
       );
-      if ( crossedOrReachedThreshold !== undefined || constrainedNewValue === this.valueRange.min ||
-           constrainedNewValue === this.valueRange.max ) {
-        this.playSoundForValueChange( constrainedNewValue, constrainedOldValue );
+      if ( crossedOrReachedThreshold !== undefined ||
+           newValue === this.valueRange.min ||
+           newValue === this.valueRange.max ) {
+        this.playSoundForValueChange( newValue, oldValue );
       }
     }
   }
@@ -208,11 +209,13 @@ class ValueChangeSoundGenerator extends SoundGenerator {
   playSoundForValueChange( newValue: number, oldValue: number ) {
     const constrainedNewValue = this.constrainValues( newValue );
     const constrainedOldValue = this.constrainValues( oldValue );
-    if ( constrainedNewValue !== constrainedOldValue ) {
-      if ( constrainedNewValue === this.valueRange.min ) {
+    if ( constrainedNewValue !== constrainedOldValue ||
+         ( oldValue !== newValue && ( newValue === this.valueRange.min || newValue === this.valueRange.max ) ) ) {
+
+      if ( newValue === this.valueRange.min ) {
         this.minSoundPlayer.play();
       }
-      else if ( constrainedNewValue === this.valueRange.max ) {
+      else if ( newValue === this.valueRange.max ) {
         this.maxSoundPlayer.play();
       }
       else {
