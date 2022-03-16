@@ -169,7 +169,7 @@ class UIComponentsScreenView extends DemosScreenView {
               keyboardStep: 1,
               thumbFill: '#6600cc',
               thumbFillHighlighted: '#b366ff',
-              soundGeneratorOptions: { numberOfMiddleThresholds: Utils.roundSymmetric( 0.7 / 0.05 ) - 1 }
+              valueChangeSoundGeneratorOptions: { numberOfMiddleThresholds: Utils.roundSymmetric( 0.7 / 0.05 ) - 1 }
             } ),
 
             // slider with custom sound generation, intended to be a little "out there"
