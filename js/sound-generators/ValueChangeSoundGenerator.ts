@@ -78,8 +78,10 @@ type SelfOptions = {
 
   // This function is used to constrain the values used for thresholds and value comparisons.  Without this, there can
   // sometimes be cases where slight value differences, such as those caused by floating point inaccuracies, can cause
-  // sounds not to be generated when they should.  Use _.identity for a "no-op" if needed.
-  constrainValues?: ( n: number ) => number;
+  // sounds not to be generated when they should.  Use _.identity for a "no-op" if needed.  This is used for multiple
+  // values, but is called "constrainValue" rather than "constrainValues" to match the pre-existing option name in the
+  // Slider class.  See https://github.com/phetsims/sun/issues/697#issuecomment-1066850181.
+  constrainValue?: ( n: number ) => number;
 
   // The sound player that is used to indicate the minimum value.
   minSoundPlayer?: ISoundPlayer;
@@ -124,7 +126,7 @@ class ValueChangeSoundGenerator extends SoundGenerator {
   private readonly minimumInterMiddleSoundTime: number;
 
   // function to constrain the values used for thresholds and comparisons
-  private readonly constrainValues: ( n: number ) => number;
+  private readonly constrainValue: ( n: number ) => number;
 
   // time of most recently played middle sound, used to moderate the rate at which these sounds are played
   private timeOfMostRecentMiddleSound: number;
@@ -142,7 +144,7 @@ class ValueChangeSoundGenerator extends SoundGenerator {
       middleMovingDownPlaybackRateMapper: NO_PLAYBACK_RATE_CHANGE,
       numberOfMiddleThresholds: null,
       interThresholdDelta: null,
-      constrainValues: DEFAULT_VALUE_CONSTRAINT,
+      constrainValue: DEFAULT_VALUE_CONSTRAINT,
       minSoundPlayer: DEFAULT_MIN_SOUND_PLAYER,
       maxSoundPlayer: generalBoundaryBoopSoundPlayer,
       minimumInterMiddleSoundTime: 0.035 // empirically determined
@@ -189,7 +191,7 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     if ( options.numberOfMiddleThresholds !== null ) {
       const interThresholdDistance = valueRange.getLength() / ( options.numberOfMiddleThresholds + 1 );
       _.times( options.numberOfMiddleThresholds, index => {
-        this.thresholds.push( options.constrainValues( valueRange.min + ( index + 1 ) * interThresholdDistance ) );
+        this.thresholds.push( options.constrainValue( valueRange.min + ( index + 1 ) * interThresholdDistance ) );
       } );
 
       // Make sure that the constraint function didn't constrain the thresholds too much.
@@ -201,7 +203,7 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     else if ( options.interThresholdDelta !== null ) {
       _.times( Math.floor( valueRange.getLength() / options.interThresholdDelta ), index => {
         this.thresholds.push(
-          options.constrainValues( valueRange.min + ( index + 1 ) * options.interThresholdDelta! )
+          options.constrainValue( valueRange.min + ( index + 1 ) * options.interThresholdDelta! )
         );
       } );
     }
@@ -215,7 +217,7 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     this.maxSoundPlayer = options.maxSoundPlayer;
     this.minimumInterMiddleSoundTime = options.minimumInterMiddleSoundTime;
     this.timeOfMostRecentMiddleSound = 0;
-    this.constrainValues = options.constrainValues;
+    this.constrainValue = options.constrainValue;
   }
 
   /**
@@ -223,8 +225,8 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    */
   playSoundIfThresholdReached( newValue: number, oldValue: number ) {
     if ( newValue !== oldValue ) {
-      const constrainedNewValue = this.constrainValues( newValue );
-      const constrainedOldValue = this.constrainValues( oldValue );
+      const constrainedNewValue = this.constrainValue( newValue );
+      const constrainedOldValue = this.constrainValue( oldValue );
       const crossedOrReachedThreshold = this.thresholds.find( threshold =>
         constrainedOldValue < threshold && constrainedNewValue >= threshold ||
         constrainedOldValue > threshold && constrainedNewValue <= threshold
@@ -241,8 +243,8 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    * Play the appropriate sound for the change in value indicated by the provided new and old values.
    */
   playSoundForValueChange( newValue: number, oldValue: number ) {
-    const constrainedNewValue = this.constrainValues( newValue );
-    const constrainedOldValue = this.constrainValues( oldValue );
+    const constrainedNewValue = this.constrainValue( newValue );
+    const constrainedOldValue = this.constrainValue( oldValue );
     if ( constrainedNewValue !== constrainedOldValue ||
          ( oldValue !== newValue && ( newValue === this.valueRange.min || newValue === this.valueRange.max ) ) ) {
 
