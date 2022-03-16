@@ -25,6 +25,7 @@ import SoundClipPlayer from './SoundClipPlayer.js';
 import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
 import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
 import Utils from '../../../dot/js/Utils.js';
+import SoundClip from './SoundClip.js';
 
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary
@@ -48,13 +49,20 @@ const DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER = new SoundClipPlayer( generalSoft
 // somewhat arbitrary, but was found to work in all the test cases at the time.
 const DEFAULT_VALUE_CONSTRAINT = ( value: number ) => Utils.roundToInterval( value, 0.000000001 );
 
+// A "no-op" function for mapping pitch values.  Always returns one, which signifies no change to the playback rate.
+const NO_PLAYBACK_RATE_CHANGE = ( value: number ) => 1;
+
 type SelfOptions = {
 
   // The sound player for movement in the middle of the range in the up direction.
-  middleMovingUpSoundPlayer?: ISoundPlayer;
+  middleMovingUpSoundPlayer?: ISoundPlayer | SoundClip;
 
   // The sound player for movement in the middle of the range in the down direction.
-  middleMovingDownSoundPlayer?: ISoundPlayer;
+  middleMovingDownSoundPlayer?: ISoundPlayer | SoundClip;
+
+  // Functions that, if provided, will alter the playback rates of the middle sounds based on the provided value.
+  middleMovingUpPlaybackRateMapper?: ( value: number ) => number;
+  middleMovingDownPlaybackRateMapper?: ( value: number ) => number;
 
   // The number of thresholds that, when reached or crossed, will cause a sound to be played when checking value changes
   // against thresholds.  In other words, this is the number of thresholds that exist between the min and max values.
@@ -95,10 +103,16 @@ class ValueChangeSoundGenerator extends SoundGenerator {
   private readonly valueRange: Range;
 
   // sound player for movement in the middle of the range (i.e. not at min or max) and moving up
-  private readonly middleMovingUpSoundPlayer: ISoundPlayer;
+  private readonly middleMovingUpSoundPlayer: ISoundPlayer | SoundClip;
 
   // sound player for movement in the middle of the range (i.e. not at min or max) and moving down
-  private readonly middleMovingDownSoundPlayer: ISoundPlayer;
+  private readonly middleMovingDownSoundPlayer: ISoundPlayer | SoundClip;
+
+  // playback rate mapper for middle sounds and upward value changes
+  private readonly middleMovingUpPlaybackRateMapper: ( value: number ) => number;
+
+  // playback rate mapper for middle sounds and upward value changes
+  private readonly middleMovingDownPlaybackRateMapper: ( value: number ) => number;
 
   // sound player for min values
   private readonly minSoundPlayer: ISoundPlayer;
@@ -124,6 +138,8 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     const options = optionize<ValueChangeSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>( {
       middleMovingUpSoundPlayer: generalSoftClickSoundPlayer,
       middleMovingDownSoundPlayer: DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER,
+      middleMovingUpPlaybackRateMapper: NO_PLAYBACK_RATE_CHANGE,
+      middleMovingDownPlaybackRateMapper: NO_PLAYBACK_RATE_CHANGE,
       numberOfMiddleThresholds: null,
       interThresholdDelta: null,
       constrainValues: DEFAULT_VALUE_CONSTRAINT,
@@ -146,7 +162,23 @@ class ValueChangeSoundGenerator extends SoundGenerator {
       'numberOfMiddleThresholds must be an integer if specified'
     );
 
-    // Set defaults if necessary.
+    // If a playback rate mapper is provided for the middle threshold, the provided sound player shouldn't be a
+    // SoundClipPlayer, since those are designed to be shared, and this would change the pitch for all users.  The
+    // following assertion check the options for this case.
+    assert && assert(
+      options.middleMovingUpPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
+      // @ts-ignore
+      options.middleMovingUpSoundPlayer.setPlaybackRate,
+      'a sound player that supports playback rate changes is required when a playback rate mapper is used'
+    );
+    assert && assert(
+      options.middleMovingDownPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
+      // @ts-ignore
+      options.middleMovingDownSoundPlayer.setPlaybackRate,
+      'a sound player that supports playback rate changes is required when a playback rate mapper is used'
+    );
+
+    // Set default number of middle thresholds if necessary.
     if ( options.numberOfMiddleThresholds === null && options.interThresholdDelta === null ) {
       options.numberOfMiddleThresholds = DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS;
     }
@@ -177,6 +209,8 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     this.valueRange = valueRange;
     this.middleMovingUpSoundPlayer = options.middleMovingUpSoundPlayer;
     this.middleMovingDownSoundPlayer = options.middleMovingDownSoundPlayer;
+    this.middleMovingUpPlaybackRateMapper = options.middleMovingUpPlaybackRateMapper;
+    this.middleMovingDownPlaybackRateMapper = options.middleMovingDownPlaybackRateMapper;
     this.minSoundPlayer = options.minSoundPlayer;
     this.maxSoundPlayer = options.maxSoundPlayer;
     this.minimumInterMiddleSoundTime = options.minimumInterMiddleSoundTime;
@@ -224,9 +258,17 @@ class ValueChangeSoundGenerator extends SoundGenerator {
         const now = phetAudioContext.currentTime;
         if ( now - this.timeOfMostRecentMiddleSound > this.minimumInterMiddleSoundTime ) {
           if ( constrainedNewValue > constrainedOldValue ) {
+            if ( this.middleMovingUpPlaybackRateMapper !== NO_PLAYBACK_RATE_CHANGE ) {
+              // @ts-ignore
+              this.middleMovingUpSoundPlayer.setPlaybackRate( this.middleMovingUpPlaybackRateMapper( newValue ), 0 );
+            }
             this.middleMovingUpSoundPlayer.play();
           }
           else {
+            if ( this.middleMovingDownPlaybackRateMapper !== NO_PLAYBACK_RATE_CHANGE ) {
+              // @ts-ignore
+              this.middleMovingDownSoundPlayer.setPlaybackRate( this.middleMovingDownPlaybackRateMapper( newValue ), 0 );
+            }
             this.middleMovingDownSoundPlayer.play();
           }
           this.timeOfMostRecentMiddleSound = now;

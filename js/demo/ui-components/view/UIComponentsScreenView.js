@@ -31,6 +31,7 @@ import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
 import SoundClipPlayer from '../../../sound-generators/SoundClipPlayer.js';
 import ValueChangeSoundGenerator from '../../../sound-generators/ValueChangeSoundGenerator.js';
 import tambo from '../../../tambo.js';
+import SliderPitchChangeSoundGenerator from './SliderPitchChangeSoundGenerator.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 20 );
@@ -148,14 +149,12 @@ class UIComponentsScreenView extends DemosScreenView {
         createNode: layoutBounds => new VBox( {
           children: [
 
-            new Text( 'Continuous', { font: LABEL_FONT } ),
-
-            // very basic slider with default sound
+            // very basic continuous slider with default sound
+            new Text( 'Continuous with Defaults', { font: LABEL_FONT } ),
             new HSlider( new NumberProperty( 0 ), new Range( 0, 100 ) ),
 
-            new Text( 'Discrete', { font: LABEL_FONT } ),
-
             // discrete slider
+            new Text( 'Discrete', { font: LABEL_FONT } ),
             new HSlider( new NumberProperty( 0 ), new Range( 0, 5 ), {
               constrainValue: value => Utils.roundSymmetric( value ),
               keyboardStep: 1,
@@ -163,9 +162,8 @@ class UIComponentsScreenView extends DemosScreenView {
               thumbFillHighlighted: '#80ff80'
             } ),
 
+            // a discrete slider where the values lead to some floating point inaccuracies
             new Text( 'Discrete with Tricky Values', { font: LABEL_FONT } ),
-
-            // The following is a discrete slider
             new HSlider( new NumberProperty( 0 ), new Range( 0, 0.7 ), {
               constrainValue: value => Utils.roundToInterval( value, 0.05 ),
               keyboardStep: 1,
@@ -174,9 +172,8 @@ class UIComponentsScreenView extends DemosScreenView {
               soundGeneratorOptions: { numberOfMiddleThresholds: Utils.roundSymmetric( 0.7 / 0.05 ) - 1 }
             } ),
 
-            new Text( 'Custom Sounds', { font: LABEL_FONT } ),
-
             // slider with custom sound generation, intended to be a little "out there"
+            new Text( 'Crazy Custom Sounds', { font: LABEL_FONT } ),
             new HSlider( new NumberProperty( 0 ), new Range( 0, 100 ), {
               soundGenerator: new ValueChangeSoundGenerator( new Range( 0, 100 ), {
                 middleMovingUpSoundPlayer: new SoundClipPlayer( brightMarimbaShort_mp3, {
@@ -199,6 +196,14 @@ class UIComponentsScreenView extends DemosScreenView {
               } ),
               thumbFill: '#ff6666',
               thumbFillHighlighted: '#ffb3b3'
+            } ),
+
+            // slider with a sound generator that changes the middle pitches
+            new Text( 'Custom Sounds - Pitch Changes', { font: LABEL_FONT } ),
+            new HSlider( new NumberProperty( 0 ), new Range( 1, 10 ), {
+              thumbFill: '#993366',
+              thumbFillHighlighted: '#CC6699',
+              soundGenerator: new SliderPitchChangeSoundGenerator( new Range( 1, 10 ) )
             } )
           ],
           spacing: 20,
