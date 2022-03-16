@@ -9,11 +9,7 @@
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../../axon/js/Emitter.js';
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
-import Dimension2 from '../../../../../dot/js/Dimension2.js';
-import Range from '../../../../../dot/js/Range.js';
-import Utils from '../../../../../dot/js/Utils.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
@@ -21,15 +17,11 @@ import { HBox, Image, Node, Text, VBox } from '../../../../../scenery/js/imports
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
-import HSlider from '../../../../../sun/js/HSlider.js';
 import Panel from '../../../../../sun/js/Panel.js';
 import lightning_png from '../../../../images/lightning_png.js';
-import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
 import checkboxChecked_mp3 from '../../../../sounds/checkboxChecked_mp3.js';
 import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
 import rhodesChord_mp3 from '../../../../sounds/demo-and-test/rhodesChord_mp3.js';
-import sliderClick01_mp3 from '../../../../sounds/demo-and-test/sliderClick01_mp3.js';
-import sliderClick02_mp3 from '../../../../sounds/demo-and-test/sliderClick02_mp3.js';
 import thunder_mp3 from '../../../../sounds/demo-and-test/thunder_mp3.js';
 import emptyApartmentBedroom06Resampled_mp3 from '../../../../sounds/emptyApartmentBedroom06Resampled_mp3.js';
 import phetAudioContext from '../../../phetAudioContext.js';
@@ -99,12 +91,6 @@ class TestingScreenView extends DemosScreenView {
       {
         label: 'LongSoundTest',
         createNode: layoutBounds => new LongSoundTestPanel( resetInProgressProperty, {
-          center: layoutBounds.center
-        } )
-      },
-      {
-        label: 'SliderSoundTest',
-        createNode: layoutBounds => new SliderSoundTestNode( resetInProgressProperty, {
           center: layoutBounds.center
         } )
       },
@@ -385,136 +371,6 @@ class LongSoundTestPanel extends Node {
    */
   dispose() {
     this.disposeLongSoundTestPanel();
-    super.dispose();
-  }
-}
-
-class SliderSoundTestNode extends HBox {
-
-  constructor( resetInProgressProperty, options ) {
-
-    // local constants
-    const sliderMax = 5;
-    const sliderTrackSize = new Dimension2( 150, 5 );
-    const sliderThumbSize = new Dimension2( 22, 45 );
-    const numberOfTickMarks = sliderMax + 1;
-    const numberOfBinsForContinuousSlider = 8;
-    const binSizeForContinuousSlider = sliderMax / numberOfBinsForContinuousSlider;
-
-    // internal state
-    const discreteValueProperty = new NumberProperty( 0 );
-    const continuousValueProperty = new NumberProperty( 0 );
-
-    // add a slider with snap-to-ticks behavior
-    const discreteSlider = new HSlider( discreteValueProperty, new Range( 0, sliderMax ), {
-      trackSize: sliderTrackSize,
-      thumbSize: sliderThumbSize,
-      constrainValue: value => Utils.roundSymmetric( value ),
-      keyboardStep: 1,
-
-      // Turn off default sound generation, since this does its own in a highly customized way.
-      soundGenerator: null
-    } );
-    _.times( numberOfTickMarks, index => { discreteSlider.addMinorTick( index ); } );
-
-    // create an inverted version of the reset-in-progress Property, used to mute sounds during reset
-    const resetNotInProgressProperty = DerivedProperty.not( resetInProgressProperty );
-
-    // add sound generators that will play a sound when the value controlled by the slider changes
-    const sliderIncreaseClickSoundClip = new SoundClip( sliderClick01_mp3 );
-    soundManager.addSoundGenerator( sliderIncreaseClickSoundClip );
-    const sliderDecreaseClickSoundClip = new SoundClip( sliderClick02_mp3, {
-      initiateWhenDisabled: false,
-      enableControlProperties: [ resetNotInProgressProperty ]
-    } );
-    soundManager.addSoundGenerator( sliderDecreaseClickSoundClip );
-    discreteValueProperty.lazyLink( ( newValue, oldValue ) => {
-      if ( newValue > oldValue ) {
-        sliderIncreaseClickSoundClip.play();
-      }
-      else {
-        sliderDecreaseClickSoundClip.play();
-      }
-    } );
-
-    // flag that indicates whether slider is being dragged through keyboard interaction
-    let sliderBeingDraggedByKeyboard = false;
-
-    // Add a slider with continuous behavior.  We create our own thumb node so that we can observe it.
-    const continuousSlider = new HSlider( continuousValueProperty, new Range( 0, sliderMax ), {
-      trackSize: sliderTrackSize,
-      thumbSize: sliderThumbSize,
-      thumbFill: '#880000',
-      thumbFillHighlighted: '#aa0000',
-      startDrag: event => {
-        if ( event.type === 'keydown' ) {
-          sliderBeingDraggedByKeyboard = true;
-        }
-      },
-      endDrag: () => { sliderBeingDraggedByKeyboard = false; },
-
-      // Turn off default sound generation, since this does its own in a highly customized way.
-      soundGenerator: null
-    } );
-
-    // Play a sound when certain threshold values are crossed by the continuous Property value, or when a change occurs
-    // in the absence of interaction with the slider, since that implies keyboard-driven interaction.
-    const marimbaSoundClip = new SoundClip( brightMarimba_mp3, { enableControlProperties: [ resetNotInProgressProperty ] } );
-    soundManager.addSoundGenerator( marimbaSoundClip );
-
-    // define a function that will play the marimba sound at a pitch value based on the continuous value Property
-    function playSoundForContinuousValue() {
-      const playbackRate = Math.pow( 2, continuousValueProperty.get() / sliderMax );
-      marimbaSoundClip.setPlaybackRate( playbackRate );
-      marimbaSoundClip.play();
-    }
-
-    continuousValueProperty.lazyLink( ( newValue, oldValue ) => {
-
-      const mapValueToBin = value => Math.min(
-        Math.floor( value / binSizeForContinuousSlider ),
-        numberOfBinsForContinuousSlider - 1
-      );
-
-      // Play the sound when certain threshold values are crossed or when a change occurs in the absence of mouse/touch
-      // interaction with the slider, which implies keyboard-driven interaction.
-      if ( sliderBeingDraggedByKeyboard ||
-           mapValueToBin( newValue ) !== mapValueToBin( oldValue ) ||
-           newValue === 0 && oldValue !== 0 ||
-           newValue === sliderMax && oldValue !== sliderMax ) {
-
-        playSoundForContinuousValue();
-      }
-    } );
-
-    super( merge( {
-      children: [ discreteSlider, continuousSlider ],
-      spacing: 20
-    }, options ) );
-
-    // reset slider positions when a reset-all event occurs
-    const resetListener = resetInProgress => {
-      if ( resetInProgress ) {
-        continuousValueProperty.reset();
-        discreteValueProperty.reset();
-      }
-    };
-    resetInProgressProperty.link( resetListener );
-
-    // @private - dispose function
-    this.disposeSliderSoundTestNode = () => {
-      resetInProgressProperty.unlink( resetListener );
-      soundManager.removeSoundGenerator( sliderIncreaseClickSoundClip );
-      soundManager.removeSoundGenerator( sliderDecreaseClickSoundClip );
-      soundManager.removeSoundGenerator( marimbaSoundClip );
-    };
-  }
-
-  /**
-   * @public
-   */
-  dispose() {
-    this.disposeSliderSoundTestNode();
     super.dispose();
   }
 }
