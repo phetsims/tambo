@@ -170,12 +170,14 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     // are set in a compatible way.
     assert && assert(
       options.middleMovingUpPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
-      options.middleMovingUpSoundPlayer instanceof SoundClipPlayer,
+      // @ts-ignore
+      options.middleMovingUpSoundPlayer.setPlaybackRate,
       'a sound player that supports playback rate changes is required when a playback rate mapper is used'
     );
     assert && assert(
       options.middleMovingDownPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
-      options.middleMovingUpSoundPlayer instanceof SoundClipPlayer,
+      // @ts-ignore
+      options.middleMovingDownSoundPlayer.setPlaybackRate,
       'a sound player that supports playback rate changes is required when a playback rate mapper is used'
     );
 
