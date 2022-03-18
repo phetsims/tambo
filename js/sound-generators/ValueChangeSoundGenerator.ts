@@ -6,8 +6,8 @@
  *
  * Because the sounds should only be produced when direct interactions from the user change a value, and not in other
  * situations (e.g. a reset), this class does not monitor a Property.  Instead, it provides methods that can be used to
- * play sounds based on changes to a value, and it is the client's responsibility to know *when* those sounds should be
- * played.
+ * evaluate changes in value and potentially play sounds, and it is the client's responsibility to know the situations
+ * in which these methods should be called.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -222,7 +222,8 @@ class ValueChangeSoundGenerator extends SoundGenerator {
   }
 
   /**
-   * Check if the new value has reached threshold and, if so, play the appropriate sound.
+   * Check if the new value has reached threshold and, if so, play the appropriate sound.  If no threshold has been
+   * reached or crossed and the new value is not at the min or max, no sound will be played.
    */
   playSoundIfThresholdReached( newValue: number, oldValue: number ) {
     if ( newValue !== oldValue ) {
@@ -241,7 +242,8 @@ class ValueChangeSoundGenerator extends SoundGenerator {
   }
 
   /**
-   * Play the appropriate sound for the change in value indicated by the provided new and old values.
+   * Play the appropriate sound for the change in value indicated by the provided new and old values.  This will almost
+   * always play a sound, but there are some exceptions.  See the code and comments for details.
    */
   playSoundForValueChange( newValue: number, oldValue: number ) {
     const constrainedNewValue = this.constrainValue( newValue );
@@ -273,7 +275,8 @@ class ValueChangeSoundGenerator extends SoundGenerator {
 
           if ( playbackRateMapper !== NO_PLAYBACK_RATE_CHANGE ) {
 
-            // It should be safe to cast this here because of the assertion checks that occur during construction.
+            // Adjust the playback rate based on the provided new value.  It should be safe to cast this here because of
+            // the assertion checks that occur during construction.
             ( soundPlayer as SoundClip ).setPlaybackRate( playbackRateMapper( newValue ) );
           }
           soundPlayer.play();
