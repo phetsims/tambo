@@ -9,7 +9,6 @@
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
-import Utils from '../../../../../dot/js/Utils.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import NumberControl from '../../../../../scenery-phet/js/NumberControl.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
@@ -23,15 +22,9 @@ import Checkbox from '../../../../../sun/js/Checkbox.js';
 import ComboBox from '../../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
-import HSlider from '../../../../../sun/js/HSlider.js';
 import accordion_png from '../../../../images/accordion_png.js';
-import brightMarimbaShort_mp3 from '../../../../sounds/brightMarimbaShort_mp3.js';
-import birdCall_mp3 from '../../../../sounds/demo-and-test/birdCall_mp3.js';
-import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
-import SoundClipPlayer from '../../../sound-generators/SoundClipPlayer.js';
-import ValueChangeSoundGenerator from '../../../sound-generators/ValueChangeSoundGenerator.js';
 import tambo from '../../../tambo.js';
-import SliderPitchChangeSoundGenerator from './SliderPitchChangeSoundGenerator.js';
+import SliderSoundTestNode from './SliderSoundTestNode.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 20 );
@@ -146,69 +139,7 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'Sliders',
-        createNode: layoutBounds => new VBox( {
-          children: [
-
-            // very basic continuous slider with default sound
-            new Text( 'Continuous with Defaults', { font: LABEL_FONT } ),
-            new HSlider( new NumberProperty( 0 ), new Range( 0, 100 ) ),
-
-            // discrete slider
-            new Text( 'Discrete', { font: LABEL_FONT } ),
-            new HSlider( new NumberProperty( 0 ), new Range( 0, 5 ), {
-              constrainValue: value => Utils.roundSymmetric( value ),
-              keyboardStep: 1,
-              thumbFill: 'green',
-              thumbFillHighlighted: '#80ff80'
-            } ),
-
-            // a discrete slider where the values lead to some floating point inaccuracies
-            new Text( 'Discrete with Tricky Values', { font: LABEL_FONT } ),
-            new HSlider( new NumberProperty( 0 ), new Range( 0, 0.7 ), {
-              constrainValue: value => Utils.roundToInterval( value, 0.05 ),
-              keyboardStep: 1,
-              thumbFill: '#6600cc',
-              thumbFillHighlighted: '#b366ff',
-              valueChangeSoundGeneratorOptions: { numberOfMiddleThresholds: Utils.roundSymmetric( 0.7 / 0.05 ) - 1 }
-            } ),
-
-            // slider with custom sound generation, intended to be a little "out there"
-            new Text( 'Crazy Custom Sounds', { font: LABEL_FONT } ),
-            new HSlider( new NumberProperty( 0 ), new Range( 0, 100 ), {
-              soundGenerator: new ValueChangeSoundGenerator( new Range( 0, 100 ), {
-                middleMovingUpSoundPlayer: new SoundClipPlayer( brightMarimbaShort_mp3, {
-                  soundClipOptions: { initialOutputLevel: 0.2 },
-                  soundManagerOptions: { categoryName: 'user-interface' }
-                } ),
-                middleMovingDownSoundPlayer: new SoundClipPlayer( brightMarimbaShort_mp3, {
-                  soundClipOptions: { initialOutputLevel: 0.2, initialPlaybackRate: 0.5 },
-                  soundManagerOptions: { categoryName: 'user-interface' }
-                } ),
-                numberOfMiddleThresholds: 5,
-                minSoundPlayer: new SoundClipPlayer( birdCall_mp3, {
-                  soundClipOptions: { initialOutputLevel: 0.2 },
-                  soundManagerOptions: { categoryName: 'user-interface' }
-                } ),
-                maxSoundPlayer: new SoundClipPlayer( loonCall_mp3, {
-                  soundClipOptions: { initialOutputLevel: 0.2 },
-                  soundManagerOptions: { categoryName: 'user-interface' }
-                } )
-              } ),
-              thumbFill: '#ff6666',
-              thumbFillHighlighted: '#ffb3b3'
-            } ),
-
-            // slider with a sound generator that changes the middle pitches
-            new Text( 'Custom Sounds - Pitch Changes', { font: LABEL_FONT } ),
-            new HSlider( new NumberProperty( 0 ), new Range( 1, 10 ), {
-              thumbFill: '#993366',
-              thumbFillHighlighted: '#CC6699',
-              soundGenerator: new SliderPitchChangeSoundGenerator( new Range( 1, 10 ) )
-            } )
-          ],
-          spacing: 20,
-          center: layoutBounds.center
-        } )
+        createNode: layoutBounds => new SliderSoundTestNode( LABEL_FONT, layoutBounds.center )
       },
       {
         label: 'NumberControl',
