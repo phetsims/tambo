@@ -164,19 +164,18 @@ class ValueChangeSoundGenerator extends SoundGenerator {
       'numberOfMiddleThresholds must be an integer if specified'
     );
 
-    // If a playback rate mapper is provided for the middle threshold, the provided sound player shouldn't be a
-    // SoundClipPlayer, since those are designed to be shared, and this would change the pitch for all users.  The
-    // following assertion check the options for this case.
+    // If a playback rate mapper is provided for a middle threshold sound, the provided sound player must support
+    // setting a different playback rate.  It should NOT be a SoundClipPlayer, since those are designed to be shared, so
+    // the playback rate should never be changed.  The following assertions are intended to verify that these options
+    // are set in a compatible way.
     assert && assert(
       options.middleMovingUpPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
-      // @ts-ignore
-      options.middleMovingUpSoundPlayer.setPlaybackRate,
+      options.middleMovingUpSoundPlayer instanceof SoundClipPlayer,
       'a sound player that supports playback rate changes is required when a playback rate mapper is used'
     );
     assert && assert(
       options.middleMovingDownPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
-      // @ts-ignore
-      options.middleMovingDownSoundPlayer.setPlaybackRate,
+      options.middleMovingUpSoundPlayer instanceof SoundClipPlayer,
       'a sound player that supports playback rate changes is required when a playback rate mapper is used'
     );
 
@@ -259,20 +258,23 @@ class ValueChangeSoundGenerator extends SoundGenerator {
         // Play a middle-range sound, but only if enough time has passed since the last one was played.
         const now = phetAudioContext.currentTime;
         if ( now - this.timeOfMostRecentMiddleSound > this.minimumInterMiddleSoundTime ) {
+          let playbackRateMapper;
+          let soundPlayer;
           if ( constrainedNewValue > constrainedOldValue ) {
-            if ( this.middleMovingUpPlaybackRateMapper !== NO_PLAYBACK_RATE_CHANGE ) {
-              // @ts-ignore
-              this.middleMovingUpSoundPlayer.setPlaybackRate( this.middleMovingUpPlaybackRateMapper( newValue ), 0 );
-            }
-            this.middleMovingUpSoundPlayer.play();
+            playbackRateMapper = this.middleMovingUpPlaybackRateMapper;
+            soundPlayer = this.middleMovingUpSoundPlayer;
           }
           else {
-            if ( this.middleMovingDownPlaybackRateMapper !== NO_PLAYBACK_RATE_CHANGE ) {
-              // @ts-ignore
-              this.middleMovingDownSoundPlayer.setPlaybackRate( this.middleMovingDownPlaybackRateMapper( newValue ), 0 );
-            }
-            this.middleMovingDownSoundPlayer.play();
+            playbackRateMapper = this.middleMovingUpPlaybackRateMapper;
+            soundPlayer = this.middleMovingDownSoundPlayer;
           }
+
+          if ( playbackRateMapper !== NO_PLAYBACK_RATE_CHANGE ) {
+
+            // It should be safe to cast this here because of the assertion checks that occur during construction.
+            ( soundPlayer as SoundClip ).setPlaybackRate( playbackRateMapper( newValue ) );
+          }
+          soundPlayer.play();
           this.timeOfMostRecentMiddleSound = now;
         }
       }
