@@ -91,7 +91,7 @@ type SelfOptions = {
 
   // The minimum amount of time that must pass after a middle sound is played before another can be played.  This is
   // helpful when a lot of value changes can occur rapidly and thus create an overwhelming amount of sound.
-  minimumInterMiddleSoundTime?: number,
+  minimumInterMiddleSoundTime?: number;
 };
 
 export type ValueChangeSoundGeneratorOptions = SelfOptions & SoundGeneratorOptions;
