@@ -3,7 +3,7 @@
 // @ts-nocheck
 
 /**
- * model of a box containing moving balls that bounce off the walls
+ * BoxOfBalls is a model of a box containing moving balls that bounce off the walls.
  */
 
 import createObservableArray from '../../../../../axon/js/createObservableArray.js';
@@ -20,12 +20,12 @@ const MIN_X_OR_Y_VELOCITY = 30;
 const MAX_X_OR_Y_VELOCITY = 60;
 
 // helper function
-function createRandomColor() {
+const createRandomColor = () => {
   const r = Math.floor( dotRandom.nextDouble() * 256 );
   const g = Math.floor( dotRandom.nextDouble() * 256 );
   const b = Math.floor( dotRandom.nextDouble() * 256 );
   return new Color( r, g, b );
-}
+};
 
 class BoxOfBalls {
 
