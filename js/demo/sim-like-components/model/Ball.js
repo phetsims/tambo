@@ -1,5 +1,5 @@
 // Copyright 2018-2021, University of Colorado Boulder
-
+// @ts-nocheck
 /**
  * simple model of a ball
  */
