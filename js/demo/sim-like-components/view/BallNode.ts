@@ -1,11 +1,11 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * a Scenery node that represents a ball in the view
  */
 
+import Vector2 from '../../../../../dot/js/Vector2.js';
+import ModelViewTransform2 from '../../../../../phetcommon/js/view/ModelViewTransform2.js';
 import { Circle } from '../../../../../scenery/js/imports.js';
 import boundaryReached_mp3 from '../../../../sounds/boundaryReached_mp3.js';
 import ceilingFloorContact_mp3 from '../../../../sounds/ceilingFloorContact_mp3.js';
@@ -13,48 +13,52 @@ import wallContact_mp3 from '../../../../sounds/wallContact_mp3.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
+import Ball from '../model/Ball.js';
 
 // constants
 const BALL_BOUNCE_OUTPUT_LEVEL = 0.3;
 
 class BallNode extends Circle {
 
-  /**
-   * @param {Ball} ball - model of a ball
-   * @param {ModelViewTransform2} modelViewTransform
-   * @constructor
-   */
-  constructor( ball, modelViewTransform ) {
+  // sounds for wall contact
+  private readonly wallContactSoundClips: SoundClip[];
 
-    // create a circle node to represent the ball
+  // sound for ceiling contact
+  private readonly ceilingFloorContactSoundClip: SoundClip;
+
+  // dispose
+  private readonly disposeBallNode: () => void;
+
+  constructor( ball: Ball, modelViewTransform: ModelViewTransform2 ) {
+
+    // Create a circle node to represent the ball.
     const radius = modelViewTransform.modelToViewDeltaX( ball.radius );
     super( radius, { fill: ball.color, stroke: 'gray' } );
 
-    // move this node as the model position changes
-    ball.positionProperty.link( position => {
+    // Move this node as the model position changes.
+    const updatePosition = ( position: Vector2 ) => {
       this.center = modelViewTransform.modelToViewPosition( position );
-    } );
+    };
+    ball.positionProperty.link( updatePosition );
 
-    // @private - sounds for wall contact
+    // Create the sound clips used when the balls hit the ceiling or the wall.
     this.wallContactSoundClips = [
       new SoundClip( wallContact_mp3, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } ),
       new SoundClip( boundaryReached_mp3, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } ),
       new SoundClip( ceilingFloorContact_mp3, { initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL } )
     ];
-
-    // @private - sound for ceiling contact
     this.ceilingFloorContactSoundClip = new SoundClip( ceilingFloorContact_mp3, {
       initialOutputLevel: BALL_BOUNCE_OUTPUT_LEVEL
     } );
 
-    // add the sound generators
+    // Add the sound generators.
     this.wallContactSoundClips.forEach( clip => {
       soundManager.addSoundGenerator( clip );
     } );
     soundManager.addSoundGenerator( this.ceilingFloorContactSoundClip );
 
-    // play bounces when the ball bounces
-    const bounceListener = bounceSurface => {
+    // Play bounce sounds when the ball bounces on the wall or ceiling.
+    const bounceListener = ( bounceSurface: string ) => {
       if ( bounceSurface === 'left-wall' || bounceSurface === 'right-wall' ) {
 
         // play the sound that was selected via the options dialog
@@ -67,6 +71,7 @@ class BallNode extends Circle {
     ball.bounceEmitter.addListener( bounceListener );
 
     this.disposeBallNode = () => {
+      ball.positionProperty.unlink( updatePosition );
       ball.bounceEmitter.removeListener( bounceListener );
       this.wallContactSoundClips.forEach( clip => {
         clip.stop();
@@ -78,14 +83,13 @@ class BallNode extends Circle {
   }
 
   /**
-   * @public
+   * Clean up memory references to avoid leaks.
    * @override
    */
   dispose() {
     this.disposeBallNode();
     super.dispose();
   }
-
 }
 
 tambo.register( 'BallNode', BallNode );

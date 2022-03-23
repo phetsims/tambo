@@ -1,7 +1,5 @@
 // Copyright 2018-2021, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * view for a screen that demonstrates views and sounds for components that interact with the model in some way
  *
@@ -17,14 +15,15 @@ import ScreenView from '../../../../../joist/js/ScreenView.js';
 import ModelViewTransform2 from '../../../../../phetcommon/js/view/ModelViewTransform2.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import { Path } from '../../../../../scenery/js/imports.js';
-import { Text } from '../../../../../scenery/js/imports.js';
+import { Path, Text } from '../../../../../scenery/js/imports.js';
 import ABSwitch from '../../../../../sun/js/ABSwitch.js';
 import NumberSpinner from '../../../../../sun/js/NumberSpinner.js';
 import PitchedPopGenerator from '../../../sound-generators/PitchedPopGenerator.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import BallNode from './BallNode.js';
+import SimLikeComponentsModel from '../model/SimLikeComponentsModel.js';
+import Ball from '../model/Ball.js';
 
 // constants
 const MAX_BALLS = 8;
@@ -32,11 +31,7 @@ const FONT = new PhetFont( 16 );
 
 class SimLikeComponentsScreenView extends ScreenView {
 
-  /**
-   * @constructor
-   * @param {SimLikeComponentsModel} model
-   */
-  constructor( model ) {
+  constructor( model: SimLikeComponentsModel ) {
 
     super();
 
@@ -62,7 +57,7 @@ class SimLikeComponentsScreenView extends ScreenView {
       this.addChild( ballNode );
 
       // set up a listener to remove the nodes when the corresponding ball is removed from the model
-      const removalListener = removedBall => {
+      const removalListener = ( removedBall: Ball ) => {
         if ( removedBall === addedBall ) {
           this.removeChild( ballNode );
           ballNode.dispose();

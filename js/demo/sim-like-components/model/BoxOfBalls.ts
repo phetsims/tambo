@@ -31,7 +31,7 @@ class BoxOfBalls {
   public readonly balls: ObservableArray<Ball>;
 
   // the bounding box
-  private readonly box: Shape;
+  public readonly box: Shape;
 
   constructor( width: number, height: number ) {
     this.box = Shape.rect( 50, 0, width, height );

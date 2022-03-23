@@ -87,7 +87,7 @@ class PitchedPopGenerator extends SoundGenerator {
    * {number} [duration] - the duration of the sound, in seconds
    * @public
    */
-  playPop( relativePitch, duration ) {
+  playPop( relativePitch, duration = DEFAULT_POP_DURATION ) {
 
     assert && assert( relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range' );
 
@@ -96,9 +96,6 @@ class PitchedPopGenerator extends SoundGenerator {
       // ignore the request
       return;
     }
-
-    // use either the specified or default duration
-    duration = duration || DEFAULT_POP_DURATION;
 
     // determine the frequency value of the pop
     const minFrequency = this.pitchRange.min;
