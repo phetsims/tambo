@@ -1,5 +1,7 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * A model that exists only for the purposes of demonstrating sonification, particularly how view and model elements are
  * used together to hook up sonification elements.
