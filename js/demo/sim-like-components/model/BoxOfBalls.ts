@@ -1,12 +1,10 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * BoxOfBalls is a model of a box containing moving balls that bounce off the walls.
  */
 
-import createObservableArray from '../../../../../axon/js/createObservableArray.js';
+import createObservableArray, { ObservableArray } from '../../../../../axon/js/createObservableArray.js';
 import dotRandom from '../../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import { Shape } from '../../../../../kite/js/imports.js';
@@ -28,13 +26,10 @@ const createRandomColor = () => {
 };
 
 class BoxOfBalls {
+  private readonly box: Shape;
+  private readonly balls: ObservableArray<Ball>;
 
-  /**
-   * @param {number} width - in centimeters
-   * @param {number} height - in centimeters
-   * @constructor
-   */
-  constructor( width, height ) {
+  constructor( width: number, height: number ) {
 
     // @public (read-only) {Shape.rect} - the bounding box
     this.box = Shape.rect( 50, 0, width, height );
@@ -44,10 +39,9 @@ class BoxOfBalls {
   }
 
   /**
-   * add a ball with random size, color, position, and velocity
-   * @public
+   * Add a ball with random size, color, position, and velocity.
    */
-  addRandomBall() {
+  public addRandomBall() {
 
     let xVelocity = MIN_X_OR_Y_VELOCITY + dotRandom.nextDouble() * ( MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY );
     xVelocity = dotRandom.nextBoolean() ? xVelocity : -xVelocity;
@@ -66,19 +60,17 @@ class BoxOfBalls {
   }
 
   /**
-   * remove a ball
-   * @public
+   * Remove a ball.
    */
-  removeABall() {
+  public removeABall() {
     this.balls.pop();
   }
 
   /**
    * step function to move and bounce the balls
-   * @param {number} dt - time step, in seconds
-   * @public
+   * @param dt - time step, in seconds
    */
-  step( dt ) {
+  public step( dt: number ) {
     const boxBounds = this.box.bounds;
     this.balls.forEach( ball => {
       const positionBeforeMotion = ball.positionProperty.value;
@@ -112,12 +104,10 @@ class BoxOfBalls {
 
   /**
    * restore initial state
-   * @public
    */
-  reset() {
+  public reset() {
     this.balls.reset();
   }
-
 }
 
 tambo.register( 'BoxOfBalls', BoxOfBalls );

@@ -11,10 +11,10 @@ import { Color } from '../../../../../scenery/js/imports.js';
 import tambo from '../../../tambo.js';
 
 class Ball {
-  private readonly radius: number;
-  private readonly color: Color;
-  private readonly positionProperty: Vector2Property;
-  private readonly velocityProperty: Vector2Property;
+  public readonly radius: number;
+  public readonly color: Color;
+  public readonly positionProperty: Vector2Property;
+  public readonly velocityProperty: Vector2Property;
   private readonly bounceEmitter: Emitter<[string]>;
 
   constructor( radius: number, color: Color, initialPosition: Vector2, initialVelocity: Vector2 ) {
