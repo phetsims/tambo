@@ -1,7 +1,8 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
 /**
- * abstract base class for Web Audio based sound producing element that work in conjunction with the soundManager
+ * SoundGenerator is an abstract base class for Web-Audio-based sound-producing elements that work in conjunction with
+ * the soundManager to produces sounds.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

@@ -6,8 +6,9 @@
  *
  * Because the sounds should only be produced when direct interactions from the user change a value, and not in other
  * situations (e.g. a reset), this class does not monitor a Property.  Instead, it provides methods that can be used to
- * evaluate changes in value and potentially play sounds, and it is the client's responsibility to know the situations
- * in which these methods should be called.
+ * evaluate changes in a value and potentially play sounds, and it is the client's responsibility to know the situations
+ * in which these methods should be called.  Often these methods will be called in drag handlers and other code that
+ * handles user input.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
