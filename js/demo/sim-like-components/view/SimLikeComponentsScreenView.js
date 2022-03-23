@@ -1,5 +1,7 @@
 // Copyright 2018-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * view for a screen that demonstrates views and sounds for components that interact with the model in some way
  *

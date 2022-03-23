@@ -1,5 +1,7 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * a Scenery node that represents a ball in the view
  */
