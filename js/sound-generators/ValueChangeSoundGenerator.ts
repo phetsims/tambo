@@ -226,7 +226,7 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    * Check if the new value has reached threshold and, if so, play the appropriate sound.  If no threshold has been
    * reached or crossed and the new value is not at the min or max, no sound will be played.
    */
-  playSoundIfThresholdReached( newValue: number, oldValue: number ) {
+  playSoundIfThresholdReached( newValue: number, oldValue: number ): void {
     if ( newValue !== oldValue ) {
       const constrainedNewValue = this.constrainValue( newValue );
       const constrainedOldValue = this.constrainValue( oldValue );
@@ -246,7 +246,7 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    * Play the appropriate sound for the change in value indicated by the provided new and old values.  This will almost
    * always play a sound, but there are some exceptions.  See the code and comments for details.
    */
-  playSoundForValueChange( newValue: number, oldValue: number ) {
+  playSoundForValueChange( newValue: number, oldValue: number ): void {
     const constrainedNewValue = this.constrainValue( newValue );
     const constrainedOldValue = this.constrainValue( oldValue );
     if ( constrainedNewValue !== constrainedOldValue ||
