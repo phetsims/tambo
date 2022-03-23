@@ -24,13 +24,12 @@ let notSettingPhetioStateProperty: Property<boolean>;
 
 export type SoundGeneratorOptions = {
 
-  // Initial value for the output level.  Generally, this should always be between 0 and 1, but values
-  // greater than 1 may be needed in some rare cases in order to create enough output to be audible
+  // Initial value for the output level.  Generally, this should always be between 0 and 1, but values greater than 1
+  // may be needed in some rare cases in order to create enough output to be audible.
   initialOutputLevel?: number;
 
-  // By default, the shared audio context is used so that this sound can be registered with the
-  // sonification manager, but this can be overridden if desired.  In general, overriding will only be done for
-  // testing.
+  // By default, the shared audio context is used so that this sound can be registered with the sonification manager,
+  // but this can be overridden if desired.  In general, overriding will only be done for testing.
   audioContext?: AudioContext;
 
   // This flag controls whether the output of this sound generator is immediately connected to the audio context
@@ -38,17 +37,16 @@ export type SoundGeneratorOptions = {
   // in conjunction with the sound manager.
   connectImmediately?: boolean;
 
-  // An initial set of Properties that will be hooked to this sound generator's enabled state,
-  // all of which must be true for sound to be produced.  More of these properties can be added after construction
-  // via methods if needed.
+  // An initial set of Properties that will be hooked to this sound generator's enabled state, all of which must be true
+  // for sound to be produced.  More of these properties can be added after construction via methods if needed.
   enableControlProperties?: IProperty<boolean>[];
 
-  // Audio nodes that will be connected in the specified order between the bufferSource and
-  // localGainNode, used to insert things like filters, compressors, etc.
+  // Audio nodes that will be connected in the specified order between the bufferSource and localGainNode, used to
+  // insert things like filters, compressors, etc.
   additionalAudioNodes?: AudioNode[];
 
-  // When false, an enable-control Property will be added that mutes the sound when setting PhET-iO state.
-  // Almost all sounds want this muting to occur, please test thoroughly before turning this option on.
+  // When false, an enable-control Property will be added that mutes the sound when setting PhET-iO state. Almost all
+  // sounds want this muting to occur, please test thoroughly before turning this option on.
   enabledDuringPhetioStateSetting?: boolean;
 };
 
@@ -69,9 +67,9 @@ abstract class SoundGenerator {
   // function defined below, no where else.
   readonly fullyEnabledProperty: Property<boolean>;
 
-  // A Property that tracks whether this sound generator is "locally enabled",
-  // which means that it is internally set to produce sound.  Setting this to true does not guarantee that sound will
-  // be produced, since other Properties can all affect this, see fullyEnabledProperty.
+  // A Property that tracks whether this sound generator is "locally enabled", which means that it is internally set to
+  // produce sound.  Setting this to true does not guarantee that sound will be produced, since other Properties can all
+  // affect this, see fullyEnabledProperty.
   locallyEnabledProperty: Property<boolean>;
 
   // master gain control that will be used to control the volume of the sound
@@ -82,7 +80,7 @@ abstract class SoundGenerator {
   protected soundSourceDestination: AudioNode;
 
   // internally used disposal function
-  private disposeSoundGenerator: () => void;
+  private readonly disposeSoundGenerator: () => void;
 
   protected constructor( providedOptions?: SoundGeneratorOptions ) {
 
@@ -116,7 +114,7 @@ abstract class SoundGenerator {
       );
     };
 
-    // listen for new enable control Properties and hook them up as they arrive
+    // Listen for new enable control Properties and hook them up as they arrive.
     this.enableControlProperties.addItemAddedListener( addedItem => {
       addedItem.link( updateFullyEnabledState );
       const checkAndRemove = ( removedItem: IProperty<boolean> ) => {
@@ -128,14 +126,14 @@ abstract class SoundGenerator {
       this.enableControlProperties.addItemRemovedListener( checkAndRemove );
     } );
 
-    // add any enable control Properties that were provided in the options object
+    // Add any enable control Properties that were provided in the options object.
     options.enableControlProperties.forEach( enableControlProperty => {
       this.addEnableControlProperty( enableControlProperty );
     } );
 
     this.locallyEnabledProperty = new BooleanProperty( true );
 
-    // add the local Property to the list of enable controls
+    // Add the local Property to the list of enable controls.
     this.addEnableControlProperty( this.locallyEnabledProperty );
 
     this.masterGainNode = this.audioContext.createGain();
@@ -144,12 +142,12 @@ abstract class SoundGenerator {
       this.audioContext.currentTime
     );
 
-    // if the option specifies immediate connection, connect the master gain node to the audio context destination
+    // If the option specifies immediate connection, connect the master gain node to the audio context destination.
     if ( options.connectImmediately ) {
       this.masterGainNode.connect( this.audioContext.destination );
     }
 
-    // turn down the gain to zero when not fully enabled, or up to the current output level when becoming fully enabled
+    // Turn down the gain to zero when not fully enabled and up to the current output level when becoming fully enabled.
     this.fullyEnabledProperty.link( fullyEnabled => {
 
       const previousGainSetting = fullyEnabled ? 0 : this._outputLevel;
@@ -160,7 +158,7 @@ abstract class SoundGenerator {
       // supposed to be before making any changes.  Otherwise, it may extrapolate from the most recent previous event.
       this.masterGainNode.gain.setValueAtTime( previousGainSetting, now );
 
-      // ramp the gain to the new level
+      // Ramp the gain to the new level.
       this.masterGainNode.gain.linearRampToValueAtTime(
         newGainSetting,
         this.audioContext.currentTime + soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME
@@ -208,7 +206,7 @@ abstract class SoundGenerator {
   }
 
   /**
-   * connect the sound generator to an audio parameter
+   * Connect the sound generator to an audio parameter.
    */
   connect( audioParam: AudioParam ) {
     this.masterGainNode.connect( audioParam );
@@ -219,7 +217,7 @@ abstract class SoundGenerator {
   }
 
   /**
-   * disconnect the sound generator from an audio parameter
+   * Disconnect the sound generator from an audio parameter.
    */
   disconnect( audioParam: AudioParam ) {
     this.masterGainNode.disconnect( audioParam );
@@ -227,7 +225,7 @@ abstract class SoundGenerator {
   }
 
   /**
-   * test if this sound generator is connected to the provided audio param
+   * Test if this sound generator is connected to the provided audio param.
    */
   isConnectedTo( audioParam: AudioParam ): boolean {
     return this.connectionList.indexOf( audioParam ) >= 0;
@@ -292,14 +290,14 @@ abstract class SoundGenerator {
   }
 
   /**
-   * add a Property to the list of those used to control the enabled state of this sound generator
+   * Add a Property to the list of those used to control the enabled state of this sound generator.
    */
   addEnableControlProperty( enableControlProperty: IProperty<boolean> ) {
     this.enableControlProperties.push( enableControlProperty );
   }
 
   /**
-   * remove a Property from the list of those used to control the enabled state of this sound generator
+   * Remove a Property from the list of those used to control the enabled state of this sound generator.
    */
   removeEnableControlProperty( enableControlProperty: IProperty<boolean> ) {
     this.enableControlProperties.remove( enableControlProperty );
@@ -320,7 +318,6 @@ abstract class SoundGenerator {
   dispose() {
     this.disposeSoundGenerator();
   }
-
 }
 
 tambo.register( 'SoundGenerator', SoundGenerator );
