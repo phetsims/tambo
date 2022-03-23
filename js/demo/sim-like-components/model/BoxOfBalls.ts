@@ -26,15 +26,15 @@ const createRandomColor = () => {
 };
 
 class BoxOfBalls {
+
+  // an array the contains the balls that are in this box
+  public readonly balls: ObservableArray<Ball>;
+
+  // the bounding box
   private readonly box: Shape;
-  private readonly balls: ObservableArray<Ball>;
 
   constructor( width: number, height: number ) {
-
-    // @public (read-only) {Shape.rect} - the bounding box
     this.box = Shape.rect( 50, 0, width, height );
-
-    // @public (read-only) {ObservableArrayDef}
     this.balls = createObservableArray();
   }
 
