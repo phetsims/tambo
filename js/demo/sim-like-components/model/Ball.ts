@@ -1,36 +1,28 @@
 // Copyright 2018-2021, University of Colorado Boulder
-// @ts-nocheck
+
 /**
  * simple model of a ball
  */
 
 import Emitter from '../../../../../axon/js/Emitter.js';
-import Property from '../../../../../axon/js/Property.js';
+import Vector2 from '../../../../../dot/js/Vector2.js';
+import Vector2Property from '../../../../../dot/js/Vector2Property.js';
+import { Color } from '../../../../../scenery/js/imports.js';
 import tambo from '../../../tambo.js';
 
 class Ball {
+  private readonly radius: number;
+  private readonly color: Color;
+  private readonly positionProperty: Vector2Property;
+  private readonly velocityProperty: Vector2Property;
+  private readonly bounceEmitter: Emitter<[string]>;
 
-  /**
-   * @param {number} radius - in centimeters
-   * @param {Color|string} color
-   * @param {Vector2} initialPosition
-   * @param {Vector2} initialVelocity
-   */
-  constructor( radius, color, initialPosition, initialVelocity ) {
+  constructor( radius: number, color: Color, initialPosition: Vector2, initialVelocity: Vector2 ) {
 
-    // @public read-only {number}
     this.radius = radius;
-
-    // @public read-only {Color}
     this.color = color;
-
-    // @public {Property.<Vector2>}
-    this.positionProperty = new Property( initialPosition );
-
-    // @public {Property.<Vector2>}
-    this.velocityProperty = new Property( initialVelocity );
-
-    // @public (read-only) {Emitter} - emitter that fires when the ball bounces, indicates surface on which it bounced
+    this.positionProperty = new Vector2Property( initialPosition );
+    this.velocityProperty = new Vector2Property( initialVelocity );
     this.bounceEmitter = new Emitter( { parameters: [ { valueType: 'string' } ] } );
 
     // monitor the velocity Property and fire the emitter when a bounce occurs
@@ -56,13 +48,11 @@ class Ball {
 
   /**
    * restore initial state
-   * @public
    */
-  reset() {
+  public reset() {
     this.positionProperty.reset();
     this.velocityProperty.reset();
   }
-
 }
 
 tambo.register( 'Ball', Ball );
