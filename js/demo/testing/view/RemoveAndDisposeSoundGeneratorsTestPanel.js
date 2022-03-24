@@ -1,5 +1,7 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * a panel that contains controls used to exercise the addition, removal, and disposal of sound generators
  *

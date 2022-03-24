@@ -1,5 +1,7 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * view for a screen that allows testing and demonstration of various sound components and behaviors
  *
