@@ -1,31 +1,30 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220Hz_mp3.js';
 import windsLoopC3Oscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopC3Oscilloscope_mp3.js';
 import windsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopMiddleCOscilloscope_mp3.js';
 import AmplitudeModulator from '../../../AmplitudeModulator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
-import SoundGenerator from '../../../sound-generators/SoundGenerator.js';
+import SoundGenerator, { SoundGeneratorOptions } from '../../../sound-generators/SoundGenerator.js';
 import tambo from '../../../tambo.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 
 /**
  * Demo and test harness for the AmplitudeModulator class.  This creates several sound loops and routes them through
  * an amplitude modulator instance.  It also provides the properties that can be manipulated in the view to change the
  * attributes of the modulation.
  */
+
+
 class AmplitudeModulatorDemo extends SoundGenerator {
 
-  /**
-   * @param {NumberProperty} sourceSoundIndexProperty - index of the selected sound, 0 indicates none
-   * @param {Object} [options]
-   */
-  constructor( sourceSoundIndexProperty, options ) {
+  public readonly amplitudeModulator: AmplitudeModulator;
+
+  constructor( sourceSoundIndexProperty: NumberProperty, options: SoundGeneratorOptions ) {
 
     super( options );
 
-    // @public {AmplitudeModulator}
+    // Create the amplitude modulator.
     this.amplitudeModulator = new AmplitudeModulator();
     this.amplitudeModulator.connect( this.soundSourceDestination );
 
@@ -59,7 +58,7 @@ class AmplitudeModulatorDemo extends SoundGenerator {
    * @public
    */
   reset() {
-    this.amplitudeModulator.enabledProperty.reset();
+    this.amplitudeModulator.enabledProperty.set( true );
     this.amplitudeModulator.frequencyProperty.reset();
     this.amplitudeModulator.depthProperty.reset();
     this.amplitudeModulator.waveformProperty.reset();

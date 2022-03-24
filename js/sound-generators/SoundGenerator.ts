@@ -209,12 +209,12 @@ abstract class SoundGenerator {
   /**
    * Connect the sound generator to an audio parameter.
    */
-  connect( audioParam: AudioParam ) {
-    this.masterGainNode.connect( audioParam );
+  connect( audioParam: AudioParam | AudioNode ) {
+    this.masterGainNode.connect( audioParam as AudioParam );
 
     // Track this sound generator's connections.  This is necessary because Web Audio doesn't support checking which
     // nodes are connected to which, and we need this information when disconnecting.
-    this.connectionList.push( audioParam );
+    this.connectionList.push( audioParam as AudioParam );
   }
 
   /**
