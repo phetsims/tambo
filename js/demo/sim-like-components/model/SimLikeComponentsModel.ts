@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2018-2022, University of Colorado Boulder
 
 /**
  * A model that exists only for the purposes of demonstrating sonification, particularly how view and model elements are
