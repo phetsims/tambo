@@ -1,7 +1,5 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * view for a screen that allows testing and demonstration of various sound components and behaviors
  *
@@ -15,10 +13,10 @@ import stepTimer from '../../../../../axon/js/stepTimer.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import { HBox, Image, Node, Text, VBox } from '../../../../../scenery/js/imports.js';
+import { HBox, Image, Node, NodeOptions, Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
-import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
+import DemosScreenView, { SunDemo } from '../../../../../sun/js/demo/DemosScreenView.js';
 import Panel from '../../../../../sun/js/Panel.js';
 import lightning_png from '../../../../images/lightning_png.js';
 import checkboxChecked_mp3 from '../../../../sounds/checkboxChecked_mp3.js';
@@ -37,6 +35,8 @@ import CompositeSoundClipTestNode from './CompositeSoundClipTestNode.js';
 import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
 import SoundClipChordTestNode from './SoundClipChordTestNode.js';
+import Bounds2 from '../../../../../dot/js/Bounds2.js';
+import { TimerListener } from '../../../../../axon/js/Timer.js';
 
 // constants
 const CHECKBOX_SIZE = 16;
@@ -44,6 +44,8 @@ const FONT = new PhetFont( 16 );
 const LIGHTNING_SHOWN_TIME = 0.750; // in seconds
 
 class TestingScreenView extends DemosScreenView {
+
+  private readonly stepEmitter: Emitter<[ number ]>;
 
   /**
    * @constructor
@@ -53,52 +55,52 @@ class TestingScreenView extends DemosScreenView {
     const resetInProgressProperty = new BooleanProperty( false );
 
     // demo items, selected via the combo box in the parent class
-    const demos = [
+    const demos: SunDemo[] = [
       {
         label: 'AmplitudeModulatorTest',
-        createNode: layoutBounds => new AmplitudeModulatorDemoNode( {
+        createNode: ( layoutBounds: Bounds2 ) => new AmplitudeModulatorDemoNode( {
           center: layoutBounds.center
         } )
       },
       {
         label: 'AdditionalAudioNodesTestNode',
-        createNode: layoutBounds => new AdditionalAudioNodesTestNode( {
+        createNode: ( layoutBounds: Bounds2 ) => new AdditionalAudioNodesTestNode( {
           center: layoutBounds.center
         } )
       },
       {
         label: 'BasicAndEnhancedSounds',
-        createNode: layoutBounds => new BasicAndEnhancedSoundTestNode( {
+        createNode: ( layoutBounds: Bounds2 ) => new BasicAndEnhancedSoundTestNode( {
           center: layoutBounds.center
         } )
       },
       {
         label: 'ContinuousPropertySoundGeneratorTest',
-        createNode: layoutBounds => new ContinuousPropertySoundGeneratorTestNode( this.stepEmitter, {
+        createNode: ( layoutBounds: Bounds2 ) => new ContinuousPropertySoundGeneratorTestNode( this.stepEmitter, {
           center: layoutBounds.center
         } )
       },
       {
         label: 'CompositeSoundClipTestNode',
-        createNode: layoutBounds => new CompositeSoundClipTestNode( {
+        createNode: ( layoutBounds: Bounds2 ) => new CompositeSoundClipTestNode( {
           center: layoutBounds.center
         } )
       },
       {
         label: 'RemoveAndDisposeSoundGenerators',
-        createNode: layoutBounds => new RemoveAndDisposeSoundGeneratorsTestPanel( {
+        createNode: ( layoutBounds: Bounds2 ) => new RemoveAndDisposeSoundGeneratorsTestPanel( {
           center: layoutBounds.center
         } )
       },
       {
         label: 'LongSoundTest',
-        createNode: layoutBounds => new LongSoundTestPanel( resetInProgressProperty, {
+        createNode: ( layoutBounds: Bounds2 ) => new LongSoundTestPanel( resetInProgressProperty, {
           center: layoutBounds.center
         } )
       },
       {
         label: 'SoundClipChordTestNode',
-        createNode: layoutBounds => new SoundClipChordTestNode( {
+        createNode: ( layoutBounds: Bounds2 ) => new SoundClipChordTestNode( {
           center: layoutBounds.center
         } )
       }
@@ -123,12 +125,7 @@ class TestingScreenView extends DemosScreenView {
     this.addChild( resetAllButton );
   }
 
-  /**
-   * @override
-   * @param {number} dt
-   * @public
-   */
-  step( dt ) {
+  public step( dt: number ) {
     this.stepEmitter.emit( dt );
   }
 }
@@ -138,7 +135,9 @@ class TestingScreenView extends DemosScreenView {
  */
 class BasicAndEnhancedSoundTestNode extends VBox {
 
-  constructor( options ) {
+  private readonly disposeBasicAndEnhancedSoundTestNode: () => void;
+
+  constructor( options: VBoxOptions ) {
 
     // sound clips to be played
     const loonCallSoundClip = new SoundClip( loonCall_mp3 );
@@ -191,7 +190,9 @@ class BasicAndEnhancedSoundTestNode extends VBox {
  */
 class AdditionalAudioNodesTestNode extends VBox {
 
-  constructor( options ) {
+  private readonly disposeBasicAndEnhancedSoundTestNode: () => void;
+
+  constructor( options: VBoxOptions ) {
 
     // convolver node, which will be used to create the reverb effect
     const convolver = phetAudioContext.createConvolver();
@@ -265,11 +266,13 @@ class AdditionalAudioNodesTestNode extends VBox {
  */
 class LongSoundTestPanel extends Node {
 
-  constructor( resetInProgressProperty, options ) {
+  private readonly disposeLongSoundTestPanel: () => void;
+
+  constructor( resetInProgressProperty: BooleanProperty, options: NodeOptions ) {
 
     // internal state variables
     const lightningBoltVisibleProperty = new BooleanProperty( false );
-    let lightningBoltVisibleTimeout = null;
+    let lightningBoltVisibleTimeout: null | TimerListener = null;
 
     // timeout function
     const timeoutFiredListener = () => {
@@ -378,4 +381,5 @@ class LongSoundTestPanel extends Node {
 }
 
 tambo.register( 'TestingScreenView', TestingScreenView );
+
 export default TestingScreenView;

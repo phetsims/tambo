@@ -1,5 +1,13 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
+/**
+ * Demo and test harness for the AmplitudeModulator class.  This creates several sound loops and routes them through
+ * an amplitude modulator instance.  It also provides the properties that can be manipulated in the view to change the
+ * attributes of the modulation.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
+ */
+
 import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220Hz_mp3.js';
 import windsLoopC3Oscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopC3Oscilloscope_mp3.js';
 import windsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopMiddleCOscilloscope_mp3.js';
@@ -9,18 +17,11 @@ import SoundGenerator, { SoundGeneratorOptions } from '../../../sound-generators
 import tambo from '../../../tambo.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 
-/**
- * Demo and test harness for the AmplitudeModulator class.  This creates several sound loops and routes them through
- * an amplitude modulator instance.  It also provides the properties that can be manipulated in the view to change the
- * attributes of the modulation.
- */
-
-
 class AmplitudeModulatorDemo extends SoundGenerator {
 
   public readonly amplitudeModulator: AmplitudeModulator;
 
-  constructor( sourceSoundIndexProperty: NumberProperty, options: SoundGeneratorOptions ) {
+  constructor( sourceSoundIndexProperty: NumberProperty, options?: SoundGeneratorOptions ) {
 
     super( options );
 

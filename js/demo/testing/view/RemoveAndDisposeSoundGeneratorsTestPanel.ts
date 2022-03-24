@@ -1,7 +1,5 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * a panel that contains controls used to exercise the addition, removal, and disposal of sound generators
  *
@@ -12,23 +10,28 @@ import createObservableArray from '../../../../../axon/js/createObservableArray.
 import Property from '../../../../../axon/js/Property.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
 import dotRandom from '../../../../../dot/js/dotRandom.js';
-import merge from '../../../../../phet-core/js/merge.js';
+import optionize from '../../../../../phet-core/js/optionize.js';
 import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import { HBox } from '../../../../../scenery/js/imports.js';
-import { Node } from '../../../../../scenery/js/imports.js';
-import { Text } from '../../../../../scenery/js/imports.js';
-import { VBox } from '../../../../../scenery/js/imports.js';
+import { HBox, Node, Text, VBox } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import ComboBox from '../../../../../sun/js/ComboBox.js';
 import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
-import Panel from '../../../../../sun/js/Panel.js';
+import Panel, { PanelOptions } from '../../../../../sun/js/Panel.js';
 import birdCall_mp3 from '../../../../sounds/demo-and-test/birdCall_mp3.js';
 import cricketsLoop_mp3 from '../../../../sounds/demo-and-test/cricketsLoop_mp3.js';
 import PitchedPopGenerator from '../../../sound-generators/PitchedPopGenerator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
+import SoundGenerator from '../../../sound-generators/SoundGenerator.js';
+
+type SelfOptions = {};
+export type RemoveAndDisposeSoundGeneratorsTestPanelOptions = SelfOptions & PanelOptions;
+type SoundGeneratorComboBoxItemInfo = {
+  comboBoxItemName: string;
+  createSoundGenerator: () => SoundGenerator;
+}
 
 // constants
 const BUTTON_FONT = new PhetFont( 18 );
@@ -37,37 +40,42 @@ const TOTAL_ADDED_TEMPLATE = 'Total Added: {{numSoundGenerators}}';
 const ADD_BUTTON_COLOR = '#C0D890';
 
 // info needed for selecting and using different sound generators from the combo box
-const SOUND_GENERATOR_INFO = {
-  recordedOneShot: {
-    comboBoxName: 'Recorded one shot',
-    createSoundGenerator: () => new SoundClip( birdCall_mp3 )
-  },
-  recordedLoop: {
-    comboBoxName: 'Recorded loop',
-    createSoundGenerator: () => new SoundClip( cricketsLoop_mp3, { loop: true } )
-  },
-  synthesizedSound: {
-    comboBoxName: 'Synthesized sound',
-    createSoundGenerator: () => new PitchedPopGenerator( { numPopGenerators: 2 } )
-  }
-};
+const SOUND_GENERATOR_INFO = new Map<string, SoundGeneratorComboBoxItemInfo>( [
+  [
+    'recordedOneShot',
+    {
+      comboBoxItemName: 'Recorded one shot',
+      createSoundGenerator: () => new SoundClip( birdCall_mp3 )
+    }
+  ],
+  [
+    'recordedLoop',
+    {
+      comboBoxItemName: 'Recorded loop',
+      createSoundGenerator: () => new SoundClip( cricketsLoop_mp3, { loop: true } )
+    }
+  ],
+  [
+    'synthesizedSound',
+    {
+      comboBoxItemName: 'Synthesized sound',
+      createSoundGenerator: () => new PitchedPopGenerator( { numPopGenerators: 2 } )
+    }
+  ]
+] );
 
 class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
 
-  /**
-   * @param {Object} [options]
-   * @constructor
-   */
-  constructor( options ) {
+  constructor( providedOptions: RemoveAndDisposeSoundGeneratorsTestPanelOptions ) {
 
-    options = merge( {
+    const options = optionize<RemoveAndDisposeSoundGeneratorsTestPanelOptions, SelfOptions, PanelOptions>( {
       fill: '#f5d3b3',
       xMargin: 14,
       yMargin: 14
-    }, options );
+    }, providedOptions );
 
     // array of sound generators that have been added and not yet removed and disposed
-    const soundGenerators = createObservableArray();
+    const soundGenerators = createObservableArray<SoundGenerator>();
 
     // node where the content goes, needed so that ComboBox will have a good place to put its list
     const panelContentNode = new Node();
@@ -77,11 +85,11 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
       font: new PhetFont( { size: 18, weight: 'bold' } )
     } );
 
-    // create the combo box for selecting the type of sound generator to add
-    const comboBoxItems = [];
-    _.keys( SOUND_GENERATOR_INFO ).forEach( soundGeneratorKey => {
+    // Create the combo box for selecting the type of sound generator to add.
+    const comboBoxItems: ComboBoxItem<string>[] = [];
+    SOUND_GENERATOR_INFO.forEach( ( soundGenerator, soundGeneratorKey ) => {
       comboBoxItems.push( new ComboBoxItem(
-        new Text( SOUND_GENERATOR_INFO[ soundGeneratorKey ].comboBoxName, { font: COMBO_BOX_FONT } ),
+        new Text( soundGenerator.comboBoxItemName, { font: COMBO_BOX_FONT } ),
         soundGeneratorKey
       ) );
     } );
@@ -97,9 +105,9 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
       spacing: 7
     } );
 
-    function addSoundGenerators( numToAdd ) {
-      _.times( numToAdd, () => {
-        const soundGenerator = SOUND_GENERATOR_INFO[ selectedSoundGeneratorTypeProperty.value ].createSoundGenerator();
+    function addSoundGenerators( numberToAdd: number ) {
+      _.times( numberToAdd, () => {
+        const soundGenerator = SOUND_GENERATOR_INFO.get( selectedSoundGeneratorTypeProperty.value )!.createSoundGenerator();
         soundManager.addSoundGenerator( soundGenerator );
         soundGenerators.push( soundGenerator );
       } );

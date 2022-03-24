@@ -1,14 +1,17 @@
 // Copyright 2020-2021, University of Colorado Boulder
 
-// @ts-nocheck
+/**
+ * View portion of the demo and test harness for the AmplitudeModulator class.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
+ */
 
+import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
-import merge from '../../../../../phet-core/js/merge.js';
+import optionize from '../../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import { HBox } from '../../../../../scenery/js/imports.js';
-import { Text } from '../../../../../scenery/js/imports.js';
-import { VBox } from '../../../../../scenery/js/imports.js';
+import { HBox, Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
@@ -16,15 +19,15 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemo from '../model/AmplitudeModulatorDemo.js';
 
+type SelfOptions = {};
+export type AmplitudeModulatorDemoNodeOptions = SelfOptions & VBoxOptions;
+
 // constants
 const LABEL_FONT = new PhetFont( 16 );
 
-/**
- * View portion of the demo and test harness for the AmplitudeModulator class.
- */
 class AmplitudeModulatorDemoNode extends VBox {
 
-  constructor( options ) {
+  constructor( providedOptions: AmplitudeModulatorDemoNodeOptions ) {
 
     const soundSourceRadioButtonItems = [
       {
@@ -62,7 +65,7 @@ class AmplitudeModulatorDemoNode extends VBox {
     // LFO enabled control
     const lfoEnabled = new Checkbox(
       new Text( 'LFO Enabled', { font: LABEL_FONT } ),
-      amplitudeModulatorDemo.amplitudeModulator.enabledProperty,
+      amplitudeModulatorDemo.amplitudeModulator.enabledProperty as BooleanProperty,
       { boxWidth: 16 }
     );
 
@@ -120,12 +123,11 @@ class AmplitudeModulatorDemoNode extends VBox {
       spacing: 5
     } );
 
-
-    super( merge( {
+    super( optionize<AmplitudeModulatorDemoNodeOptions, SelfOptions, VBoxOptions>( {
       children: [ soundIndexSelectorVBox, lfoEnabled, frequencyControlHBox, depthControlHBox, waveformSelectorVBox ],
       spacing: 15,
       align: 'left'
-    }, options ) );
+    }, providedOptions ) );
   }
 }
 

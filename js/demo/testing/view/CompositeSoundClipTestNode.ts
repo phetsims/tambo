@@ -1,7 +1,5 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * Test and demo of the CompositeSoundClip.
  *
@@ -10,7 +8,7 @@
 
 import merge from '../../../../../phet-core/js/merge.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import { VBox } from '../../../../../scenery/js/imports.js';
+import { VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
 import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
@@ -21,10 +19,10 @@ import tambo from '../../../tambo.js';
 
 class CompositeSoundClipTestNode extends VBox {
 
-  /**
-   * @param {Object} [options]
-   */
-  constructor( options ) {
+  // dispose function
+  private readonly disposeCompositeSoundClipTestNode: () => void;
+
+  constructor( options: VBoxOptions ) {
 
     // sound clips to be played
     const compositeSoundClip = new CompositeSoundClip( [

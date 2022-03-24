@@ -1,7 +1,5 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * Test and demo of the ContinuousPropertySoundGenerator.
  *
@@ -14,8 +12,7 @@ import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import NumberControl from '../../../../../scenery-phet/js/NumberControl.js';
-import { Text } from '../../../../../scenery/js/imports.js';
-import { VBox } from '../../../../../scenery/js/imports.js';
+import { Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import Panel from '../../../../../sun/js/Panel.js';
 import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220Hz_mp3.js';
@@ -25,31 +22,36 @@ import windsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/w
 import ContinuousPropertySoundGenerator from '../../../sound-generators/ContinuousPropertySoundGenerator.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
+import Emitter from '../../../../../axon/js/Emitter.js';
+import WrappedAudioBuffer from '../../../WrappedAudioBuffer.js';
+
+type SelfOptions = {};
+export type ContinuousPropertySoundGeneratorTestNodeOptions = SelfOptions & VBoxOptions;
 
 class ContinuousPropertySoundGeneratorTestNode extends VBox {
 
-  /**
-   * @param {Emitter} stepEmitter
-   * @param {Object} [options]
-   */
-  constructor( stepEmitter, options ) {
+  // dispose function
+  private readonly disposeContinuousPropertySoundGeneratorTestNode: () => void;
+
+  constructor( stepEmitter: Emitter<[ number ]>, providedOptions: ContinuousPropertySoundGeneratorTestNodeOptions ) {
 
     // keep track of listeners added to the step emitter so that they can be disposed
-    const stepListeners = [];
+    const stepListeners: ( ( dt: number ) => void )[] = [];
 
     // creates a panel that demonstrates a ContinuousPropertySoundGenerator
-    const createTester = ( sound, max ) => {
+    const createTester = ( sound: WrappedAudioBuffer, max: number ) => {
       const numberProperty = new NumberProperty( 5 );
       const range = new Range( 1, 10 );
       const continuousPropertySoundGenerator = new ContinuousPropertySoundGenerator(
         numberProperty,
         sound,
+        // @ts-ignore
         range
       );
       soundManager.addSoundGenerator( continuousPropertySoundGenerator );
       const isOscillatingProperty = new BooleanProperty( false );
       let phase = 0;
-      const stepListener = dt => {
+      const stepListener = ( dt: number ) => {
         if ( isOscillatingProperty.value ) {
           numberProperty.value = ( max * Math.sin( Date.now() / 1000 - phase ) + 1 ) * ( range.max - range.min ) / 2 + range.min;
         }
@@ -81,9 +83,9 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
       ],
       spacing: 15,
       align: 'left'
-    }, options ) );
+    }, providedOptions ) );
 
-    // @private - for memory cleanup
+    // define dispose function for memory cleanup
     this.disposeContinuousPropertySoundGeneratorTestNode = () => {
       stepListeners.forEach( listener => {
         stepEmitter.removeListener( listener );
