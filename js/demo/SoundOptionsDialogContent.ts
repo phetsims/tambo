@@ -1,6 +1,12 @@
 // Copyright 2020-2021, University of Colorado Boulder
 
-// @ts-nocheck
+/**
+ * SoundOptionsDialogContent is intended as an example of a node that can serve as the content for an options dialog,
+ * and that enables the user to select between different candidate sounds that are under consideration for use in a
+ * sound design.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
+ */
 
 import NumberProperty from '../../../axon/js/NumberProperty.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
@@ -12,11 +18,6 @@ import tambo from '../tambo.js';
 // constants
 const TEXT_OPTIONS = { font: new PhetFont( 24 ) };
 
-/**
- * SoundOptionsDialogContent is intended as an example of a node that can serve as the content for an options dialog,
- * and that enables the user to select between different candidate sounds that are under consideration for use in a
- * sound design.
- */
 class SoundOptionsDialogContent extends Node {
 
   constructor() {
@@ -49,4 +50,5 @@ class SoundOptionsDialogContent extends Node {
 }
 
 tambo.register( 'SoundOptionsDialogContent', SoundOptionsDialogContent );
+
 export default SoundOptionsDialogContent;
