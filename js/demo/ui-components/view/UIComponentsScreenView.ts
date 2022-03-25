@@ -1,9 +1,8 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
- * view for a screen that demonstrates views and sounds for components that interact with the model in some way
+ * UIComponentsScreenView is a view for a screen that demonstrates views and sounds for common User Interface
+ * components.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -27,16 +26,15 @@ import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
 import accordion_png from '../../../../images/accordion_png.js';
 import tambo from '../../../tambo.js';
 import SliderSoundTestNode from './SliderSoundTestNode.js';
+import UIComponentsModel from '../model/UIComponentsModel.js';
+import Bounds2 from '../../../../../dot/js/Bounds2.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 20 );
 
 class UIComponentsScreenView extends DemosScreenView {
 
-  /**
-   * @constructor
-   */
-  constructor( model ) {
+  constructor( model: UIComponentsModel ) {
 
     const radioButtonItems = [
       {
@@ -56,14 +54,14 @@ class UIComponentsScreenView extends DemosScreenView {
     const demos = [
       {
         label: 'PushButton',
-        createNode: layoutBounds => new RectangularPushButton( {
+        createNode: ( layoutBounds: Bounds2 ) => new RectangularPushButton( {
           content: new Text( 'You\'re Pushing It.', { font: LABEL_FONT } ),
           center: layoutBounds.center
         } )
       },
       {
         label: 'Checkbox',
-        createNode: layoutBounds => new Checkbox(
+        createNode: ( layoutBounds: Bounds2 ) => new Checkbox(
           new Text( 'Check it Out', { font: LABEL_FONT } ),
           new BooleanProperty( false ),
           {
@@ -73,7 +71,7 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'AquaRadioButtonGroup',
-        createNode: layoutBounds => new AquaRadioButtonGroup(
+        createNode: ( layoutBounds: Bounds2 ) => new AquaRadioButtonGroup(
           new NumberProperty( 0 ),
           radioButtonItems,
           {
@@ -86,7 +84,7 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'TimeControlNode',
-        createNode: layoutBounds => new TimeControlNode(
+        createNode: ( layoutBounds: Bounds2 ) => new TimeControlNode(
           new BooleanProperty( true ),
           {
             center: layoutBounds.center,
@@ -98,11 +96,11 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'ResetAllButton',
-        createNode: layoutBounds => new ResetAllButton( { center: layoutBounds.center } )
+        createNode: ( layoutBounds: Bounds2 ) => new ResetAllButton( { center: layoutBounds.center } )
       },
       {
         label: 'ComboBox',
-        createNode: layoutBounds => new ComboBox(
+        createNode: ( layoutBounds: Bounds2 ) => new ComboBox(
           [
             new ComboBoxItem( new Text( 'Rainbows', { font: LABEL_FONT } ), 0 ),
             new ComboBoxItem( new Text( 'Unicorns', { font: LABEL_FONT } ), 1 ),
@@ -115,7 +113,7 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'BooleanRectangularToggleButton',
-        createNode: layoutBounds => new BooleanRectangularToggleButton(
+        createNode: ( layoutBounds: Bounds2 ) => new BooleanRectangularToggleButton(
           new Text( 'Yep', { font: LABEL_FONT } ),
           new Text( 'Nope', { font: LABEL_FONT } ),
           new BooleanProperty( true ),
@@ -127,7 +125,7 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'AccordionBox',
-        createNode: layoutBounds => new AccordionBox(
+        createNode: ( layoutBounds: Bounds2 ) => new AccordionBox(
           new Image( accordion_png, { maxWidth: 200 } ),
           {
             titleNode: new Text( 'Accordion Box', { font: LABEL_FONT } ),
@@ -141,18 +139,18 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'Sliders',
-        createNode: layoutBounds => new SliderSoundTestNode( LABEL_FONT, layoutBounds.center )
+        createNode: ( layoutBounds: Bounds2 ) => new SliderSoundTestNode( LABEL_FONT, layoutBounds.center )
       },
       {
         label: 'NumberControl',
-        createNode: layoutBounds => new VBox( {
+        createNode: ( layoutBounds: Bounds2 ) => new VBox( {
           children: [
 
-            new NumberControl( 'Basic Number Control', new NumberProperty( 0 ), new Range( 0, 10 ), { delta: 2 } ),
+            new NumberControl( 'How much you want?', new NumberProperty( 0 ), new Range( 0, 10 ), { delta: 2 } ),
 
             // This is an example of a number control that has a delta value that leads to thresholds in the sound
             // player that are not all equally sized.  See https://github.com/phetsims/sun/issues/697.
-            new NumberControl( 'Asymmetric Number Control', new NumberProperty( 0 ), new Range( 0, 100 ), { delta: 22 } )
+            new NumberControl( 'How much you want (asymmetric)?', new NumberProperty( 0 ), new Range( 0, 100 ), { delta: 22 } )
           ],
           spacing: 20,
           center: layoutBounds.center

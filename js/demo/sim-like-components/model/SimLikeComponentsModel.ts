@@ -1,8 +1,8 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
 /**
- * A model that exists only for the purposes of demonstrating sonification, particularly how view and model elements are
- * used together to hook up sonification elements.
+ * SimLikeComponentsModel is a model that exists only for the purposes of demonstrating sonification, particularly how
+ * view and model elements are used together to hook up sonification elements.
  *
  * @author John Blanco
  */

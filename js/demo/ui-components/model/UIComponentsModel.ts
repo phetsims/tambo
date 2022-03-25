@@ -1,10 +1,8 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
- * A model that exists only for the purposes of demonstrating sonification, particularly how view and model elements are
- * used together to hook up sonification elements.
+ * UIComponentsModel is a model that exists only for the purposes of demonstrating sonification, particularly the
+ * sound-related behavior of common user interface (UI) components.
  *
  * @author John Blanco
  */
@@ -14,25 +12,25 @@ import tambo from '../../../tambo.js';
 
 class UIComponentsModel {
 
+  // tracks whether a reset is happening
+  public readonly resetInProgressProperty: BooleanProperty;
+
   /**
    * @constructor
    */
   constructor() {
-
-    // @public {BooleanProperty} - tracks whether a reset is happening
     this.resetInProgressProperty = new BooleanProperty( false );
   }
 
   /**
    * restore initial state
-   * @public
    */
-  reset() {
+  public reset() {
     this.resetInProgressProperty.value = true;
     this.resetInProgressProperty.value = false;
   }
-
 }
 
 tambo.register( 'UIComponentsModel', UIComponentsModel );
+
 export default UIComponentsModel;
