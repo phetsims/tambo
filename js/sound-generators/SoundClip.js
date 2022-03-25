@@ -1,5 +1,7 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * A sound generator that plays pre-recorded sounds, either as a one-shot or as a loop.
  *
