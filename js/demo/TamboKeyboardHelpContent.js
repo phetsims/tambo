@@ -1,5 +1,7 @@
 // Copyright 2018-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * Content for the "Keyboard Shortcuts" dialog that can be brought up from the sim navigation bar.  This is stubbed,
  * since we need it for testing but this sim is not meant to be used outside of PhET.
