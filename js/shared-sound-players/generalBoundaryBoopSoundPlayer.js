@@ -1,5 +1,7 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * A shared sound generator for UI-related boundary sounds, like when at the min or max of a component range.
  *

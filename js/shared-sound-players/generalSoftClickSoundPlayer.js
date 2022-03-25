@@ -1,5 +1,7 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * A shared sound generator for soft UI-related clicks, like a slider thumb moving across a tick line.
  *
