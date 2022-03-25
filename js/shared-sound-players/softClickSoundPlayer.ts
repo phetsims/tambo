@@ -1,7 +1,5 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * shared sound generator that produces a soft click, often used to produce discrete sounds for some continuous
  * quantity, uses the singleton pattern

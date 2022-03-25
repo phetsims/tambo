@@ -1,7 +1,5 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * shared sound generator for picking something up, uses the singleton pattern
  *

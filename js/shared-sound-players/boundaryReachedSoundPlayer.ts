@@ -1,7 +1,5 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * shared sound generator for when something encounters a boundary
  *

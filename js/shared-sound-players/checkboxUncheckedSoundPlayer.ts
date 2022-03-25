@@ -1,7 +1,5 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * shared sound generator for un-checking a checkbox, uses the singleton pattern
  *
