@@ -13,6 +13,12 @@ import tambo from './tambo.js';
 const AUDIO_DATA_THRESHOLD = 0.05;
 
 /**
+ * @typedef {Object} SoundBounds
+ * @property {number} soundStart
+ * @property {number|null} soundEnd
+ */
+
+/**
  * sound utility object definition
  */
 const SoundUtils = {
@@ -21,7 +27,7 @@ const SoundUtils = {
    * helper function that sets the start and end points for a decoded set of sound samples based on where the sound
    * data first and last exceeds a certain threshold
    * {AudioBuffer} audioBuffer
-   * @returns {Object} - an object with values for the time at which the sound starts and ends
+   * @returns {SoundBounds} - an object with values for the time at which the sound starts and ends
    */
   detectSoundBounds: audioBuffer => {
 
