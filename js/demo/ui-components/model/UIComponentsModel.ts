@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2018-2022, University of Colorado Boulder
 
 /**
  * UIComponentsModel is a model that exists only for the purposes of demonstrating sonification, particularly the

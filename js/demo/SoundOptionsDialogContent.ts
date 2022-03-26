@@ -1,4 +1,4 @@
-// Copyright 2020-2021, University of Colorado Boulder
+// Copyright 2020-2022, University of Colorado Boulder
 
 /**
  * SoundOptionsDialogContent is intended as an example of a node that can serve as the content for an options dialog,
