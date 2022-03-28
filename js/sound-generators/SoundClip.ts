@@ -80,7 +80,7 @@ class SoundClip extends SoundGenerator {
   private _playbackRate: number;
 
   // indicates whether the sound is being played
-  private readonly isPlayingProperty: BooleanProperty;
+  public readonly isPlayingProperty: BooleanProperty;
 
   // time at which a deferred play request occurred, in milliseconds since epoch
   private timeOfDeferredPlayRequest: number;
