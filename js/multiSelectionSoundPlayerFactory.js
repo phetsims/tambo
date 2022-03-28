@@ -3,7 +3,7 @@
 /**
  * The multiSelectionSoundPlayerFactory singleton is used to create sound players that are similar but slightly
  * different, and can be used to sonically indicate that a selection is being made from a group of available options.
- * It was originally called radioButtonSoundPlayerFactory, but its usage was expanded to to combo boxes, so the name was
+ * It was originally called radioButtonSoundPlayerFactory, but its usage was expanded to combo boxes, so the name was
  * generalized.  It may be appropriate to use in other contexts as well.
  *
  * By providing a factory for these sound players, we can avoid having to construct unique instances for each case where
