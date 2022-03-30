@@ -1,7 +1,5 @@
 // Copyright 2020-2021, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * A sound generator that is composed of multiple SoundClips that are all started and stopped at the same time.
  * Basically, this is a container to create and control multiple SoundClip instances as one.
@@ -10,71 +8,57 @@
  */
 
 import tambo from '../tambo.js';
-import SoundClip from './SoundClip.js';
-import SoundGenerator from './SoundGenerator.js';
+import SoundClip, { SoundClipOptions } from './SoundClip.js';
+import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
+import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
+
+export type SoundAndOptions = {
+  sound: WrappedAudioBuffer;
+  options?: SoundClipOptions;
+};
+
+type SelfOptions = {};
+export type CompositeSoundClipOptions = SelfOptions & SoundGeneratorOptions;
 
 class CompositeSoundClip extends SoundGenerator {
 
-  /**
-   * @param {Array.<{sound:WrappedAudioBuffer, options?:Object}>} soundsAndOptionsTuples
-   * @param {Object} [options]
-   */
-  constructor( soundsAndOptionsTuples, options ) {
+  // array that will hold the individual sound clips
+  private readonly soundClips: SoundClip[];
+
+  constructor( soundsAndOptionsTuples: SoundAndOptions[], options?: CompositeSoundClipOptions ) {
     super( options );
 
-    // @private {Array.<SoundClip>}
     this.soundClips = [];
 
     for ( let i = 0; i < soundsAndOptionsTuples.length; i++ ) {
       const soundAndOptions = soundsAndOptionsTuples[ i ];
-      assert && assert( soundAndOptions.hasOwnProperty( 'sound' ), 'sound is a required member of the tuples' );
       const soundClip = new SoundClip( soundAndOptions.sound, soundAndOptions.options );
       soundClip.connect( this.soundSourceDestination );
       this.soundClips.push( soundClip );
     }
   }
 
-  /**
-   * @public
-   */
-  play() {
+  public play() {
     this.soundClips.forEach( soundClip => soundClip.play() );
   }
 
-  /**
-   * @public
-   */
-  stop() {
+  public stop() {
     this.soundClips.forEach( soundClip => soundClip.stop() );
   }
 
-  /**
-   * @public
-   */
-  connect( destination ) {
+  public connect( destination: AudioParam | AudioNode ) {
     this.soundClips.forEach( soundClip => soundClip.connect( destination ) );
   }
 
-  /**
-   * @public
-   */
-  dispose() {
+  public dispose() {
     this.soundClips.forEach( soundClip => soundClip.dispose() );
   }
 
-  /**
-   * @returns {boolean} - true if any of the soundClips are playing.
-   */
-  get isPlaying() {
+  public get isPlaying() {
     return _.some( this.soundClips, soundClip => soundClip.isPlaying );
   }
 
-  /**
-   * @public
-   * @param {number} outputLevel
-   * @param {number} timeConstant
-   */
-  setOutputLevel( outputLevel, timeConstant ) {
+  public setOutputLevel( outputLevel: number, timeConstant: number ) {
     this.soundClips.forEach( soundClip => soundClip.setOutputLevel( outputLevel, timeConstant ) );
   }
 }

@@ -1,7 +1,5 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * DiscreteSoundGenerator produces sounds based on the value of a number property.  It monitors the property value and
  * maps it to one of a finite number of bins, and produces a discrete sound when the bin to which the value is mapped
@@ -10,49 +8,61 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import BooleanProperty from '../../../axon/js/BooleanProperty.js';
+import NumberProperty from '../../../axon/js/NumberProperty.js';
 import Range from '../../../dot/js/Range.js';
-import merge from '../../../phet-core/js/merge.js';
+import optionize from '../../../phet-core/js/optionize.js';
 import brightMarimba_mp3 from '../../sounds/brightMarimba_mp3.js';
 import tambo from '../tambo.js';
-import SoundClip from './SoundClip.js';
+import SoundClip, { SoundClipOptions } from './SoundClip.js';
+import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
+
+type SelfOptions = {
+
+  // the sound that will be played at the discrete values
+  sound?: WrappedAudioBuffer;
+
+  // number of discrete bins, crossing between them will produce a sound
+  numBins?: 7;
+
+  // the range over which the playback rate is varied, 1 is normal speed, 2 is double speed, et cetera
+  playbackRateRange?: Range;
+
+  // when true will cause sound to be played on any change of the value property
+  alwaysPlayOnChangesProperty?: null | BooleanProperty;
+
+  // If true, the sound will be played when the value reaches the min.
+  playSoundAtMin?: boolean;
+
+  // If true, the sound will be played when the value reaches the max.
+  playSoundAtMax?: boolean;
+
+  // a flag that indicates whether out of range values should be ignored
+  outOfRangeValuesOK?: boolean;
+};
+export type DiscreteSoundGeneratorOptions = SelfOptions & SoundClipOptions;
 
 class DiscreteSoundGenerator extends SoundClip {
+  private readonly disposeDiscreteSoundGenerator: () => void;
 
   /**
-   * {NumberProperty} valueProperty - the value that is monitored to trigger sounds
-   * {Range} valueRange - the range of values expected and over which sounds will be played
-   * {Object} options
+   * valueProperty - the value that is monitored to trigger sounds
+   * valueRange - the range of values expected and over which sounds will be played
+   * options - options for this sound generation and its parent class
    * @constructor
    */
-  constructor( valueProperty, valueRange, options ) {
+  constructor( valueProperty: NumberProperty, valueRange: Range, providedOptions: DiscreteSoundGeneratorOptions ) {
 
-    options = merge( {
-
-      // sound - the sound to play as the value changes
+    const options = optionize<DiscreteSoundGeneratorOptions, SelfOptions, SoundClipOptions>( {
       sound: brightMarimba_mp3,
-
-      // {number} - initial level at which sounds will be produced, can be changed later
       initialOutputLevel: 1,
-
-      // {number} - number of bins, odd numbers are generally better if slider starts in middle of range
       numBins: 7,
-
-      // {Range} - the range over which the playback rate is varied, 1 is normal speed, 2 is double speed, et cetera
       playbackRateRange: new Range( 1, 1 ), // default is no change to the sound
-
-      // {BooleanProperty} - when true will cause sound to be played on any change of the value property
       alwaysPlayOnChangesProperty: null,
-
-      // {boolean} - if true, the sound will be played when the value reaches the min
       playSoundAtMin: true,
-
-      // {boolean} - if true, the sound will be played when the value reaches the max
       playSoundAtMax: true,
-
-      // {boolean} - a flag that indicates whether out of range values should be ignored
       outOfRangeValuesOK: false
-
-    }, options );
+    }, providedOptions );
 
     // invoke superconstructor
     super( options.sound, options );
@@ -61,7 +71,7 @@ class DiscreteSoundGenerator extends SoundClip {
     const binSelector = new BinSelector( valueRange, options.numBins, options.outOfRangeValuesOK );
 
     // function for playing sound when the appropriate conditions are met
-    const playSoundOnChanges = ( newValue, oldValue ) => {
+    const playSoundOnChanges = ( newValue: number, oldValue: number ) => {
 
       const newBin = binSelector.selectBin( newValue );
       const oldBin = binSelector.selectBin( oldValue );
@@ -96,16 +106,17 @@ class DiscreteSoundGenerator extends SoundClip {
 
 }
 
+/**
+ * inner type for placing values in a bin
+ */
 class BinSelector {
+  private readonly minValue: number;
+  private readonly maxValue: number;
+  private readonly span: number;
+  private readonly numBins: number;
+  private readonly tolerateOutOfRangeValues: boolean;
 
-  /**
-   * inner type for placing values in a bin
-   * @param {Range} valueRange
-   * @param {number} numBins
-   * @param {boolean} tolerateOutOfRangeValues
-   * @constructor
-   */
-  constructor( valueRange, numBins, tolerateOutOfRangeValues ) {
+  constructor( valueRange: Range, numBins: number, tolerateOutOfRangeValues: boolean ) {
 
     // parameter checking
     assert && assert( numBins > 0 );
@@ -119,12 +130,9 @@ class BinSelector {
   }
 
   /**
-   * put the provided value in a bin
-   * @param value
-   * @returns {number}
-   * @public
+   * return a value indicating which bin the provided value would fall into
    */
-  selectBin( value ) {
+  public selectBin( value: number ): number {
     if ( !this.tolerateOutOfRangeValues ) {
       assert && assert( value <= this.maxValue );
       assert && assert( value >= this.minValue );
@@ -134,7 +142,6 @@ class BinSelector {
     const proportion = ( value - this.minValue ) / this.span;
     return Math.min( Math.floor( proportion * this.numBins ), this.numBins - 1 );
   }
-
 }
 
 tambo.register( 'DiscreteSoundGenerator', DiscreteSoundGenerator );

@@ -1,7 +1,5 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * sound generator that produces a popping sound with controllable pitch
  *
@@ -10,9 +8,19 @@
  */
 
 import Range from '../../../dot/js/Range.js';
-import merge from '../../../phet-core/js/merge.js';
+import optionize from '../../../phet-core/js/optionize.js';
 import tambo from '../tambo.js';
-import SoundGenerator from './SoundGenerator.js';
+import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
+
+type SelfOptions = {
+
+  // the range of pitches that will be produced, in Hz
+  pitchRange?: Range;
+
+  // the number of pop generators to create and pool, use more if generating lots of pops close together, less if not
+  numPopGenerators?: number;
+};
+export type PitchedPopGeneratorOptions = SelfOptions & SoundGeneratorOptions;
 
 // constants
 const DEFAULT_NUM_POP_GENERATORS = 8;
@@ -21,31 +29,32 @@ const DEFAULT_POP_DURATION = 0.02; // in seconds
 
 class PitchedPopGenerator extends SoundGenerator {
 
-  /**
-   * @constructor
-   * {Object} options
-   */
-  constructor( options ) {
+  // range of pitches to be produced
+  private readonly pitchRange: Range;
 
-    options = merge( {
+  // Sound sources, which consist of an oscillator and a gain node.
+  private readonly soundSources: { oscillator: OscillatorNode; gainNode: GainNode }[];
 
-      // the range of pitches that this pop generator will produce, in Hz
+  // next sound source to use to play a sound
+  private nextSoundSourceIndex: number;
+
+  constructor( providedOptions: PitchedPopGeneratorOptions ) {
+
+    const options = optionize<PitchedPopGeneratorOptions, SelfOptions, SoundGeneratorOptions>( {
       pitchRange: new Range( 220, 660 ),
-
-      // the number of pop generators to create and pool, use more if generating lots of pops close together, less if not
       numPopGenerators: DEFAULT_NUM_POP_GENERATORS
-    }, options );
+    }, providedOptions );
 
     super( options );
 
-    // @private {Range} - range of pitches to be produced
     this.pitchRange = options.pitchRange;
 
-    // {DynamicsCompressorNode} - a dynamics compressor node used to limit max output amplitude, otherwise distortion
-    // tends to occur when lots of pops are played at once
+    // A dynamics compressor node used to limit max output amplitude, otherwise distortion tends to occur when lots of
+    // pops are played at once.
     const dynamicsCompressorNode = this.audioContext.createDynamicsCompressor();
 
-    // the following values were empirically determined throgh informed experimentation
+    // The following parameter values for the dynamics compressor were empirically determined through informed
+    // experimentation.
     const now = this.audioContext.currentTime;
     dynamicsCompressorNode.threshold.setValueAtTime( -3, now );
     dynamicsCompressorNode.knee.setValueAtTime( 0, now ); // hard knee
@@ -79,17 +88,15 @@ class PitchedPopGenerator extends SoundGenerator {
       } );
     } );
 
-    // @private
     this.nextSoundSourceIndex = 0;
   }
 
   /**
-   * play the pop sound
-   * {number} relativePitch - a value from 0 to 1 indicating the frequency to play within the pitch range
-   * {number} [duration] - the duration of the sound, in seconds
-   * @public
+   * Play the pop sound.
+   * relativePitch - a value from 0 to 1 indicating the proportionate frequency to play within the pitch range
+   [duration] - the duration of the pop sound to be played, in seconds
    */
-  playPop( relativePitch, duration = DEFAULT_POP_DURATION ) {
+  public playPop( relativePitch: number, duration = DEFAULT_POP_DURATION ) {
 
     assert && assert( relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range' );
 
@@ -117,7 +124,6 @@ class PitchedPopGenerator extends SoundGenerator {
     soundSource.gainNode.gain.setTargetAtTime( 1, now, ENVELOPE_TIME_CONSTANT );
     soundSource.gainNode.gain.setTargetAtTime( 0, now + duration, ENVELOPE_TIME_CONSTANT );
   }
-
 }
 
 tambo.register( 'PitchedPopGenerator', PitchedPopGenerator );

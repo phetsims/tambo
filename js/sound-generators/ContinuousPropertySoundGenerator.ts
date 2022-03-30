@@ -21,14 +21,14 @@ import SoundClip from './SoundClip.js';
 class ContinuousPropertySoundGenerator extends SoundClip {
 
   /**
-   * @param {Property.<number>} property
-   * @param {Object} sound - returned by the import directive, should be optimized for good continuous looping, which
+   * @param property
+   * @param sound - returned by the import directive, should be optimized for good continuous looping, which
    * may require it to be a .wav file, since .mp3 files generally have a bit of silence at the beginning.
-   * @param {Range} range - the range of values that the provided property can take on
-   * @param {Object} [options]
+   * @param range - the range of values that the provided property can take on
+   * @param [options]
    * @constructor
    */
-  constructor( property, sound, range, options ) {
+  constructor( property, sound, range, options? ) {
     assert && assert( !options || !options.hasOwnProperty( 'loop' ), 'loop option should be supplied by' +
                                                                      ' ContinuousPropertySoundGenerator' );
 

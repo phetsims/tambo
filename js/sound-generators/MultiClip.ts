@@ -1,7 +1,5 @@
 // Copyright 2019-2021, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * MultiClip is a sound generator that plays one-shot sounds from a set of pre-recorded files that are provided upon
  * construction. This is often used as a base class for a sound generator when a finite set of sounds clips need to be
@@ -17,10 +15,16 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import merge from '../../../phet-core/js/merge.js';
 import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
 import tambo from '../tambo.js';
-import SoundGenerator from './SoundGenerator.js';
+import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
+import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
+import optionize from '../../../phet-core/js/optionize.js';
+
+type SelfOptions = {
+  initialPlaybackRate?: number;
+};
+export type MultiClipOptions = SelfOptions & SoundGeneratorOptions;
 
 // constants
 const STOP_DELAY_TIME = 0.1; // empirically determined to avoid clicks when stopping sounds
@@ -28,31 +32,42 @@ const MAX_PLAY_DEFER_TIME = 0.2; // seconds, max time to defer a play request wh
 
 class MultiClip extends SoundGenerator {
 
+  // buffer sources that are currently playing, used if they need to be stopped early
+  private readonly activeBufferSources: AudioBufferSourceNode[];
+
+  // map that associates values with audio buffers
+  private readonly valueToWrappedAudioBufferMap: Map<any, WrappedAudioBuffer>;
+
+  // a gain node that is used to prevent clicks when stopping the sounds
+  private readonly localGainNode: GainNode;
+
+  // playback rate used for all clips
+  private playbackRate: number;
+
+  // a listener for implementing deferred play requests, see usage for details
+  private audioContextStateChangeListener: null | ( ( state: string ) => void );
+
+  // time at which a deferred play request occurred, in milliseconds since epoch
+  private timeOfDeferredPlayRequest: number;
+
   /**
-   * @param {Map.<*,WrappedAudioBuffer>} valueToWrappedAudioBufferMap - a map of values to Web Audio AudioBuffer objects
-   * that is used to associate each item in a set of values with a sound. The object defines a method that can then be
-   * used to play the sound associated with the value.
-   * @param {Object} [options]
+   * @param valueToWrappedAudioBufferMap - a map of values to Web Audio AudioBuffer objects that is used to associate
+   * each item in a set of values with a sound. The object defines a method that can then be used to play the sound
+   * associated with the value.
+   * @param [providedOptions]
    */
-  constructor( valueToWrappedAudioBufferMap, options ) {
+  constructor( valueToWrappedAudioBufferMap: Map<any, WrappedAudioBuffer>, providedOptions: MultiClipOptions ) {
 
-    options = merge( {
-
-      // {boolean} - Playback rate for this clip, can be changed after construction via API.  This value is a
-      // multiplier, so 1 is the nominal playback rate, 0.5 is half speed (or an octave lower in musical terms) and a
-      // value of 2 is twice normal speed (or an octave higher in musical terms).
+    const options = optionize<MultiClipOptions, SelfOptions, MultiClipOptions>( {
       initialPlaybackRate: 1
-    }, options );
+    }, providedOptions );
 
     super( options );
 
-    // @private {AudioBufferSource[]} - buffer sources that are currently playing, used if they need to be stopped early
     this.activeBufferSources = [];
-
-    // @private {Map.<*,AudioBuffer>}
     this.valueToWrappedAudioBufferMap = valueToWrappedAudioBufferMap;
 
-    // @private {GainNode} - a gain node that is used to prevent clicks when stopping the sounds
+    // initialize the local gain node
     this.localGainNode = this.audioContext.createGain();
     this.localGainNode.connect( this.soundSourceDestination );
 
@@ -64,7 +79,7 @@ class MultiClip extends SoundGenerator {
     } );
 
     // @private
-    this.playbackRate = options.initialPlaybackRate;
+    this.playbackRate = ( options.initialPlaybackRate === undefined ) ? 1 : options.initialPlaybackRate;
 
     // @private {function|null} - a listener for implementing deferred play requests, see usage for details
     this.audioContextStateChangeListener = null;
@@ -75,11 +90,9 @@ class MultiClip extends SoundGenerator {
 
   /**
    * play the sound associated with the provided value
-   * @param {*} value
-   * @param {number} delay
    * @public
    */
-  playAssociatedSound( value, delay = 0 ) {
+  public playAssociatedSound( value: any, delay = 0 ) {
 
     // get the audio buffer for this value
     const wrappedAudioBuffer = this.valueToWrappedAudioBufferMap.get( value );
@@ -90,7 +103,7 @@ class MultiClip extends SoundGenerator {
     if ( this.audioContext.state === 'running' ) {
 
       // play the sound (if enabled and fully decoded)
-      if ( this.fullyEnabled && wrappedAudioBuffer.audioBufferProperty.value ) {
+      if ( this.fullyEnabled && wrappedAudioBuffer!.audioBufferProperty.value ) {
 
         const now = this.audioContext.currentTime;
 
@@ -100,7 +113,7 @@ class MultiClip extends SoundGenerator {
 
         // create an audio buffer source node and connect it to the previously data in the audio buffer
         const bufferSource = this.audioContext.createBufferSource();
-        bufferSource.buffer = wrappedAudioBuffer.audioBufferProperty.value;
+        bufferSource.buffer = wrappedAudioBuffer!.audioBufferProperty.value;
         bufferSource.playbackRate.setValueAtTime( this.playbackRate, this.audioContext.currentTime );
 
         // connect this source node to the output
@@ -143,7 +156,11 @@ class MultiClip extends SoundGenerator {
           // Play the sound, but delayed a little bit so that the gain nodes can be fully turned up in time.
           this.playAssociatedSound( value, 0.1 );
         }
-        audioContextStateChangeMonitor.removeStateChangeListener( this.audioContext, this.audioContextStateChangeListener );
+        audioContextStateChangeMonitor.removeStateChangeListener(
+          this.audioContext,
+          // @ts-ignore
+          this.audioContextStateChangeListener
+        );
         this.audioContextStateChangeListener = null;
       };
       audioContextStateChangeMonitor.addStateChangeListener(
@@ -156,18 +173,16 @@ class MultiClip extends SoundGenerator {
   /**
    * Change the speed that the sound playback occurs. Note, this does not affect playing sounds, but will only affect
    * subsequent plays of sounds.
-   * @param {number} playbackRate - desired playback speed, 1 = normal speed
-   * @public
+   * @param playbackRate - desired playback speed, 1 = normal speed
    */
-  setPlaybackRate( playbackRate ) {
+  public setPlaybackRate( playbackRate: number ) {
     this.playbackRate = playbackRate;
   }
 
   /**
-   * stop playing any sounds that are currently in progress
-   * @public
+   * Stop playing any sounds that are currently in progress.
    */
-  stopAll() {
+  public stopAll() {
 
     // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
     // down the gain, effectively doing a fade out, before stopping playback.

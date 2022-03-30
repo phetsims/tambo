@@ -1,7 +1,5 @@
 // Copyright 2018-2021, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * white noise generator with optional low- and high-pass filters
  *
@@ -9,11 +7,36 @@
  */
 
 import dotRandom from '../../../dot/js/dotRandom.js';
-import merge from '../../../phet-core/js/merge.js';
+import optionize from '../../../phet-core/js/optionize.js';
 import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
 import soundConstants from '../soundConstants.js';
 import tambo from '../tambo.js';
-import SoundGenerator from './SoundGenerator.js';
+import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
+
+type SelfOptions = {
+  noiseType?: 'pink' | 'white' | 'brown';
+
+  // low pass value in Hz, null (or any falsey value including zero) means no low pass filter is added
+  lowPassCutoffFrequency?: number | null;
+
+  // high pass value in Hz, null (or any falsey value including zero) means no high pass filter is added
+  highPassCutoffFrequency?: number | null;
+
+  // center frequency for band pass filter value in Hz, null (or any falsey value including zero) means no band pass
+  // filter is added
+  centerFrequency?: number | null;
+
+  // Q factor, aka quality factor, for bandpass filter if present, see Web Audio BiquadFilterNode for more information
+  qFactor?: number;
+
+  // parameters that control the behavior of the low frequency oscillator (LFO), which does amplitude modulation on
+  // the noise
+  lfoInitiallyEnabled?: boolean;
+  lfoInitialFrequency?: number; // in Hz
+  lfoInitialDepth?: number; // valid values are from 0 to 1
+  lfoType?: OscillatorType;
+};
+export type NoiseGeneratorOptions = SelfOptions & SoundGeneratorOptions;
 
 // constants
 const NOISE_BUFFER_SECONDS = 2;
@@ -22,13 +45,39 @@ const LFO_DEPTH_CHANGE_TIME_CONSTANT = 0.05;
 
 class NoiseGenerator extends SoundGenerator {
 
-  /**
-   * @param {Object} [options]
-   */
-  constructor( options ) {
+  // filter that is potentially used on the noise signal
+  private readonly bandPassFilter: BiquadFilterNode | null;
 
-    // set up options using default values, see base class for additional options
-    options = merge( {
+  // buffer that holds the noise samples
+  private readonly noiseBuffer: AudioBuffer;
+
+  // the source node from which the noise is played, set when play is called
+  private noiseSource: AudioBufferSourceNode | null;
+
+  // the low frequency oscillator that can be used to do amplitude modulation on the noise signal
+  private readonly lfo: OscillatorNode;
+
+  // gain node that is used to implement amplitude modulation
+  private readonly lfoAttenuatorGainNode: GainNode;
+
+  // gain node that controls the amount of low-frequency amplitude modulation
+  private readonly lfoControlledGainNode: GainNode;
+
+  // point where the noise source connects
+  private readonly noiseSourceConnectionPoint: AudioNode;
+
+  // flag that indicates whether the noise is playing
+  private isPlaying: boolean;
+
+  // time at which a play request occurred that couldn't be performed and was subsequently deferred
+  private timeOfDeferredStartRequest: number;
+
+  // function that handles changes to the audio context
+  private readonly audioContextStateChangeListener: ( state: string ) => void;
+
+  constructor( providedOptions: NoiseGeneratorOptions ) {
+
+    const options = optionize<NoiseGeneratorOptions, SelfOptions, SoundGeneratorOptions>( {
       noiseType: 'pink', // valid values are 'white', 'pink', and 'brown'
 
       // {number} - low pass value in Hz, null (or any falsey value including zero) means no low pass filter is added
@@ -51,8 +100,7 @@ class NoiseGenerator extends SoundGenerator {
       lfoInitialFrequency: 2, // Hz
       lfoInitialDepth: 1, // valid values are from 0 to 1
       lfoType: 'sine' // oscillator type, possible values are the same as a Web Audio OscillatorNode
-
-    }, options );
+    }, providedOptions );
 
     assert && assert(
       [ 'white', 'pink', 'brown' ].indexOf( options.noiseType ) !== -1,
@@ -90,6 +138,9 @@ class NoiseGenerator extends SoundGenerator {
       this.bandPassFilter.type = 'bandpass';
       this.bandPassFilter.frequency.setValueAtTime( options.centerFrequency, now );
       this.bandPassFilter.Q.setValueAtTime( options.qFactor, now );
+    }
+    else {
+      this.bandPassFilter = null;
     }
 
     // define the noise data
@@ -138,10 +189,10 @@ class NoiseGenerator extends SoundGenerator {
       throw new Error( `unexpected value for noiseType: ${options.noiseType}` );
     }
 
-    // @private {AudioBufferSourceNode|null} - the source node from which the noise is played, set when play is called
+    // the source node from which the noise is played, set when play is called
     this.noiseSource = null;
 
-    // @private {OscillatorNode} - a low frequency oscillator (LFO) for amplitude modulation
+    // set up the low frequency oscillator (LFO) for amplitude modulation
     this.lfo = this.audioContext.createOscillator();
     this.lfo.type = options.lfoType;
 
@@ -183,10 +234,7 @@ class NoiseGenerator extends SoundGenerator {
       nextOutputToConnect = this.bandPassFilter;
     }
 
-    // @private {AudioParam} - point where the noise source connects
     this.noiseSourceConnectionPoint = nextOutputToConnect;
-
-    // @public (read-only) {boolean}
     this.isPlaying = false;
 
     // @private {number} - time at which a deferred play request occurred.
@@ -209,15 +257,13 @@ class NoiseGenerator extends SoundGenerator {
   }
 
   /**
-   * start the noise source
-   * @param {number} [delay] - optional delay for when to start the noise source, in seconds
-   * @public
+   * Start the noise source.
+   * @param [delay] - optional delay for when to start the noise source, in seconds
    */
-  start( delay ) {
+  public start( delay = 0 ) {
 
     if ( this.audioContext.state === 'running' ) {
 
-      delay = ( delay === undefined ) ? 0 : delay;
       const now = this.audioContext.currentTime;
 
       // only do something if not already playing, otherwise ignore this request
@@ -247,13 +293,10 @@ class NoiseGenerator extends SoundGenerator {
   }
 
   /**
-   * stop the noise source
+   * Stop the noise source.
    * @param {number} [time] - optional audio context time at which this should be stopped
-   * @public
    */
-  stop( time ) {
-
-    time = time === undefined ? this.audioContext.currentTime : time;
+  public stop( time = 0 ) {
 
     // only stop if playing, otherwise ignore
     if ( this.isPlaying && this.noiseSource ) {
@@ -264,27 +307,24 @@ class NoiseGenerator extends SoundGenerator {
   }
 
   /**
-   * set the frequency of the low frequency amplitude modulator (LFO)
-   * @public
+   * Set the frequency of the low frequency amplitude modulator (LFO).
    */
-  setLfoFrequency( frequency ) {
+  public setLfoFrequency( frequency: number ) {
     this.lfo.frequency.setTargetAtTime( frequency, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT );
   }
 
   /**
-   * @param {number} depth - depth value from 0 (no modulation) to 1 (max modulcaiton)
-   * @public
+   * Set the depth of the LFO modulator.
+   * @param {number} depth - depth value from 0 (no modulation) to 1 (max modulation)
    */
-  setLfoDepth( depth ) {
+  public setLfoDepth( depth: number ) {
     this.lfoAttenuatorGainNode.gain.setTargetAtTime( depth / 2, this.audioContext.currentTime, LFO_DEPTH_CHANGE_TIME_CONSTANT );
   }
 
   /**
-   * turn the low frequency amplitude modulation on/off
-   * @param {boolean} enabled
-   * @public
+   * Turn the low frequency amplitude modulation on/off.
    */
-  setLfoEnabled( enabled ) {
+  public setLfoEnabled( enabled: boolean ) {
     if ( enabled ) {
       this.lfoAttenuatorGainNode.gain.setTargetAtTime( 0.5, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT );
       this.lfoAttenuatorGainNode.connect( this.lfoControlledGainNode.gain );
@@ -297,15 +337,13 @@ class NoiseGenerator extends SoundGenerator {
 
   /**
    * set the Q value for the band pass filter, assumes that noise generator was created with this filter enabled
-   * @param frequency
-   * @param timeConstant
-   * @public
    */
-  setBandpassFilterCenterFrequency( frequency, timeConstant ) {
+  public setBandpassFilterCenterFrequency( frequency: number, timeConstant: number ) {
     timeConstant = timeConstant || PARAMETER_CHANGE_TIME_CONSTANT;
-    this.bandPassFilter.frequency.setTargetAtTime( frequency, this.audioContext.currentTime, timeConstant );
+    if ( this.bandPassFilter !== null ) {
+      this.bandPassFilter.frequency.setTargetAtTime( frequency, this.audioContext.currentTime, timeConstant );
+    }
   }
-
 }
 
 tambo.register( 'NoiseGenerator', NoiseGenerator );

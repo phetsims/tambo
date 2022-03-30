@@ -45,7 +45,6 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
       const continuousPropertySoundGenerator = new ContinuousPropertySoundGenerator(
         numberProperty,
         sound,
-        // @ts-ignore
         range
       );
       soundManager.addSoundGenerator( continuousPropertySoundGenerator );
