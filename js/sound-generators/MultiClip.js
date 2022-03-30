@@ -1,5 +1,7 @@
 // Copyright 2019-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * MultiClip is a sound generator that plays one-shot sounds from a set of pre-recorded files that are provided upon
  * construction. This is often used as a base class for a sound generator when a finite set of sounds clips need to be

@@ -1,5 +1,7 @@
 // Copyright 2020-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * Given a sound, make a chord based on it, and provided playback rates that correspond to notes.
  *

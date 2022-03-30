@@ -1,5 +1,7 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * sound generator that produces a popping sound with controllable pitch
  *

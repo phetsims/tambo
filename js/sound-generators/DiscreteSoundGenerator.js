@@ -1,5 +1,7 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * DiscreteSoundGenerator produces sounds based on the value of a number property.  It monitors the property value and
  * maps it to one of a finite number of bins, and produces a discrete sound when the bin to which the value is mapped

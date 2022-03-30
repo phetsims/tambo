@@ -1,5 +1,7 @@
 // Copyright 2020-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * A sound generator that is composed of multiple SoundClips that are all started and stopped at the same time.
  * Basically, this is a container to create and control multiple SoundClip instances as one.

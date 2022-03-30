@@ -1,5 +1,7 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * OscillatorSoundGenerator is a Web Audio oscillator node wrapped in a sound generator so that it can be easily be used
  * in PhET sims.

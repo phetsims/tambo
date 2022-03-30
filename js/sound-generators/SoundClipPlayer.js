@@ -1,5 +1,7 @@
 // Copyright 2019-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * SoundClipPlayer is a limited and automatically registered sound clip.  It is intended to be used for sounds that
  * can be shared in multiple places within a simulation so that separate instances of sound clips don't need to be

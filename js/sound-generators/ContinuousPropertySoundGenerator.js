@@ -1,5 +1,7 @@
 // Copyright 2019-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * ContinuousPropertySoundGenerator is a sound generator that alters the playback rate of a sound clip based on the
  * value of a continuous numerical Property.  It is specifically designed to work with sound clips and does not support
