@@ -30,13 +30,13 @@ export type MultiClipOptions = SelfOptions & SoundGeneratorOptions;
 const STOP_DELAY_TIME = 0.1; // empirically determined to avoid clicks when stopping sounds
 const MAX_PLAY_DEFER_TIME = 0.2; // seconds, max time to defer a play request while waiting for audio context state change
 
-class MultiClip extends SoundGenerator {
+class MultiClip<T> extends SoundGenerator {
 
   // buffer sources that are currently playing, used if they need to be stopped early
   private readonly activeBufferSources: AudioBufferSourceNode[];
 
   // map that associates values with audio buffers
-  private readonly valueToWrappedAudioBufferMap: Map<any, WrappedAudioBuffer>;
+  private readonly valueToWrappedAudioBufferMap: Map<T, WrappedAudioBuffer>;
 
   // a gain node that is used to prevent clicks when stopping the sounds
   private readonly localGainNode: GainNode;
@@ -56,7 +56,7 @@ class MultiClip extends SoundGenerator {
    * associated with the value.
    * @param [providedOptions]
    */
-  constructor( valueToWrappedAudioBufferMap: Map<any, WrappedAudioBuffer>, providedOptions: MultiClipOptions ) {
+  constructor( valueToWrappedAudioBufferMap: Map<T, WrappedAudioBuffer>, providedOptions: MultiClipOptions ) {
 
     const options = optionize<MultiClipOptions, SelfOptions, MultiClipOptions>( {
       initialPlaybackRate: 1
@@ -92,7 +92,7 @@ class MultiClip extends SoundGenerator {
    * play the sound associated with the provided value
    * @public
    */
-  public playAssociatedSound( value: any, delay = 0 ) {
+  public playAssociatedSound( value: T, delay = 0 ) {
 
     // get the audio buffer for this value
     const wrappedAudioBuffer = this.valueToWrappedAudioBufferMap.get( value );

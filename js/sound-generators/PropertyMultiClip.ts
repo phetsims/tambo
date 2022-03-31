@@ -21,7 +21,7 @@ type SelfOptions = {
 
 export type PropertyMultiClipOptions = SelfOptions & MultiClipOptions;
 
-class PropertyMultiClip extends MultiClip {
+class PropertyMultiClip<T> extends MultiClip<T> {
 
   private readonly disposePropertyMultiClip: () => void;
 
@@ -31,7 +31,7 @@ class PropertyMultiClip extends MultiClip {
    *                          between values and sounds.
    * @param [providedOptions]
    */
-  constructor( property: Property<any>, valueToSoundMap: Map<any, WrappedAudioBuffer>, providedOptions: PropertyMultiClipOptions ) {
+  constructor( property: Property<T>, valueToSoundMap: Map<T, WrappedAudioBuffer>, providedOptions: PropertyMultiClipOptions ) {
 
     const options = optionize<PropertyMultiClipOptions, SelfOptions, MultiClipOptions>( {
       linkLazily: true
@@ -39,7 +39,7 @@ class PropertyMultiClip extends MultiClip {
 
     super( valueToSoundMap, options );
 
-    const playSoundForValue = ( value: any ) => { this.playAssociatedSound( value ); };
+    const playSoundForValue = ( value: T ) => { this.playAssociatedSound( value ); };
 
     if ( options.linkLazily ) {
       property.lazyLink( playSoundForValue );
