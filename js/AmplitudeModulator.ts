@@ -1,7 +1,5 @@
 // Copyright 2020-2021, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * AmplitudeModulator instances can be used to create low-frequency amplitude oscillation effects on a loop, oscillator,
  * or other steady sound source.  It is not a sound generator itself, and is instead intended to be used as a component
@@ -11,11 +9,26 @@
  */
 
 import NumberProperty from '../../axon/js/NumberProperty.js';
-import StringProperty from '../../axon/js/StringProperty.js';
-import merge from '../../phet-core/js/merge.js';
-import EnabledComponent from '../../axon/js/EnabledComponent.js';
+import EnabledComponent, { EnabledComponentOptions } from '../../axon/js/EnabledComponent.js';
 import phetAudioContext from './phetAudioContext.js';
 import tambo from './tambo.js';
+import optionize from '../../phet-core/js/optionize.js';
+import Property from '../../axon/js/Property.js';
+
+type SelfOptions = {
+
+  // controls the frequency of modulation, created if not supplied
+  frequencyProperty?: NumberProperty | null;
+
+  // controls the depth of modulation, 0 means no modulation, 1 is the max, created if not supplied
+  depthProperty?: NumberProperty | null;
+
+  // Controls the type of waveform being used for the modulation, see the documentation for Web Audio OscillatorNode for
+  // the available types.  Created if not supplied.
+  waveformProperty?: Property<OscillatorType> | null;
+};
+
+export type AmplitudeModulatorOptions = SelfOptions & EnabledComponentOptions;
 
 // constants
 const DEFAULT_FREQUENCY = 5; // Hz
@@ -24,25 +37,28 @@ const DEFAULT_WAVEFORM = 'sine'; // proportion
 
 class AmplitudeModulator extends EnabledComponent {
 
-  /**
-   * @param {Object} [options]
-   */
-  constructor( options ) {
+  // frequency of the oscillation, generally pretty low, like 1 to 20 or so
+  public readonly frequencyProperty: NumberProperty;
 
-    options = merge( {
+  // depth of modulation, 0 for none, 1 for full modulation
+  public readonly depthProperty: NumberProperty;
 
-      // {NumberProperty} - Controls the frequency of modulation, created if not supplied.
+  // Web Audio oscillator type
+  public readonly waveformProperty: Property<OscillatorType>;
+
+  // the main gain node that is modulated in order to produce the amplitude modulation effect
+  private readonly modulatedGainNode: GainNode;
+
+  // dispose function
+  private readonly disposeAmplitudeModulator: () => void;
+
+  constructor( providedOptions: AmplitudeModulatorOptions ) {
+
+    const options = optionize<AmplitudeModulatorOptions, SelfOptions, EnabledComponentOptions>( {
       frequencyProperty: null,
-
-      // (NumberProperty} - Controls the depth of modulation, 0 means no modulation, 1 is the max, created if not
-      // supplied.
       depthProperty: null,
-
-      // {StringProperty} - Controls the type of waveform being used for the modulation, see the documentation for Web
-      // Audio OscillatorNode for the available types.  Created if not supplied.
       waveformProperty: null
-
-    }, options );
+    }, providedOptions );
 
     super( options );
 
@@ -53,10 +69,10 @@ class AmplitudeModulator extends EnabledComponent {
     this.depthProperty = options.depthProperty || new NumberProperty( DEFAULT_DEPTH );
 
     // @public {StringProperty} - Web Audio oscillator type
-    this.waveformProperty = options.waveformProperty || new StringProperty( DEFAULT_WAVEFORM );
+    this.waveformProperty = options.waveformProperty || new Property<OscillatorType>( DEFAULT_WAVEFORM );
 
-    // @private - the low frequency oscillator (LFO) that will control the modulation, created in the handler below
-    let lowFrequencyOscillator = null;
+    // the low frequency oscillator (LFO) that will control the modulation, created in the handler below
+    let lowFrequencyOscillator: OscillatorNode | null = null;
 
     // @private {GainNode} - the main gain node that is modulated in order to produce the amplitude modulation effect
     this.modulatedGainNode = phetAudioContext.createGain();
@@ -68,7 +84,7 @@ class AmplitudeModulator extends EnabledComponent {
     lfoAttenuator.connect( this.modulatedGainNode.gain );
 
     // hook up the LFO-control properties
-    const enabledListener = enabled => {
+    const enabledListener = ( enabled: boolean ) => {
       const now = phetAudioContext.currentTime;
       if ( enabled ) {
 
@@ -90,7 +106,7 @@ class AmplitudeModulator extends EnabledComponent {
       else {
 
         // Stop the oscillator.  According to the spec, there is no need to disconnect - it's automatic.
-        lowFrequencyOscillator.stop();
+        lowFrequencyOscillator!.stop();
         lowFrequencyOscillator = null;
 
         // Set the gain to 1 so that this will act as a pass-through with no effect on the signal.
@@ -99,7 +115,7 @@ class AmplitudeModulator extends EnabledComponent {
     };
     this.enabledProperty.link( enabledListener );
 
-    const depthListener = depth => {
+    const depthListener = ( depth: any ) => {
       if ( lowFrequencyOscillator ) {
         lfoAttenuator.gain.setValueAtTime( depth / 2, phetAudioContext.currentTime );
         this.modulatedGainNode.gain.setValueAtTime( 1 - depth / 2, phetAudioContext.currentTime );
@@ -107,14 +123,14 @@ class AmplitudeModulator extends EnabledComponent {
     };
     this.depthProperty.link( depthListener );
 
-    const waveformListener = waveform => {
+    const waveformListener = ( waveform: OscillatorType ) => {
       if ( lowFrequencyOscillator ) {
         lowFrequencyOscillator.type = waveform;
       }
     };
     this.waveformProperty.link( waveformListener );
 
-    const frequencyListener = frequency => {
+    const frequencyListener = ( frequency: number ) => {
       if ( lowFrequencyOscillator ) {
         lowFrequencyOscillator.frequency.setValueAtTime( frequency, phetAudioContext.currentTime );
       }
@@ -131,31 +147,28 @@ class AmplitudeModulator extends EnabledComponent {
   }
 
   /**
-   * @public
+   * Clean up memory references to avoid memory leaks.
    */
-  dispose() {
+  public dispose() {
     this.disposeAmplitudeModulator();
     super.dispose();
   }
 
   /**
-   * get the gain node to which connections should occur
-   * @returns {GainNode}
-   * @public
+   * Get the gain node to which connections should occur.
    */
-  getConnectionPoint() {
+  public getConnectionPoint(): GainNode {
     return this.modulatedGainNode;
   }
 
   /**
-   * connect the output of this modulator to a destination
-   * @param {AudioNode|AudioParam} destination
-   * @public
+   * Connect the output of this modulator to a destination.
    */
-  connect( destination ) {
-    this.modulatedGainNode.connect( destination );
+  public connect( destination: AudioNode | AudioParam ) {
+    this.modulatedGainNode.connect( destination as AudioNode );
   }
 }
 
 tambo.register( 'AmplitudeModulator', AmplitudeModulator );
+
 export default AmplitudeModulator;
