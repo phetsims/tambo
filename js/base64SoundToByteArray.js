@@ -1,5 +1,7 @@
 // Copyright 2020, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * @author John Blanco (PhET Interactive Simulations)
  */

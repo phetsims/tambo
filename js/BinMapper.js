@@ -1,5 +1,7 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * an object that maps a continuous value to one of a finite number of "bins"
  *

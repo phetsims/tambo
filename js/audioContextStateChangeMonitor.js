@@ -1,5 +1,7 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * A singleton instance that allows clients to register listeners that get fired on state changes for an audio context.
  * This exists because an audio context has a single "onstatechange" property, and we had the need to register multiple
