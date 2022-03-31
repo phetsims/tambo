@@ -1,5 +1,7 @@
 // Copyright 2020-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * AmplitudeModulator instances can be used to create low-frequency amplitude oscillation effects on a loop, oscillator,
  * or other steady sound source.  It is not a sound generator itself, and is instead intended to be used as a component
