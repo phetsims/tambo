@@ -52,7 +52,7 @@ class AmplitudeModulator extends EnabledComponent {
   // dispose function
   private readonly disposeAmplitudeModulator: () => void;
 
-  constructor( providedOptions: AmplitudeModulatorOptions ) {
+  constructor( providedOptions?: AmplitudeModulatorOptions ) {
 
     const options = optionize<AmplitudeModulatorOptions, SelfOptions, EnabledComponentOptions>( {
       frequencyProperty: null,
