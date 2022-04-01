@@ -6,7 +6,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
 import optionize from '../../../../../phet-core/js/optionize.js';
@@ -65,7 +64,7 @@ class AmplitudeModulatorDemoNode extends VBox {
     // LFO enabled control
     const lfoEnabled = new Checkbox(
       new Text( 'LFO Enabled', { font: LABEL_FONT } ),
-      amplitudeModulatorDemo.amplitudeModulator.enabledProperty as BooleanProperty,
+      amplitudeModulatorDemo.amplitudeModulator.enabledProperty,
       { boxWidth: 16 }
     );
 
