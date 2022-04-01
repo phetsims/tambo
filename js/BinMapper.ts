@@ -1,36 +1,37 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
- * an object that maps a continuous value to one of a finite number of "bins"
+ * BinMapper is an object that maps a continuous value to one of a finite number of "bins".
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
 import merge from '../../phet-core/js/merge.js';
 import tambo from './tambo.js';
+import Range from '../../dot/js/Range.js';
+
+export type BinMapperOptions = {
+
+  // Allow values that are outside the specified range (if false, an assert occurs on out-of-range values).
+  tolerateOutOfRangeValues: boolean;
+};
 
 class BinMapper {
+  private readonly minValue : number;
+  private readonly maxValue : number;
+  private readonly span : number;
+  private readonly numBins : number;
+  private readonly options : BinMapperOptions;
 
-  /**
-   * {Range} valueRange - the range of values covered by this mapper
-   * {number} numBins - the number of bins to which the value will be mapped
-   * {Object} [options]
-   * @constructor
-   */
-  constructor( valueRange, numBins, options ) {
+  constructor( valueRange: Range, numBins: number, options?: BinMapperOptions ) {
 
     // parameter checking
     assert && assert( numBins > 0 );
 
     options = merge( {
-
-      // allow values that are outside the specified range (if false, an assert occurs on out-of-range values)
       tolerateOutOfRangeValues: false
     }, options );
 
-    // @private
     this.minValue = valueRange.min;
     this.maxValue = valueRange.max;
     this.span = valueRange.getLength();
@@ -39,12 +40,9 @@ class BinMapper {
   }
 
   /**
-   * map the provided value in a bin
-   * @param value
-   * @returns {number}
-   * @public
+   * Map the provided value to a bin.
    */
-  mapToBin( value ) {
+  public mapToBin( value: number ) {
     if ( !this.options.tolerateOutOfRangeValues ) {
       assert && assert( value <= this.maxValue );
       assert && assert( value >= this.minValue );
@@ -58,4 +56,5 @@ class BinMapper {
 }
 
 tambo.register( 'BinMapper', BinMapper );
+
 export default BinMapper;

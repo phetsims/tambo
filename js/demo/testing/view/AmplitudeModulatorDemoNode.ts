@@ -12,7 +12,7 @@ import Range from '../../../../../dot/js/Range.js';
 import optionize from '../../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
-import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
+import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
 import soundManager from '../../../soundManager.js';
@@ -92,7 +92,7 @@ class AmplitudeModulatorDemoNode extends VBox {
     } );
 
     // waveform type selector
-    const waveformRadioButtonItems = [
+    const waveformRadioButtonItems: AquaRadioButtonGroupItem<OscillatorType>[] = [
       {
         node: new Text( 'Sine', { font: LABEL_FONT } ),
         value: 'sine'
@@ -111,7 +111,7 @@ class AmplitudeModulatorDemoNode extends VBox {
       }
     ];
 
-    const waveformSelector = new AquaRadioButtonGroup(
+    const waveformSelector = new AquaRadioButtonGroup<OscillatorType>(
       amplitudeModulatorDemo.amplitudeModulator.waveformProperty,
       waveformRadioButtonItems
     );

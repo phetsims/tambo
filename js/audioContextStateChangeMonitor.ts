@@ -1,7 +1,5 @@
 // Copyright 2019-2020, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * A singleton instance that allows clients to register listeners that get fired on state changes for an audio context.
  * This exists because an audio context has a single "onstatechange" property, and we had the need to register multiple
@@ -10,30 +8,30 @@
 
 import tambo from './tambo.js';
 
+// type definition for audio context state change listeners
+type AudioContextStateChangeListener = ( ( state: string ) => void );
+
 // A list of the audio contexts being monitored. In the code below, contexts should only be added, never deleted, and
 // this array should never be reordered.
-const monitoredAudioContexts = [];
+const monitoredAudioContexts: AudioContext[] = [];
 
-// a two-dimensional list of listeners, indexed by the position of the correspond audio context in the array above
-const stateChangeListenerArrays = [];
+// a two-dimensional list of listeners, indexed by the position of the corresponding audio context in the array above
+const stateChangeListenerArrays: AudioContextStateChangeListener[][] = [];
 
 // the definition of the singleton instance
 const audioContextStateChangeMonitor = {
 
   /**
    * add a listener that will be fired on state changes for the provided audio context
-   * @param {AudioContext} audioContext
-   * @param {function} listener
-   * @public
    */
-  addStateChangeListener( audioContext, listener ) {
+  addStateChangeListener( audioContext: AudioContext, listener: AudioContextStateChangeListener ) {
 
     // parameter checking
     assert && assert( typeof listener === 'function' );
 
-    // find the audio context in the list of those being monitored, or add it if not found
+    // Find the audio context in the list of those being monitored, or add it if not found.
     let audioContextIndex = monitoredAudioContexts.indexOf( audioContext );
-    let listenerArray;
+    let listenerArray: AudioContextStateChangeListener[];
     if ( audioContextIndex === -1 ) {
       monitoredAudioContexts.push( audioContext );
       audioContextIndex = monitoredAudioContexts.length - 1;
@@ -59,10 +57,8 @@ const audioContextStateChangeMonitor = {
 
   /**
    * remove the state change listener for the specified audio context
-   * @param {AudioContext} audioContext
-   * @param {function} listener
    */
-  removeStateChangeListener( audioContext, listener ) {
+  removeStateChangeListener( audioContext: AudioContext, listener: AudioContextStateChangeListener ) {
 
     // parameter checking
     assert && assert( typeof listener === 'function' );
@@ -78,11 +74,8 @@ const audioContextStateChangeMonitor = {
 
   /**
    * test if the provided listener is present for the specified audio context
-   * @param {AudioContext} audioContext
-   * @param {function} listener
-   * @returns {boolean} - true is listener is found, false if not
    */
-  hasListener( audioContext, listener ) {
+  hasListener( audioContext: AudioContext, listener: AudioContextStateChangeListener ): boolean {
     let found = false;
     const audioContextIndex = monitoredAudioContexts.indexOf( audioContext );
     if ( audioContextIndex >= 0 ) {
@@ -95,7 +88,6 @@ const audioContextStateChangeMonitor = {
   }
 };
 
-// register for phet-io
 tambo.register( 'audioContextStateChangeMonitor', audioContextStateChangeMonitor );
 
 export default audioContextStateChangeMonitor;

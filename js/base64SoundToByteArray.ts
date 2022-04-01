@@ -1,7 +1,5 @@
 // Copyright 2020, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -9,11 +7,8 @@
 /**
  * Decode a base-64 encoded sound into a Uint8Array.  This does *not* do audio decompression, such as that needed for
  * interpreting MP3 files.
- * @param {AudioContext} audioContext
- * @param {string} base64Sound
- * @returns {Uint8Array}
  */
-const base64SoundToByteArray = ( audioContext, base64Sound ) => {
+const base64SoundToByteArray = ( audioContext: AudioContext, base64Sound: string ) => {
   const soundData = base64Sound.replace( new RegExp( '^.*,' ), '' ); // remove the mime header
   const byteChars = atob( soundData ); // eslint-disable-line no-undef
   const byteArray = new Uint8Array( byteChars.length );
