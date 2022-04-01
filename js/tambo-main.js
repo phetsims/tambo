@@ -1,5 +1,7 @@
 // Copyright 2018-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * main file for the tambo library demo and test harness
  */
