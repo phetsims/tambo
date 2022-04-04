@@ -109,7 +109,7 @@ class SoundClip extends SoundGenerator {
     this.soundEnd = null;
     if ( options.trimSilence ) {
 
-      // For sounds that are created statically during the module load phase this listener will interpret the audio
+      // For sounds that are created statically during the module load phase, this listener will interpret the audio
       // data once the load of that data has completed.  For all sounds constructed after the module load phase has
       // completed, this will process right away.
       // TODO: (for and from @jbphet) - Review the 'any' typespec below with a developer who understands this better, see https://github.com/phetsims/tambo/issues/160
