@@ -1,12 +1,16 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * a singleton object with functions for analyzing and manipulating sound data
  */
 
 import tambo from './tambo.js';
+
+// a type that contains information about where the audible sounds begin and end within an audio buffer
+type SoundBounds = {
+  soundStart: number;
+  soundEnd: number | null;
+}
 
 // This threshold is used for analyzing individual decoded sound samples in order to find where the actual sound
 // values start and end.  Its value was determined through experimentation on a single loop (charges-in-body) at a
@@ -15,23 +19,15 @@ import tambo from './tambo.js';
 const AUDIO_DATA_THRESHOLD = 0.05;
 
 /**
- * @typedef {Object} SoundBounds
- * @property {number} soundStart
- * @property {number|null} soundEnd
- */
-
-/**
  * sound utility object definition
  */
 const SoundUtils = {
 
   /**
-   * helper function that sets the start and end points for a decoded set of sound samples based on where the sound
-   * data first and last exceeds a certain threshold
-   * {AudioBuffer} audioBuffer
-   * @returns {SoundBounds} - an object with values for the time at which the sound starts and ends
+   * Detect the start and end points of a sound within and AudioBuffer based on the points where the samples exceed a
+   * predetermined threshold.
    */
-  detectSoundBounds: audioBuffer => {
+  detectSoundBounds: ( audioBuffer: AudioBuffer ): SoundBounds => {
 
     const soundDataLength = audioBuffer.length;
     const soundStartIndexes = [];
@@ -57,20 +53,20 @@ const SoundUtils = {
     // return an object with values for where the loop should start and end
     const sampleRate = audioBuffer.sampleRate;
     return {
-      soundStart: _.min( soundStartIndexes ) / sampleRate,
-      soundEnd: _.max( soundEndIndexes ) / sampleRate
+      soundStart: _.min( soundStartIndexes )! / sampleRate,
+      soundEnd: _.max( soundEndIndexes )! / sampleRate
     };
   }
 };
 
 /**
- * find the index in the provided buffer where the sound begins, i.e. the end of any leading silence
- * @param {Float32Array} soundData - sound data to be analyzed
- * @param {number} length - length of the sound data
- * @param {number} threshold - detection level for initial sound, should be between 0 and 1
- * @returns {number} - index where sound can be considered to start
+ * Find the index in the provided audio buffer where the sound begins, i.e. find the end of any leading silence.
+ * @param soundData - sound data to be analyzed
+ * @param length - length of the sound data
+ * @param threshold - detection level for initial sound, should be between 0 and 1
+ * @returns index where sound can be considered to start
  */
-function findSoundStartIndex( soundData, length, threshold ) {
+const findSoundStartIndex = ( soundData: Float32Array, length: number, threshold: number ): number => {
 
   // find the first occurrence of the threshold that is trending in the up direction
   let startThresholdIndex = 0;
@@ -103,17 +99,17 @@ function findSoundStartIndex( soundData, length, threshold ) {
   }
 
   return soundStartIndex;
-}
+};
 
 /**
- * Find the index in the provided sound data where the sound can be considered to end, i.e. only data below the
- * threshold afterwards.
- * @param {Float32Array} soundData
- * @param {number} length - length of the sound data
- * @param {number} threshold - detection level for the presence of sound, should be between 0 and 1
+ * Find the index in the provided sound data where the sound can be considered to end, meaning that there is only
+ * silence or very little sound energy thereafter.
+ * @param soundData - the sample values for the sound
+ * @param length - length of the sound data
+ * @param threshold - detection level for the presence of sound, should be between 0 and 1
  * @returns {number} - index where sound ends
  */
-function findSoundEndIndex( soundData, length, threshold ) {
+const findSoundEndIndex = ( soundData: Float32Array, length: number, threshold: number ): number => {
 
   // work backwards from the end of the data to find the first negative occurance of the threshold
   let endThresholdIndex = length - 1;
@@ -145,7 +141,7 @@ function findSoundEndIndex( soundData, length, threshold ) {
   }
 
   return soundEndIndex;
-}
+};
 
 tambo.register( 'SoundUtils', SoundUtils );
 
