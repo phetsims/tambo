@@ -1,7 +1,5 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * main file for the tambo library demo and test harness
  */
@@ -26,7 +24,6 @@ import tamboStrings from './tamboStrings.js';
 // constants
 const SOUND_OPTIONS_DIALOG_CONTENT = new SoundOptionsDialogContent();
 
-// set up the simulation options
 const simOptions = {
   credits: {
     leadDesign: 'John Blanco'
@@ -99,7 +96,7 @@ simLauncher.launch( () => {
       }
     ),
 
-    // screen with global controls for sonification
+    // screen to test and demonstrate more unusual and complex sound generators
     new Screen(
       ( () => {
         return {};
