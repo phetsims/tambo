@@ -1,5 +1,7 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * a singleton object with functions for analyzing and manipulating sound data
  */
