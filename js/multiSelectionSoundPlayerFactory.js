@@ -1,5 +1,7 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * The multiSelectionSoundPlayerFactory singleton is used to create sound players that are similar but slightly
  * different, and can be used to sonically indicate that a selection is being made from a group of available options.
