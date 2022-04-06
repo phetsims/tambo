@@ -1,12 +1,11 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
- * The multiSelectionSoundPlayerFactory singleton is used to create sound players that are similar but slightly
- * different, and can be used to sonically indicate that a selection is being made from a group of available options.
- * It was originally called radioButtonSoundPlayerFactory, but its usage was expanded to combo boxes, so the name was
- * generalized.  It may be appropriate to use in other contexts as well.
+ * The multiSelectionSoundPlayerFactory singleton is used to create a set of sound players that are similar to one
+ * another but slightly different, and can thus be used to sonically indicate that a selection is being made from a
+ * group of available options. It was originally developed to support radio buttons (and was called
+ * radioButtonSoundPlayerFactory), but its usage was expanded to combo boxes, so the name was generalized.  It may be
+ * appropriate to use in other contexts as well.
  *
  * By providing a factory for these sound players, we can avoid having to construct unique instances for each case where
  * a sound player is needed, thus conserving memory and minimizing load time.
@@ -18,16 +17,18 @@ import radioButtonV2_mp3 from '../sounds/radioButtonV2_mp3.js';
 import SoundClip from './sound-generators/SoundClip.js';
 import soundManager from './soundManager.js';
 import tambo from './tambo.js';
+import ISoundPlayer from './ISoundPlayer.js';
 
 class MultiSelectionSoundPlayerFactory {
 
+  // sound clip that will serve as the basis for all sound plays, will be constructed the first time it is requested
+  private _basisSoundClip: SoundClip | null;
+
+  // instances of sound players, indexed by position in the group, created as needed
+  private readonly soundPlayers: ISoundPlayer[];
+
   constructor() {
-
-    // @private {SoundClip|null} - sound clip that will serve as the basis for all sound plays, will be constructed the
-    // first time it is requested
     this._basisSoundClip = null;
-
-    // @private - instances of sound players, indexed by position in radio button group, created as needed
     this.soundPlayers = [];
   }
 
@@ -51,11 +52,10 @@ class MultiSelectionSoundPlayerFactory {
   /**
    * Get a sound player for the specified position that will produce a sound that varies from the primary sound based on
    * provided parameter.
-   * @param {number} positionIndex - the position within the radio button group, combo box, or whatever
-   * @returns {SoundPlayer}
+   * @param positionIndex - the position within the radio button group, combo box, or whatever
    * @public
    */
-  getSelectionSoundPlayer( positionIndex ) {
+  getSelectionSoundPlayer( positionIndex: number ) : ISoundPlayer {
 
     if ( !this.soundPlayers[ positionIndex ] ) {
 
@@ -82,24 +82,23 @@ class MultiSelectionSoundPlayerFactory {
  */
 class FixedSpeedSoundClipPlayer {
 
-  /**
-   * @param {SoundPlayer} soundPlayer
-   * @param {number} playbackRate
-   * @public
-   */
-  constructor( soundPlayer, playbackRate ) {
+  private readonly soundPlayer: SoundClip;
+  private readonly playbackRate: number;
+
+  constructor( soundPlayer: SoundClip, playbackRate: number ) {
 
     // @private
     this.soundPlayer = soundPlayer;
     this.playbackRate = playbackRate;
   }
 
-  /**
-   * @public
-   */
-  play() {
+  public play() {
     this.soundPlayer.setPlaybackRate( this.playbackRate );
     this.soundPlayer.play();
+  }
+
+  public stop() {
+    this.soundPlayer.stop();
   }
 }
 

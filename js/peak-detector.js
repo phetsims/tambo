@@ -4,6 +4,9 @@
  * This file defines an AudioWorklet processor for a peak detector.  This code is intended to run on the audio rendering
  * thread in the AudioWorkletGlobalScope.  It must be loaded using audioWorklet.addModule in the main JavaScript thread.
  *
+ * Since it is directly loaded onto a separate thread, this file should be in JavaScript and should not be converted to
+ * TypeScript.
+ *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
