@@ -1,7 +1,5 @@
 // Copyright 2021, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * PeakDetectorAudioNode is a Web Audio node that can be used to detect peak audio output values in an audio signal
  * chain.  The detected peak audio values are output to the console.  This file contains the portion that runs in the
@@ -28,20 +26,20 @@ import merge from '../../phet-core/js/merge.js';
 import phetAudioContext from './phetAudioContext.js';
 import tambo from './tambo.js';
 
+export type PeakDetectorAudioNodeOptions = {
+
+  // If true, zero values will be output, otherwise no output will occur if the peak value detected for a given time
+  // interval is zero.
+  logZeroValues?: boolean;
+};
+
 class PeakDetectorAudioNode extends AudioWorkletNode {
 
-  /**
-   * @param {Object} [options]
-   */
-  constructor( options ) {
+  constructor( providedOptions: PeakDetectorAudioNodeOptions ) {
 
-    options = merge( {
-
-      // {boolean} - If true, zero values will be output, otherwise no output will occur if the peak value detected
-      //             for a given time interval is zero.
+    const options = merge( {
       logZeroValues: false
-
-    }, options );
+    }, providedOptions );
 
     super( phetAudioContext, 'peak-detector' );
 
