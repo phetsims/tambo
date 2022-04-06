@@ -1,5 +1,7 @@
 // Copyright 2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * PeakDetectorAudioNode is a Web Audio node that can be used to detect peak audio output values in an audio signal
  * chain.  The detected peak audio values are output to the console.  This file contains the portion that runs in the
