@@ -95,7 +95,7 @@ class SoundClipChord extends SoundGenerator {
   /**
    * Release any memory references in order to avoid memory leaks.
    */
-  public dispose() {
+  public override dispose() {
     this.playbackSoundClips.forEach( soundClip => soundClip.dispose() );
     this.playbackSoundClips.length = 0;
     super.dispose();

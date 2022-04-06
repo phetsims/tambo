@@ -56,7 +56,7 @@ class PropertyMultiClip<T> extends MultiClip<T> {
    * dispose function
    * @public
    */
-  dispose() {
+  override dispose() {
     this.disposePropertyMultiClip();
   }
 }

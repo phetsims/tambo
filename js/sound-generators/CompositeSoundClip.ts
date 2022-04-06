@@ -46,11 +46,11 @@ class CompositeSoundClip extends SoundGenerator {
     this.soundClips.forEach( soundClip => soundClip.stop() );
   }
 
-  public connect( destination: AudioParam | AudioNode ) {
+  public override connect( destination: AudioParam | AudioNode ) {
     this.soundClips.forEach( soundClip => soundClip.connect( destination ) );
   }
 
-  public dispose() {
+  public override dispose() {
     this.soundClips.forEach( soundClip => soundClip.dispose() );
   }
 
@@ -58,7 +58,7 @@ class CompositeSoundClip extends SoundGenerator {
     return _.some( this.soundClips, soundClip => soundClip.isPlaying );
   }
 
-  public setOutputLevel( outputLevel: number, timeConstant: number ) {
+  public override setOutputLevel( outputLevel: number, timeConstant: number ) {
     this.soundClips.forEach( soundClip => soundClip.setOutputLevel( outputLevel, timeConstant ) );
   }
 }

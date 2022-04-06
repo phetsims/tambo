@@ -177,9 +177,8 @@ class BasicAndEnhancedSoundTestNode extends VBox {
 
   /**
    * @public
-   * @override
    */
-  dispose() {
+  override dispose() {
     this.disposeBasicAndEnhancedSoundTestNode();
     super.dispose();
   }
@@ -252,9 +251,8 @@ class AdditionalAudioNodesTestNode extends VBox {
 
   /**
    * @public
-   * @override
    */
-  dispose() {
+  override dispose() {
     this.disposeBasicAndEnhancedSoundTestNode();
     super.dispose();
   }
@@ -374,7 +372,7 @@ class LongSoundTestPanel extends Node {
    * release memory to avoid leaks
    * @public
    */
-  dispose() {
+  override dispose() {
     this.disposeLongSoundTestPanel();
     super.dispose();
   }

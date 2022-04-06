@@ -64,7 +64,7 @@ class SoundClipChordTestNode extends VBox {
   /**
    * @public
    */
-  dispose() {
+  override dispose() {
     this.disposeSoundClipChordTestNode();
     super.dispose();
   }
