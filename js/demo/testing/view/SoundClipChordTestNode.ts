@@ -32,7 +32,7 @@ class SoundClipChordTestNode extends VBox {
     soundManager.addSoundGenerator( arpeggioSoundClipChord );
 
     // add a button to play a basic-mode sound
-    const playBasicSoundButton = new TextPushButton( 'Play Chord', {
+    const playChordButton = new TextPushButton( 'Play Chord', {
       baseColor: '#aad6cc',
       font: new PhetFont( 16 ),
       soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
@@ -40,7 +40,7 @@ class SoundClipChordTestNode extends VBox {
     } );
 
     // add button to play enhanced-mode sound
-    const playEnhancedSoundButton = new TextPushButton( 'Play Arpeggiated Chord', {
+    const playArpeggioButton = new TextPushButton( 'Play Arpeggiated Chord', {
       baseColor: '#DBB1CD',
       font: new PhetFont( 16 ),
       soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
@@ -48,7 +48,7 @@ class SoundClipChordTestNode extends VBox {
     } );
 
     super( optionize<SoundClipChordTestNodeOptions, SelfOptions, VBoxOptions>( {
-      children: [ playBasicSoundButton, playEnhancedSoundButton ],
+      children: [ playChordButton, playArpeggioButton ],
       spacing: 20
     }, providedOptions ) );
 
