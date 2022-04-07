@@ -1,7 +1,5 @@
 // Copyright 2020-2021, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * WrappedAudioBuffer is an object that contains a Web Audio AudioBuffer and a TinyProperty that indicates whether the
  * audio buffer has been decoded.  This is *only* intended for usage during the loading process, not during run time,
@@ -15,15 +13,17 @@ import TinyProperty from '../../axon/js/TinyProperty.js';
 
 class WrappedAudioBuffer {
 
+  // This TinyProperty is set to null during construction.  Later, when audio data is loaded and decoded, the client
+  // should set this to the resultant AudioBuffer.  Once this is set to an AudioBuffer, it should not be set again.
+  public readonly audioBufferProperty: TinyProperty<AudioBuffer | null>;
+
   constructor() {
 
-    // @public {TinyProperty.<AudioBuffer|null>} - A TinyProperty that is initially set to null and is set to an audio
-    // buffer, which contains audio data, when the decoding of that data is complete.
-    this.audioBufferProperty = new TinyProperty( null );
+    this.audioBufferProperty = new TinyProperty<AudioBuffer | null>( null );
 
     // Make sure that the audio buffer is only ever set once.
     assert && this.audioBufferProperty.lazyLink( ( audioBuffer, previousAudioBuffer ) => {
-      assert( previousAudioBuffer === null && audioBuffer !== null, 'The audio buffer can only be set once' );
+      assert && assert( previousAudioBuffer === null && audioBuffer !== null, 'The audio buffer can only be set once' );
     } );
   }
 }
