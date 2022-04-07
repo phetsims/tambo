@@ -1,5 +1,7 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * A singleton object that registers sound generators, connects them to the audio output, and provides a number of
  * related services, such as:
