@@ -1,4 +1,4 @@
-// Copyright 2021, University of Colorado Boulder
+// Copyright 2021-2022, University of Colorado Boulder
 
 /**
  * This file defines an AudioWorklet processor for a peak detector.  This code is intended to run on the audio rendering
