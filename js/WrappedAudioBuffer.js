@@ -1,5 +1,7 @@
 // Copyright 2020-2021, University of Colorado Boulder
 
+// @ts-nocheck
+
 /**
  * WrappedAudioBuffer is an object that contains a Web Audio AudioBuffer and a TinyProperty that indicates whether the
  * audio buffer has been decoded.  This is *only* intended for usage during the loading process, not during run time,
