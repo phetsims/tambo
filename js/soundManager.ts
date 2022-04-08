@@ -305,7 +305,7 @@ class SoundManager extends PhetioObject {
    * @param {Object} [options]
    * @public
    */
-  addSoundGenerator( soundGenerator, options ) {
+  addSoundGenerator( soundGenerator, options? ) {
 
     // Check if initialization has been done and, if not, queue the sound generator and its options for addition
     // once initialization is complete.  Note that when sound is not supported, initialization will never occur.
