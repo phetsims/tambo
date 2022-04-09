@@ -1,7 +1,5 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * A singleton object that registers sound generators, connects them to the audio output, and provides a number of
  * related services, such as:
@@ -18,9 +16,7 @@
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
 import Property from '../../axon/js/Property.js';
 import Utils from '../../dot/js/Utils.js';
-import merge from '../../phet-core/js/merge.js';
-import { Display } from '../../scenery/js/imports.js';
-import { DisplayedProperty } from '../../scenery/js/imports.js';
+import { Display, DisplayedProperty, Node } from '../../scenery/js/imports.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import emptyApartmentBedroom06Resampled_mp3 from '../sounds/emptyApartmentBedroom06Resampled_mp3.js';
@@ -29,6 +25,45 @@ import phetAudioContext from './phetAudioContext.js';
 import soundConstants from './soundConstants.js';
 import SoundLevelEnum from './SoundLevelEnum.js';
 import tambo from './tambo.js';
+import SoundGenerator from './sound-generators/SoundGenerator.js';
+import optionize from '../../phet-core/js/optionize.js';
+import { PropertyLinkListener } from '../../axon/js/IReadOnlyProperty.js';
+
+// options that can be used when adding a sound generator that can control some aspects of its behavior
+type SoundGeneratorAddOptions = {
+
+  // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of the
+  // sonification level parameter for the sim.  Valid values are 'BASIC' or 'ENHANCED'.
+  sonificationLevel?: string;
+
+  // The associated view node is a Scenery node that, if provided, must be visible in the display for the sound
+  // generator to be enabled.  This is generally used only for sounds that can play for long durations, such as a
+  // looping sound clip, that should be stopped when the associated visual representation is hidden.
+  associatedViewNode?: Node | null;
+
+  // category name for this sound
+  categoryName?: string | null;
+};
+
+// sound generators that are queued up and waiting to be added when initialization is complete
+type SoundGeneratorAwaitingAdd = {
+  soundGenerator: SoundGenerator;
+  soundGeneratorAddOptions: SoundGeneratorAddOptions;
+}
+
+// sound generator with its sonification level
+type SoundGeneratorInfo = {
+  soundGenerator: SoundGenerator;
+  sonificationLevel: string;
+};
+
+type SoundGeneratorInitializationOptions = {
+
+  // This option can be used to define a set of categories that can be used to group sound generators together and
+  // then control their volume collectively.  The names should be unique.  See the default initialization values for an
+  // example list.
+  categories?: string[];
+};
 
 // constants
 const DEFAULT_REVERB_LEVEL = 0.02;
@@ -37,10 +72,38 @@ const GAIN_LOGGING_ENABLED = false;
 
 class SoundManager extends PhetioObject {
 
-  /**
-   * @param {Tandem} tandem
-   */
-  constructor( tandem ) {
+  // global enabled state for sound generation
+  public readonly enabledProperty: BooleanProperty;
+
+  // enabled state for enhanced sounds
+  public readonly enhancedSoundEnabledProperty: BooleanProperty;
+
+  // an array where the sound generators are stored along with information about how to manage them
+  private soundGeneratorInfoArray: SoundGeneratorInfo[];
+
+  // output level for the master gain node when sonification is enabled
+  private _masterOutputLevel: number;
+
+  // reverb level, needed because some browsers don't support reading of gain values, see methods for more info
+  private _reverbLevel: number;
+
+  // A map of category names to GainNode instances that control gains for that category name.  This filled in during
+  // initialization, see the usage of options.categories in the initialize function for more information.
+  private readonly gainNodesForCategories: Map<string, GainNode>;
+
+  // flag that tracks whether the sonification manager has been initialized
+  private initialized: boolean;
+
+  // sound generators that are queued up if attempts are made to add them before initialization has occurred
+  private readonly soundGeneratorsAwaitingAdd: SoundGeneratorAwaitingAdd[];
+
+  // audio nodes that are used in the signal chain between sound generators and the audio context destination
+  private masterGainNode: GainNode | null;
+  private convolver: ConvolverNode | null;
+  private reverbGainNode: GainNode | null;
+  private dryGainNode: GainNode | null;
+
+  constructor( tandem: Tandem ) {
 
     super( {
       tandem: tandem,
@@ -49,13 +112,11 @@ class SoundManager extends PhetioObject {
                            'its children can be ignored.'
     } );
 
-    // @public {BooleanProperty} - global enabled state for sound generation
     this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.supportsSound, {
       tandem: tandem.createTandem( 'enabledProperty' ),
       phetioDocumentation: 'Determines whether sound is enabled.'
     } );
 
-    // @public {BooleanProperty} - enabled state for enhanced sounds
     this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled, {
       tandem: tandem.createTandem( 'enhancedSoundEnabledProperty' ),
       phetioDocumentation: 'Determines whether enhanced sound is enabled. Enhanced sound is additional sounds that ' +
@@ -64,63 +125,38 @@ class SoundManager extends PhetioObject {
                            'that the value is irrelevant when enabledProperty is false.'
     } );
 
-    // @private {Array.<{ soundGenerator:SoundGenerator, sonificationLevel:string }>} - array where the sound
-    // generators are stored along with information about how to manage them
     this.soundGeneratorInfoArray = [];
-
-    // @private {number} - output level for the master gain node when sonification is enabled, valid range is 0 to 1
     this._masterOutputLevel = 1;
-
-    // @private {number} - reverb level, needed because some browsers don't support reading of gain values, see
-    // methods for more info
     this._reverbLevel = DEFAULT_REVERB_LEVEL;
-
-    // @private {Object} - a map of category name to GainNode instances that control gains for that category name,
-    // will be filled in during init, see the usage of options.categories in the initialize function for more
-    // information.
-    this.gainNodesForCategories = {};
-
-    // @private {boolean} - flag that tracks whether the sonification manager has been initialized
+    this.gainNodesForCategories = new Map<string, GainNode>();
     this.initialized = false;
-
-    // @private {Object[]} - sound generators and options that were added before initialization and will be added once
-    // initialization is complete
     this.soundGeneratorsAwaitingAdd = [];
+    this.masterGainNode = null;
+    this.convolver = null;
+    this.reverbGainNode = null;
+    this.dryGainNode = null;
   }
 
   /**
    * Initialize the sonification manager. This function must be invoked before any sound generators can be added.
-   * @param {Property.<boolean>} simConstructionCompleteProperty
-   * @param {Property.<boolean>} audioEnabledProperty
-   * @param {Property.<boolean>} simVisibleProperty
-   * @param {Property.<boolean>} simActiveProperty
-   * @param {Property.<boolean>} simSettingPhetioStateProperty
-   * @param {Object} [options]
-   * @public
    */
-  initialize( simConstructionCompleteProperty,
-              audioEnabledProperty,
-              simVisibleProperty,
-              simActiveProperty,
-              simSettingPhetioStateProperty,
-              options ) {
+  public initialize( simConstructionCompleteProperty: BooleanProperty,
+                     audioEnabledProperty: BooleanProperty,
+                     simVisibleProperty: BooleanProperty,
+                     simActiveProperty: BooleanProperty,
+                     simSettingPhetioStateProperty: BooleanProperty,
+                     providedOptions: SoundGeneratorInitializationOptions ) {
 
     assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
 
-    options = merge( {
-
-      // Categories that can be used to group sound generators together and control their volume as a group - the
-      // names can be anything that will work as a key for a JavaScript object, but initially we've chosen to use
-      // names with conventions similar to what is commonly seen for CSS classes.
+    const options = optionize<SoundGeneratorInitializationOptions, SoundGeneratorInitializationOptions>( {
       categories: [ 'sim-specific', 'user-interface' ]
-
-    }, options );
+    }, providedOptions );
 
     // options validation
-    assert && assert( typeof Array.isArray( options.categories ), 'unexpected type for options.categories' );
     assert && assert(
-      _.every( options.categories, categoryName => typeof categoryName === 'string' ),
-      'unexpected type of element in options.categories'
+      options.categories.length === _.uniq( options.categories ).length,
+      'categories must be unique'
     );
 
     const now = phetAudioContext.currentTime;
@@ -138,11 +174,11 @@ class SoundManager extends PhetioObject {
     this.masterGainNode = phetAudioContext.createGain();
     this.masterGainNode.connect( dynamicsCompressor );
 
-    // convolver node, which will be used to create the reverb effect
+    // Set up a convolver node, which will be used to create the reverb effect.
     this.convolver = phetAudioContext.createConvolver();
-    const setConvolverBuffer = audioBuffer => {
+    const setConvolverBuffer: PropertyLinkListener<AudioBuffer | null> = audioBuffer => {
       if ( audioBuffer ) {
-        this.convolver.buffer = audioBuffer;
+        this.convolver!.buffer = audioBuffer;
         emptyApartmentBedroom06Resampled_mp3.audioBufferProperty.unlink( setConvolverBuffer );
       }
     };
@@ -166,9 +202,10 @@ class SoundManager extends PhetioObject {
     // Create and hook up gain nodes for each of the defined categories.
     options.categories.forEach( categoryName => {
       const gainNode = phetAudioContext.createGain();
-      gainNode.connect( this.convolver );
-      gainNode.connect( this.dryGainNode );
-      this.gainNodesForCategories[ categoryName ] = gainNode;
+      // TODO: Why are the following casts necessary?  See https://github.com/phetsims/tambo/issues/160.
+      gainNode.connect( this.convolver as AudioNode );
+      gainNode.connect( this.dryGainNode as AudioNode );
+      this.gainNodesForCategories.set( categoryName, gainNode );
     } );
 
     // Hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
@@ -188,110 +225,110 @@ class SoundManager extends PhetioObject {
         const gain = fullyEnabled ? this._masterOutputLevel : 0;
 
         // Set the gain, but somewhat gradually in order to avoid rapid transients, which can sound like clicks.
-        this.masterGainNode.gain.linearRampToValueAtTime(
+        this.masterGainNode!.gain.linearRampToValueAtTime(
           gain,
           phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
         );
       }
     );
 
-    // Handle the audio context state, both when changes occur and when it is initially muted.  As of this writing
-    // (Feb 2019), there are some differences in how the audio context state behaves on different platforms, so the
-    // code monitors different events and states to keep the audio context running.  As the behavior of the audio
-    // context becomes more consistent across browsers, it may be possible to simplify this.
-    if ( !phetAudioContext.isStubbed ) {
+    //------------------------------------------------------------------------------------------------------------------
+    // Handle the audio context state, both when changes occur and when it is initially muted due to the autoplay
+    // policy.  As of this writing (Feb 2019), there are some differences in how the audio context state behaves on
+    // different platforms, so the code monitors different events and states to keep the audio context running.  As the
+    // behavior of the audio context becomes more consistent across browsers, it may be possible to simplify this.
+    //------------------------------------------------------------------------------------------------------------------
 
-      // function to remove the listeners, used to avoid code duplication
-      const removeUserInteractionListeners = () => {
-        window.removeEventListener( 'touchstart', resumeAudioContext, false );
-        if ( Display.userGestureEmitter.hasListener( resumeAudioContext ) ) {
-          Display.userGestureEmitter.removeListener( resumeAudioContext );
-        }
-      };
+    // function to remove the user interaction listeners, used to avoid code duplication
+    const removeUserInteractionListeners = () => {
+      window.removeEventListener( 'touchstart', resumeAudioContext, false );
+      if ( Display.userGestureEmitter.hasListener( resumeAudioContext ) ) {
+        Display.userGestureEmitter.removeListener( resumeAudioContext );
+      }
+    };
 
-      // listener that resumes the audio context
-      const resumeAudioContext = () => {
+    // listener that resumes the audio context
+    const resumeAudioContext = () => {
 
-        if ( phetAudioContext.state !== 'running' ) {
+      if ( phetAudioContext.state !== 'running' ) {
 
-          phet.log && phet.log( `audio context not running, attempting to resume, state = ${phetAudioContext.state}` );
+        phet.log && phet.log( `audio context not running, attempting to resume, state = ${phetAudioContext.state}` );
 
-          // tell the audio context to resume
-          phetAudioContext.resume()
-            .then( () => {
-              phet.log && phet.log( `resume appears to have succeeded, phetAudioContext.state = ${phetAudioContext.state}` );
-              removeUserInteractionListeners();
-            } )
-            .catch( err => {
-              const errorMessage = `error when trying to resume audio context, err = ${err}`;
-              console.error( errorMessage );
-              assert && alert( errorMessage );
-            } );
-        }
-        else {
+        // tell the audio context to resume
+        phetAudioContext.resume()
+          .then( () => {
+            phet.log && phet.log( `resume appears to have succeeded, phetAudioContext.state = ${phetAudioContext.state}` );
+            removeUserInteractionListeners();
+          } )
+          .catch( err => {
+            const errorMessage = `error when trying to resume audio context, err = ${err}`;
+            console.error( errorMessage );
+            assert && alert( errorMessage );
+          } );
+      }
+      else {
 
-          // audio context is already running, no need to listen anymore
-          removeUserInteractionListeners();
-        }
-      };
+        // audio context is already running, no need to listen anymore
+        removeUserInteractionListeners();
+      }
+    };
 
-      // listen for a touchstart - this only works to resume the audio context on iOS devices (as of this writing)
-      window.addEventListener( 'touchstart', resumeAudioContext, false );
+    // listen for a touchstart - this only works to resume the audio context on iOS devices (as of this writing)
+    window.addEventListener( 'touchstart', resumeAudioContext, false );
 
-      // listen for other user gesture events
-      Display.userGestureEmitter.addListener( resumeAudioContext );
+    // listen for other user gesture events
+    Display.userGestureEmitter.addListener( resumeAudioContext );
 
-      // During testing, several use cases were found where the audio context state changes to something other than
-      // the "running" state while the sim is in use (generally either "suspended" or "interrupted", depending on the
-      // browser).  The following code is intended to handle this situation by trying to resume it right away.  GitHub
-      // issues with details about why this is necessary are:
-      // - https://github.com/phetsims/tambo/issues/58
-      // - https://github.com/phetsims/tambo/issues/59
-      // - https://github.com/phetsims/fractions-common/issues/82
-      // - https://github.com/phetsims/friction/issues/173
-      // - https://github.com/phetsims/resistance-in-a-wire/issues/190
-      // - https://github.com/phetsims/tambo/issues/90
-      let previousAudioContextState = phetAudioContext.state;
-      audioContextStateChangeMonitor.addStateChangeListener( phetAudioContext, state => {
+    // During testing, several use cases were found where the audio context state changes to something other than the
+    // "running" state while the sim is in use (generally either "suspended" or "interrupted", depending on the
+    // browser).  The following code is intended to handle this situation by trying to resume it right away.  GitHub
+    // issues with details about why this is necessary are:
+    // - https://github.com/phetsims/tambo/issues/58
+    // - https://github.com/phetsims/tambo/issues/59
+    // - https://github.com/phetsims/fractions-common/issues/82
+    // - https://github.com/phetsims/friction/issues/173
+    // - https://github.com/phetsims/resistance-in-a-wire/issues/190
+    // - https://github.com/phetsims/tambo/issues/90
+    let previousAudioContextState: AudioContextState = phetAudioContext.state;
+    audioContextStateChangeMonitor.addStateChangeListener( phetAudioContext, ( state: AudioContextState ) => {
 
-        phet.log && phet.log(
-          `audio context state changed, old state = ${
-            previousAudioContextState
-          }, new state = ${
-            state
-          }, audio context time = ${
-            phetAudioContext.currentTime}`
-        );
+      phet.log && phet.log(
+        `audio context state changed, old state = ${
+          previousAudioContextState
+        }, new state = ${
+          state
+        }, audio context time = ${
+          phetAudioContext.currentTime}`
+      );
 
-        if ( state !== 'running' ) {
+      if ( state !== 'running' ) {
 
-          // add a listener that will resume the audio context on the next touchstart
-          window.addEventListener( 'touchstart', resumeAudioContext, false );
+        // add a listener that will resume the audio context on the next touchstart
+        window.addEventListener( 'touchstart', resumeAudioContext, false );
 
-          // listen for other user gesture events too
-          Display.userGestureEmitter.addListener( resumeAudioContext );
-        }
+        // listen for other user gesture events too
+        Display.userGestureEmitter.addListener( resumeAudioContext );
+      }
 
-        previousAudioContextState = state;
-      } );
-    }
+      previousAudioContextState = state;
+    } );
 
     this.initialized = true;
 
     // Add any sound generators that were waiting for initialization to complete (must be done after init complete).
     this.soundGeneratorsAwaitingAdd.forEach( soundGeneratorAwaitingAdd => {
-      this.addSoundGenerator( soundGeneratorAwaitingAdd.soundGenerator, soundGeneratorAwaitingAdd.options );
+      this.addSoundGenerator(
+        soundGeneratorAwaitingAdd.soundGenerator,
+        soundGeneratorAwaitingAdd.soundGeneratorAddOptions
+      );
     } );
     this.soundGeneratorsAwaitingAdd.length = 0;
   }
 
   /**
-   * Returns true if the soundGenerator has been added to the soundManager.
-   * @param {SoundGenerator} soundGenerator
-   * @returns {boolean}
-   * @public
+   * Returns true if the specified soundGenerator has been previously added to the soundManager.
    */
-  hasSoundGenerator( soundGenerator ) {
+  public hasSoundGenerator( soundGenerator: SoundGenerator ) {
     return _.some(
       this.soundGeneratorInfoArray,
       soundGeneratorInfo => soundGeneratorInfo.soundGenerator === soundGenerator
@@ -301,16 +338,16 @@ class SoundManager extends PhetioObject {
   /**
    * Add a sound generator.  This connects the sound generator to the audio path, puts it on the list of sound
    * generators, and creates and returns a unique ID.
-   * @param {SoundGenerator} soundGenerator
-   * @param {Object} [options]
-   * @public
    */
-  addSoundGenerator( soundGenerator, options? ) {
+  public addSoundGenerator( soundGenerator: SoundGenerator, providedOptions: SoundGeneratorAddOptions = {} ) {
 
     // Check if initialization has been done and, if not, queue the sound generator and its options for addition
     // once initialization is complete.  Note that when sound is not supported, initialization will never occur.
     if ( !this.initialized ) {
-      this.soundGeneratorsAwaitingAdd.push( { soundGenerator: soundGenerator, options: options } );
+      this.soundGeneratorsAwaitingAdd.push( {
+        soundGenerator: soundGenerator,
+        soundGeneratorAddOptions: providedOptions
+      } );
       return;
     }
 
@@ -319,7 +356,7 @@ class SoundManager extends PhetioObject {
     assert && assert( !hasSoundGenerator, 'can\'t add the same sound generator twice' );
 
     // default options
-    options = merge( {
+    const options = optionize<SoundGeneratorAddOptions, SoundGeneratorAddOptions>( {
 
       // {string} - The 'sonification level' is used to determine whether a given sound should be enabled given the
       // setting of the sonification level parameter for the sim.  Valid values are 'BASIC' or 'ENHANCED'.
@@ -330,9 +367,9 @@ class SoundManager extends PhetioObject {
       // clip, that should be stopped when the associated visual representation is hidden.
       associatedViewNode: null,
 
-      // {string} - category name for this sound, which can be used to group sounds together an control them as a group
+      // {string} - category name for this sound, which can be used to group sounds together and control them as a group
       categoryName: null
-    }, options );
+    }, providedOptions );
 
     // option validation
     assert && assert(
@@ -342,11 +379,15 @@ class SoundManager extends PhetioObject {
 
     // Connect the sound generator to an output path.
     if ( options.categoryName === null ) {
-      soundGenerator.connect( this.convolver );
-      soundGenerator.connect( this.dryGainNode );
+      soundGenerator.connect( this.convolver as AudioNode );
+      soundGenerator.connect( this.dryGainNode as AudioNode );
     }
     else {
-      soundGenerator.connect( this.gainNodesForCategories[ options.categoryName ] );
+      assert && assert(
+        this.gainNodesForCategories.has( options.categoryName! ),
+        `category does not exist : ${options.categoryName}`
+      );
+      soundGenerator.connect( this.gainNodesForCategories.get( options.categoryName! ) as AudioNode );
     }
 
     // Keep a record of the sound generator along with additional information about it.
@@ -367,6 +408,7 @@ class SoundManager extends PhetioObject {
     // If a view node was specified, create and pass in a boolean Property that is true only when the node is displayed.
     if ( options.associatedViewNode ) {
       soundGenerator.addEnableControlProperty(
+        // @ts-ignore TODO - remove this ts-ignore DisplayedProperty is ported to TS, see https://github.com/phetsims/tambo/issues/160
         new DisplayedProperty( options.associatedViewNode )
       );
     }
@@ -374,10 +416,8 @@ class SoundManager extends PhetioObject {
 
   /**
    * Remove the specified sound generator.
-   * @param {SoundGenerator} soundGenerator
-   * @public
    */
-  removeSoundGenerator( soundGenerator ) {
+  public removeSoundGenerator( soundGenerator: SoundGenerator ) {
 
     // Check if the sound manager is initialized and, if not, issue a warning and ignore the request.  This is not an
     // assertion because the sound manager may not be initialized in cases where the sound is not enabled for the
@@ -402,28 +442,29 @@ class SoundManager extends PhetioObject {
     assert && assert( soundGeneratorInfo, 'unable to remove sound generator - not found' );
 
     // disconnect the sound generator from any audio nodes to which it may be connected
-    if ( soundGenerator.isConnectedTo( this.convolver ) ) {
-      soundGenerator.disconnect( this.convolver );
+    if ( soundGenerator.isConnectedTo( this.convolver as AudioNode ) ) {
+      soundGenerator.disconnect( this.convolver as AudioNode );
     }
-    if ( soundGenerator.isConnectedTo( this.dryGainNode ) ) {
-      soundGenerator.disconnect( this.dryGainNode );
+    if ( soundGenerator.isConnectedTo( this.dryGainNode as AudioNode ) ) {
+      soundGenerator.disconnect( this.dryGainNode as AudioNode );
     }
-    _.values( this.gainNodesForCategories ).forEach( gainNode => {
+    this.gainNodesForCategories.forEach( gainNode => {
       if ( soundGenerator.isConnectedTo( gainNode ) ) {
         soundGenerator.disconnect( gainNode );
       }
     } );
 
-    // remove the sound generator from the list
-    this.soundGeneratorInfoArray = _.without( this.soundGeneratorInfoArray, soundGeneratorInfo );
+    // Remove the sound generator from the list.
+    if ( soundGeneratorInfo ) {
+      this.soundGeneratorInfoArray.splice( this.soundGeneratorInfoArray.indexOf( soundGeneratorInfo ), 1 );
+    }
   }
 
   /**
    * Set the master output level for sonification.
-   * @param {number} level - valid values from 0 (min) through 1 (max)
-   * @public
+   * @param level - valid values from 0 (min) through 1 (max)
    */
-  setMasterOutputLevel( level ) {
+  public setMasterOutputLevel( level: number ) {
 
     // Check if initialization has been done.  This is not an assertion because the sound manager may not be
     // initialized if sound is not enabled for the sim.
@@ -437,23 +478,21 @@ class SoundManager extends PhetioObject {
 
     this._masterOutputLevel = level;
     if ( this.enabledProperty.value ) {
-      this.masterGainNode.gain.linearRampToValueAtTime(
+      this.masterGainNode!.gain.linearRampToValueAtTime(
         level,
         phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
       );
     }
   }
 
-  set masterOutputLevel( outputLevel ) {
+  public set masterOutputLevel( outputLevel ) {
     this.setMasterOutputLevel( outputLevel );
   }
 
   /**
    * Get the current output level setting.
-   * @returns {number}
-   * @public
    */
-  getMasterOutputLevel() {
+  public getMasterOutputLevel(): number {
     return this._masterOutputLevel;
   }
 
@@ -463,11 +502,10 @@ class SoundManager extends PhetioObject {
 
   /**
    * Set the output level for the specified category of sound generator.
-   * @param {String} categoryName - name of category to which this invocation applies
-   * @param {number} outputLevel - valid values from 0 through 1
-   * @public
+   * @param categoryName - name of category to which this invocation applies
+   * @param outputLevel - valid values from 0 through 1
    */
-  setOutputLevelForCategory( categoryName, outputLevel ) {
+  public setOutputLevelForCategory( categoryName: string, outputLevel: number ) {
 
     // Check if initialization has been done.  This is not an assertion because the sound manager may not be
     // initialized if sound is not enabled for the sim.
@@ -482,18 +520,20 @@ class SoundManager extends PhetioObject {
     assert && assert( outputLevel >= 0 && outputLevel <= 1, `output level value out of range: ${outputLevel}` );
 
     // verify that the specified category exists
-    assert && assert( this.gainNodesForCategories[ categoryName ], `no category with name = ${categoryName}` );
+    assert && assert( this.gainNodesForCategories.get( categoryName ), `no category with name = ${categoryName}` );
 
-    this.gainNodesForCategories[ categoryName ].gain.setValueAtTime( outputLevel, phetAudioContext.currentTime );
+    // Set the gain value on the appropriate gain node.
+    const gainNode = this.gainNodesForCategories.get( categoryName );
+    if ( gainNode ) {
+      gainNode.gain.setValueAtTime( outputLevel, phetAudioContext.currentTime );
+    }
   }
 
   /**
    * Get the output level for the specified sound generator category.
-   * @param {String} categoryName - name of category to which this invocation applies
-   * @returns {number}
-   * @public
+   * @param categoryName - name of category to which this invocation applies
    */
-  getOutputLevelForCategory( categoryName ) {
+  public getOutputLevelForCategory( categoryName: string ): number {
 
     // Check if initialization has been done.  This is not an assertion because the sound manager may not be
     // initialized if sound is not enabled for the sim.
@@ -503,18 +543,17 @@ class SoundManager extends PhetioObject {
     }
 
     // Get the GainNode for the specified category.
-    const gainNode = this.gainNodesForCategories[ categoryName ];
+    const gainNode = this.gainNodesForCategories.get( categoryName );
     assert && assert( gainNode, `no category with name = ${categoryName}` );
 
-    return gainNode.gain.value;
+    return gainNode!.gain.value;
   }
 
   /**
    * Set the amount of reverb.
-   * @param {number} newReverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
-   * @public
+   * @param newReverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
    */
-  setReverbLevel( newReverbLevel ) {
+  public setReverbLevel( newReverbLevel: number ) {
 
     // Check if initialization has been done.  This is not an assertion because the sound manager may not be
     // initialized if sound is not enabled for the sim.
@@ -526,49 +565,33 @@ class SoundManager extends PhetioObject {
     if ( newReverbLevel !== this._reverbLevel ) {
       assert && assert( newReverbLevel >= 0 && newReverbLevel <= 1, `reverb value out of range: ${newReverbLevel}` );
       const now = phetAudioContext.currentTime;
-      this.reverbGainNode.gain.linearRampToValueAtTime( newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
-      this.dryGainNode.gain.linearRampToValueAtTime( 1 - newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
+      this.reverbGainNode!.gain.linearRampToValueAtTime( newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
+      this.dryGainNode!.gain.linearRampToValueAtTime( 1 - newReverbLevel, now + LINEAR_GAIN_CHANGE_TIME );
       this._reverbLevel = newReverbLevel;
     }
   }
 
-  set reverbLevel( reverbLevel ) {
+  public set reverbLevel( reverbLevel ) {
     this.setReverbLevel( reverbLevel );
   }
 
-  /**
-   * @returns {number}
-   * @public
-   */
-  getReverbLevel() {
+  public getReverbLevel(): number {
     return this._reverbLevel;
   }
 
-  get reverbLevel() {
+  public get reverbLevel(): number {
     return this.getReverbLevel();
   }
 
-  /**
-   * ES5 setter for enabled state
-   * @param {boolean} enabled
-   */
-  set enabled( enabled ) {
+  public set enabled( enabled: boolean ) {
     this.enabledProperty.value = enabled;
   }
 
-  /**
-   * ES5 getter for enabled state
-   * @returns {boolean}
-   */
-  get enabled() {
+  public get enabled(): boolean {
     return this.enabledProperty.value;
   }
 
-  /**
-   * ES5 setter for sonification level
-   * @param {string} sonificationLevel
-   */
-  set sonificationLevel( sonificationLevel ) {
+  public set sonificationLevel( sonificationLevel: string ) {
     assert && assert(
       _.includes( _.values( SoundLevelEnum ), sonificationLevel ),
       `invalid sonification level: ${sonificationLevel}`
@@ -578,9 +601,8 @@ class SoundManager extends PhetioObject {
 
   /**
    * ES5 getter for sonification level
-   * @returns {string}
    */
-  get sonificationLevel() {
+  public get sonificationLevel(): string {
     return this.enhancedSoundEnabledProperty.value ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
   }
 
@@ -592,11 +614,10 @@ class SoundManager extends PhetioObject {
    * It may be possible to remove this method someday once the behavior is more consistent across browsers.  See
    * https://github.com/phetsims/resistance-in-a-wire/issues/205 for some history on this.
    *
-   * @param {GainNode} gainNode
-   * @param {number} duration - duration for logging, in seconds
-   * @public
+   * @param gainNode
+   * @param duration - duration for logging, in seconds
    */
-  logGain( gainNode, duration ) {
+  public logGain( gainNode: GainNode, duration: number ) {
 
     duration = duration || 1;
     const startTime = Date.now();
@@ -621,20 +642,22 @@ class SoundManager extends PhetioObject {
 
   /**
    * Log the value of the master gain as it changes, used primarily for debug.
-   * @param {number} duration - in seconds
-   * @public
+   * @param duration - in seconds
    */
-  logMasterGain( duration ) {
-    this.logGain( this.masterGainNode, duration );
+  public logMasterGain( duration: number ) {
+    if ( this.masterGainNode ) {
+      this.logGain( this.masterGainNode, duration );
+    }
   }
 
   /**
    * Log the value of the reverb gain as it changes, used primarily for debug.
-   * @param {number} duration - in seconds
-   * @public
+   * @param {number} duration - duration for logging, in seconds
    */
-  logReverbGain( duration ) {
-    this.logGain( this.reverbGainNode, duration );
+  public logReverbGain( duration: number ) {
+    if ( this.reverbGainNode ) {
+      this.logGain( this.reverbGainNode, duration );
+    }
   }
 }
 

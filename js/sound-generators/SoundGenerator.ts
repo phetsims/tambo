@@ -58,7 +58,7 @@ abstract class SoundGenerator {
   private _outputLevel: number;
 
   // a list of all audio nodes to which this sound generator is connected
-  private connectionList: AudioParam[];
+  private connectionList: ( AudioParam | AudioNode )[];
 
   // A set of boolean Properties that collectively control whether the sound generator is enabled.  All of these must be
   // true in order for the sound generator to be "fully enabled", meaning that it will produce sound.
@@ -66,7 +66,7 @@ abstract class SoundGenerator {
 
   // A Property that tracks whether this sound generator is fully enabled, meaning that all the enable control
   // Properties are in a state indicating that sound can be produced.  This should only be updated in the listener
-  // function defined below, no where else.
+  // function defined below, nowhere else.
   readonly fullyEnabledProperty: Property<boolean>;
 
   // A Property that tracks whether this sound generator is "locally enabled", which means that it is internally set to
@@ -210,7 +210,7 @@ abstract class SoundGenerator {
   /**
    * Connect the sound generator to an audio parameter.
    */
-  connect( audioParam: AudioParam | AudioNode ) {
+  public connect( audioParam: AudioParam | AudioNode ) {
     this.masterGainNode.connect( audioParam as AudioParam );
 
     // Track this sound generator's connections.  This is necessary because Web Audio doesn't support checking which
@@ -221,15 +221,15 @@ abstract class SoundGenerator {
   /**
    * Disconnect the sound generator from an audio parameter.
    */
-  disconnect( audioParam: AudioParam ) {
-    this.masterGainNode.disconnect( audioParam );
+  public disconnect( audioParam: AudioParam | AudioNode ) {
+    this.masterGainNode.disconnect( audioParam as AudioNode );
     this.connectionList = _.without( this.connectionList, audioParam );
   }
 
   /**
    * Test if this sound generator is connected to the provided audio param.
    */
-  isConnectedTo( audioParam: AudioParam ): boolean {
+  public isConnectedTo( audioParam: AudioParam | AudioNode ): boolean {
     return this.connectionList.indexOf( audioParam ) >= 0;
   }
 
@@ -239,7 +239,7 @@ abstract class SoundGenerator {
    *                      signal, and can be negative to invert the phase
    * @param [timeConstant] - time constant for change, longer values mean slower transitions, in seconds
    */
-  setOutputLevel( outputLevel: number, timeConstant: number = DEFAULT_TIME_CONSTANT ) {
+  public setOutputLevel( outputLevel: number, timeConstant: number = DEFAULT_TIME_CONSTANT ) {
 
     const now = this.audioContext.currentTime;
 
@@ -275,7 +275,7 @@ abstract class SoundGenerator {
     }
   }
 
-  set outputLevel( outputLevel: number ) {
+  public set outputLevel( outputLevel: number ) {
     this.setOutputLevel( outputLevel );
   }
 
@@ -283,41 +283,41 @@ abstract class SoundGenerator {
    * Get the current output level setting.  Note that if the sound generator is disabled, this could return a non-zero
    * value but the sound generator won't produce audible sound.
    */
-  getOutputLevel(): number {
+  public getOutputLevel(): number {
     return this._outputLevel;
   }
 
-  get outputLevel(): number {
+  public get outputLevel(): number {
     return this.getOutputLevel();
   }
 
   /**
    * Add a Property to the list of those used to control the enabled state of this sound generator.
    */
-  addEnableControlProperty( enableControlProperty: IReadOnlyProperty<boolean> ) {
+  public addEnableControlProperty( enableControlProperty: IReadOnlyProperty<boolean> ) {
     this.enableControlProperties.push( enableControlProperty );
   }
 
   /**
    * Remove a Property from the list of those used to control the enabled state of this sound generator.
    */
-  removeEnableControlProperty( enableControlProperty: IProperty<boolean> ) {
+  public removeEnableControlProperty( enableControlProperty: IProperty<boolean> ) {
     this.enableControlProperties.remove( enableControlProperty );
   }
 
-  get locallyEnabled(): boolean {
+  public get locallyEnabled(): boolean {
     return this.locallyEnabledProperty.value;
   }
 
-  set locallyEnabled( locallyEnabled: boolean ) {
+  public set locallyEnabled( locallyEnabled: boolean ) {
     this.locallyEnabledProperty.value = locallyEnabled;
   }
 
-  get fullyEnabled(): boolean {
+  public get fullyEnabled(): boolean {
     return this.fullyEnabledProperty.value;
   }
 
-  dispose() {
+  public dispose() {
     this.disposeSoundGenerator();
   }
 }

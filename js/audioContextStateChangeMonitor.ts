@@ -9,7 +9,7 @@
 import tambo from './tambo.js';
 
 // type definition for audio context state change listeners
-type AudioContextStateChangeListener = ( ( state: string ) => void );
+type AudioContextStateChangeListener = ( ( state: AudioContextState ) => void );
 
 // A list of the audio contexts being monitored. In the code below, contexts should only be added, never deleted, and
 // this array should never be reordered.
