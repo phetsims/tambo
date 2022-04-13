@@ -30,7 +30,7 @@ import optionize from '../../phet-core/js/optionize.js';
 import { PropertyLinkListener } from '../../axon/js/IReadOnlyProperty.js';
 
 // options that can be used when adding a sound generator that can control some aspects of its behavior
-type SoundGeneratorAddOptions = {
+export type SoundGeneratorAddOptions = {
 
   // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of the
   // sonification level parameter for the sim.  Valid values are 'BASIC' or 'ENHANCED'.

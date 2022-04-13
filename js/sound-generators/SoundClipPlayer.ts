@@ -1,7 +1,5 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * SoundClipPlayer is a limited and automatically registered sound clip.  It is intended to be used for sounds that
  * can be shared in multiple places within a simulation so that separate instances of sound clips don't need to be
@@ -18,57 +16,61 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import merge from '../../../phet-core/js/merge.js';
-import soundManager from '../soundManager.js';
+import soundManager, { SoundGeneratorAddOptions } from '../soundManager.js';
 import tambo from '../tambo.js';
-import SoundClip from './SoundClip.js';
+import SoundClip, { SoundClipOptions } from './SoundClip.js';
+import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
+import optionize from '../../../phet-core/js/optionize.js';
+
+export type SoundClipPlayerOptions = {
+  soundClipOptions?: SoundClipOptions;
+  soundManagerOptions?: SoundGeneratorAddOptions;
+};
 
 class SoundClipPlayer {
 
+  private readonly _soundClip: SoundClip;
+
   /**
-   * @param {WrappedAudioBuffer} wrappedAudioBuffer - a Web Audio audio buffer containing decoded audio samples
-   * @param {Object} [options]
+   * @param wrappedAudioBuffer - a Web Audio audio buffer containing decoded audio samples
+   * @param [providedOptions]
    * @constructor
    */
-  constructor( wrappedAudioBuffer, options ) {
+  constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipPlayerOptions ) {
 
-    options = merge( {
-      soundClipOptions: null,
-      soundManagerOptions: null
-    }, options );
+    const options = optionize<SoundClipPlayerOptions, SoundClipPlayerOptions>( {
+      soundClipOptions: {},
+      soundManagerOptions: {}
+    }, providedOptions );
 
     // {SoundClip} @private
-    this.soundClip = new SoundClip( wrappedAudioBuffer, options.soundClipOptions );
+    this._soundClip = new SoundClip( wrappedAudioBuffer, options.soundClipOptions );
 
     // automatically register this sound clip with the sound manager
-    soundManager.addSoundGenerator( this.soundClip, options.soundManagerOptions );
+    soundManager.addSoundGenerator( this._soundClip, options.soundManagerOptions );
   }
 
   /**
-   * Plays the sound clip.
-   * @public
+   * Play the sound clip.
    */
-  play() {
-    this.soundClip.play();
+  public play() {
+    this._soundClip.play();
   }
 
   /**
-   * Stops the sound clip.
-   * @public
+   * Stop the sound clip.  Does nothing if the sound clip is not playing.
    */
-  stop() {
-    this.soundClip.stop();
+  public stop() {
+    this._soundClip.stop();
   }
 
   /**
    * Get the sound clip that is wrapped by this player.  USE THIS METHOD CAREFULLY, IF AT ALL.  This class is intended
    * primarily for use in singletons that play a sound.  If the underlying sound clip is manipulated, it will change for
-   * all users, so this should be used with caution and clear intention.
-   * @returns {SoundClip}
-   * @public
+   * all users, so this method should be used with caution and clear intention.
    */
-  getSoundClip() {
-    return this.soundClip;
+  public getSoundClip(): SoundClip {
+    return this._soundClip;
   }
 }
 
