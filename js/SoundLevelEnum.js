@@ -1,5 +1,7 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
+// ts-nocheck
+
 /**
  * enum for the different sound level settings
  *
