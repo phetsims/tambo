@@ -1,7 +1,5 @@
 // Copyright 2019-2022, University of Colorado Boulder
 
-// @ts-nocheck
-
 /**
  * ContinuousPropertySoundGenerator is a sound generator that alters the playback rate of a sound clip based on the
  * value of a continuous numerical Property.  It is specifically designed to work with sound clips and does not support
@@ -14,59 +12,91 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import merge from '../../../phet-core/js/merge.js';
+import NumberProperty from '../../../axon/js/NumberProperty.js';
 import tambo from '../tambo.js';
-import SoundClip from './SoundClip.js';
+import SoundClip, { SoundClipOptions } from './SoundClip.js';
+import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
+import optionize from '../../../phet-core/js/optionize.js';
+import BooleanProperty from '../../../axon/js/BooleanProperty.js';
+import Range from '../../../dot/js/Range.js';
+
+type SelfOptions = {
+
+  // number of octaves that the playback rate will span, larger numbers increase pitch range
+  playbackRateSpanOctaves?: number;
+
+  // time to wait before starting fade out if no activity, in seconds
+  fadeStartDelay?: number;
+
+  // duration of fade out, in seconds
+  fadeTime?: number;
+
+  // amount of time in seconds from full fade to stop of sound, done to avoid sonic glitches
+  delayBeforeStop?: number;
+
+  // Center offset of playback rate, positive numbers move the pitch range up, negative numbers move it down, and a
+  // value of zero indicates no offset, so the pitch range will center around the inherent pitch of the source loop.
+  // This offset is added to the calculated playback rate, so a value of 1 would move the range up an octave, -1 would
+  // move it down an octave, 0.5 would move it up a perfect fifth, etc.
+  playbackRateCenterOffset?: number;
+
+  // If provided, this is used to prevent sound from being played during a reset, since the value of the provided
+  // Property will often change then, and sound generation may not be desired.
+  resetInProgressProperty?: BooleanProperty | null;
+};
+export type ContinuousPropertySoundGeneratorOptions = SelfOptions & SoundClipOptions;
 
 class ContinuousPropertySoundGenerator extends SoundClip {
+
+  // duration of inactivity fade out
+  private readonly fadeTime: number;
+
+  // see docs in options type declaration
+  private readonly delayBeforeStop: number;
+
+  // the output level before fade out starts
+  private readonly nonFadedOutputLevel: number;
+
+  // countdown time used for fade out
+  private remainingFadeTime: number;
+
+  private readonly disposeContinuousPropertySoundGenerator: () => void;
 
   /**
    * @param property
    * @param sound - returned by the import directive, should be optimized for good continuous looping, which
    * may require it to be a .wav file, since .mp3 files generally have a bit of silence at the beginning.
    * @param range - the range of values that the provided property can take on
-   * @param [options]
+   * @param [providedOptions]
    * @constructor
    */
-  constructor( property, sound, range, options? ) {
-    assert && assert( !options || !options.hasOwnProperty( 'loop' ), 'loop option should be supplied by' +
-                                                                     ' ContinuousPropertySoundGenerator' );
+  constructor( property: NumberProperty,
+               sound: WrappedAudioBuffer,
+               range: Range,
+               providedOptions?: ContinuousPropertySoundGeneratorOptions ) {
 
-    options = merge( {
+    assert && assert(
+      !providedOptions || !providedOptions.loop,
+      'loop option should be supplied by ContinuousPropertySoundGenerator'
+    );
+
+    const options = optionize<ContinuousPropertySoundGeneratorOptions, SelfOptions, SoundClipOptions>( {
       initialOutputLevel: 0.7,
       loop: true,
       trimSilence: true,
-      pitchRangeInSemitones: 36,
-      pitchCenterOffset: 2,
-      fadeStartDelay: 0.2, // in seconds, time to wait before starting fade
-      fadeTime: 0.15, // in seconds, duration of fade out
-      delayBeforeStop: 0.1, // in seconds, amount of time from full fade to stop of sound, done to avoid glitches
-
-      // {number} - number of octaves that the playback rate will span, larger numbers increase pitch range
+      fadeStartDelay: 0.2,
+      fadeTime: 0.15,
+      delayBeforeStop: 0.1,
       playbackRateSpanOctaves: 2,
-
-      // {number} - Center offset of playback rate, positive numbers move the pitch range up, negative numbers move it
-      // down, and a value of zero indicates no offset, so the pitch range will center around the inherent pitch of
-      // the source loop.  This offset is added to the calculated playback rate, so a value of 1 would move the range
-      // up an octave, -1 would move it down an octave, 0.5 would move it up a perfect fifth, etc.
       playbackRateCenterOffset: 0,
-
-      // {BooleanProperty|null} - If provided, this is used to prevent sound from being played during a reset, since
-      // the value of the provided Property will often change then, and sound generation may not be desired.
       resetInProgressProperty: null
-
-    }, options );
+    }, providedOptions );
 
     super( sound, options );
 
-    // @private {number} - see docs at options declaration
     this.fadeTime = options.fadeTime;
-
-    // @private {number} - see docs at options declaration
     this.delayBeforeStop = options.delayBeforeStop;
-
-    // @private {number} - the output level before fade out starts
-    this.nonFadedOutputLevel = options.initialOutputLevel;
+    this.nonFadedOutputLevel = options.initialOutputLevel === undefined ? 1 : options.initialOutputLevel;
 
     // @private {number} - countdown time used for fade out
     this.remainingFadeTime = 0;
@@ -75,7 +105,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     this.setOutputLevel( 0, 0 );
 
     // function for starting the sound or adjusting the volume
-    const listener = value => {
+    const listener = ( value: number ) => {
 
       // Update the sound generation when the value changes.
       if ( !options.resetInProgressProperty || !options.resetInProgressProperty.value ) {
@@ -87,7 +117,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
 
         this.setPlaybackRate( playbackRate );
         this.setOutputLevel( this.nonFadedOutputLevel );
-        if ( !this.playing ) {
+        if ( !this.isPlaying ) {
           this.play();
         }
 
@@ -101,20 +131,16 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     this.disposeContinuousPropertySoundGenerator = () => property.unlink( listener );
   }
 
-  /**
-   * @public
-   */
-  dispose() {
+  public override dispose() {
     this.disposeContinuousPropertySoundGenerator();
     super.dispose();
   }
 
   /**
    * Step this sound generator, used for fading out the sound in the absence change.
-   * @param {number} dt
-   * @public
+   * @param dt - change in time (i.e. delta time) in seconds
    */
-  step( dt ) {
+  public step( dt: number ) {
     if ( this.remainingFadeTime > 0 ) {
       this.remainingFadeTime = Math.max( this.remainingFadeTime - dt, 0 );
 
@@ -134,9 +160,8 @@ class ContinuousPropertySoundGenerator extends SoundClip {
 
   /**
    * stop any in-progress sound generation
-   * @public
    */
-  reset() {
+  public reset() {
     this.stop( 0 );
     this.remainingFadeTime = 0;
   }
