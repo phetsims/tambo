@@ -1,22 +1,24 @@
 // Copyright 2018-2020, University of Colorado Boulder
 
-// ts-nocheck
-
 /**
- * enum for the different sound level settings
+ * This enum is used to describe whether a sound is part of the "basic" sounds or the "enhanced" sounds.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import Enumeration from '../../phet-core/js/Enumeration.js';
+import EnumerationValue from '../../phet-core/js/EnumerationValue.js';
 import tambo from './tambo.js';
 
-const SoundLevelEnum = {
-  BASIC: 'BASIC',
-  ENHANCED: 'ENHANCED'
-};
+class SoundScope extends EnumerationValue {
+  static BASIC = new SoundScope();
+  static ENHANCED = new SoundScope();
 
-// in development mode, catch any attempted changes to the enum
-if ( assert ) { Object.freeze( SoundLevelEnum ); }
+  // Gets a list of keys, values and mapping between them. For use by EnumerationProperty and PhET-iO.
+  static enumeration = new Enumeration( SoundScope, {
+    phetioDocumentation: 'describes whether a sound is considered part of the basic or the enhanced sounds for the sim'
+  } );
+}
 
-tambo.register( 'SoundLevelEnum', SoundLevelEnum );
-export default SoundLevelEnum;
+tambo.register( 'SoundScope', SoundScope );
+export default SoundScope;

@@ -33,8 +33,8 @@ import { PropertyLinkListener } from '../../axon/js/IReadOnlyProperty.js';
 export type SoundGeneratorAddOptions = {
 
   // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of the
-  // sonification level parameter for the sim.  Valid values are 'BASIC' or 'ENHANCED'.
-  sonificationLevel?: string;
+  // sonification level parameter for the sim.
+  sonificationLevel?: SoundLevelEnum;
 
   // The associated view node is a Scenery node that, if provided, must be visible in the display for the sound
   // generator to be enabled.  This is generally used only for sounds that can play for long durations, such as a
@@ -54,7 +54,7 @@ type SoundGeneratorAwaitingAdd = {
 // sound generator with its sonification level
 type SoundGeneratorInfo = {
   soundGenerator: SoundGenerator;
-  sonificationLevel: string;
+  sonificationLevel: SoundLevelEnum;
 };
 
 type SoundGeneratorInitializationOptions = {
@@ -79,7 +79,7 @@ class SoundManager extends PhetioObject {
   public readonly enhancedSoundEnabledProperty: BooleanProperty;
 
   // an array where the sound generators are stored along with information about how to manage them
-  private soundGeneratorInfoArray: SoundGeneratorInfo[];
+  private readonly soundGeneratorInfoArray: SoundGeneratorInfo[];
 
   // output level for the master gain node when sonification is enabled
   private _masterOutputLevel: number;
@@ -591,18 +591,14 @@ class SoundManager extends PhetioObject {
     return this.enabledProperty.value;
   }
 
-  public set sonificationLevel( sonificationLevel: string ) {
-    assert && assert(
-      _.includes( _.values( SoundLevelEnum ), sonificationLevel ),
-      `invalid sonification level: ${sonificationLevel}`
-    );
+  public set sonificationLevel( sonificationLevel: SoundLevelEnum ) {
     this.enhancedSoundEnabledProperty.value = sonificationLevel === SoundLevelEnum.ENHANCED;
   }
 
   /**
    * ES5 getter for sonification level
    */
-  public get sonificationLevel(): string {
+  public get sonificationLevel(): SoundLevelEnum {
     return this.enhancedSoundEnabledProperty.value ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
   }
 
@@ -652,7 +648,7 @@ class SoundManager extends PhetioObject {
 
   /**
    * Log the value of the reverb gain as it changes, used primarily for debug.
-   * @param {number} duration - duration for logging, in seconds
+   * @param duration - duration for logging, in seconds
    */
   public logReverbGain( duration: number ) {
     if ( this.reverbGainNode ) {
