@@ -34,7 +34,7 @@ class CompositeSoundClipTestNode extends VBox {
 
     soundManager.addSoundGenerator( compositeSoundClip );
 
-    // add a button to play a basic-mode sound
+    // add a button to play a composite sound
     const playSoundClipChordButton = new TextPushButton( 'Play CompositeSoundClip', {
       baseColor: '#aad6cc',
       font: new PhetFont( 16 ),
@@ -42,7 +42,7 @@ class CompositeSoundClipTestNode extends VBox {
       listener: () => { compositeSoundClip.play(); }
     } );
 
-    // add button to play enhanced-mode sound
+    // add button to stop the sound
     const stopSoundClipChordButton = new TextPushButton( 'Stop CompositeSoundClip', {
       baseColor: '#DBB1CD',
       font: new PhetFont( 16 ),
