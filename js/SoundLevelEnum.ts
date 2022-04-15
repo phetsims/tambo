@@ -1,4 +1,4 @@
-// Copyright 2018-2020, University of Colorado Boulder
+// Copyright 2018-2022, University of Colorado Boulder
 
 /**
  * This enum is used to describe whether a sound is part of the "basic" sounds or the "enhanced" sounds.
