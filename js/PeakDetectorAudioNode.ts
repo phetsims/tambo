@@ -22,7 +22,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import merge from '../../phet-core/js/merge.js';
+import optionize from '../../phet-core/js/optionize.js';
 import phetAudioContext from './phetAudioContext.js';
 import tambo from './tambo.js';
 
@@ -37,7 +37,7 @@ class PeakDetectorAudioNode extends AudioWorkletNode {
 
   constructor( providedOptions: PeakDetectorAudioNodeOptions ) {
 
-    const options = merge( {
+    const options = optionize<PeakDetectorAudioNodeOptions, PeakDetectorAudioNodeOptions>( {
       logZeroValues: false
     }, providedOptions );
 

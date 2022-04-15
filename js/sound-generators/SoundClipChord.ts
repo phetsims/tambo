@@ -14,6 +14,7 @@ import SoundClip, { SoundClipOptions } from '../../../tambo/js/sound-generators/
 import SoundGenerator, { SoundGeneratorOptions } from '../../../tambo/js/sound-generators/SoundGenerator.js';
 import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
+import ISoundPlayer from '../ISoundPlayer.js';
 
 type SelfOptions = {
 
@@ -33,7 +34,7 @@ type SelfOptions = {
 
 export type SoundClipChordOptions = SelfOptions & SoundGeneratorOptions;
 
-class SoundClipChord extends SoundGenerator {
+class SoundClipChord extends SoundGenerator implements ISoundPlayer {
 
   // whether to play the chord as an arpeggio
   private readonly arpeggiate: boolean;
@@ -89,6 +90,15 @@ class SoundClipChord extends SoundGenerator {
     this.playbackSoundClips.forEach( ( soundClip, index ) => {
       const delay = this.arpeggiate ? index * this.arpeggiateTime / this.playbackSoundClips.length : 0;
       soundClip.play( delay );
+    } );
+  }
+
+  /**
+   * Stop the chord if it's playing.  This is mostly here to complete the ISoundPlayer interface.
+   */
+  public stop() {
+    this.playbackSoundClips.forEach( soundClip => {
+      soundClip.stop();
     } );
   }
 

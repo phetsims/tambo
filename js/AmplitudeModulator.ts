@@ -115,7 +115,7 @@ class AmplitudeModulator extends EnabledComponent {
     };
     this.enabledProperty.link( enabledListener );
 
-    const depthListener = ( depth: any ) => {
+    const depthListener = ( depth: number ) => {
       if ( lowFrequencyOscillator ) {
         lfoAttenuator.gain.setValueAtTime( depth / 2, phetAudioContext.currentTime );
         this.modulatedGainNode.gain.setValueAtTime( 1 - depth / 2, phetAudioContext.currentTime );

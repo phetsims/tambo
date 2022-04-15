@@ -10,7 +10,6 @@ import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
-import SoundPlayer from '../../../SoundPlayer.js';
 import SoundClipChord from '../../../sound-generators/SoundClipChord.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
@@ -35,16 +34,14 @@ class SoundClipChordTestNode extends VBox {
     const playChordButton = new TextPushButton( 'Play Chord', {
       baseColor: '#aad6cc',
       font: new PhetFont( 16 ),
-      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
-      listener: () => { chordSoundClipChord.play(); }
+      soundPlayer: chordSoundClipChord
     } );
 
     // add button to play an arpeggio
     const playArpeggioButton = new TextPushButton( 'Play Arpeggiated Chord', {
       baseColor: '#DBB1CD',
       font: new PhetFont( 16 ),
-      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
-      listener: () => { arpeggioSoundClipChord.play(); }
+      soundPlayer: arpeggioSoundClipChord
     } );
 
     super( optionize<SoundClipChordTestNodeOptions, SelfOptions, VBoxOptions>( {

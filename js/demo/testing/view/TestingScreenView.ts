@@ -28,7 +28,6 @@ import phetAudioContext from '../../../phetAudioContext.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
-import SoundPlayer from '../../../SoundPlayer.js';
 import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
 import CompositeSoundClipTestNode from './CompositeSoundClipTestNode.js';
@@ -37,6 +36,7 @@ import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGen
 import SoundClipChordTestNode from './SoundClipChordTestNode.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import { TimerListener } from '../../../../../axon/js/Timer.js';
+import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
 
 // constants
 const CHECKBOX_SIZE = 16;
@@ -149,16 +149,14 @@ class BasicAndEnhancedSoundTestNode extends VBox {
     const playBasicSoundButton = new TextPushButton( 'Play Basic-Level Sound', {
       baseColor: '#aad6cc',
       font: new PhetFont( 16 ),
-      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
-      listener: () => { loonCallSoundClip.play(); }
+      soundPlayer: loonCallSoundClip
     } );
 
     // add button to play enhanced-mode sound
     const playEnhancedSoundButton = new TextPushButton( 'Play Enhanced-Level Sound', {
       baseColor: '#DBB1CD',
       font: new PhetFont( 16 ),
-      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
-      listener: () => { rhodesChordSoundClip.play(); }
+      soundPlayer: rhodesChordSoundClip
     } );
 
     super( merge( {
@@ -212,23 +210,21 @@ class AdditionalAudioNodesTestNode extends VBox {
     const playNormalSoundButton = new TextPushButton( 'Normal Sound Clip', {
       baseColor: '#CCFF00',
       font: buttonFont,
-      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
-      listener: () => { shortSoundNormal.play(); }
+      soundPlayer: shortSoundNormal
     } );
 
     // add button to play the sound with the reverb added in the signal path
     const playSoundWithInsertedAudioNodeButton = new TextPushButton( 'Same Clip with In-Line Reverb Node', {
       baseColor: '#CC99FF',
       font: buttonFont,
-      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
-      listener: () => {shortSoundWithReverb.play();}
+      soundPlayer: shortSoundWithReverb
     } );
 
     // add button to play both sounds at the same time
     const playBothSounds = new TextPushButton( 'Both Clips Simultaneously', {
       baseColor: '#FF9999',
       font: buttonFont,
-      soundPlayer: SoundPlayer.NO_SOUND, // turn off default sound generation
+      soundPlayer: nullSoundPlayer, // turn off default sound generation
       listener: () => {
         shortSoundNormal.play();
         shortSoundWithReverb.play();

@@ -17,7 +17,6 @@ import Range from '../../../dot/js/Range.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import generalBoundaryBoopSoundPlayer from '../shared-sound-players/generalBoundaryBoopSoundPlayer.js';
 import generalSoftClickSoundPlayer from '../shared-sound-players/generalSoftClickSoundPlayer.js';
-import SoundPlayer from '../SoundPlayer.js';
 import tambo from '../tambo.js';
 import ISoundPlayer from '../ISoundPlayer.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
@@ -27,6 +26,7 @@ import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
 import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
 import Utils from '../../../dot/js/Utils.js';
 import SoundClip from './SoundClip.js';
+import nullSoundPlayer from '../shared-sound-players/nullSoundPlayer.js';
 
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary
@@ -291,9 +291,9 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    * Static instance that makes no sound.  This is generally used as an option value to turn off sound generation.
    */
   static NO_SOUND = new ValueChangeSoundGenerator( new Range( 0, 1 ), {
-    middleMovingUpSoundPlayer: SoundPlayer.NO_SOUND,
-    minSoundPlayer: SoundPlayer.NO_SOUND,
-    maxSoundPlayer: SoundPlayer.NO_SOUND
+    middleMovingUpSoundPlayer: nullSoundPlayer,
+    minSoundPlayer: nullSoundPlayer,
+    maxSoundPlayer: nullSoundPlayer
   } )
 }
 

@@ -1,16 +1,15 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * SoundPlayer is a "definition" type, initially based off of PaintDef.js, that defines a type that is used in the tambo
- * sound library but is not actually a base class.  This is similar to the idea of an "interface" in Java.  A
- * SoundPlayer type is a sound generator that has just the most basic methods for playing a sound.
+ * ISoundPlayer defines a simple interface that can be used to support polymorphism when defining options and other
+ * API interfaces that include sound generation.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-type SoundPlayer = {
+interface ISoundPlayer {
   play: () => void;
   stop: () => void;
-};
+}
 
-export default SoundPlayer;
+export default ISoundPlayer;

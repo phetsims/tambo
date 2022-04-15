@@ -200,11 +200,11 @@ class SoundManager extends PhetioObject {
     this.dryGainNode.connect( this.masterGainNode );
 
     // Create and hook up gain nodes for each of the defined categories.
+    assert && assert( this.convolver !== null && this.dryGainNode !== null, 'some audio nodes have not been initialized' );
     options.categories.forEach( categoryName => {
       const gainNode = phetAudioContext.createGain();
-      // TODO: Why are the following casts necessary?  See https://github.com/phetsims/tambo/issues/160.
-      gainNode.connect( this.convolver as AudioNode );
-      gainNode.connect( this.dryGainNode as AudioNode );
+      gainNode.connect( this.convolver! );
+      gainNode.connect( this.dryGainNode! );
       this.gainNodesForCategories.set( categoryName, gainNode );
     } );
 
@@ -351,6 +351,9 @@ class SoundManager extends PhetioObject {
       return;
     }
 
+    // state checking - make sure the needed nodes have been created
+    assert && assert( this.convolver !== null && this.dryGainNode !== null, 'some audio nodes have not been initialized' );
+
     // Verify that this is not a duplicate addition.
     const hasSoundGenerator = this.hasSoundGenerator( soundGenerator );
     assert && assert( !hasSoundGenerator, 'can\'t add the same sound generator twice' );
@@ -379,15 +382,15 @@ class SoundManager extends PhetioObject {
 
     // Connect the sound generator to an output path.
     if ( options.categoryName === null ) {
-      soundGenerator.connect( this.convolver as AudioNode );
-      soundGenerator.connect( this.dryGainNode as AudioNode );
+      soundGenerator.connect( this.convolver! );
+      soundGenerator.connect( this.dryGainNode! );
     }
     else {
       assert && assert(
         this.gainNodesForCategories.has( options.categoryName! ),
         `category does not exist : ${options.categoryName}`
       );
-      soundGenerator.connect( this.gainNodesForCategories.get( options.categoryName! ) as AudioNode );
+      soundGenerator.connect( this.gainNodesForCategories.get( options.categoryName! )! );
     }
 
     // Keep a record of the sound generator along with additional information about it.
@@ -442,11 +445,11 @@ class SoundManager extends PhetioObject {
     assert && assert( soundGeneratorInfo, 'unable to remove sound generator - not found' );
 
     // disconnect the sound generator from any audio nodes to which it may be connected
-    if ( soundGenerator.isConnectedTo( this.convolver as AudioNode ) ) {
-      soundGenerator.disconnect( this.convolver as AudioNode );
+    if ( soundGenerator.isConnectedTo( this.convolver! ) ) {
+      soundGenerator.disconnect( this.convolver! );
     }
-    if ( soundGenerator.isConnectedTo( this.dryGainNode as AudioNode ) ) {
-      soundGenerator.disconnect( this.dryGainNode as AudioNode );
+    if ( soundGenerator.isConnectedTo( this.dryGainNode! ) ) {
+      soundGenerator.disconnect( this.dryGainNode! );
     }
     this.gainNodesForCategories.forEach( gainNode => {
       if ( soundGenerator.isConnectedTo( gainNode ) ) {
