@@ -309,6 +309,9 @@ class SoundManager extends PhetioObject {
         // listen for other user gesture events too
         Display.userGestureEmitter.addListener( resumeAudioContext );
       }
+      else {
+        console.log( 'AudioContext is now running.' );
+      }
 
       previousAudioContextState = state;
     } );
