@@ -163,7 +163,7 @@ class SoundClip extends SoundGenerator {
   /**
    * Start playing the sound.
    */
-  public play( delay = 0 ) {
+  public play( delay: number = 0 ) {
 
     if ( this.audioContext.state === 'running' && this.wrappedAudioBuffer.audioBufferProperty.value ) {
 
