@@ -307,7 +307,14 @@ class SoundManager extends PhetioObject {
         window.addEventListener( 'touchstart', resumeAudioContext, false );
 
         // listen for other user gesture events too
-        Display.userGestureEmitter.addListener( resumeAudioContext );
+        if ( Display.userGestureEmitter.hasListener( resumeAudioContext ) ) {
+
+          // TODO: See https://github.com/phetsims/tambo/issues/162
+          console.log( 'already has listener, see https://github.com/phetsims/tambo/issues/162' );
+        }
+        else {
+          Display.userGestureEmitter.addListener( resumeAudioContext );
+        }
       }
       else {
         console.log( 'AudioContext is now running.' );
