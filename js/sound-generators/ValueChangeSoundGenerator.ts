@@ -138,7 +138,7 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    */
   constructor( valueRange: Range, providedOptions?: ValueChangeSoundGeneratorOptions ) {
 
-    const options = optionize<ValueChangeSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>( {
+    const options = optionize<ValueChangeSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
       middleMovingUpSoundPlayer: generalSoftClickSoundPlayer,
       middleMovingDownSoundPlayer: DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER,
       middleMovingUpPlaybackRateMapper: NO_PLAYBACK_RATE_CHANGE,

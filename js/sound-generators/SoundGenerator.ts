@@ -86,7 +86,7 @@ abstract class SoundGenerator {
 
   protected constructor( providedOptions?: SoundGeneratorOptions ) {
 
-    const options = optionize<SoundGeneratorOptions, SoundGeneratorOptions>( {
+    const options = optionize<SoundGeneratorOptions, SoundGeneratorOptions>()( {
       initialOutputLevel: 1,
       audioContext: phetAudioContext,
       connectImmediately: false,

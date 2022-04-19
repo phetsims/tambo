@@ -68,7 +68,7 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
 
   constructor( providedOptions: RemoveAndDisposeSoundGeneratorsTestPanelOptions ) {
 
-    const options = optionize<RemoveAndDisposeSoundGeneratorsTestPanelOptions, SelfOptions, PanelOptions>( {
+    const options = optionize<RemoveAndDisposeSoundGeneratorsTestPanelOptions, SelfOptions, PanelOptions>()( {
       fill: '#f5d3b3',
       xMargin: 14,
       yMargin: 14

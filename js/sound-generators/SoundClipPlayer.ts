@@ -38,7 +38,7 @@ class SoundClipPlayer {
    */
   constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipPlayerOptions ) {
 
-    const options = optionize<SoundClipPlayerOptions, SoundClipPlayerOptions>( {
+    const options = optionize<SoundClipPlayerOptions, SoundClipPlayerOptions>()( {
       soundClipOptions: {},
       soundManagerOptions: {}
     }, providedOptions );

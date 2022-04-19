@@ -34,7 +34,7 @@ class OscillatorSoundGenerator extends SoundGenerator {
 
   constructor( providedOptions: OscillatorSoundGeneratorOptions ) {
 
-    const options = optionize<OscillatorSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>( {
+    const options = optionize<OscillatorSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
       initialFrequency: 440,
       initialWaveformType: 'sine'
     }, providedOptions );

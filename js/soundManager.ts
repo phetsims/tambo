@@ -149,7 +149,7 @@ class SoundManager extends PhetioObject {
 
     assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
 
-    const options = optionize<SoundGeneratorInitializationOptions, SoundGeneratorInitializationOptions>( {
+    const options = optionize<SoundGeneratorInitializationOptions, SoundGeneratorInitializationOptions>()( {
       categories: [ 'sim-specific', 'user-interface' ]
     }, providedOptions );
 
@@ -369,7 +369,7 @@ class SoundManager extends PhetioObject {
     assert && assert( !hasSoundGenerator, 'can\'t add the same sound generator twice' );
 
     // default options
-    const options = optionize<SoundGeneratorAddOptions, SoundGeneratorAddOptions>( {
+    const options = optionize<SoundGeneratorAddOptions, SoundGeneratorAddOptions>()( {
 
       // {string} - The 'sonification level' is used to determine whether a given sound should be enabled given the
       // setting of the sonification level parameter for the sim.  Valid values are 'BASIC' or 'ENHANCED'.

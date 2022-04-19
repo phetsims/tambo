@@ -122,7 +122,7 @@ class AmplitudeModulatorDemoNode extends VBox {
       spacing: 5
     } );
 
-    super( optionize<AmplitudeModulatorDemoNodeOptions, SelfOptions, VBoxOptions>( {
+    super( optionize<AmplitudeModulatorDemoNodeOptions, SelfOptions, VBoxOptions>()( {
       children: [ soundIndexSelectorVBox, lfoEnabled, frequencyControlHBox, depthControlHBox, waveformSelectorVBox ],
       spacing: 15,
       align: 'left'

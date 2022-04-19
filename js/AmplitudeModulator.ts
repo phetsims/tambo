@@ -54,7 +54,7 @@ class AmplitudeModulator extends EnabledComponent {
 
   constructor( providedOptions?: AmplitudeModulatorOptions ) {
 
-    const options = optionize<AmplitudeModulatorOptions, SelfOptions, EnabledComponentOptions>( {
+    const options = optionize<AmplitudeModulatorOptions, SelfOptions, EnabledComponentOptions>()( {
       frequencyProperty: null,
       depthProperty: null,
       waveformProperty: null

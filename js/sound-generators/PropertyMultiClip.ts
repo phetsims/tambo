@@ -33,7 +33,7 @@ class PropertyMultiClip<T> extends MultiClip<T> {
    */
   constructor( property: Property<T>, valueToSoundMap: Map<T, WrappedAudioBuffer>, providedOptions: PropertyMultiClipOptions ) {
 
-    const options = optionize<PropertyMultiClipOptions, SelfOptions, MultiClipOptions>( {
+    const options = optionize<PropertyMultiClipOptions, SelfOptions, MultiClipOptions>()( {
       linkLazily: true
     }, providedOptions );
 

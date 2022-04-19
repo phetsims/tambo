@@ -44,7 +44,7 @@ class SoundClipChordTestNode extends VBox {
       soundPlayer: arpeggioSoundClipChord
     } );
 
-    super( optionize<SoundClipChordTestNodeOptions, SelfOptions, VBoxOptions>( {
+    super( optionize<SoundClipChordTestNodeOptions, SelfOptions, VBoxOptions>()( {
       children: [ playChordButton, playArpeggioButton ],
       spacing: 20
     }, providedOptions ) );

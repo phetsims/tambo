@@ -37,7 +37,7 @@ class PeakDetectorAudioNode extends AudioWorkletNode {
 
   constructor( providedOptions: PeakDetectorAudioNodeOptions ) {
 
-    const options = optionize<PeakDetectorAudioNodeOptions, PeakDetectorAudioNodeOptions>( {
+    const options = optionize<PeakDetectorAudioNodeOptions, PeakDetectorAudioNodeOptions>()( {
       logZeroValues: false
     }, providedOptions );
 

@@ -40,7 +40,7 @@ class PitchedPopGenerator extends SoundGenerator {
 
   constructor( providedOptions: PitchedPopGeneratorOptions ) {
 
-    const options = optionize<PitchedPopGeneratorOptions, SelfOptions, SoundGeneratorOptions>( {
+    const options = optionize<PitchedPopGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
       pitchRange: new Range( 220, 660 ),
       numPopGenerators: DEFAULT_NUM_POP_GENERATORS
     }, providedOptions );

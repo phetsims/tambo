@@ -80,7 +80,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
       'loop option should be supplied by ContinuousPropertySoundGenerator'
     );
 
-    const options = optionize<ContinuousPropertySoundGeneratorOptions, SelfOptions, SoundClipOptions>( {
+    const options = optionize<ContinuousPropertySoundGeneratorOptions, SelfOptions, SoundClipOptions>()( {
       initialOutputLevel: 0.7,
       loop: true,
       trimSilence: true,

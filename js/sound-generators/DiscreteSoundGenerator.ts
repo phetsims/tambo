@@ -53,7 +53,7 @@ class DiscreteSoundGenerator extends SoundClip {
    */
   constructor( valueProperty: NumberProperty, valueRange: Range, providedOptions: DiscreteSoundGeneratorOptions ) {
 
-    const options = optionize<DiscreteSoundGeneratorOptions, SelfOptions, SoundClipOptions>( {
+    const options = optionize<DiscreteSoundGeneratorOptions, SelfOptions, SoundClipOptions>()( {
       sound: brightMarimba_mp3,
       initialOutputLevel: 1,
       numBins: 7,

@@ -90,7 +90,7 @@ class SoundClip extends SoundGenerator {
 
   constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipOptions ) {
 
-    const options = optionize<SoundClipOptions, SelfOptions, SoundGeneratorOptions>( {
+    const options = optionize<SoundClipOptions, SelfOptions, SoundGeneratorOptions>()( {
       loop: false,
       trimSilence: true,
       initialPlaybackRate: 1,

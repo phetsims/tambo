@@ -50,7 +50,7 @@ class SoundClipChord extends SoundGenerator implements ISoundPlayer {
 
   constructor( sound: WrappedAudioBuffer, providedOptions?: SoundClipChordOptions ) {
 
-    const options = optionize<SoundClipChordOptions, SelfOptions, SoundGeneratorOptions>( {
+    const options = optionize<SoundClipChordOptions, SelfOptions, SoundGeneratorOptions>()( {
       initialOutputLevel: 0.7,
       soundClipOptions: null,
       arpeggiate: false,

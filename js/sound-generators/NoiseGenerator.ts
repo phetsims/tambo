@@ -77,7 +77,7 @@ class NoiseGenerator extends SoundGenerator {
 
   constructor( providedOptions: NoiseGeneratorOptions ) {
 
-    const options = optionize<NoiseGeneratorOptions, SelfOptions, SoundGeneratorOptions>( {
+    const options = optionize<NoiseGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
       noiseType: 'pink', // valid values are 'white', 'pink', and 'brown'
 
       // {number} - low pass value in Hz, null (or any falsey value including zero) means no low pass filter is added
