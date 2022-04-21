@@ -24,6 +24,7 @@ import tambo from '../../../tambo.js';
 import BallNode from './BallNode.js';
 import SimLikeComponentsModel from '../model/SimLikeComponentsModel.js';
 import Ball from '../model/Ball.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
 
 // constants
 const MAX_BALLS = 8;
@@ -33,7 +34,9 @@ class SimLikeComponentsScreenView extends ScreenView {
 
   constructor( model: SimLikeComponentsModel ) {
 
-    super();
+    super( {
+      tandem: Tandem.OPT_OUT
+    } );
 
     // set up the model view transform
     const modelViewTransform = ModelViewTransform2.createSinglePointScaleInvertedYMapping(
