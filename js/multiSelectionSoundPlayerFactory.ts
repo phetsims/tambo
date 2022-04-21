@@ -53,7 +53,6 @@ class MultiSelectionSoundPlayerFactory {
    * Get a sound player for the specified position that will produce a sound that varies from the primary sound based on
    * provided parameter.
    * @param positionIndex - the position within the radio button group, combo box, or whatever
-   * @public
    */
   getSelectionSoundPlayer( positionIndex: number ): ISoundPlayer {
 

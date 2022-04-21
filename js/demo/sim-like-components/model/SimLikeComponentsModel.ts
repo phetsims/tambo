@@ -51,7 +51,6 @@ class SimLikeComponentsModel {
 
   /**
    * @param dt - delta time, in seconds
-   * @public
    */
   step( dt: number ) {
     if ( this.ballsMovingProperty.value ) {
@@ -60,7 +59,6 @@ class SimLikeComponentsModel {
   }
 
   /**
-   * @public
    */
   reset() {
     this.resetInProgressProperty.value = true;

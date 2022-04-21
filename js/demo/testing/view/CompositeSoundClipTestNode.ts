@@ -62,7 +62,6 @@ class CompositeSoundClipTestNode extends VBox {
   }
 
   /**
-   * @public
    */
   override dispose() {
     this.disposeCompositeSoundClipTestNode();

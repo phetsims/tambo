@@ -93,7 +93,6 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
   }
 
   /**
-   * @public
    */
   override dispose() {
     this.disposeContinuousPropertySoundGeneratorTestNode();

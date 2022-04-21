@@ -97,7 +97,6 @@ class DiscreteSoundGenerator extends SoundClip {
   }
 
   /**
-   * @public
    */
   override dispose() {
     this.disposeDiscreteSoundGenerator();

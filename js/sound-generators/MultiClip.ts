@@ -90,7 +90,6 @@ class MultiClip<T> extends SoundGenerator {
 
   /**
    * play the sound associated with the provided value
-   * @public
    */
   public playAssociatedSound( value: T, delay = 0 ) {
 

@@ -294,7 +294,6 @@ class SoundClip extends SoundGenerator {
   /**
    * ES5 getter for playback rate
    * @returns {number}
-   * @public
    */
   public get playbackRate(): number {
     return this.getPlaybackRate();
