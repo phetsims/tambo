@@ -164,7 +164,7 @@ class AmplitudeModulator extends EnabledComponent {
   /**
    * Connect the output of this modulator to a destination.
    */
-  public connect( destination: AudioNode | AudioParam ) {
+  public connect( destination: AudioNode | AudioParam ): void {
     this.modulatedGainNode.connect( destination as AudioNode );
   }
 }

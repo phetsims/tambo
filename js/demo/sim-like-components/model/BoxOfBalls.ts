@@ -41,7 +41,7 @@ class BoxOfBalls {
   /**
    * Add a ball with random size, color, position, and velocity.
    */
-  public addRandomBall() {
+  public addRandomBall(): void {
 
     let xVelocity = MIN_X_OR_Y_VELOCITY + dotRandom.nextDouble() * ( MAX_X_OR_Y_VELOCITY - MIN_X_OR_Y_VELOCITY );
     xVelocity = dotRandom.nextBoolean() ? xVelocity : -xVelocity;
@@ -62,7 +62,7 @@ class BoxOfBalls {
   /**
    * Remove a ball.
    */
-  public removeABall() {
+  public removeABall(): void {
     this.balls.pop();
   }
 
@@ -70,7 +70,7 @@ class BoxOfBalls {
    * step function to move and bounce the balls
    * @param dt - time step, in seconds
    */
-  public step( dt: number ) {
+  public step( dt: number ): void {
     const boxBounds = this.box.bounds;
     this.balls.forEach( ball => {
       const positionBeforeMotion = ball.positionProperty.value;
@@ -105,7 +105,7 @@ class BoxOfBalls {
   /**
    * restore initial state
    */
-  public reset() {
+  public reset(): void {
     this.balls.reset();
   }
 }

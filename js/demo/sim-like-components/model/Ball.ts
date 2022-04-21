@@ -15,7 +15,7 @@ class Ball {
   public readonly color: Color;
   public readonly positionProperty: Vector2Property;
   public readonly velocityProperty: Vector2Property;
-  public readonly bounceEmitter: Emitter<[string]>;
+  public readonly bounceEmitter: Emitter<[ string ]>;
 
   constructor( radius: number, color: Color, initialPosition: Vector2, initialVelocity: Vector2 ) {
 
@@ -49,7 +49,7 @@ class Ball {
   /**
    * restore initial state
    */
-  public reset() {
+  public reset(): void {
     this.positionProperty.reset();
     this.velocityProperty.reset();
   }

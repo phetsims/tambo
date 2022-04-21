@@ -55,7 +55,7 @@ class MultiSelectionSoundPlayerFactory {
    * @param positionIndex - the position within the radio button group, combo box, or whatever
    * @public
    */
-  getSelectionSoundPlayer( positionIndex: number ) : ISoundPlayer {
+  getSelectionSoundPlayer( positionIndex: number ): ISoundPlayer {
 
     if ( !this.soundPlayers[ positionIndex ] ) {
 
@@ -92,12 +92,12 @@ class FixedSpeedSoundClipPlayer {
     this.playbackRate = playbackRate;
   }
 
-  public play() {
+  public play(): void {
     this.soundPlayer.setPlaybackRate( this.playbackRate );
     this.soundPlayer.play();
   }
 
-  public stop() {
+  public stop(): void {
     this.soundPlayer.stop();
   }
 }

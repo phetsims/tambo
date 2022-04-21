@@ -131,7 +131,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     this.disposeContinuousPropertySoundGenerator = () => property.unlink( listener );
   }
 
-  public override dispose() {
+  public override dispose(): void {
     this.disposeContinuousPropertySoundGenerator();
     super.dispose();
   }

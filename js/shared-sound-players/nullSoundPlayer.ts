@@ -14,9 +14,9 @@ class NullSoundPlayer implements ISoundPlayer {
 
   constructor() {}
 
-  public play() {}
+  public play(): void {}
 
-  public stop() {}
+  public stop(): void {}
 }
 
 // Create the singleton instance.

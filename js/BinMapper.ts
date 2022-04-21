@@ -17,11 +17,11 @@ export type BinMapperOptions = {
 };
 
 class BinMapper {
-  private readonly minValue : number;
-  private readonly maxValue : number;
-  private readonly span : number;
-  private readonly numBins : number;
-  private readonly options : BinMapperOptions;
+  private readonly minValue: number;
+  private readonly maxValue: number;
+  private readonly span: number;
+  private readonly numBins: number;
+  private readonly options: BinMapperOptions;
 
   constructor( valueRange: Range, numBins: number, options?: BinMapperOptions ) {
 
@@ -42,7 +42,7 @@ class BinMapper {
   /**
    * Map the provided value to a bin.
    */
-  public mapToBin( value: number ) {
+  public mapToBin( value: number ): number {
     if ( !this.options.tolerateOutOfRangeValues ) {
       assert && assert( value <= this.maxValue );
       assert && assert( value >= this.minValue );

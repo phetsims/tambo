@@ -125,7 +125,7 @@ class TestingScreenView extends DemosScreenView {
     this.addChild( resetAllButton );
   }
 
-  public override step( dt: number ) {
+  public override step( dt: number ): void {
     this.stepEmitter.emit( dt );
   }
 }

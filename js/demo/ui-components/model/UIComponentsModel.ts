@@ -25,7 +25,7 @@ class UIComponentsModel {
   /**
    * restore initial state
    */
-  public reset() {
+  public reset(): void {
     this.resetInProgressProperty.value = true;
     this.resetInProgressProperty.value = false;
   }

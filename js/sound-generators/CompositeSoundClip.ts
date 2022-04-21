@@ -38,27 +38,27 @@ class CompositeSoundClip extends SoundGenerator {
     }
   }
 
-  public play() {
+  public play(): void {
     this.soundClips.forEach( soundClip => soundClip.play() );
   }
 
-  public stop() {
+  public stop(): void {
     this.soundClips.forEach( soundClip => soundClip.stop() );
   }
 
-  public override connect( destination: AudioParam | AudioNode ) {
+  public override connect( destination: AudioParam | AudioNode ): void {
     this.soundClips.forEach( soundClip => soundClip.connect( destination ) );
   }
 
-  public override dispose() {
+  public override dispose(): void {
     this.soundClips.forEach( soundClip => soundClip.dispose() );
   }
 
-  public get isPlaying() {
+  public get isPlaying(): boolean {
     return _.some( this.soundClips, soundClip => soundClip.isPlaying );
   }
 
-  public override setOutputLevel( outputLevel: number, timeConstant: number ) {
+  public override setOutputLevel( outputLevel: number, timeConstant: number ): void {
     this.soundClips.forEach( soundClip => soundClip.setOutputLevel( outputLevel, timeConstant ) );
   }
 }
