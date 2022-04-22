@@ -22,7 +22,7 @@ import IReadOnlyProperty from '../../../axon/js/IReadOnlyProperty.js';
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
-let notSettingPhetioStateProperty: Property<boolean>;
+let notSettingPhetioStateProperty: IReadOnlyProperty<boolean>;
 
 export type SoundGeneratorOptions = {
 

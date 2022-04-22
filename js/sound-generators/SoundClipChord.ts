@@ -7,7 +7,6 @@
  */
 
 import DerivedProperty from '../../../axon/js/DerivedProperty.js';
-import Property from '../../../axon/js/Property.js';
 import merge from '../../../phet-core/js/merge.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import SoundClip, { SoundClipOptions } from '../../../tambo/js/sound-generators/SoundClip.js';
@@ -15,6 +14,7 @@ import SoundGenerator, { SoundGeneratorOptions } from '../../../tambo/js/sound-g
 import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import ISoundPlayer from '../ISoundPlayer.js';
+import IReadOnlyProperty from '../../../axon/js/IReadOnlyProperty.js';
 
 type SelfOptions = {
 
@@ -46,7 +46,7 @@ class SoundClipChord extends SoundGenerator implements ISoundPlayer {
   private readonly playbackSoundClips: SoundClip[];
 
   // flag indicating whether this is currently playing
-  public readonly isPlayingProperty: Property<boolean>;
+  public readonly isPlayingProperty: IReadOnlyProperty<boolean>;
 
   constructor( sound: WrappedAudioBuffer, providedOptions?: SoundClipChordOptions ) {
 
