@@ -83,7 +83,7 @@ class SoundClipChord extends SoundGenerator implements ISoundPlayer {
   /**
    * Play the chord.
    */
-  public play() {
+  public play(): void {
     this.playbackSoundClips.forEach( ( soundClip, index ) => {
       const delay = this.arpeggiate ? index * this.arpeggiateTime / this.playbackSoundClips.length : 0;
       soundClip.play( delay );

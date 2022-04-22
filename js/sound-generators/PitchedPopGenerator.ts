@@ -94,7 +94,7 @@ class PitchedPopGenerator extends SoundGenerator {
    * relativePitch - a value from 0 to 1 indicating the proportionate frequency to play within the pitch range
    [duration] - the duration of the pop sound to be played, in seconds
    */
-  public playPop( relativePitch: number, duration = DEFAULT_POP_DURATION ) {
+  public playPop( relativePitch: number, duration = DEFAULT_POP_DURATION ): void {
 
     assert && assert( relativePitch >= 0 && relativePitch <= 1, 'relative pitch value out of range' );
 

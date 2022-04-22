@@ -51,14 +51,14 @@ class SoundClipPlayer {
   /**
    * Play the sound clip.
    */
-  public play() {
+  public play(): void {
     this._soundClip.play();
   }
 
   /**
    * Stop the sound clip.  Does nothing if the sound clip is not playing.
    */
-  public stop() {
+  public stop(): void {
     this._soundClip.stop();
   }
 

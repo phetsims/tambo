@@ -51,7 +51,7 @@ class OscillatorSoundGenerator extends SoundGenerator {
    * Starts the oscillator. The name 'play' is used because this is commonly used in the tambo library for sound
    * generators. If the oscillator is already playing, this has no effect.
    */
-  public play() {
+  public play(): void {
     if ( !this.oscillatorNode ) {
       this.oscillatorNode = phetAudioContext.createOscillator();
       this.oscillatorNode.type = this.waveformType;
@@ -64,7 +64,7 @@ class OscillatorSoundGenerator extends SoundGenerator {
   /**
    * Stops the oscillator. If the oscillator isn't playing, this has no effect.
    */
-  public stop() {
+  public stop(): void {
     if ( this.oscillatorNode ) {
       this.oscillatorNode.stop();
       this.oscillatorNode = null;
@@ -74,7 +74,7 @@ class OscillatorSoundGenerator extends SoundGenerator {
   /**
    * Sets the waveform type.
    */
-  public setWaveformType( waveformType: OscillatorType ) {
+  public setWaveformType( waveformType: OscillatorType ): void {
     this.waveformType = waveformType;
     if ( this.oscillatorNode ) {
       this.oscillatorNode.type = waveformType;

@@ -210,7 +210,7 @@ abstract class SoundGenerator {
   /**
    * Connect the sound generator to an audio parameter.
    */
-  public connect( audioParam: AudioParam | AudioNode ) {
+  public connect( audioParam: AudioParam | AudioNode ): void {
     this.masterGainNode.connect( audioParam as AudioParam );
 
     // Track this sound generator's connections.  This is necessary because Web Audio doesn't support checking which
@@ -221,7 +221,7 @@ abstract class SoundGenerator {
   /**
    * Disconnect the sound generator from an audio parameter.
    */
-  public disconnect( audioParam: AudioParam | AudioNode ) {
+  public disconnect( audioParam: AudioParam | AudioNode ): void {
     this.masterGainNode.disconnect( audioParam as AudioNode );
     this.connectionList = _.without( this.connectionList, audioParam );
   }
@@ -239,7 +239,7 @@ abstract class SoundGenerator {
    *                      signal, and can be negative to invert the phase
    * @param [timeConstant] - time constant for change, longer values mean slower transitions, in seconds
    */
-  public setOutputLevel( outputLevel: number, timeConstant: number = DEFAULT_TIME_CONSTANT ) {
+  public setOutputLevel( outputLevel: number, timeConstant: number = DEFAULT_TIME_CONSTANT ): void {
 
     const now = this.audioContext.currentTime;
 
@@ -294,14 +294,14 @@ abstract class SoundGenerator {
   /**
    * Add a Property to the list of those used to control the enabled state of this sound generator.
    */
-  public addEnableControlProperty( enableControlProperty: IReadOnlyProperty<boolean> ) {
+  public addEnableControlProperty( enableControlProperty: IReadOnlyProperty<boolean> ): void {
     this.enableControlProperties.push( enableControlProperty );
   }
 
   /**
    * Remove a Property from the list of those used to control the enabled state of this sound generator.
    */
-  public removeEnableControlProperty( enableControlProperty: IProperty<boolean> ) {
+  public removeEnableControlProperty( enableControlProperty: IProperty<boolean> ): void {
     this.enableControlProperties.remove( enableControlProperty );
   }
 
@@ -317,7 +317,7 @@ abstract class SoundGenerator {
     return this.fullyEnabledProperty.value;
   }
 
-  public dispose() {
+  public dispose(): void {
     this.disposeSoundGenerator();
   }
 }

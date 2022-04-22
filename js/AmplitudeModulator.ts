@@ -141,7 +141,7 @@ class AmplitudeModulator extends EnabledComponent {
   /**
    * Clean up memory references to avoid memory leaks.
    */
-  public override dispose() {
+  public override dispose(): void {
     this.disposeAmplitudeModulator();
     super.dispose();
   }

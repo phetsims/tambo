@@ -137,7 +137,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
    * Step this sound generator, used for fading out the sound in the absence change.
    * @param dt - change in time (i.e. delta time) in seconds
    */
-  public step( dt: number ) {
+  public step( dt: number ): void {
     if ( this.remainingFadeTime > 0 ) {
       this.remainingFadeTime = Math.max( this.remainingFadeTime - dt, 0 );
 
@@ -158,7 +158,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
   /**
    * stop any in-progress sound generation
    */
-  public reset() {
+  public reset(): void {
     this.stop( 0 );
     this.remainingFadeTime = 0;
   }

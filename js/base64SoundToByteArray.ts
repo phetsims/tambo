@@ -8,7 +8,7 @@
  * Decode a base-64 encoded sound into a Uint8Array.  This does *not* do audio decompression, such as that needed for
  * interpreting MP3 files.
  */
-const base64SoundToByteArray = ( audioContext: AudioContext, base64Sound: string ) => {
+const base64SoundToByteArray = ( audioContext: AudioContext, base64Sound: string ): Uint8Array => {
   const soundData = base64Sound.replace( new RegExp( '^.*,' ), '' ); // remove the mime header
   const byteChars = atob( soundData ); // eslint-disable-line no-undef
   const byteArray = new Uint8Array( byteChars.length );

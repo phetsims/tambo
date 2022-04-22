@@ -86,7 +86,7 @@ class MultiClip<T> extends SoundGenerator {
   /**
    * play the sound associated with the provided value
    */
-  public playAssociatedSound( value: T, delay = 0 ) {
+  public playAssociatedSound( value: T, delay = 0 ): void {
 
     // get the audio buffer for this value
     const wrappedAudioBuffer = this.valueToWrappedAudioBufferMap.get( value );

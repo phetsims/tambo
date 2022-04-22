@@ -35,7 +35,7 @@ class MultiSelectionSoundPlayerFactory {
   /**
    * get the single instance of the sound player, and create it if it doesn't exist yet
    */
-  private getSoundClipInstance() {
+  private getSoundClipInstance(): SoundClip {
     if ( !this._basisSoundClip ) {
       this._basisSoundClip = new SoundClip( radioButtonV2_mp3, {
         initialOutputLevel: 0.7,
