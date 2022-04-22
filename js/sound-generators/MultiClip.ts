@@ -56,7 +56,7 @@ class MultiClip<T> extends SoundGenerator {
    * associated with the value.
    * @param [providedOptions]
    */
-  constructor( valueToWrappedAudioBufferMap: Map<T, WrappedAudioBuffer>, providedOptions: MultiClipOptions ) {
+  constructor( valueToWrappedAudioBufferMap: Map<T, WrappedAudioBuffer>, providedOptions?: MultiClipOptions ) {
 
     const options = optionize<MultiClipOptions, SelfOptions, MultiClipOptions>()( {
       initialPlaybackRate: 1

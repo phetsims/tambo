@@ -35,7 +35,7 @@ export type PeakDetectorAudioNodeOptions = {
 
 class PeakDetectorAudioNode extends AudioWorkletNode {
 
-  constructor( providedOptions: PeakDetectorAudioNodeOptions ) {
+  constructor( providedOptions?: PeakDetectorAudioNodeOptions ) {
 
     const options = optionize<PeakDetectorAudioNodeOptions, PeakDetectorAudioNodeOptions>()( {
       logZeroValues: false

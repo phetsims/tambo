@@ -68,7 +68,6 @@ class ContinuousPropertySoundGenerator extends SoundClip {
    * may require it to be a .wav file, since .mp3 files generally have a bit of silence at the beginning.
    * @param range - the range of values that the provided property can take on
    * @param [providedOptions]
-   * @constructor
    */
   constructor( property: NumberProperty,
                sound: WrappedAudioBuffer,

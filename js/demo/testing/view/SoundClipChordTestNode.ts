@@ -22,7 +22,7 @@ class SoundClipChordTestNode extends VBox {
 
   private readonly disposeSoundClipChordTestNode: () => void;
 
-  constructor( providedOptions: SoundClipChordTestNodeOptions ) {
+  constructor( providedOptions?: SoundClipChordTestNodeOptions ) {
 
     // sound clips to be played
     const chordSoundClipChord = new SoundClipChord( brightMarimba_mp3 );

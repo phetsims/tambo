@@ -26,7 +26,7 @@ const LABEL_FONT = new PhetFont( 16 );
 
 class AmplitudeModulatorDemoNode extends VBox {
 
-  constructor( providedOptions: AmplitudeModulatorDemoNodeOptions ) {
+  constructor( providedOptions?: AmplitudeModulatorDemoNodeOptions ) {
 
     const soundSourceRadioButtonItems = [
       {

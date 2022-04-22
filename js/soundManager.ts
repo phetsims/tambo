@@ -145,7 +145,7 @@ class SoundManager extends PhetioObject {
                      simVisibleProperty: BooleanProperty,
                      simActiveProperty: BooleanProperty,
                      simSettingPhetioStateProperty: BooleanProperty,
-                     providedOptions: SoundGeneratorInitializationOptions ) {
+                     providedOptions?: SoundGeneratorInitializationOptions ) {
 
     assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
 
@@ -345,7 +345,12 @@ class SoundManager extends PhetioObject {
    * Add a sound generator.  This connects the sound generator to the audio path, puts it on the list of sound
    * generators, and creates and returns a unique ID.
    */
-  public addSoundGenerator( soundGenerator: SoundGenerator, providedOptions: SoundGeneratorAddOptions = {} ) {
+  public addSoundGenerator( soundGenerator: SoundGenerator, providedOptions?: SoundGeneratorAddOptions ) {
+
+    // We'll need an empty object of no options were provided.
+    if ( providedOptions === undefined ) {
+      providedOptions = {};
+    }
 
     // Check if initialization has been done and, if not, queue the sound generator and its options for addition
     // once initialization is complete.  Note that when sound is not supported, initialization will never occur.

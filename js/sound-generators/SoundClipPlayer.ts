@@ -34,7 +34,6 @@ class SoundClipPlayer {
   /**
    * @param wrappedAudioBuffer - a Web Audio audio buffer containing decoded audio samples
    * @param [providedOptions]
-   * @constructor
    */
   constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipPlayerOptions ) {
 

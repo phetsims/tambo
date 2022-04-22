@@ -75,7 +75,7 @@ class NoiseGenerator extends SoundGenerator {
   // function that handles changes to the audio context
   private readonly audioContextStateChangeListener: ( state: string ) => void;
 
-  constructor( providedOptions: NoiseGeneratorOptions ) {
+  constructor( providedOptions?: NoiseGeneratorOptions ) {
 
     const options = optionize<NoiseGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
       noiseType: 'pink', // valid values are 'white', 'pink', and 'brown'
@@ -236,8 +236,6 @@ class NoiseGenerator extends SoundGenerator {
 
     this.noiseSourceConnectionPoint = nextOutputToConnect;
     this.isPlaying = false;
-
-    // @private {number} - time at which a deferred play request occurred.
     this.timeOfDeferredStartRequest = Number.NEGATIVE_INFINITY;
 
     // define the listener for audio context state transitions

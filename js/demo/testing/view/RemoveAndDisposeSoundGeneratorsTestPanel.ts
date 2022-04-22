@@ -66,7 +66,7 @@ const SOUND_GENERATOR_INFO = new Map<string, SoundGeneratorComboBoxItemInfo>( [
 
 class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
 
-  constructor( providedOptions: RemoveAndDisposeSoundGeneratorsTestPanelOptions ) {
+  constructor( providedOptions?: RemoveAndDisposeSoundGeneratorsTestPanelOptions ) {
 
     const options = optionize<RemoveAndDisposeSoundGeneratorsTestPanelOptions, SelfOptions, PanelOptions>()( {
       fill: '#f5d3b3',

@@ -46,12 +46,11 @@ class DiscreteSoundGenerator extends SoundClip {
   private readonly disposeDiscreteSoundGenerator: () => void;
 
   /**
-   * valueProperty - the value that is monitored to trigger sounds
-   * valueRange - the range of values expected and over which sounds will be played
-   * options - options for this sound generation and its parent class
-   * @constructor
+   * @param valueProperty - the value that is monitored to trigger sounds
+   * @param valueRange - the range of values expected and over which sounds will be played
+   * @param [providedOptions] - options for this sound generation and its parent class
    */
-  constructor( valueProperty: NumberProperty, valueRange: Range, providedOptions: DiscreteSoundGeneratorOptions ) {
+  constructor( valueProperty: NumberProperty, valueRange: Range, providedOptions?: DiscreteSoundGeneratorOptions ) {
 
     const options = optionize<DiscreteSoundGeneratorOptions, SelfOptions, SoundClipOptions>()( {
       sound: brightMarimba_mp3,

@@ -47,9 +47,6 @@ class TestingScreenView extends DemosScreenView {
 
   private readonly stepEmitter: Emitter<[ number ]>;
 
-  /**
-   * @constructor
-   */
   constructor() {
 
     const resetInProgressProperty = new BooleanProperty( false );
