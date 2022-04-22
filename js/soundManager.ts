@@ -301,18 +301,14 @@ class SoundManager extends PhetioObject {
           phetAudioContext.currentTime}`
       );
 
+      console.log( `slime: state = ${state}` );
       if ( state !== 'running' ) {
 
-        // add a listener that will resume the audio context on the next touchstart
+        // Add a listener that will resume the audio context on the next touchstart.
         window.addEventListener( 'touchstart', resumeAudioContext, false );
 
-        // listen for other user gesture events too
-        if ( Display.userGestureEmitter.hasListener( resumeAudioContext ) ) {
-
-          // TODO: See https://github.com/phetsims/tambo/issues/162
-          console.log( 'already has listener, see https://github.com/phetsims/tambo/issues/162' );
-        }
-        else {
+        // Listen also for other user gesture events that can be used to resume the audio context.
+        if ( !Display.userGestureEmitter.hasListener( resumeAudioContext ) ) {
           Display.userGestureEmitter.addListener( resumeAudioContext );
         }
       }
