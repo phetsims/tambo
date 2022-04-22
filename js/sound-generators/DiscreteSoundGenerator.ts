@@ -92,7 +92,7 @@ class DiscreteSoundGenerator extends SoundClip {
     // monitor the value, playing sounds when appropriate
     valueProperty.lazyLink( playSoundOnChanges );
 
-    // @private {function}
+    // dispose function
     this.disposeDiscreteSoundGenerator = () => { valueProperty.unlink( playSoundOnChanges ); };
   }
 
@@ -120,7 +120,6 @@ class BinSelector {
     // parameter checking
     assert && assert( numBins > 0 );
 
-    // @private
     this.minValue = valueRange.min;
     this.maxValue = valueRange.max;
     this.span = valueRange.getLength();

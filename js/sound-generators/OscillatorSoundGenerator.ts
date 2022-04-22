@@ -41,11 +41,8 @@ class OscillatorSoundGenerator extends SoundGenerator {
 
     super( options );
 
-    // @private {OscillatorNode|null} - The Web Audio oscillator node that will be created when play is called, and set
-    // to null when stopped (Web Audio oscillators are meant to be single use only).
+    // state initialization
     this.oscillatorNode = null;
-
-    // @private
     this.frequency = options.initialFrequency;
     this.waveformType = options.initialWaveformType;
   }

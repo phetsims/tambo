@@ -164,7 +164,7 @@ class BasicAndEnhancedSoundTestNode extends VBox {
       spacing: 20
     }, options ) );
 
-    // @private - dispose function
+    // dispose function
     this.disposeBasicAndEnhancedSoundTestNode = () => {
       soundManager.removeSoundGenerator( loonCallSoundClip );
       loonCallSoundClip.dispose();
@@ -235,7 +235,7 @@ class AdditionalAudioNodesTestNode extends VBox {
       spacing: 20
     }, options ) );
 
-    // @private - dispose function
+    // dispose function
     this.disposeBasicAndEnhancedSoundTestNode = () => {
       soundManager.removeSoundGenerator( shortSoundNormal );
       shortSoundNormal.dispose();
@@ -354,7 +354,7 @@ class LongSoundTestPanel extends Node {
     };
     resetInProgressProperty.link( resetHandler );
 
-    // @private - dispose function
+    // dispose function
     this.disposeLongSoundTestPanel = () => {
       resetInProgressProperty.unlink( resetHandler );
       soundManager.removeSoundGenerator( thunderSoundClip );

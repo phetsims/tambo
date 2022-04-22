@@ -78,13 +78,8 @@ class MultiClip<T> extends SoundGenerator {
       }
     } );
 
-    // @private
     this.playbackRate = ( options.initialPlaybackRate === undefined ) ? 1 : options.initialPlaybackRate;
-
-    // @private {function|null} - a listener for implementing deferred play requests, see usage for details
     this.audioContextStateChangeListener = null;
-
-    // @private {number} - time at which a deferred play request occurred, in milliseconds since epoch
     this.timeOfDeferredPlayRequest = Number.NEGATIVE_INFINITY;
   }
 

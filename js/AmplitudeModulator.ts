@@ -62,19 +62,9 @@ class AmplitudeModulator extends EnabledComponent {
 
     super( options );
 
-    // {NumberProperty} - frequency of the oscillation, generally pretty low, like 1 to 20 or so
     this.frequencyProperty = options.frequencyProperty || new NumberProperty( DEFAULT_FREQUENCY );
-
-    // {NumberProperty} - 0 for no audible oscillation, 1 for full modulation
     this.depthProperty = options.depthProperty || new NumberProperty( DEFAULT_DEPTH );
-
-    // {StringProperty} - Web Audio oscillator type
     this.waveformProperty = options.waveformProperty || new Property<OscillatorType>( DEFAULT_WAVEFORM );
-
-    // the low frequency oscillator (LFO) that will control the modulation, created in the handler below
-    let lowFrequencyOscillator: OscillatorNode | null = null;
-
-    // @private {GainNode} - the main gain node that is modulated in order to produce the amplitude modulation effect
     this.modulatedGainNode = phetAudioContext.createGain();
     this.modulatedGainNode.gain.value = 0.5; // this value is added to the attenuated LFO output value
 
@@ -82,6 +72,8 @@ class AmplitudeModulator extends EnabledComponent {
     // range of -0.5 to 0.5, which is shifted up later in the chain to go from 0 to 1.
     const lfoAttenuator = phetAudioContext.createGain();
     lfoAttenuator.connect( this.modulatedGainNode.gain );
+
+    let lowFrequencyOscillator: OscillatorNode | null = null;
 
     // hook up the LFO-control properties
     const enabledListener = ( enabled: boolean ) => {
@@ -137,7 +129,7 @@ class AmplitudeModulator extends EnabledComponent {
     };
     this.frequencyProperty.link( frequencyListener );
 
-    // @private
+    // dispose function
     this.disposeAmplitudeModulator = () => {
       this.enabledProperty.unlink( enabledListener );
       this.depthProperty.unlink( depthListener );

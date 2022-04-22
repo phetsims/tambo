@@ -145,7 +145,7 @@ class NoiseGenerator extends SoundGenerator {
 
     // define the noise data
     const noiseBufferSize = NOISE_BUFFER_SECONDS * this.audioContext.sampleRate;
-    this.noiseBuffer = this.audioContext.createBuffer( 1, noiseBufferSize, this.audioContext.sampleRate ); // @private
+    this.noiseBuffer = this.audioContext.createBuffer( 1, noiseBufferSize, this.audioContext.sampleRate );
     const data = this.noiseBuffer.getChannelData( 0 );
 
     // fill in the sample buffer based on the noise type
@@ -200,12 +200,12 @@ class NoiseGenerator extends SoundGenerator {
     this.lfo.frequency.setValueAtTime( options.lfoInitialFrequency, now );
     this.lfo.start();
 
-    // @private {GainNode} - a gain stage to attenuate the LFO output so that it will range from -0.5 to +0.5
+    // set up the gain stage that will attenuate the LFO output so that it will range from -0.5 to +0.5
     this.lfoAttenuatorGainNode = this.audioContext.createGain();
     this.lfoAttenuatorGainNode.gain.value = options.lfoInitialDepth / 2;
     this.lfo.connect( this.lfoAttenuatorGainNode );
 
-    // @private {GainNode} - a gain stage for the LFO - the main sound path will run through here
+    // set up the gain stage for the LFO - the main sound path will run through here
     this.lfoControlledGainNode = this.audioContext.createGain();
     this.lfoControlledGainNode.gain.value = 0.5; // this value is added to the attenuated LFO output value
 
@@ -240,7 +240,7 @@ class NoiseGenerator extends SoundGenerator {
     // @private {number} - time at which a deferred play request occurred.
     this.timeOfDeferredStartRequest = Number.NEGATIVE_INFINITY;
 
-    // @private {function} - callback for when audio context isn't in 'running' state, see usage
+    // define the listener for audio context state transitions
     this.audioContextStateChangeListener = state => {
 
       if ( state === 'running' && this.isPlaying ) {

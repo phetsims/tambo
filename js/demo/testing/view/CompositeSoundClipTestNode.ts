@@ -54,7 +54,7 @@ class CompositeSoundClipTestNode extends VBox {
       spacing: 20
     }, options ) );
 
-    // @private - dispose function
+    // dispose function
     this.disposeCompositeSoundClipTestNode = () => {
       soundManager.removeSoundGenerator( compositeSoundClip );
       compositeSoundClip.dispose();

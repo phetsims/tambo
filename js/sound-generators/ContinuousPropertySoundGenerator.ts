@@ -97,8 +97,6 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     this.fadeTime = options.fadeTime;
     this.delayBeforeStop = options.delayBeforeStop;
     this.nonFadedOutputLevel = options.initialOutputLevel === undefined ? 1 : options.initialOutputLevel;
-
-    // @private {number} - countdown time used for fade out
     this.remainingFadeTime = 0;
 
     // start with the output level at zero so that the initial sound generation has a bit of fade in
@@ -127,7 +125,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     };
     property.lazyLink( listener );
 
-    // @private {function}
+    // dispose function
     this.disposeContinuousPropertySoundGenerator = () => property.unlink( listener );
   }
 

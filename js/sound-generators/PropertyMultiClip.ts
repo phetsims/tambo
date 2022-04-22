@@ -48,7 +48,7 @@ class PropertyMultiClip<T> extends MultiClip<T> {
       property.link( playSoundForValue );
     }
 
-    // @private - dispose function
+    // dispose function
     this.disposePropertyMultiClip = () => { property.unlink( playSoundForValue ); };
   }
 

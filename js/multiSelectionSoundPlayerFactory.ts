@@ -34,9 +34,8 @@ class MultiSelectionSoundPlayerFactory {
 
   /**
    * get the single instance of the sound player, and create it if it doesn't exist yet
-   * @private
    */
-  getSoundClipInstance() {
+  private getSoundClipInstance() {
     if ( !this._basisSoundClip ) {
       this._basisSoundClip = new SoundClip( radioButtonV2_mp3, {
         initialOutputLevel: 0.7,
@@ -85,8 +84,6 @@ class FixedSpeedSoundClipPlayer {
   private readonly playbackRate: number;
 
   constructor( soundPlayer: SoundClip, playbackRate: number ) {
-
-    // @private
     this.soundPlayer = soundPlayer;
     this.playbackRate = playbackRate;
   }

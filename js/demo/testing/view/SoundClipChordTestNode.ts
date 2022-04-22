@@ -49,7 +49,7 @@ class SoundClipChordTestNode extends VBox {
       spacing: 20
     }, providedOptions ) );
 
-    // @private - dispose function
+    // dispose function
     this.disposeSoundClipChordTestNode = () => {
       soundManager.removeSoundGenerator( chordSoundClipChord );
       chordSoundClipChord.dispose();

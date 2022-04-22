@@ -67,11 +67,8 @@ class SoundClipChord extends SoundGenerator implements ISoundPlayer {
 
     super( options );
 
-    // @private
     this.arpeggiate = options.arpeggiate;
     this.arpeggiateTime = options.arpeggiateTime;
-
-    // @private
     this.playbackSoundClips = options.chordPlaybackRates.map( playbackRate => {
       const soundClip = new SoundClip( sound, merge( {
         initialPlaybackRate: playbackRate

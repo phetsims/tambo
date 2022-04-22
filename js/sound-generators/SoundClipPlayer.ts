@@ -43,7 +43,6 @@ class SoundClipPlayer {
       soundManagerOptions: {}
     }, providedOptions );
 
-    // {SoundClip} @private
     this._soundClip = new SoundClip( wrappedAudioBuffer, options.soundClipOptions );
 
     // automatically register this sound clip with the sound manager
