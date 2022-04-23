@@ -7,11 +7,12 @@
 import Property from '../../axon/js/Property.js';
 import Screen from '../../joist/js/Screen.js';
 import ScreenIcon from '../../joist/js/ScreenIcon.js';
-import Sim from '../../joist/js/Sim.js';
+import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
 import { Rectangle } from '../../scenery/js/imports.js';
 import { LinearGradient } from '../../scenery/js/imports.js';
 import { RadialGradient } from '../../scenery/js/imports.js';
+import Tandem from '../../tandem/js/Tandem.js';
 import SimLikeComponentsModel from './demo/sim-like-components/model/SimLikeComponentsModel.js';
 import SimLikeComponentsScreenView from './demo/sim-like-components/view/SimLikeComponentsScreenView.js';
 import SoundOptionsDialogContent from './demo/SoundOptionsDialogContent.js';
@@ -24,7 +25,7 @@ import tamboStrings from './tamboStrings.js';
 // constants
 const SOUND_OPTIONS_DIALOG_CONTENT = new SoundOptionsDialogContent();
 
-const simOptions = {
+const simOptions: SimOptions = {
   credits: {
     leadDesign: 'John Blanco'
   },
@@ -77,7 +78,8 @@ simLauncher.launch( () => {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        keyboardHelpNode: keyboardHelpNode
+        keyboardHelpNode: keyboardHelpNode,
+        tandem: Tandem.OPT_OUT
       }
     ),
 
@@ -92,7 +94,8 @@ simLauncher.launch( () => {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        keyboardHelpNode: keyboardHelpNode
+        keyboardHelpNode: keyboardHelpNode,
+        tandem: Tandem.OPT_OUT
       }
     ),
 
@@ -109,7 +112,8 @@ simLauncher.launch( () => {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        keyboardHelpNode: keyboardHelpNode
+        keyboardHelpNode: keyboardHelpNode,
+        tandem: Tandem.OPT_OUT
       }
     )
 
