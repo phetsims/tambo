@@ -6,7 +6,7 @@
     }
   ],
   "include": [
-    "js/tambo-main.js",
+    "js/tambo-main.ts",
     "js/demo/**/*",
     "js/**/*Test*",
     "js/**/*test*",

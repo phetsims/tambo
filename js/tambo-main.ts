@@ -9,7 +9,7 @@ import Screen from '../../joist/js/Screen.js';
 import ScreenIcon from '../../joist/js/ScreenIcon.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { Rectangle } from '../../scenery/js/imports.js';
+import { IColor, Rectangle } from '../../scenery/js/imports.js';
 import { LinearGradient } from '../../scenery/js/imports.js';
 import { RadialGradient } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
@@ -34,7 +34,7 @@ const simOptions: SimOptions = {
 };
 
 // helper function to create screen icons that aren't too bland
-function createScreenIcon( color1, color2, gradientType ) {
+function createScreenIcon( color1: IColor, color2: IColor, gradientType: string ) {
 
   let colorGradient;
   if ( gradientType === 'radial' ) {
