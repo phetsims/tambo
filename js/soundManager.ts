@@ -301,7 +301,6 @@ class SoundManager extends PhetioObject {
           phetAudioContext.currentTime}`
       );
 
-      console.log( `slime: state = ${state}` );
       if ( state !== 'running' ) {
 
         // Add a listener that will resume the audio context on the next touchstart.
