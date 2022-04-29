@@ -93,7 +93,7 @@ class SoundClipChord extends SoundGenerator implements ISoundPlayer {
   /**
    * Stop the chord if it's playing.  This is mostly here to complete the ISoundPlayer interface.
    */
-  public stop() {
+  public stop(): void {
     this.playbackSoundClips.forEach( soundClip => {
       soundClip.stop();
     } );
@@ -102,7 +102,7 @@ class SoundClipChord extends SoundGenerator implements ISoundPlayer {
   /**
    * Release any memory references in order to avoid memory leaks.
    */
-  public override dispose() {
+  public override dispose(): void {
     this.playbackSoundClips.forEach( soundClip => soundClip.dispose() );
     this.playbackSoundClips.length = 0;
     super.dispose();

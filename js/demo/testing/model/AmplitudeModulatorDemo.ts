@@ -57,7 +57,7 @@ class AmplitudeModulatorDemo extends SoundGenerator {
   /**
    * restore initial state
    */
-  reset() {
+  reset(): void {
     this.amplitudeModulator.enabledProperty.set( true );
     this.amplitudeModulator.frequencyProperty.reset();
     this.amplitudeModulator.depthProperty.reset();

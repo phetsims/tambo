@@ -97,7 +97,7 @@ class DiscreteSoundGenerator extends SoundClip {
 
   /**
    */
-  override dispose() {
+  override dispose(): void {
     this.disposeDiscreteSoundGenerator();
     super.dispose();
   }

@@ -85,7 +85,7 @@ class BallNode extends Circle {
   /**
    * Clean up memory references to avoid leaks.
    */
-  override dispose() {
+  override dispose(): void {
     this.disposeBallNode();
     super.dispose();
   }

@@ -145,7 +145,7 @@ class SoundManager extends PhetioObject {
                      simVisibleProperty: BooleanProperty,
                      simActiveProperty: BooleanProperty,
                      simSettingPhetioStateProperty: BooleanProperty,
-                     providedOptions?: SoundGeneratorInitializationOptions ) {
+                     providedOptions?: SoundGeneratorInitializationOptions ): void {
 
     assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );
 
@@ -333,7 +333,7 @@ class SoundManager extends PhetioObject {
   /**
    * Returns true if the specified soundGenerator has been previously added to the soundManager.
    */
-  public hasSoundGenerator( soundGenerator: SoundGenerator ) {
+  public hasSoundGenerator( soundGenerator: SoundGenerator ): boolean {
     return _.some(
       this.soundGeneratorInfoArray,
       soundGeneratorInfo => soundGeneratorInfo.soundGenerator === soundGenerator
@@ -344,7 +344,7 @@ class SoundManager extends PhetioObject {
    * Add a sound generator.  This connects the sound generator to the audio path, puts it on the list of sound
    * generators, and creates and returns a unique ID.
    */
-  public addSoundGenerator( soundGenerator: SoundGenerator, providedOptions?: SoundGeneratorAddOptions ) {
+  public addSoundGenerator( soundGenerator: SoundGenerator, providedOptions?: SoundGeneratorAddOptions ): void {
 
     // We'll need an empty object of no options were provided.
     if ( providedOptions === undefined ) {
@@ -430,7 +430,7 @@ class SoundManager extends PhetioObject {
   /**
    * Remove the specified sound generator.
    */
-  public removeSoundGenerator( soundGenerator: SoundGenerator ) {
+  public removeSoundGenerator( soundGenerator: SoundGenerator ): void {
 
     // Check if the sound manager is initialized and, if not, issue a warning and ignore the request.  This is not an
     // assertion because the sound manager may not be initialized in cases where the sound is not enabled for the
@@ -477,7 +477,7 @@ class SoundManager extends PhetioObject {
    * Set the master output level for sonification.
    * @param level - valid values from 0 (min) through 1 (max)
    */
-  public setMasterOutputLevel( level: number ) {
+  public setMasterOutputLevel( level: number ): void {
 
     // Check if initialization has been done.  This is not an assertion because the sound manager may not be
     // initialized if sound is not enabled for the sim.
@@ -518,7 +518,7 @@ class SoundManager extends PhetioObject {
    * @param categoryName - name of category to which this invocation applies
    * @param outputLevel - valid values from 0 through 1
    */
-  public setOutputLevelForCategory( categoryName: string, outputLevel: number ) {
+  public setOutputLevelForCategory( categoryName: string, outputLevel: number ): void {
 
     // Check if initialization has been done.  This is not an assertion because the sound manager may not be
     // initialized if sound is not enabled for the sim.
@@ -566,7 +566,7 @@ class SoundManager extends PhetioObject {
    * Set the amount of reverb.
    * @param newReverbLevel - value from 0 to 1, 0 = totally dry, 1 = wet
    */
-  public setReverbLevel( newReverbLevel: number ) {
+  public setReverbLevel( newReverbLevel: number ): void {
 
     // Check if initialization has been done.  This is not an assertion because the sound manager may not be
     // initialized if sound is not enabled for the sim.
@@ -626,7 +626,7 @@ class SoundManager extends PhetioObject {
    * @param gainNode
    * @param duration - duration for logging, in seconds
    */
-  public logGain( gainNode: GainNode, duration: number ) {
+  public logGain( gainNode: GainNode, duration: number ): void {
 
     duration = duration || 1;
     const startTime = Date.now();
@@ -653,7 +653,7 @@ class SoundManager extends PhetioObject {
    * Log the value of the master gain as it changes, used primarily for debug.
    * @param duration - in seconds
    */
-  public logMasterGain( duration: number ) {
+  public logMasterGain( duration: number ): void {
     if ( this.masterGainNode ) {
       this.logGain( this.masterGainNode, duration );
     }
@@ -663,7 +663,7 @@ class SoundManager extends PhetioObject {
    * Log the value of the reverb gain as it changes, used primarily for debug.
    * @param duration - duration for logging, in seconds
    */
-  public logReverbGain( duration: number ) {
+  public logReverbGain( duration: number ): void {
     if ( this.reverbGainNode ) {
       this.logGain( this.reverbGainNode, duration );
     }

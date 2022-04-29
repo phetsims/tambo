@@ -258,7 +258,7 @@ class NoiseGenerator extends SoundGenerator {
    * Start the noise source.
    * @param [delay] - optional delay for when to start the noise source, in seconds
    */
-  public start( delay = 0 ) {
+  public start( delay = 0 ): void {
 
     if ( this.audioContext.state === 'running' ) {
 
@@ -294,7 +294,7 @@ class NoiseGenerator extends SoundGenerator {
    * Stop the noise source.
    * @param {number} [time] - optional audio context time at which this should be stopped
    */
-  public stop( time = 0 ) {
+  public stop( time = 0 ): void {
 
     // only stop if playing, otherwise ignore
     if ( this.isPlaying && this.noiseSource ) {
@@ -307,7 +307,7 @@ class NoiseGenerator extends SoundGenerator {
   /**
    * Set the frequency of the low frequency amplitude modulator (LFO).
    */
-  public setLfoFrequency( frequency: number ) {
+  public setLfoFrequency( frequency: number ): void {
     this.lfo.frequency.setTargetAtTime( frequency, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT );
   }
 
@@ -315,14 +315,14 @@ class NoiseGenerator extends SoundGenerator {
    * Set the depth of the LFO modulator.
    * @param {number} depth - depth value from 0 (no modulation) to 1 (max modulation)
    */
-  public setLfoDepth( depth: number ) {
+  public setLfoDepth( depth: number ): void {
     this.lfoAttenuatorGainNode.gain.setTargetAtTime( depth / 2, this.audioContext.currentTime, LFO_DEPTH_CHANGE_TIME_CONSTANT );
   }
 
   /**
    * Turn the low frequency amplitude modulation on/off.
    */
-  public setLfoEnabled( enabled: boolean ) {
+  public setLfoEnabled( enabled: boolean ): void {
     if ( enabled ) {
       this.lfoAttenuatorGainNode.gain.setTargetAtTime( 0.5, this.audioContext.currentTime, PARAMETER_CHANGE_TIME_CONSTANT );
       this.lfoAttenuatorGainNode.connect( this.lfoControlledGainNode.gain );
@@ -336,7 +336,7 @@ class NoiseGenerator extends SoundGenerator {
   /**
    * set the Q value for the band pass filter, assumes that noise generator was created with this filter enabled
    */
-  public setBandpassFilterCenterFrequency( frequency: number, timeConstant: number ) {
+  public setBandpassFilterCenterFrequency( frequency: number, timeConstant: number ): void {
     timeConstant = timeConstant || PARAMETER_CHANGE_TIME_CONSTANT;
     if ( this.bandPassFilter !== null ) {
       this.bandPassFilter.frequency.setTargetAtTime( frequency, this.audioContext.currentTime, timeConstant );

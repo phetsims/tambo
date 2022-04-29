@@ -236,7 +236,7 @@ class SoundClip extends SoundGenerator {
    * cause audible clicks.  If greater than zero, which it is by default, this method will try to fade out the sound
    * fully prior to stopping the audio playback.
    */
-  public stop( delay: number = DEFAULT_STOP_DELAY ) {
+  public stop( delay: number = DEFAULT_STOP_DELAY ): void {
 
     // Calculate a time constant to fade output level by 99% by the stop time, see Web Audio time constant information
     // to understand this calculation.
@@ -271,7 +271,7 @@ class SoundClip extends SoundGenerator {
   /**
    * Set the playback rate.  Based on the way this SoundClip was created, this may or may not affect in-progress sounds.
    */
-  public setPlaybackRate( playbackRate: number, timeConstant: number = DEFAULT_TC ) {
+  public setPlaybackRate( playbackRate: number, timeConstant: number = DEFAULT_TC ): void {
     assert && assert( playbackRate > 0 );
     if ( this.rateChangesAffectPlayingSounds ) {
       const now = this.audioContext.currentTime;
@@ -311,7 +311,7 @@ class SoundClip extends SoundGenerator {
    * SoundClip supports multiple buffers playing at the same time.  This method is generally used to limit the number
    * of instances that are playing at the same time.
    */
-  public getNumberOfPlayingInstances() {
+  public getNumberOfPlayingInstances(): number {
     return this.activeBufferSources.length;
   }
 }

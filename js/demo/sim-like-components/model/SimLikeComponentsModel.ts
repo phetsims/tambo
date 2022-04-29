@@ -52,7 +52,7 @@ class SimLikeComponentsModel {
   /**
    * @param dt - delta time, in seconds
    */
-  step( dt: number ) {
+  step( dt: number ): void {
     if ( this.ballsMovingProperty.value ) {
       this.boxOfBalls.step( dt );
     }
@@ -60,7 +60,7 @@ class SimLikeComponentsModel {
 
   /**
    */
-  reset() {
+  reset(): void {
     this.resetInProgressProperty.value = true;
     this.numberOfBallsProperty.reset();
     this.ballsMovingProperty.reset();

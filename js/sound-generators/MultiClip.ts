@@ -169,14 +169,14 @@ class MultiClip<T> extends SoundGenerator {
    * subsequent plays of sounds.
    * @param playbackRate - desired playback speed, 1 = normal speed
    */
-  public setPlaybackRate( playbackRate: number ) {
+  public setPlaybackRate( playbackRate: number ): void {
     this.playbackRate = playbackRate;
   }
 
   /**
    * Stop playing any sounds that are currently in progress.
    */
-  public stopAll() {
+  public stopAll(): void {
 
     // Simply calling stop() on the buffer source frequently causes an audible click, so we use a gain node and turn
     // down the gain, effectively doing a fade out, before stopping playback.
