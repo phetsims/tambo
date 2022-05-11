@@ -16,6 +16,7 @@ import brightMarimba_mp3 from '../../sounds/brightMarimba_mp3.js';
 import tambo from '../tambo.js';
 import SoundClip, { SoundClipOptions } from './SoundClip.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
+import BinMapper from '../BinMapper.js';
 
 type SelfOptions = {
 
@@ -67,13 +68,15 @@ class DiscreteSoundGenerator extends SoundClip {
     super( options.sound, options );
 
     // create the object that will place the continuous values into bins
-    const binSelector = new BinSelector( valueRange, options.numBins, options.outOfRangeValuesOK );
+    const binMapper = new BinMapper( valueRange, options.numBins, {
+      tolerateOutOfRangeValues: options.outOfRangeValuesOK
+    } );
 
     // function for playing sound when the appropriate conditions are met
     const playSoundOnChanges = ( newValue: number, oldValue: number ) => {
 
-      const newBin = binSelector.selectBin( newValue );
-      const oldBin = binSelector.selectBin( oldValue );
+      const newBin = binMapper.mapToBin( newValue );
+      const oldBin = binMapper.mapToBin( oldValue );
 
       if ( options.alwaysPlayOnChangesProperty && options.alwaysPlayOnChangesProperty.value ||
            ( newValue === valueRange.min && options.playSoundAtMin ) ||
@@ -102,43 +105,6 @@ class DiscreteSoundGenerator extends SoundClip {
     super.dispose();
   }
 
-}
-
-/**
- * inner type for placing values in a bin
- */
-class BinSelector {
-  private readonly minValue: number;
-  private readonly maxValue: number;
-  private readonly span: number;
-  private readonly numBins: number;
-  private readonly tolerateOutOfRangeValues: boolean;
-
-  constructor( valueRange: Range, numBins: number, tolerateOutOfRangeValues: boolean ) {
-
-    // parameter checking
-    assert && assert( numBins > 0 );
-
-    this.minValue = valueRange.min;
-    this.maxValue = valueRange.max;
-    this.span = valueRange.getLength();
-    this.numBins = numBins;
-    this.tolerateOutOfRangeValues = tolerateOutOfRangeValues;
-  }
-
-  /**
-   * return a value indicating which bin the provided value would fall into
-   */
-  public selectBin( value: number ): number {
-    if ( !this.tolerateOutOfRangeValues ) {
-      assert && assert( value <= this.maxValue );
-      assert && assert( value >= this.minValue );
-    }
-
-    // this calculation means that values on the boundaries will go into the higher bin except for the max value
-    const proportion = ( value - this.minValue ) / this.span;
-    return Math.min( Math.floor( proportion * this.numBins ), this.numBins - 1 );
-  }
 }
 
 tambo.register( 'DiscreteSoundGenerator', DiscreteSoundGenerator );

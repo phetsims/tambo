@@ -6,14 +6,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import merge from '../../phet-core/js/merge.js';
 import tambo from './tambo.js';
 import Range from '../../dot/js/Range.js';
+import optionize from '../../phet-core/js/optionize.js';
 
 export type BinMapperOptions = {
 
   // Allow values that are outside the specified range (if false, an assert occurs on out-of-range values).
-  tolerateOutOfRangeValues: boolean;
+  tolerateOutOfRangeValues?: boolean;
 };
 
 class BinMapper {
@@ -28,7 +28,7 @@ class BinMapper {
     // parameter checking
     assert && assert( numBins > 0 );
 
-    options = merge( {
+    options = optionize<BinMapperOptions, BinMapperOptions>()( {
       tolerateOutOfRangeValues: false
     }, options );
 
