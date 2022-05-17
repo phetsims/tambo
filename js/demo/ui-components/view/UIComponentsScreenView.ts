@@ -12,6 +12,7 @@ import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import NumberControl from '../../../../../scenery-phet/js/NumberControl.js';
+import NumberPicker from '../../../../../scenery-phet/js/NumberPicker.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../../scenery-phet/js/TimeControlNode.js';
 import { Image, Text, VBox } from '../../../../../scenery/js/imports.js';
@@ -28,6 +29,7 @@ import tambo from '../../../tambo.js';
 import SliderSoundTestNode from './SliderSoundTestNode.js';
 import UIComponentsModel from '../model/UIComponentsModel.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
+import Property from '../../../../../axon/js/Property.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 20 );
@@ -151,6 +153,16 @@ class UIComponentsScreenView extends DemosScreenView {
             // This is an example of a number control that has a delta value that leads to thresholds in the sound
             // player that are not all equally sized.  See https://github.com/phetsims/sun/issues/697.
             new NumberControl( 'How much you want (asymmetric)?', new NumberProperty( 0 ), new Range( 0, 100 ), { delta: 22 } )
+          ],
+          spacing: 20,
+          center: layoutBounds.center
+        } )
+      },
+      {
+        label: 'NumberPicker',
+        createNode: ( layoutBounds: Bounds2 ) => new VBox( {
+          children: [
+            new NumberPicker( new NumberProperty( 0 ), new Property<Range>( new Range( 0, 4 ) ) )
           ],
           spacing: 20,
           center: layoutBounds.center
