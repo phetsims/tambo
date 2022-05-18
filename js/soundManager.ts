@@ -370,17 +370,8 @@ class SoundManager extends PhetioObject {
 
     // default options
     const options = optionize<SoundGeneratorAddOptions, SoundGeneratorAddOptions>()( {
-
-      // {string} - The 'sonification level' is used to determine whether a given sound should be enabled given the
-      // setting of the sonification level parameter for the sim.  Valid values are 'BASIC' or 'ENHANCED'.
       sonificationLevel: SoundLevelEnum.BASIC,
-
-      // {Node|null} - a Scenery node that, if provided, must be visible in the display for the sound generator to be
-      // enabled.  This is generally used only for sounds that can play for long durations, such as a looping sound
-      // clip, that should be stopped when the associated visual representation is hidden.
       associatedViewNode: null,
-
-      // {string} - category name for this sound, which can be used to group sounds together and control them as a group
       categoryName: null
     }, providedOptions );
 

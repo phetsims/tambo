@@ -78,28 +78,15 @@ class NoiseGenerator extends SoundGenerator {
   constructor( providedOptions?: NoiseGeneratorOptions ) {
 
     const options = optionize<NoiseGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
-      noiseType: 'pink', // valid values are 'white', 'pink', and 'brown'
-
-      // {number} - low pass value in Hz, null (or any falsey value including zero) means no low pass filter is added
+      noiseType: 'pink',
       lowPassCutoffFrequency: null,
-
-      // {number} - high pass value in Hz, null (or any falsey value including zero) means no high pass filter is added
       highPassCutoffFrequency: null,
-
-      // {number} - center frequency for band pass filter value in Hz, null (or any falsey value including zero) means
-      // no band pass filter is added
       centerFrequency: null,
-
-      // {number} - Q factor, aka quality factor, for bandpass filter if present, see Web Audio BiquadFilterNode for
-      // more information
       qFactor: 1,
-
-      // parameters that control the behavior of the low frequency oscillator (LFO), which does amplitude modulation on
-      // the noise
       lfoInitiallyEnabled: false,
-      lfoInitialFrequency: 2, // Hz
-      lfoInitialDepth: 1, // valid values are from 0 to 1
-      lfoType: 'sine' // oscillator type, possible values are the same as a Web Audio OscillatorNode
+      lfoInitialFrequency: 2,
+      lfoInitialDepth: 1,
+      lfoType: 'sine'
     }, providedOptions );
 
     assert && assert(
