@@ -14,6 +14,7 @@ import tambo from '../tambo.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import optionize from '../../../phet-core/js/optionize.js';
+import Property from '../../../axon/js/Property.js';
 
 type SelfOptions = {
 
@@ -80,7 +81,7 @@ class SoundClip extends SoundGenerator {
   private _playbackRate: number;
 
   // indicates whether the sound is being played
-  public readonly isPlayingProperty: BooleanProperty;
+  public readonly isPlayingProperty: Property<boolean>;
 
   // time at which a deferred play request occurred, in milliseconds since epoch
   private timeOfDeferredPlayRequest: number;
