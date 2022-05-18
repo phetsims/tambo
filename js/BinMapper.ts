@@ -23,14 +23,14 @@ class BinMapper {
   private readonly numBins: number;
   private readonly options: BinMapperOptions;
 
-  constructor( valueRange: Range, numBins: number, options?: BinMapperOptions ) {
+  constructor( valueRange: Range, numBins: number, providedOptions?: BinMapperOptions ) {
 
     // parameter checking
     assert && assert( numBins > 0 );
 
-    options = optionize<BinMapperOptions, BinMapperOptions>()( {
+    const options = optionize<BinMapperOptions, BinMapperOptions>()( {
       tolerateOutOfRangeValues: false
-    }, options );
+    }, providedOptions );
 
     this.minValue = valueRange.min;
     this.maxValue = valueRange.max;
