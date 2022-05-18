@@ -279,7 +279,7 @@ class NoiseGenerator extends SoundGenerator {
 
   /**
    * Stop the noise source.
-   * @param {number} [time] - optional audio context time at which this should be stopped
+   * @param [time] - optional audio context time at which this should be stopped
    */
   public stop( time = 0 ): void {
 

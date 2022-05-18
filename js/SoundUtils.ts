@@ -107,7 +107,6 @@ const findSoundStartIndex = ( soundData: Float32Array, length: number, threshold
  * @param soundData - the sample values for the sound
  * @param length - length of the sound data
  * @param threshold - detection level for the presence of sound, should be between 0 and 1
- * @returns {number} - index where sound ends
  */
 const findSoundEndIndex = ( soundData: Float32Array, length: number, threshold: number ): number => {
 

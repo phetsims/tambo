@@ -67,14 +67,12 @@ class PitchedPopGenerator extends SoundGenerator {
     this.soundSources = [];
     _.times( options.numPopGenerators, () => {
 
-      // {OscillatorNode}
       const oscillator = this.audioContext.createOscillator();
       const now = this.audioContext.currentTime;
       oscillator.type = 'sine';
       oscillator.frequency.setValueAtTime( options.pitchRange.min, now );
       oscillator.start( 0 );
 
-      // {GainNode}
       const gainNode = this.audioContext.createGain();
       gainNode.gain.setValueAtTime( 0, now );
       oscillator.connect( gainNode );
