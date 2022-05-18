@@ -465,7 +465,7 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * Set the master output level for sonification.
+   * Set the master output level for sounds.
    * @param level - valid values from 0 (min) through 1 (max)
    */
   public setMasterOutputLevel( level: number ): void {
