@@ -300,7 +300,7 @@ class NoiseGenerator extends SoundGenerator {
 
   /**
    * Set the depth of the LFO modulator.
-   * @param {number} depth - depth value from 0 (no modulation) to 1 (max modulation)
+   * @param depth - depth value from 0 (no modulation) to 1 (max modulation)
    */
   public setLfoDepth( depth: number ): void {
     this.lfoAttenuatorGainNode.gain.setTargetAtTime( depth / 2, this.audioContext.currentTime, LFO_DEPTH_CHANGE_TIME_CONSTANT );
