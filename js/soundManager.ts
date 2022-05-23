@@ -14,7 +14,6 @@
  */
 
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
-import Property from '../../axon/js/Property.js';
 import Utils from '../../dot/js/Utils.js';
 import { Display, DisplayedProperty, Node } from '../../scenery/js/imports.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
@@ -28,6 +27,7 @@ import tambo from './tambo.js';
 import SoundGenerator from './sound-generators/SoundGenerator.js';
 import optionize from '../../phet-core/js/optionize.js';
 import { PropertyLinkListener } from '../../axon/js/IReadOnlyProperty.js';
+import Multilink from '../../axon/js/Multilink.js';
 
 // options that can be used when adding a sound generator that can control some aspects of its behavior
 export type SoundGeneratorAddOptions = {
@@ -210,7 +210,7 @@ class SoundManager extends PhetioObject {
 
     // Hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
     // active.
-    Property.multilink(
+    Multilink.multilink(
       [
         this.enabledProperty,
         audioEnabledProperty,
