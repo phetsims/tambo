@@ -30,6 +30,7 @@ import SliderSoundTestNode from './SliderSoundTestNode.js';
 import UIComponentsModel from '../model/UIComponentsModel.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Property from '../../../../../axon/js/Property.js';
+import ABSwitch from '../../../../../sun/js/ABSwitch.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 20 );
@@ -54,6 +55,33 @@ class UIComponentsScreenView extends DemosScreenView {
     ];
 
     const demos = [
+      {
+        label: 'ABSwitch',
+        createNode: ( layoutBounds: Bounds2 ) => new VBox( {
+          children: [
+            new Text( 'Default Sounds:', { font: LABEL_FONT } ),
+            new ABSwitch(
+              model.abSwitch1Property,
+              false,
+              new Text( 'Tastes Great', { font: LABEL_FONT } ),
+              true,
+              new Text( 'Less Filling', { font: LABEL_FONT } ),
+              { center: layoutBounds.center }
+            ),
+            new Text( 'Custom Sounds:', { font: LABEL_FONT } ),
+            new ABSwitch(
+              model.abSwitch2Property,
+              false,
+              new Text( 'Heads', { font: LABEL_FONT } ),
+              true,
+              new Text( 'Tails', { font: LABEL_FONT } ),
+              { center: layoutBounds.center }
+            )
+          ],
+          spacing: 30,
+          center: layoutBounds.center
+        } )
+      },
       {
         label: 'PushButton',
         createNode: ( layoutBounds: Bounds2 ) => new RectangularPushButton( {

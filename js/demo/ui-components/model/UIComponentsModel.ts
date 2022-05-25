@@ -12,6 +12,10 @@ import tambo from '../../../tambo.js';
 
 class UIComponentsModel {
 
+  // property used by the AB switches in the demo
+  public readonly abSwitch1Property: BooleanProperty = new BooleanProperty( false );
+  public readonly abSwitch2Property: BooleanProperty = new BooleanProperty( false );
+
   // tracks whether a reset is happening
   public readonly resetInProgressProperty: BooleanProperty;
 
@@ -24,6 +28,8 @@ class UIComponentsModel {
    */
   public reset(): void {
     this.resetInProgressProperty.value = true;
+    this.abSwitch1Property.reset();
+    this.abSwitch2Property.reset();
     this.resetInProgressProperty.value = false;
   }
 }
