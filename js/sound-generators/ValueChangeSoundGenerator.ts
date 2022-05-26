@@ -4,7 +4,7 @@
  * ValueChangeSoundGenerator is used to produce sounds based on changes to a numerical value.  It was initially created
  * for supporting PhET's Slider class and variations thereof, but it may have other applications.
  *
- * Because the sounds should only be produced when direct interactions from the user change a value, and not in other
+ * Because the sounds should only be produced when direct interactions by the user change a value, and not in other
  * situations (e.g. a reset), this class does not monitor a Property.  Instead, it provides methods that can be used to
  * evaluate changes in a value and potentially play sounds, and it is the client's responsibility to know the situations
  * in which these methods should be called.  Often these methods will be called in drag handlers and other code that
