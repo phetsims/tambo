@@ -493,6 +493,10 @@ class SoundManager extends PhetioObject {
     this.setMasterOutputLevel( outputLevel );
   }
 
+  get masterOutputLevel() {
+    return this.getMasterOutputLevel();
+  }
+
   /**
    * Get the current output level setting.
    */
@@ -500,9 +504,6 @@ class SoundManager extends PhetioObject {
     return this._masterOutputLevel;
   }
 
-  get masterOutputLevel() {
-    return this.getMasterOutputLevel();
-  }
 
   /**
    * Set the output level for the specified category of sound generator.
@@ -579,12 +580,12 @@ class SoundManager extends PhetioObject {
     this.setReverbLevel( reverbLevel );
   }
 
-  public getReverbLevel(): number {
-    return this._reverbLevel;
-  }
-
   public get reverbLevel(): number {
     return this.getReverbLevel();
+  }
+
+  public getReverbLevel(): number {
+    return this._reverbLevel;
   }
 
   public set enabled( enabled: boolean ) {

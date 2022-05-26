@@ -279,16 +279,16 @@ abstract class SoundGenerator {
     this.setOutputLevel( outputLevel );
   }
 
+  public get outputLevel(): number {
+    return this.getOutputLevel();
+  }
+
   /**
    * Get the current output level setting.  Note that if the sound generator is disabled, this could return a non-zero
    * value but the sound generator won't produce audible sound.
    */
   public getOutputLevel(): number {
     return this._outputLevel;
-  }
-
-  public get outputLevel(): number {
-    return this.getOutputLevel();
   }
 
   /**
