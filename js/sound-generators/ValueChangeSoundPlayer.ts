@@ -1,14 +1,17 @@
 // Copyright 2022, University of Colorado Boulder
 
 /**
- * ValueChangeSoundGenerator is used to produce sounds based on changes to a numerical value.  It was initially created
- * for supporting PhET's Slider class and variations thereof, but it may have other applications.
+ * ValueChangeSoundPlayer plays sounds based on changes to a numerical value.  It was initially created for supporting
+ * sound generation in PhET's Slider class and variations thereof, but it may have other applications.
  *
- * Because the sounds should only be produced when direct interactions by the user change a value, and not in other
- * situations (e.g. a reset), this class does not monitor a Property.  Instead, it provides methods that can be used to
- * evaluate changes in a value and potentially play sounds, and it is the client's responsibility to know the situations
- * in which these methods should be called.  Often these methods will be called in drag handlers and other code that
- * handles user input.
+ * This class does not extend SoundGenerator and is not itself added to the sound manager.  It is instead a player of
+ * a set of sounds, each of which should be registered with the sound manager elsewhere.
+ *
+ * Because the sounds should only be produced when users directly change a value, and not in side-effect-ish situations
+ * (such as a reset), this class does not monitor a Property.  Instead, it provides methods that can be used to evaluate
+ * changes in a value and potentially play sounds, and it is the client's responsibility to know the situations in which
+ * these methods should be called.  Often these methods will be called in drag handlers and other code that handles user
+ * input.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -19,7 +22,6 @@ import generalBoundaryBoopSoundPlayer from '../shared-sound-players/generalBound
 import generalSoftClickSoundPlayer from '../shared-sound-players/generalSoftClickSoundPlayer.js';
 import tambo from '../tambo.js';
 import ISoundPlayer from '../ISoundPlayer.js';
-import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 import phetAudioContext from '../phetAudioContext.js';
 import SoundClipPlayer from './SoundClipPlayer.js';
 import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
@@ -53,7 +55,7 @@ const DEFAULT_VALUE_CONSTRAINT = ( value: number ) => Utils.roundToInterval( val
 // A "no-op" function for mapping pitch values.  Always returns one, which signifies no change to the playback rate.
 const NO_PLAYBACK_RATE_CHANGE = ( value: number ) => 1;
 
-type SelfOptions = {
+export type ValueChangeSoundPlayerOptions = {
 
   // The sound player for movement in the middle of the range in the up direction.
   middleMovingUpSoundPlayer?: ISoundPlayer | SoundClip;
@@ -95,9 +97,7 @@ type SelfOptions = {
   minimumInterMiddleSoundTime?: number;
 };
 
-export type ValueChangeSoundGeneratorOptions = SelfOptions & SoundGeneratorOptions;
-
-class ValueChangeSoundGenerator extends SoundGenerator {
+class ValueChangeSoundPlayer {
 
   // thresholds that will be used to decide when to play sounds in some cases
   private readonly thresholds: number[]
@@ -136,9 +136,9 @@ class ValueChangeSoundGenerator extends SoundGenerator {
    * @param valueRange - the range of values expected and over which sounds will be played
    * @param [providedOptions]
    */
-  constructor( valueRange: Range, providedOptions?: ValueChangeSoundGeneratorOptions ) {
+  constructor( valueRange: Range, providedOptions?: ValueChangeSoundPlayerOptions ) {
 
-    const options = optionize<ValueChangeSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
+    const options = optionize<ValueChangeSoundPlayerOptions>()( {
       middleMovingUpSoundPlayer: generalSoftClickSoundPlayer,
       middleMovingDownSoundPlayer: DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER,
       middleMovingUpPlaybackRateMapper: NO_PLAYBACK_RATE_CHANGE,
@@ -186,8 +186,6 @@ class ValueChangeSoundGenerator extends SoundGenerator {
     if ( options.numberOfMiddleThresholds === null && options.interThresholdDelta === null ) {
       options.numberOfMiddleThresholds = DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS;
     }
-
-    super( options );
 
     this.thresholds = [];
     if ( options.numberOfMiddleThresholds !== null ) {
@@ -290,13 +288,13 @@ class ValueChangeSoundGenerator extends SoundGenerator {
   /**
    * Static instance that makes no sound.  This is generally used as an option value to turn off sound generation.
    */
-  static NO_SOUND = new ValueChangeSoundGenerator( new Range( 0, 1 ), {
+  static NO_SOUND = new ValueChangeSoundPlayer( new Range( 0, 1 ), {
     middleMovingUpSoundPlayer: nullSoundPlayer,
     minSoundPlayer: nullSoundPlayer,
     maxSoundPlayer: nullSoundPlayer
   } )
 }
 
-tambo.register( 'ValueChangeSoundGenerator', ValueChangeSoundGenerator );
+tambo.register( 'ValueChangeSoundPlayer', ValueChangeSoundPlayer );
 
-export default ValueChangeSoundGenerator;
+export default ValueChangeSoundPlayer;

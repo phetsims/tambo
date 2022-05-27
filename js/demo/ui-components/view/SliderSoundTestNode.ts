@@ -7,7 +7,7 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import ValueChangeSoundGenerator from '../../../sound-generators/ValueChangeSoundGenerator.js';
+import ValueChangeSoundPlayer from '../../../sound-generators/ValueChangeSoundPlayer.js';
 import tambo from '../../../tambo.js';
 import brightMarimbaShort_mp3 from '../../../../sounds/brightMarimbaShort_mp3.js';
 import Range from '../../../../../dot/js/Range.js';
@@ -55,7 +55,7 @@ class SliderSoundTestNode extends HBox {
         // slider with custom sound generation, intended to be a little "out there"
         new Text( 'Crazy Custom Sounds', { font: labelFont } ),
         new HSlider( new NumberProperty( 0 ), new Range( 0, 100 ), {
-          soundGenerator: new ValueChangeSoundGenerator( new Range( 0, 100 ), {
+          soundGenerator: new ValueChangeSoundPlayer( new Range( 0, 100 ), {
             middleMovingUpSoundPlayer: new SoundClipPlayer( brightMarimbaShort_mp3, {
               soundClipOptions: { initialOutputLevel: 0.2 },
               soundManagerOptions: { categoryName: 'user-interface' }

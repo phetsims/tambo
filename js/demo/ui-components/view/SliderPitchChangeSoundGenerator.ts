@@ -1,6 +1,6 @@
 // Copyright 2022, University of Colorado Boulder
 
-import ValueChangeSoundGenerator from '../../../sound-generators/ValueChangeSoundGenerator.js';
+import ValueChangeSoundPlayer from '../../../sound-generators/ValueChangeSoundPlayer.js';
 import tambo from '../../../tambo.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import brightMarimbaShort_mp3 from '../../../../sounds/brightMarimbaShort_mp3.js';
@@ -8,14 +8,14 @@ import soundManager from '../../../soundManager.js';
 import Range from '../../../../../dot/js/Range.js';
 
 /**
- * SliderPitchChangeSoundGenerator is intended as a demonstration of a ValueChangeSoundGenerator that changes the pitch
+ * SliderPitchChangeSoundGenerator is intended as a demonstration of a ValueChangeSoundPlayer that changes the pitch
  * (aka the playback rate) of its produced sounds as the slider values change.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
 
-class SliderPitchChangeSoundGenerator extends ValueChangeSoundGenerator {
+class SliderPitchChangeSoundGenerator extends ValueChangeSoundPlayer {
 
   /**
    * @param valueRange - the range of values expected and over which sounds will be played
