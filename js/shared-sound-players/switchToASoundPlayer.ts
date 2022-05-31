@@ -12,7 +12,7 @@ import tambo from '../tambo.js';
 
 // create the shared sound instance
 const switchToASoundPlayer = new SoundClipPlayer( switchToA_mp3, {
-  soundClipOptions: { initialOutputLevel: 0.5 },
+  soundClipOptions: { initialOutputLevel: 0.2 },
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
 
