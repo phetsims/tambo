@@ -64,7 +64,7 @@ class AmplitudeModulatorDemoNode extends VBox {
     // LFO enabled control
     const lfoEnabled = new Checkbox(
       new Text( 'LFO Enabled', { font: LABEL_FONT } ),
-      amplitudeModulatorDemo.amplitudeModulator.enabledProperty,
+      amplitudeModulatorDemo.amplitudeModulator.myEnabledProperty,
       { boxWidth: 16 }
     );
 

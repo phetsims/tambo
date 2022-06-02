@@ -14,6 +14,8 @@ import phetAudioContext from './phetAudioContext.js';
 import tambo from './tambo.js';
 import optionize from '../../phet-core/js/optionize.js';
 import Property from '../../axon/js/Property.js';
+import StrictOmit from '../../phet-core/js/types/StrictOmit.js';
+import IProperty from '../../axon/js/IProperty.js';
 
 type SelfOptions = {
 
@@ -28,7 +30,7 @@ type SelfOptions = {
   waveformProperty?: Property<OscillatorType> | null;
 };
 
-export type AmplitudeModulatorOptions = SelfOptions & EnabledComponentOptions;
+export type AmplitudeModulatorOptions = SelfOptions & StrictOmit<EnabledComponentOptions, 'enabledProperty'>;
 
 // constants
 const DEFAULT_FREQUENCY = 5; // Hz
@@ -52,6 +54,8 @@ class AmplitudeModulator extends EnabledComponent {
   // dispose function
   private readonly disposeAmplitudeModulator: () => void;
 
+  readonly myEnabledProperty: IProperty<boolean>;
+
   constructor( providedOptions?: AmplitudeModulatorOptions ) {
 
     const options = optionize<AmplitudeModulatorOptions, SelfOptions, EnabledComponentOptions>()( {
@@ -61,6 +65,9 @@ class AmplitudeModulator extends EnabledComponent {
     }, providedOptions );
 
     super( options );
+
+    // TODO: https://github.com/phetsims/axon/issues/342 get rid of the type assertion
+    this.myEnabledProperty = this.enabledProperty as IProperty<boolean>;
 
     this.frequencyProperty = options.frequencyProperty || new NumberProperty( DEFAULT_FREQUENCY );
     this.depthProperty = options.depthProperty || new NumberProperty( DEFAULT_DEPTH );
