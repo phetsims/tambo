@@ -31,6 +31,7 @@ import UIComponentsModel from '../model/UIComponentsModel.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Property from '../../../../../axon/js/Property.js';
 import ABSwitch from '../../../../../sun/js/ABSwitch.js';
+import OnOffSwitch from '../../../../../sun/js/OnOffSwitch.js';
 import grabSoundPlayer from '../../../shared-sound-players/grabSoundPlayer.js';
 import releaseSoundPlayer from '../../../shared-sound-players/releaseSoundPlayer.js';
 import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
@@ -80,8 +81,10 @@ class UIComponentsScreenView extends DemosScreenView {
               new Text( 'Tails', { font: LABEL_FONT } ),
               {
                 center: layoutBounds.center,
-                switchToASoundPlayer: grabSoundPlayer,
-                switchToBSoundPlayer: releaseSoundPlayer
+                toggleSwitchOptions: {
+                  switchToLeftSoundPlayer: grabSoundPlayer,
+                  switchToRightSoundPlayer: releaseSoundPlayer
+                }
               }
             ),
             new Text( 'No Sounds:', { font: LABEL_FONT } ),
@@ -93,9 +96,25 @@ class UIComponentsScreenView extends DemosScreenView {
               new Text( 'Quiet', { font: LABEL_FONT } ),
               {
                 center: layoutBounds.center,
-                switchToASoundPlayer: nullSoundPlayer,
-                switchToBSoundPlayer: nullSoundPlayer
+                toggleSwitchOptions: {
+                  switchToLeftSoundPlayer: nullSoundPlayer,
+                  switchToRightSoundPlayer: nullSoundPlayer
+                }
               }
+            )
+          ],
+          spacing: 30,
+          center: layoutBounds.center
+        } )
+      },
+      {
+        label: 'OnOffSwitch',
+        createNode: ( layoutBounds: Bounds2 ) => new VBox( {
+          children: [
+            new Text( 'On Off Switch:', { font: LABEL_FONT } ),
+            new OnOffSwitch(
+              model.abSwitch1Property,
+              { center: layoutBounds.center }
             )
           ],
           spacing: 30,
