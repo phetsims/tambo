@@ -15,7 +15,6 @@ import tambo from './tambo.js';
 import optionize from '../../phet-core/js/optionize.js';
 import Property from '../../axon/js/Property.js';
 import StrictOmit from '../../phet-core/js/types/StrictOmit.js';
-import IProperty from '../../axon/js/IProperty.js';
 
 type SelfOptions = {
 
@@ -54,7 +53,7 @@ class AmplitudeModulator extends EnabledComponent {
   // dispose function
   private readonly disposeAmplitudeModulator: () => void;
 
-  readonly myEnabledProperty: IProperty<boolean>;
+  readonly myEnabledProperty: Property<boolean>;
 
   constructor( providedOptions?: AmplitudeModulatorOptions ) {
 
@@ -67,7 +66,8 @@ class AmplitudeModulator extends EnabledComponent {
     super( options );
 
     // TODO: https://github.com/phetsims/axon/issues/342 get rid of the type assertion
-    this.myEnabledProperty = this.enabledProperty as IProperty<boolean>;
+    // TODO: See also https://github.com/phetsims/axon/issues/382
+    this.myEnabledProperty = this.enabledProperty as Property<boolean>;
 
     this.frequencyProperty = options.frequencyProperty || new NumberProperty( DEFAULT_FREQUENCY );
     this.depthProperty = options.depthProperty || new NumberProperty( DEFAULT_DEPTH );
