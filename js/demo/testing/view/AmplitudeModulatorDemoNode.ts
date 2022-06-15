@@ -9,6 +9,7 @@
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
 import optionize from '../../../../../phet-core/js/optionize.js';
+import EmptyObjectType from '../../../../../phet-core/js/types/EmptyObjectType.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../../sun/js/AquaRadioButtonGroup.js';
@@ -18,7 +19,7 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemo from '../model/AmplitudeModulatorDemo.js';
 
-type SelfOptions = {};
+type SelfOptions = EmptyObjectType;
 export type AmplitudeModulatorDemoNodeOptions = SelfOptions & VBoxOptions;
 
 // constants

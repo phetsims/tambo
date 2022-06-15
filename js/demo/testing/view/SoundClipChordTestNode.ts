@@ -14,8 +14,9 @@ import SoundClipChord from '../../../sound-generators/SoundClipChord.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import optionize from '../../../../../phet-core/js/optionize.js';
+import EmptyObjectType from '../../../../../phet-core/js/types/EmptyObjectType.js';
 
-type SelfOptions = {};
+type SelfOptions = EmptyObjectType;
 export type SoundClipChordTestNodeOptions = SelfOptions & VBoxOptions;
 
 class SoundClipChordTestNode extends VBox {

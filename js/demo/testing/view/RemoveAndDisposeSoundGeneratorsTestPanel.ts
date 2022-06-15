@@ -11,6 +11,7 @@ import Property from '../../../../../axon/js/Property.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
 import dotRandom from '../../../../../dot/js/dotRandom.js';
 import optionize from '../../../../../phet-core/js/optionize.js';
+import EmptyObjectType from '../../../../../phet-core/js/types/EmptyObjectType.js';
 import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, Text, VBox } from '../../../../../scenery/js/imports.js';
@@ -26,7 +27,7 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import SoundGenerator from '../../../sound-generators/SoundGenerator.js';
 
-type SelfOptions = {};
+type SelfOptions = EmptyObjectType;
 export type RemoveAndDisposeSoundGeneratorsTestPanelOptions = SelfOptions & PanelOptions;
 type SoundGeneratorComboBoxItemInfo = {
   comboBoxItemName: string;

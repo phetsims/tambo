@@ -24,8 +24,9 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import Emitter from '../../../../../axon/js/Emitter.js';
 import WrappedAudioBuffer from '../../../WrappedAudioBuffer.js';
+import EmptyObjectType from '../../../../../phet-core/js/types/EmptyObjectType.js';
 
-type SelfOptions = {};
+type SelfOptions = EmptyObjectType;
 export type ContinuousPropertySoundGeneratorTestNodeOptions = SelfOptions & VBoxOptions;
 
 class ContinuousPropertySoundGeneratorTestNode extends VBox {
