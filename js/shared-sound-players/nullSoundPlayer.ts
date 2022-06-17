@@ -12,11 +12,13 @@ import ISoundPlayer from '../ISoundPlayer.js';
 
 class NullSoundPlayer implements ISoundPlayer {
 
-  constructor() {}
+  public play(): void {
+    // Required for ISoundPlayer
+  }
 
-  public play(): void {}
-
-  public stop(): void {}
+  public stop(): void {
+    // Required for ISoundPlayer
+  }
 }
 
 // Create the singleton instance.
