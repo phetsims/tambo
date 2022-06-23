@@ -297,20 +297,12 @@ class LongSoundTestPanel extends Node {
     } );
 
     // check box that controls whether the thunderSoundClip sound is locally enabled
-    const thunderEnabledCheckbox = new Checkbox(
-      new Text( 'Enabled', { font: FONT } ),
-      thunderSoundClip.locallyEnabledProperty,
-      { boxWidth: CHECKBOX_SIZE }
-    );
+    const thunderEnabledCheckbox = new Checkbox( thunderSoundClip.locallyEnabledProperty, new Text( 'Enabled', { font: FONT } ), { boxWidth: CHECKBOX_SIZE } );
 
     // check box that controls whether the thunderSoundClip sound can be initiated when disabled
     const initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundClip.initiateWhenDisabled );
     initiateThunderWhenDisabledProperty.linkAttribute( thunderSoundClip, 'initiateWhenDisabled' );
-    const initiateThunderWhenDisabledCheckbox = new Checkbox(
-      new Text( 'Initiate when disabled', { font: FONT } ),
-      initiateThunderWhenDisabledProperty,
-      { boxWidth: CHECKBOX_SIZE }
-    );
+    const initiateThunderWhenDisabledCheckbox = new Checkbox( initiateThunderWhenDisabledProperty, new Text( 'Initiate when disabled', { font: FONT } ), { boxWidth: CHECKBOX_SIZE } );
 
     // lay out the set of controls for the thunderSoundClip
     const thunderControl = new VBox( {

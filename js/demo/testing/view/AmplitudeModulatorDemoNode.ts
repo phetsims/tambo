@@ -63,11 +63,7 @@ class AmplitudeModulatorDemoNode extends VBox {
     soundManager.addSoundGenerator( amplitudeModulatorDemo );
 
     // LFO enabled control
-    const lfoEnabled = new Checkbox(
-      new Text( 'LFO Enabled', { font: LABEL_FONT } ),
-      amplitudeModulatorDemo.amplitudeModulator.myEnabledProperty,
-      { boxWidth: 16 }
-    );
+    const lfoEnabled = new Checkbox( amplitudeModulatorDemo.amplitudeModulator.myEnabledProperty, new Text( 'LFO Enabled', { font: LABEL_FONT } ), { boxWidth: 16 } );
 
     // frequency control
     const frequencyControlHBox = new HBox( {

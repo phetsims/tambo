@@ -65,7 +65,7 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
 
       return new Panel( new VBox( {
         children: [
-          new Checkbox( new Text( 'Oscillate' ), isOscillatingProperty ),
+          new Checkbox( isOscillatingProperty, new Text( 'Oscillate' ) ),
           new NumberControl( 'Value', numberProperty, range, {
             delta: 0.1,
             numberDisplayOptions: { decimalPlaces: 1 }

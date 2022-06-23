@@ -130,13 +130,9 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'Checkbox',
-        createNode: ( layoutBounds: Bounds2 ) => new Checkbox(
-          new Text( 'Check it Out', { font: LABEL_FONT } ),
-          new BooleanProperty( false ),
-          {
-            center: layoutBounds.center
-          }
-        )
+        createNode: ( layoutBounds: Bounds2 ) => new Checkbox( new BooleanProperty( false ), new Text( 'Check it Out', { font: LABEL_FONT } ), {
+          center: layoutBounds.center
+        } )
       },
       {
         label: 'AquaRadioButtonGroup',
