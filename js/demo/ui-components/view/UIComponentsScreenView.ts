@@ -165,16 +165,11 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'ComboBox',
-        createNode: ( layoutBounds: Bounds2 ) => new ComboBox(
-          [
-            new ComboBoxItem( new Text( 'Rainbows', { font: LABEL_FONT } ), 0 ),
-            new ComboBoxItem( new Text( 'Unicorns', { font: LABEL_FONT } ), 1 ),
-            new ComboBoxItem( new Text( 'Butterflies', { font: LABEL_FONT } ), 2 )
-          ],
-          new NumberProperty( 0 ),
-          this,
-          { center: layoutBounds.center }
-        )
+        createNode: ( layoutBounds: Bounds2 ) => new ComboBox( new NumberProperty( 0 ), [
+          new ComboBoxItem( new Text( 'Rainbows', { font: LABEL_FONT } ), 0 ),
+          new ComboBoxItem( new Text( 'Unicorns', { font: LABEL_FONT } ), 1 ),
+          new ComboBoxItem( new Text( 'Butterflies', { font: LABEL_FONT } ), 2 )
+        ], this, { center: layoutBounds.center } )
       },
       {
         label: 'BooleanRectangularToggleButton',

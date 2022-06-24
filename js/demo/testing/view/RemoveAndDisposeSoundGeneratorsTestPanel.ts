@@ -95,7 +95,7 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
       ) );
     } );
     const selectedSoundGeneratorTypeProperty = new Property( comboBoxItems[ 0 ].value );
-    const comboBox = new ComboBox( comboBoxItems, selectedSoundGeneratorTypeProperty, panelContentNode, {
+    const comboBox = new ComboBox( selectedSoundGeneratorTypeProperty, comboBoxItems, panelContentNode, {
       buttonFill: 'rgb( 218, 236, 255 )'
     } );
     const sgSelectorNode = new HBox( {
