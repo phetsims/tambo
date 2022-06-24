@@ -178,15 +178,10 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'BooleanRectangularToggleButton',
-        createNode: ( layoutBounds: Bounds2 ) => new BooleanRectangularToggleButton(
-          new Text( 'Yep', { font: LABEL_FONT } ),
-          new Text( 'Nope', { font: LABEL_FONT } ),
-          new BooleanProperty( true ),
-          {
-            baseColor: '#B3FFEC',
-            center: layoutBounds.center
-          }
-        )
+        createNode: ( layoutBounds: Bounds2 ) => new BooleanRectangularToggleButton( new BooleanProperty( true ), new Text( 'Yep', { font: LABEL_FONT } ), new Text( 'Nope', { font: LABEL_FONT } ), {
+          baseColor: '#B3FFEC',
+          center: layoutBounds.center
+        } )
       },
       {
         label: 'AccordionBox',
