@@ -22,7 +22,6 @@ import BooleanRectangularToggleButton from '../../../../../sun/js/buttons/Boolea
 import RectangularPushButton from '../../../../../sun/js/buttons/RectangularPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import ComboBox from '../../../../../sun/js/ComboBox.js';
-import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
 import accordion_png from '../../../../images/accordion_png.js';
 import tambo from '../../../tambo.js';
@@ -166,9 +165,9 @@ class UIComponentsScreenView extends DemosScreenView {
       {
         label: 'ComboBox',
         createNode: ( layoutBounds: Bounds2 ) => new ComboBox( new NumberProperty( 0 ), [
-          new ComboBoxItem( new Text( 'Rainbows', { font: LABEL_FONT } ), 0 ),
-          new ComboBoxItem( new Text( 'Unicorns', { font: LABEL_FONT } ), 1 ),
-          new ComboBoxItem( new Text( 'Butterflies', { font: LABEL_FONT } ), 2 )
+          { value: 0, node: new Text( 'Rainbows', { font: LABEL_FONT } ) },
+          { value: 1, node: new Text( 'Unicorns', { font: LABEL_FONT } ) },
+          { value: 2, node: new Text( 'Butterflies', { font: LABEL_FONT } ) }
         ], this, { center: layoutBounds.center } )
       },
       {

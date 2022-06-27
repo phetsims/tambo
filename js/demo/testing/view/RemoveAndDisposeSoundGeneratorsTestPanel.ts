@@ -16,8 +16,7 @@ import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, Text, VBox } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
-import ComboBox from '../../../../../sun/js/ComboBox.js';
-import ComboBoxItem from '../../../../../sun/js/ComboBoxItem.js';
+import ComboBox, { ComboBoxItem } from '../../../../../sun/js/ComboBox.js';
 import Panel, { PanelOptions } from '../../../../../sun/js/Panel.js';
 import birdCall_mp3 from '../../../../sounds/demo-and-test/birdCall_mp3.js';
 import cricketsLoop_mp3 from '../../../../sounds/demo-and-test/cricketsLoop_mp3.js';
@@ -89,10 +88,10 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
     // Create the combo box for selecting the type of sound generator to add.
     const comboBoxItems: ComboBoxItem<string>[] = [];
     SOUND_GENERATOR_INFO.forEach( ( soundGenerator, soundGeneratorKey ) => {
-      comboBoxItems.push( new ComboBoxItem(
-        new Text( soundGenerator.comboBoxItemName, { font: COMBO_BOX_FONT } ),
-        soundGeneratorKey
-      ) );
+      comboBoxItems.push( {
+        value: soundGeneratorKey,
+        node: new Text( soundGenerator.comboBoxItemName, { font: COMBO_BOX_FONT } )
+      } );
     } );
     const selectedSoundGeneratorTypeProperty = new Property( comboBoxItems[ 0 ].value );
     const comboBox = new ComboBox( selectedSoundGeneratorTypeProperty, comboBoxItems, panelContentNode, {
