@@ -12,7 +12,7 @@ import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import NumberControl from '../../../../../scenery-phet/js/NumberControl.js';
-import NumberPicker from '../../../../../scenery-phet/js/NumberPicker.js';
+import NumberPicker from '../../../../../sun/js/NumberPicker.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../../scenery-phet/js/TimeControlNode.js';
 import { Image, Text, VBox } from '../../../../../scenery/js/imports.js';
