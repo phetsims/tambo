@@ -89,7 +89,7 @@ class SoundClip extends SoundGenerator {
   // callback for when audio context isn't in 'running' state, see usage
   private readonly audioContextStateChangeListener: ( state: string ) => void;
 
-  constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipOptions ) {
+  public constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipOptions ) {
 
     const options = optionize<SoundClipOptions, SelfOptions, SoundGeneratorOptions>()( {
       loop: false,

@@ -11,11 +11,11 @@ import EnumerationValue from '../../phet-core/js/EnumerationValue.js';
 import tambo from './tambo.js';
 
 class SoundScope extends EnumerationValue {
-  static BASIC = new SoundScope();
-  static ENHANCED = new SoundScope();
+  public static BASIC = new SoundScope();
+  public static ENHANCED = new SoundScope();
 
   // Gets a list of keys, values and mapping between them. For use by EnumerationProperty and PhET-iO.
-  static enumeration = new Enumeration( SoundScope, {
+  public static enumeration = new Enumeration( SoundScope, {
     phetioDocumentation: 'describes whether a sound is considered part of the basic or the enhanced sounds for the sim'
   } );
 }

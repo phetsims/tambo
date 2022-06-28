@@ -21,7 +21,7 @@ class AmplitudeModulatorDemo extends SoundGenerator {
 
   public readonly amplitudeModulator: AmplitudeModulator;
 
-  constructor( sourceSoundIndexProperty: NumberProperty, options?: SoundGeneratorOptions ) {
+  public constructor( sourceSoundIndexProperty: NumberProperty, options?: SoundGeneratorOptions ) {
 
     super( options );
 
@@ -57,7 +57,7 @@ class AmplitudeModulatorDemo extends SoundGenerator {
   /**
    * restore initial state
    */
-  reset(): void {
+  public reset(): void {
     this.amplitudeModulator.myEnabledProperty.set( true );
     this.amplitudeModulator.frequencyProperty.reset();
     this.amplitudeModulator.depthProperty.reset();

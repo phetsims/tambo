@@ -20,7 +20,7 @@ const TEXT_OPTIONS = { font: new PhetFont( 24 ) };
 
 class SoundOptionsDialogContent extends Node {
 
-  constructor() {
+  public constructor() {
 
     // global property that specifies which sound to use when balls bounce on the walls of the box (but not the ceiling)
     phet.tambo.soundIndexForWallBounceProperty = new NumberProperty( 0 );

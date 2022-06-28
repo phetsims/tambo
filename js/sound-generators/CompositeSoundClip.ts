@@ -26,7 +26,7 @@ class CompositeSoundClip extends SoundGenerator {
   // array that will hold the individual sound clips
   private readonly soundClips: SoundClip[];
 
-  constructor( soundsAndOptionsTuples: SoundAndOptions[], options?: CompositeSoundClipOptions ) {
+  public constructor( soundsAndOptionsTuples: SoundAndOptions[], options?: CompositeSoundClipOptions ) {
     super( options );
 
     this.soundClips = [];

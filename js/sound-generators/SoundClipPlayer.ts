@@ -35,7 +35,7 @@ class SoundClipPlayer {
    * @param wrappedAudioBuffer - a Web Audio audio buffer containing decoded audio samples
    * @param [providedOptions]
    */
-  constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipPlayerOptions ) {
+  public constructor( wrappedAudioBuffer: WrappedAudioBuffer, providedOptions?: SoundClipPlayerOptions ) {
 
     const options = optionize<SoundClipPlayerOptions, SoundClipPlayerOptions>()( {
       soundClipOptions: {},

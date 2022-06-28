@@ -21,7 +21,7 @@ class UIComponentsModel {
   // tracks whether a reset is happening
   public readonly resetInProgressProperty: BooleanProperty;
 
-  constructor() {
+  public constructor() {
     this.resetInProgressProperty = new BooleanProperty( false );
   }
 

@@ -17,7 +17,7 @@ class WrappedAudioBuffer {
   // should set this to the resultant AudioBuffer.  Once this is set to an AudioBuffer, it should not be set again.
   public readonly audioBufferProperty: TinyProperty<AudioBuffer | null>;
 
-  constructor() {
+  public constructor() {
 
     this.audioBufferProperty = new TinyProperty<AudioBuffer | null>( null );
 

@@ -12,7 +12,7 @@ import { HBox } from '../../../scenery/js/imports.js';
 import tambo from '../tambo.js';
 
 class TamboKeyboardHelpContent extends HBox {
-  constructor() {
+  public constructor() {
     super( { children: [ new BasicActionsKeyboardHelpSection() ], align: 'top', spacing: 30 } );
   }
 }

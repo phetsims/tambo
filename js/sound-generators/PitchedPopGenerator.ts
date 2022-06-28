@@ -38,7 +38,7 @@ class PitchedPopGenerator extends SoundGenerator {
   // next sound source to use to play a sound
   private nextSoundSourceIndex: number;
 
-  constructor( providedOptions?: PitchedPopGeneratorOptions ) {
+  public constructor( providedOptions?: PitchedPopGeneratorOptions ) {
 
     const options = optionize<PitchedPopGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
       pitchRange: new Range( 220, 660 ),

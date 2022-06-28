@@ -22,7 +22,7 @@ class CompositeSoundClipTestNode extends VBox {
   // dispose function
   private readonly disposeCompositeSoundClipTestNode: () => void;
 
-  constructor( options: VBoxOptions ) {
+  public constructor( options: VBoxOptions ) {
 
     // sound clips to be played
     const compositeSoundClip = new CompositeSoundClip( [
@@ -62,8 +62,9 @@ class CompositeSoundClipTestNode extends VBox {
   }
 
   /**
+   * Release references to avoid memory leaks.
    */
-  override dispose(): void {
+  public override dispose(): void {
     this.disposeCompositeSoundClipTestNode();
     super.dispose();
   }

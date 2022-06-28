@@ -34,7 +34,7 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
   // dispose function
   private readonly disposeContinuousPropertySoundGeneratorTestNode: () => void;
 
-  constructor( stepEmitter: Emitter<[ number ]>, providedOptions?: ContinuousPropertySoundGeneratorTestNodeOptions ) {
+  public constructor( stepEmitter: Emitter<[ number ]>, providedOptions?: ContinuousPropertySoundGeneratorTestNodeOptions ) {
 
     // keep track of listeners added to the step emitter so that they can be disposed
     const stepListeners: ( ( dt: number ) => void )[] = [];
@@ -94,8 +94,9 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
   }
 
   /**
+   * Release references to avoid memory leaks.
    */
-  override dispose(): void {
+  public override dispose(): void {
     this.disposeContinuousPropertySoundGeneratorTestNode();
     super.dispose();
   }

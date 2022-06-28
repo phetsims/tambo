@@ -24,7 +24,7 @@ import SliderPitchChangeSoundGenerator from './SliderPitchChangeSoundGenerator.j
 
 class SliderSoundTestNode extends HBox {
 
-  constructor( labelFont: Font, center: Vector2 ) {
+  public constructor( labelFont: Font, center: Vector2 ) {
 
     const horizontalSliderSet = new VBox( {
       children: [

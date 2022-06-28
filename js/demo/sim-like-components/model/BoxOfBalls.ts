@@ -33,7 +33,7 @@ class BoxOfBalls {
   // the bounding box
   public readonly box: Shape;
 
-  constructor( width: number, height: number ) {
+  public constructor( width: number, height: number ) {
     this.box = Shape.rect( 50, 0, width, height );
     this.balls = createObservableArray();
   }

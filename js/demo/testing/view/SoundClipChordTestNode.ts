@@ -23,7 +23,7 @@ class SoundClipChordTestNode extends VBox {
 
   private readonly disposeSoundClipChordTestNode: () => void;
 
-  constructor( providedOptions?: SoundClipChordTestNodeOptions ) {
+  public constructor( providedOptions?: SoundClipChordTestNodeOptions ) {
 
     // sound clips to be played
     const chordSoundClipChord = new SoundClipChord( brightMarimba_mp3 );
@@ -60,8 +60,9 @@ class SoundClipChordTestNode extends VBox {
   }
 
   /**
+   * Release references to avoid memory leaks.
    */
-  override dispose(): void {
+  public override dispose(): void {
     this.disposeSoundClipChordTestNode();
     super.dispose();
   }

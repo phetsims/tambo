@@ -69,7 +69,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
    * @param range - the range of values that the provided property can take on
    * @param [providedOptions]
    */
-  constructor( property: NumberProperty,
+  public constructor( property: NumberProperty,
                sound: WrappedAudioBuffer,
                range: Range,
                providedOptions?: ContinuousPropertySoundGeneratorOptions ) {

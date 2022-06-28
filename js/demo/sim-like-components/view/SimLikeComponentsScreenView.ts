@@ -32,7 +32,7 @@ const FONT = new PhetFont( 16 );
 
 class SimLikeComponentsScreenView extends ScreenView {
 
-  constructor( model: SimLikeComponentsModel ) {
+  public constructor( model: SimLikeComponentsModel ) {
 
     super( {
       tandem: Tandem.OPT_OUT

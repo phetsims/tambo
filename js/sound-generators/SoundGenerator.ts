@@ -67,12 +67,12 @@ abstract class SoundGenerator {
   // A Property that tracks whether this sound generator is fully enabled, meaning that all the enable control
   // Properties are in a state indicating that sound can be produced.  This should only be updated in the listener
   // function defined below, nowhere else.
-  readonly fullyEnabledProperty: Property<boolean>;
+  public readonly fullyEnabledProperty: Property<boolean>;
 
   // A Property that tracks whether this sound generator is "locally enabled", which means that it is internally set to
   // produce sound.  Setting this to true does not guarantee that sound will be produced, since other Properties can all
   // affect this, see fullyEnabledProperty.
-  locallyEnabledProperty: Property<boolean>;
+  public readonly locallyEnabledProperty: Property<boolean>;
 
   // master gain control that will be used to control the volume of the sound
   protected masterGainNode: GainNode;

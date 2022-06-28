@@ -29,7 +29,7 @@ class BallNode extends Circle {
   // dispose
   private readonly disposeBallNode: () => void;
 
-  constructor( ball: Ball, modelViewTransform: ModelViewTransform2 ) {
+  public constructor( ball: Ball, modelViewTransform: ModelViewTransform2 ) {
 
     // Create a circle node to represent the ball.
     const radius = modelViewTransform.modelToViewDeltaX( ball.radius );
@@ -85,7 +85,7 @@ class BallNode extends Circle {
   /**
    * Clean up memory references to avoid leaks.
    */
-  override dispose(): void {
+  public override dispose(): void {
     this.disposeBallNode();
     super.dispose();
   }

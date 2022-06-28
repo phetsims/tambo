@@ -136,7 +136,7 @@ class ValueChangeSoundPlayer {
    * @param valueRange - the range of values expected and over which sounds will be played
    * @param [providedOptions]
    */
-  constructor( valueRange: Range, providedOptions?: ValueChangeSoundPlayerOptions ) {
+  public constructor( valueRange: Range, providedOptions?: ValueChangeSoundPlayerOptions ) {
 
     const options = optionize<ValueChangeSoundPlayerOptions>()( {
       middleMovingUpSoundPlayer: generalSoftClickSoundPlayer,
@@ -224,7 +224,7 @@ class ValueChangeSoundPlayer {
    * Check if the new value has reached threshold and, if so, play the appropriate sound.  If no threshold has been
    * reached or crossed and the new value is not at the min or max, no sound will be played.
    */
-  playSoundIfThresholdReached( newValue: number, oldValue: number ): void {
+  public playSoundIfThresholdReached( newValue: number, oldValue: number ): void {
     if ( newValue !== oldValue ) {
       const constrainedNewValue = this.constrainValue( newValue );
       const constrainedOldValue = this.constrainValue( oldValue );
@@ -244,7 +244,7 @@ class ValueChangeSoundPlayer {
    * Play the appropriate sound for the change in value indicated by the provided new and old values.  This will almost
    * always play a sound, but there are some exceptions.  See the code and comments for details.
    */
-  playSoundForValueChange( newValue: number, oldValue: number ): void {
+  public playSoundForValueChange( newValue: number, oldValue: number ): void {
     const constrainedNewValue = this.constrainValue( newValue );
     const constrainedOldValue = this.constrainValue( oldValue );
     if ( constrainedNewValue !== constrainedOldValue ||
@@ -288,7 +288,7 @@ class ValueChangeSoundPlayer {
   /**
    * Static instance that makes no sound.  This is generally used as an option value to turn off sound generation.
    */
-  static NO_SOUND = new ValueChangeSoundPlayer( new Range( 0, 1 ), {
+  public static NO_SOUND = new ValueChangeSoundPlayer( new Range( 0, 1 ), {
     middleMovingUpSoundPlayer: nullSoundPlayer,
     minSoundPlayer: nullSoundPlayer,
     maxSoundPlayer: nullSoundPlayer

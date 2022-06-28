@@ -17,7 +17,7 @@ class Ball {
   public readonly velocityProperty: Vector2Property;
   public readonly bounceEmitter: Emitter<[ string ]>;
 
-  constructor( radius: number, color: Color, initialPosition: Vector2, initialVelocity: Vector2 ) {
+  public constructor( radius: number, color: Color, initialPosition: Vector2, initialVelocity: Vector2 ) {
 
     this.radius = radius;
     this.color = color;

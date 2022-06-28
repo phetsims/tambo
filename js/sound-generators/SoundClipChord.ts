@@ -48,7 +48,7 @@ class SoundClipChord extends SoundGenerator implements ISoundPlayer {
   // flag indicating whether this is currently playing
   public readonly isPlayingProperty: IReadOnlyProperty<boolean>;
 
-  constructor( sound: WrappedAudioBuffer, providedOptions?: SoundClipChordOptions ) {
+  public constructor( sound: WrappedAudioBuffer, providedOptions?: SoundClipChordOptions ) {
 
     const options = optionize<SoundClipChordOptions, SelfOptions, SoundGeneratorOptions>()( {
       initialOutputLevel: 0.7,

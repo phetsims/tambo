@@ -20,7 +20,7 @@ class SliderPitchChangeSoundGenerator extends ValueChangeSoundPlayer {
   /**
    * @param valueRange - the range of values expected and over which sounds will be played
    */
-  constructor( valueRange: Range ) {
+  public constructor( valueRange: Range ) {
 
     // sound clip to be used in both the up and down directions for the middle sounds
     const marimbaSoundClip = new SoundClip( brightMarimbaShort_mp3, {

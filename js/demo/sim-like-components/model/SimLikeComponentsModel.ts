@@ -26,7 +26,7 @@ class SimLikeComponentsModel {
   // tracks whether a reset is happening
   public readonly resetInProgressProperty: BooleanProperty;
 
-  constructor() {
+  public constructor() {
 
     this.boxOfBalls = new BoxOfBalls( 135, 80 ); // size empirically determined
     this.numberOfBallsProperty = new NumberProperty( 0 );
@@ -52,7 +52,7 @@ class SimLikeComponentsModel {
   /**
    * @param dt - delta time, in seconds
    */
-  step( dt: number ): void {
+  public step( dt: number ): void {
     if ( this.ballsMovingProperty.value ) {
       this.boxOfBalls.step( dt );
     }
@@ -60,7 +60,7 @@ class SimLikeComponentsModel {
 
   /**
    */
-  reset(): void {
+  public reset(): void {
     this.resetInProgressProperty.value = true;
     this.numberOfBallsProperty.reset();
     this.ballsMovingProperty.reset();

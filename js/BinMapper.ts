@@ -23,7 +23,7 @@ class BinMapper {
   private readonly numBins: number;
   private readonly options: BinMapperOptions;
 
-  constructor( valueRange: Range, numBins: number, providedOptions?: BinMapperOptions ) {
+  public constructor( valueRange: Range, numBins: number, providedOptions?: BinMapperOptions ) {
 
     // parameter checking
     assert && assert( numBins > 0 );

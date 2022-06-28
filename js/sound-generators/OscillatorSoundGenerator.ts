@@ -32,7 +32,7 @@ class OscillatorSoundGenerator extends SoundGenerator {
   private readonly frequency: number;
   private waveformType: OscillatorType;
 
-  constructor( providedOptions?: OscillatorSoundGeneratorOptions ) {
+  public constructor( providedOptions?: OscillatorSoundGeneratorOptions ) {
 
     const options = optionize<OscillatorSoundGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
       initialFrequency: 440,

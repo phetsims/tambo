@@ -40,7 +40,7 @@ const LABEL_FONT = new PhetFont( 20 );
 
 class UIComponentsScreenView extends DemosScreenView {
 
-  constructor( model: UIComponentsModel ) {
+  public constructor( model: UIComponentsModel ) {
 
     const radioButtonItems = [
       {

@@ -27,7 +27,7 @@ class MultiSelectionSoundPlayerFactory {
   // instances of sound players, indexed by position in the group, created as needed
   private readonly soundPlayers: ISoundPlayer[];
 
-  constructor() {
+  public constructor() {
     this._basisSoundClip = null;
     this.soundPlayers = [];
   }
@@ -53,7 +53,7 @@ class MultiSelectionSoundPlayerFactory {
    * provided parameter.
    * @param positionIndex - the position within the radio button group, combo box, or whatever
    */
-  getSelectionSoundPlayer( positionIndex: number ): ISoundPlayer {
+  public getSelectionSoundPlayer( positionIndex: number ): ISoundPlayer {
 
     if ( !this.soundPlayers[ positionIndex ] ) {
 
@@ -83,7 +83,7 @@ class FixedSpeedSoundClipPlayer {
   private readonly soundPlayer: SoundClip;
   private readonly playbackRate: number;
 
-  constructor( soundPlayer: SoundClip, playbackRate: number ) {
+  public constructor( soundPlayer: SoundClip, playbackRate: number ) {
     this.soundPlayer = soundPlayer;
     this.playbackRate = playbackRate;
   }

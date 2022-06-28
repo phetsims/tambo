@@ -47,7 +47,7 @@ class TestingScreenView extends DemosScreenView {
 
   private readonly stepEmitter: Emitter<[ number ]>;
 
-  constructor() {
+  public constructor() {
 
     const resetInProgressProperty = new BooleanProperty( false );
 
@@ -134,7 +134,7 @@ class BasicAndEnhancedSoundTestNode extends VBox {
 
   private readonly disposeBasicAndEnhancedSoundTestNode: () => void;
 
-  constructor( options: VBoxOptions ) {
+  public constructor( options: VBoxOptions ) {
 
     // sound clips to be played
     const loonCallSoundClip = new SoundClip( loonCall_mp3 );
@@ -171,8 +171,9 @@ class BasicAndEnhancedSoundTestNode extends VBox {
   }
 
   /**
+   * Release references to avoid memory leaks.
    */
-  override dispose(): void {
+  public override dispose(): void {
     this.disposeBasicAndEnhancedSoundTestNode();
     super.dispose();
   }
@@ -185,7 +186,7 @@ class AdditionalAudioNodesTestNode extends VBox {
 
   private readonly disposeBasicAndEnhancedSoundTestNode: () => void;
 
-  constructor( options: VBoxOptions ) {
+  public constructor( options: VBoxOptions ) {
 
     // convolver node, which will be used to create the reverb effect
     const convolver = phetAudioContext.createConvolver();
@@ -242,8 +243,9 @@ class AdditionalAudioNodesTestNode extends VBox {
   }
 
   /**
+   * Release references to avoid memory leaks.
    */
-  override dispose(): void {
+  public override dispose(): void {
     this.disposeBasicAndEnhancedSoundTestNode();
     super.dispose();
   }
@@ -257,7 +259,7 @@ class LongSoundTestPanel extends Node {
 
   private readonly disposeLongSoundTestPanel: () => void;
 
-  constructor( resetInProgressProperty: BooleanProperty, options: NodeOptions ) {
+  public constructor( resetInProgressProperty: BooleanProperty, options: NodeOptions ) {
 
     // internal state variables
     const lightningBoltVisibleProperty = new BooleanProperty( false );
@@ -354,7 +356,7 @@ class LongSoundTestPanel extends Node {
   /**
    * release memory to avoid leaks
    */
-  override dispose(): void {
+  public override dispose(): void {
     this.disposeLongSoundTestPanel();
     super.dispose();
   }

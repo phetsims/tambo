@@ -103,7 +103,7 @@ class SoundManager extends PhetioObject {
   private reverbGainNode: GainNode | null;
   private dryGainNode: GainNode | null;
 
-  constructor( tandem: Tandem ) {
+  public constructor( tandem: Tandem ) {
 
     super( {
       tandem: tandem,
@@ -493,7 +493,7 @@ class SoundManager extends PhetioObject {
     this.setMasterOutputLevel( outputLevel );
   }
 
-  get masterOutputLevel() {
+  public get masterOutputLevel() {
     return this.getMasterOutputLevel();
   }
 

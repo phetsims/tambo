@@ -75,7 +75,7 @@ class NoiseGenerator extends SoundGenerator {
   // function that handles changes to the audio context
   private readonly audioContextStateChangeListener: ( state: string ) => void;
 
-  constructor( providedOptions?: NoiseGeneratorOptions ) {
+  public constructor( providedOptions?: NoiseGeneratorOptions ) {
 
     const options = optionize<NoiseGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
       noiseType: 'pink',
