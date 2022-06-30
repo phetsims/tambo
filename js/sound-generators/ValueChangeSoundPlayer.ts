@@ -17,18 +17,18 @@
  */
 
 import Range from '../../../dot/js/Range.js';
+import Utils from '../../../dot/js/Utils.js';
 import optionize from '../../../phet-core/js/optionize.js';
-import generalBoundaryBoopSoundPlayer from '../shared-sound-players/generalBoundaryBoopSoundPlayer.js';
-import generalSoftClickSoundPlayer from '../shared-sound-players/generalSoftClickSoundPlayer.js';
-import tambo from '../tambo.js';
-import ISoundPlayer from '../ISoundPlayer.js';
-import phetAudioContext from '../phetAudioContext.js';
-import SoundClipPlayer from './SoundClipPlayer.js';
 import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
 import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
-import Utils from '../../../dot/js/Utils.js';
-import SoundClip from './SoundClip.js';
+import ISoundPlayer from '../ISoundPlayer.js';
+import phetAudioContext from '../phetAudioContext.js';
+import generalBoundaryBoopSoundPlayer from '../shared-sound-players/generalBoundaryBoopSoundPlayer.js';
+import generalSoftClickSoundPlayer from '../shared-sound-players/generalSoftClickSoundPlayer.js';
 import nullSoundPlayer from '../shared-sound-players/nullSoundPlayer.js';
+import tambo from '../tambo.js';
+import SoundClip from './SoundClip.js';
+import SoundClipPlayer from './SoundClipPlayer.js';
 
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary
@@ -74,8 +74,11 @@ export type ValueChangeSoundPlayerOptions = {
   numberOfMiddleThresholds?: number | null;
 
   // The delta value between thresholds that are used to determine when sounds are played.  This is an alternative way
-  // to specify the thresholds and should only be used when they need to be asymmetric.  This was initially added to
-  // support NumberControl, see https://github.com/phetsims/sun/issues/697.  This is incompatible with specifying
+  // to specify the thresholds and should only be used when numberOfMiddleThresholds can't, which is generally when a
+  // very specific delta is required and having perfectly even thresholds isn't completely desirable.  Note that this
+  // approach will often lead to a situation where the distance between the last threshold and the end of the range
+  // isn't the same as the distance between all the other thresholds.  This was initially added to support
+  // NumberControl, see https://github.com/phetsims/sun/issues/697.  This is incompatible with specifying
   // numberOfMiddleThresholds.
   interThresholdDelta?: number | null;
 
@@ -99,8 +102,8 @@ export type ValueChangeSoundPlayerOptions = {
 
 class ValueChangeSoundPlayer {
 
-  // thresholds that will be used to decide when to play sounds in some cases
-  private readonly thresholds: number[]
+  // The distance between the threshold values at which sounds will be played.
+  private readonly interThresholdDistance: number;
 
   // range of values that this should expect to handle
   private readonly valueRange: Range;
@@ -187,25 +190,15 @@ class ValueChangeSoundPlayer {
       options.numberOfMiddleThresholds = DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS;
     }
 
-    this.thresholds = [];
     if ( options.numberOfMiddleThresholds !== null ) {
-      const interThresholdDistance = valueRange.getLength() / ( options.numberOfMiddleThresholds + 1 );
-      _.times( options.numberOfMiddleThresholds, index => {
-        this.thresholds.push( options.constrainValue( valueRange.min + ( index + 1 ) * interThresholdDistance ) );
-      } );
-
-      // Make sure that the constraint function didn't constrain the thresholds too much.
-      assert && assert(
-        _.uniq( this.thresholds ).length === options.numberOfMiddleThresholds,
-        'not enough unique thresholds were produced - is the constraint function too constraining?'
-      );
+      this.interThresholdDistance = valueRange.getLength() / ( options.numberOfMiddleThresholds + 1 );
     }
     else if ( options.interThresholdDelta !== null ) {
-      _.times( Math.floor( valueRange.getLength() / options.interThresholdDelta ), index => {
-        this.thresholds.push(
-          options.constrainValue( valueRange.min + ( index + 1 ) * options.interThresholdDelta! )
-        );
-      } );
+      this.interThresholdDistance = options.interThresholdDelta;
+    }
+    else {
+      assert && assert( false, 'should never get here, it is a logic error if we do' );
+      this.interThresholdDistance = valueRange.getLength() / 2; // avoid uninitialized compile-time error
     }
 
     this.valueRange = valueRange;
@@ -221,20 +214,20 @@ class ValueChangeSoundPlayer {
   }
 
   /**
-   * Check if the new value has reached threshold and, if so, play the appropriate sound.  If no threshold has been
-   * reached or crossed and the new value is not at the min or max, no sound will be played.
+   * Check if the new value has reached or crossed a threshold and, if so, play the appropriate sound.  If no threshold
+   * has been reached or crossed and the new value is not at the min or max, no sound will be played.
    */
   public playSoundIfThresholdReached( newValue: number, oldValue: number ): void {
     if ( newValue !== oldValue ) {
+
       const constrainedNewValue = this.constrainValue( newValue );
       const constrainedOldValue = this.constrainValue( oldValue );
-      const crossedOrReachedThreshold = this.thresholds.find( threshold =>
-        constrainedOldValue < threshold && constrainedNewValue >= threshold ||
-        constrainedOldValue > threshold && constrainedNewValue <= threshold
-      );
-      if ( crossedOrReachedThreshold !== undefined ||
-           newValue === this.valueRange.min ||
-           newValue === this.valueRange.max ) {
+      const newValueQuantizedRange = this.mapValueToQuantizedRange( constrainedNewValue );
+      const oldValueQuantizedRange = this.mapValueToQuantizedRange( constrainedOldValue );
+      if ( newValueQuantizedRange.min !== oldValueQuantizedRange.min ||
+           constrainedNewValue === newValueQuantizedRange.min && constrainedOldValue !== oldValueQuantizedRange.min ||
+           constrainedNewValue === newValueQuantizedRange.max && constrainedOldValue !== oldValueQuantizedRange.max ) {
+
         this.playSoundForValueChange( newValue, oldValue );
       }
     }
@@ -283,6 +276,19 @@ class ValueChangeSoundPlayer {
         }
       }
     }
+  }
+
+  /**
+   * Map the provided value a quantized range that can then be used to determine if a threshold has been crossed.
+   */
+  private mapValueToQuantizedRange( value: number ): Range {
+    const valueProportion = ( value - this.valueRange.min ) / this.valueRange.getLength();
+    const numberOfRanges = Math.ceil( this.valueRange.getLength() / this.interThresholdDistance );
+    const rangeNumber = Math.min( Math.floor( valueProportion * numberOfRanges ), numberOfRanges - 1 );
+    return new Range(
+      this.valueRange.min + rangeNumber * this.interThresholdDistance,
+      Math.min( this.valueRange.min + ( rangeNumber + 1 ) * this.interThresholdDistance, this.valueRange.max )
+    );
   }
 
   /**
