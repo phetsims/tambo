@@ -1,7 +1,7 @@
 // Copyright 2018-2022, University of Colorado Boulder
 
 /**
- * This enum is used to describe whether a sound is part of the "basic" sounds or the "enhanced" sounds.
+ * This enum is used to describe whether a sound is part of the "basic" sounds or the "extra" sounds.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -12,11 +12,11 @@ import tambo from './tambo.js';
 
 class SoundScope extends EnumerationValue {
   public static BASIC = new SoundScope();
-  public static ENHANCED = new SoundScope();
+  public static EXTRA = new SoundScope();
 
   // Gets a list of keys, values and mapping between them. For use by EnumerationProperty and PhET-iO.
   public static enumeration = new Enumeration( SoundScope, {
-    phetioDocumentation: 'describes whether a sound is considered part of the basic or the enhanced sounds for the sim'
+    phetioDocumentation: 'describes whether a sound is considered part of the basic or the extra sounds for the sim'
   } );
 }
 

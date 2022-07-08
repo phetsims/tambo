@@ -66,8 +66,8 @@ class TestingScreenView extends DemosScreenView {
         } )
       },
       {
-        label: 'BasicAndEnhancedSounds',
-        createNode: ( layoutBounds: Bounds2 ) => new BasicAndEnhancedSoundTestNode( {
+        label: 'BasicAndExtraSounds',
+        createNode: ( layoutBounds: Bounds2 ) => new BasicAndExtraSoundTestNode( {
           center: layoutBounds.center
         } )
       },
@@ -128,11 +128,11 @@ class TestingScreenView extends DemosScreenView {
 }
 
 /**
- * a node with two buttons, the 2nd of which only produces sound when in 'enhanced sound' mode
+ * a node with two buttons, the 2nd of which only produces sound when in 'extra sound' mode
  */
-class BasicAndEnhancedSoundTestNode extends VBox {
+class BasicAndExtraSoundTestNode extends VBox {
 
-  private readonly disposeBasicAndEnhancedSoundTestNode: () => void;
+  private readonly disposeBasicAndExtraSoundTestNode: () => void;
 
   public constructor( options: VBoxOptions ) {
 
@@ -140,7 +140,7 @@ class BasicAndEnhancedSoundTestNode extends VBox {
     const loonCallSoundClip = new SoundClip( loonCall_mp3 );
     soundManager.addSoundGenerator( loonCallSoundClip );
     const rhodesChordSoundClip = new SoundClip( rhodesChord_mp3 );
-    soundManager.addSoundGenerator( rhodesChordSoundClip, { sonificationLevel: SoundLevelEnum.ENHANCED } );
+    soundManager.addSoundGenerator( rhodesChordSoundClip, { sonificationLevel: SoundLevelEnum.EXTRA } );
 
     // add a button to play a basic-mode sound
     const playBasicSoundButton = new TextPushButton( 'Play Basic-Level Sound', {
@@ -149,20 +149,20 @@ class BasicAndEnhancedSoundTestNode extends VBox {
       soundPlayer: loonCallSoundClip
     } );
 
-    // add button to play enhanced-mode sound
-    const playEnhancedSoundButton = new TextPushButton( 'Play Enhanced-Level Sound', {
+    // add button to play extra-mode sound
+    const playExtraSoundButton = new TextPushButton( 'Play Extra-Level Sound', {
       baseColor: '#DBB1CD',
       font: new PhetFont( 16 ),
       soundPlayer: rhodesChordSoundClip
     } );
 
     super( merge( {
-      children: [ playBasicSoundButton, playEnhancedSoundButton ],
+      children: [ playBasicSoundButton, playExtraSoundButton ],
       spacing: 20
     }, options ) );
 
     // dispose function
-    this.disposeBasicAndEnhancedSoundTestNode = () => {
+    this.disposeBasicAndExtraSoundTestNode = () => {
       soundManager.removeSoundGenerator( loonCallSoundClip );
       loonCallSoundClip.dispose();
       soundManager.removeSoundGenerator( rhodesChordSoundClip );
@@ -174,7 +174,7 @@ class BasicAndEnhancedSoundTestNode extends VBox {
    * Release references to avoid memory leaks.
    */
   public override dispose(): void {
-    this.disposeBasicAndEnhancedSoundTestNode();
+    this.disposeBasicAndExtraSoundTestNode();
     super.dispose();
   }
 }
@@ -184,7 +184,7 @@ class BasicAndEnhancedSoundTestNode extends VBox {
  */
 class AdditionalAudioNodesTestNode extends VBox {
 
-  private readonly disposeBasicAndEnhancedSoundTestNode: () => void;
+  private readonly disposeBasicAndExtraSoundTestNode: () => void;
 
   public constructor( options: VBoxOptions ) {
 
@@ -234,7 +234,7 @@ class AdditionalAudioNodesTestNode extends VBox {
     }, options ) );
 
     // dispose function
-    this.disposeBasicAndEnhancedSoundTestNode = () => {
+    this.disposeBasicAndExtraSoundTestNode = () => {
       soundManager.removeSoundGenerator( shortSoundNormal );
       shortSoundNormal.dispose();
       soundManager.removeSoundGenerator( shortSoundWithReverb );
@@ -246,7 +246,7 @@ class AdditionalAudioNodesTestNode extends VBox {
    * Release references to avoid memory leaks.
    */
   public override dispose(): void {
-    this.disposeBasicAndEnhancedSoundTestNode();
+    this.disposeBasicAndExtraSoundTestNode();
     super.dispose();
   }
 }

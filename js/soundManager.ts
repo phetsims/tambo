@@ -6,7 +6,7 @@
  *  - master enable/disable
  *  - master gain control
  *  - enable/disable of sounds based on visibility of an associated Scenery node
- *  - enable/disable of sounds based on their assigned sonification level (e.g. "basic" or "enhanced")
+ *  - enable/disable of sounds based on their assigned sonification level (e.g. "basic" or "extra")
  *  - gain control for sounds based on their assigned category, e.g. UI versus sim-specific sounds
  *  - a shared reverb unit to add some spatialization and make all sounds seem to originate with the same space
  *
@@ -75,8 +75,8 @@ class SoundManager extends PhetioObject {
   // global enabled state for sound generation
   public readonly enabledProperty: BooleanProperty;
 
-  // enabled state for enhanced sounds
-  public readonly enhancedSoundEnabledProperty: BooleanProperty;
+  // enabled state for extra sounds
+  public readonly extraSoundEnabledProperty: BooleanProperty;
 
   // an array where the sound generators are stored along with information about how to manage them
   private readonly soundGeneratorInfoArray: SoundGeneratorInfo[];
@@ -117,11 +117,11 @@ class SoundManager extends PhetioObject {
       phetioDocumentation: 'Determines whether sound is enabled.'
     } );
 
-    this.enhancedSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.enhancedSoundInitiallyEnabled, {
-      tandem: tandem.createTandem( 'enhancedSoundEnabledProperty' ),
-      phetioDocumentation: 'Determines whether enhanced sound is enabled. Enhanced sound is additional sounds that ' +
+    this.extraSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.extraSoundInitiallyEnabled, {
+      tandem: tandem.createTandem( 'extraSoundEnabledProperty' ),
+      phetioDocumentation: 'Determines whether extra sound is enabled. Extra sound is additional sounds that ' +
                            'can serve to improve the learning experience for individuals with visual disabilities. ' +
-                           'Note that not all simulations that support sound also support enhanced sound. Also note ' +
+                           'Note that not all simulations that support sound also support extra sound. Also note ' +
                            'that the value is irrelevant when enabledProperty is false.'
     } );
 
@@ -404,9 +404,9 @@ class SoundManager extends PhetioObject {
     // Add the global enable Property to the list of Properties that enable this sound generator.
     soundGenerator.addEnableControlProperty( this.enabledProperty );
 
-    // If this sound generator is only enabled in enhanced mode, add the enhanced mode Property as an enable control.
-    if ( options.sonificationLevel === SoundLevelEnum.ENHANCED ) {
-      soundGenerator.addEnableControlProperty( this.enhancedSoundEnabledProperty );
+    // If this sound generator is only enabled in extra mode, add the extra mode Property as an enable-control.
+    if ( options.sonificationLevel === SoundLevelEnum.EXTRA ) {
+      soundGenerator.addEnableControlProperty( this.extraSoundEnabledProperty );
     }
 
     // If a view node was specified, create and pass in a boolean Property that is true only when the node is displayed.
@@ -597,14 +597,14 @@ class SoundManager extends PhetioObject {
   }
 
   public set sonificationLevel( sonificationLevel: SoundLevelEnum ) {
-    this.enhancedSoundEnabledProperty.value = sonificationLevel === SoundLevelEnum.ENHANCED;
+    this.extraSoundEnabledProperty.value = sonificationLevel === SoundLevelEnum.EXTRA;
   }
 
   /**
    * ES5 getter for sonification level
    */
   public get sonificationLevel(): SoundLevelEnum {
-    return this.enhancedSoundEnabledProperty.value ? SoundLevelEnum.ENHANCED : SoundLevelEnum.BASIC;
+    return this.extraSoundEnabledProperty.value ? SoundLevelEnum.EXTRA : SoundLevelEnum.BASIC;
   }
 
   /**

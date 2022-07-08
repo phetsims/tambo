@@ -12,7 +12,7 @@ Design](https://docs.google.com/document/d/1LJ6maD9QGvRRIaukKi_s019Gc1V2YHi4CPbP
 - [ ] Figure out if it's okay to turn sound on for the simulation.  This will hinge upon whether there will need to be
 releases made off of master before the sound implementation is complete.  Generally you'll want to turn sound on, but in
 cases where that isn't possible, skip the two sub-steps below, and the query parameters `supportsSound` and
-`supportsEnhancedSound` can be used to turn sound on for testing during development. 
+`supportsExtraSound` can be used to turn sound on for testing during development. 
   - [ ] Turn on sound by adding the `supportsSound: true` key-value pair to the `phet` sub-object in the package.json 
 file for this simulation. See https://github.com/phetsims/friction/blob/master/package.json.  This portion will look
 something like this:
@@ -28,9 +28,9 @@ something like this:
        ...
     }
     ```
-  - [ ] If the sound design includes enhanced sound, turn this on by adding the `supportsEnhancedSound: true` key-value
+  - [ ] If the sound design includes extra sound, turn this on by adding the `supportsExtraSound: true` key-value
 pair to the `phet` sub-object in the package.json file for this simulation. The main effect that this is has is to add
-the 'Enhanced Sound' item to the PhET menu. See https://github.com/phetsims/friction/blob/master/package.json.
+the 'Extra Sound' item to the PhET menu. See https://github.com/phetsims/friction/blob/master/package.json.
   - [ ] Run `grunt update` to get the updated configuration into the HTML file.
 - [ ] Explicitly turn *off* sound for any common UI components that now produce sounds that are not needed, if there are
 any.  This is done by looking at the options and setting any sound players to `SoundPlayer.NO_SOUND`.  Search through the
