@@ -65,8 +65,7 @@ class AmplitudeModulator extends EnabledComponent {
 
     super( options );
 
-    // TODO: https://github.com/phetsims/axon/issues/342 get rid of the type assertion
-    // TODO: See also https://github.com/phetsims/axon/issues/382
+    assert && assert( this.enabledProperty instanceof Property, 'enabledProperty must be of type Property' );
     this.myEnabledProperty = this.enabledProperty as Property<boolean>;
 
     this.frequencyProperty = options.frequencyProperty || new NumberProperty( DEFAULT_FREQUENCY );
