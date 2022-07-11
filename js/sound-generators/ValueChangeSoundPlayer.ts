@@ -298,7 +298,7 @@ class ValueChangeSoundPlayer {
     middleMovingUpSoundPlayer: nullSoundPlayer,
     minSoundPlayer: nullSoundPlayer,
     maxSoundPlayer: nullSoundPlayer
-  } )
+  } );
 }
 
 tambo.register( 'ValueChangeSoundPlayer', ValueChangeSoundPlayer );
