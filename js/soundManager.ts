@@ -49,7 +49,7 @@ export type SoundGeneratorAddOptions = {
 type SoundGeneratorAwaitingAdd = {
   soundGenerator: SoundGenerator;
   soundGeneratorAddOptions: SoundGeneratorAddOptions;
-}
+};
 
 // sound generator with its sonification level
 type SoundGeneratorInfo = {

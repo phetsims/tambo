@@ -10,7 +10,7 @@ import tambo from './tambo.js';
 type SoundBounds = {
   soundStart: number;
   soundEnd: number | null;
-}
+};
 
 // This threshold is used for analyzing individual decoded sound samples in order to find where the actual sound
 // values start and end.  Its value was determined through experimentation on a single loop (charges-in-body) at a

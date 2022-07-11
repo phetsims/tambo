@@ -31,7 +31,7 @@ export type RemoveAndDisposeSoundGeneratorsTestPanelOptions = SelfOptions & Pane
 type SoundGeneratorComboBoxItemInfo = {
   comboBoxItemName: string;
   createSoundGenerator: () => SoundGenerator;
-}
+};
 
 // constants
 const BUTTON_FONT = new PhetFont( 18 );
