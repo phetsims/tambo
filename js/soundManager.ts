@@ -388,10 +388,10 @@ class SoundManager extends PhetioObject {
     }
     else {
       assert && assert(
-        this.gainNodesForCategories.has( options.categoryName! ),
+        this.gainNodesForCategories.has( options.categoryName ),
         `category does not exist : ${options.categoryName}`
       );
-      soundGenerator.connect( this.gainNodesForCategories.get( options.categoryName! )! );
+      soundGenerator.connect( this.gainNodesForCategories.get( options.categoryName )! );
     }
 
     // Keep a record of the sound generator along with additional information about it.
