@@ -230,7 +230,7 @@ abstract class SoundGenerator {
    * Test if this sound generator is connected to the provided audio param.
    */
   public isConnectedTo( audioParam: AudioParam | AudioNode ): boolean {
-    return this.connectionList.indexOf( audioParam ) >= 0;
+    return this.connectionList.includes( audioParam );
   }
 
   /**

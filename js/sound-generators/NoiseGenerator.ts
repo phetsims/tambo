@@ -90,7 +90,7 @@ class NoiseGenerator extends SoundGenerator {
     }, providedOptions );
 
     assert && assert(
-      [ 'white', 'pink', 'brown' ].indexOf( options.noiseType ) !== -1,
+      [ 'white', 'pink', 'brown' ].includes( options.noiseType ),
       `invalid noise type: ${options.noiseType}`
     );
 

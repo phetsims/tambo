@@ -75,7 +75,7 @@ const audioContextStateChangeMonitor = {
     if ( audioContextIndex >= 0 ) {
       const listenerArray = stateChangeListenerArrays[ audioContextIndex ];
       if ( listenerArray ) {
-        found = listenerArray.indexOf( listener ) >= 0;
+        found = listenerArray.includes( listener );
       }
     }
     return found;
