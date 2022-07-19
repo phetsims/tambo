@@ -9,9 +9,7 @@ import Screen from '../../joist/js/Screen.js';
 import ScreenIcon from '../../joist/js/ScreenIcon.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { IColor, Rectangle } from '../../scenery/js/imports.js';
-import { LinearGradient } from '../../scenery/js/imports.js';
-import { RadialGradient } from '../../scenery/js/imports.js';
+import { IColor, LinearGradient, RadialGradient, Rectangle } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import SimLikeComponentsModel from './demo/sim-like-components/model/SimLikeComponentsModel.js';
 import SimLikeComponentsScreenView from './demo/sim-like-components/view/SimLikeComponentsScreenView.js';
@@ -24,6 +22,10 @@ import tamboStrings from './tamboStrings.js';
 
 // constants
 const SOUND_OPTIONS_DIALOG_CONTENT = new SoundOptionsDialogContent();
+
+class Model {
+  public step(): void { /* no stepping here */ }
+}
 
 const simOptions: SimOptions = {
   credits: {
@@ -101,9 +103,7 @@ simLauncher.launch( () => {
 
     // screen to test and demonstrate more unusual and complex sound generators
     new Screen(
-      ( () => {
-        return {};
-      } ), // no model needed, return a stub
+      ( () => new Model() ), // no model needed, return a stub
       ( () => new TestingScreenView() ),
       {
         name: 'Testing',
