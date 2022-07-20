@@ -10,8 +10,7 @@
 
 import NumberProperty from '../../../axon/js/NumberProperty.js';
 import PhetFont from '../../../scenery-phet/js/PhetFont.js';
-import { Node } from '../../../scenery/js/imports.js';
-import { Text } from '../../../scenery/js/imports.js';
+import { Node, Text } from '../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../sun/js/AquaRadioButtonGroup.js';
 import tambo from '../tambo.js';
 

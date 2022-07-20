@@ -10,8 +10,7 @@ import createObservableArray from '../../../../../axon/js/createObservableArray.
 import Property from '../../../../../axon/js/Property.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
 import dotRandom from '../../../../../dot/js/dotRandom.js';
-import optionize from '../../../../../phet-core/js/optionize.js';
-import { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
+import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
 import StringUtils from '../../../../../phetcommon/js/util/StringUtils.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Node, Text, VBox } from '../../../../../scenery/js/imports.js';
