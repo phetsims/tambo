@@ -37,6 +37,7 @@ import SoundClipChordTestNode from './SoundClipChordTestNode.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import { TimerListener } from '../../../../../axon/js/Timer.js';
 import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
+import IEmitter from '../../../../../axon/js/IEmitter.js';
 
 // constants
 const CHECKBOX_SIZE = 16;
@@ -45,7 +46,7 @@ const LIGHTNING_SHOWN_TIME = 0.750; // in seconds
 
 class TestingScreenView extends DemosScreenView {
 
-  private readonly stepEmitter: Emitter<[ number ]>;
+  private readonly stepEmitter: IEmitter<[ number ]>;
 
   public constructor() {
 

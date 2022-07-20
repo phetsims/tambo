@@ -22,9 +22,9 @@ import windsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/w
 import ContinuousPropertySoundGenerator from '../../../sound-generators/ContinuousPropertySoundGenerator.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
-import Emitter from '../../../../../axon/js/Emitter.js';
 import WrappedAudioBuffer from '../../../WrappedAudioBuffer.js';
 import EmptyObjectType from '../../../../../phet-core/js/types/EmptyObjectType.js';
+import IEmitter from '../../../../../axon/js/IEmitter.js';
 
 type SelfOptions = EmptyObjectType;
 export type ContinuousPropertySoundGeneratorTestNodeOptions = SelfOptions & VBoxOptions;
@@ -34,7 +34,7 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
   // dispose function
   private readonly disposeContinuousPropertySoundGeneratorTestNode: () => void;
 
-  public constructor( stepEmitter: Emitter<[ number ]>, providedOptions?: ContinuousPropertySoundGeneratorTestNodeOptions ) {
+  public constructor( stepEmitter: IEmitter<[ number ]>, providedOptions?: ContinuousPropertySoundGeneratorTestNodeOptions ) {
 
     // keep track of listeners added to the step emitter so that they can be disposed
     const stepListeners: ( ( dt: number ) => void )[] = [];

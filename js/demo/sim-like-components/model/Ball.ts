@@ -5,6 +5,7 @@
  */
 
 import Emitter from '../../../../../axon/js/Emitter.js';
+import IEmitter from '../../../../../axon/js/IEmitter.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../../dot/js/Vector2Property.js';
 import { Color } from '../../../../../scenery/js/imports.js';
@@ -15,7 +16,7 @@ class Ball {
   public readonly color: Color;
   public readonly positionProperty: Vector2Property;
   public readonly velocityProperty: Vector2Property;
-  public readonly bounceEmitter: Emitter<[ string ]>;
+  public readonly bounceEmitter: IEmitter<[ string ]>;
 
   public constructor( radius: number, color: Color, initialPosition: Vector2, initialVelocity: Vector2 ) {
 
