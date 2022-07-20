@@ -11,14 +11,14 @@ import tambo from '../tambo.js';
 import SoundClip, { SoundClipOptions } from './SoundClip.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import EmptyObjectType from '../../../phet-core/js/types/EmptyObjectType.js';
+import { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 
 export type SoundAndOptions = {
   sound: WrappedAudioBuffer;
   options?: SoundClipOptions;
 };
 
-type SelfOptions = EmptyObjectType;
+type SelfOptions = EmptySelfOptions;
 export type CompositeSoundClipOptions = SelfOptions & SoundGeneratorOptions;
 
 class CompositeSoundClip extends SoundGenerator {

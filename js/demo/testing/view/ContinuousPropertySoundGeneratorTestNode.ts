@@ -23,10 +23,10 @@ import ContinuousPropertySoundGenerator from '../../../sound-generators/Continuo
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import WrappedAudioBuffer from '../../../WrappedAudioBuffer.js';
-import EmptyObjectType from '../../../../../phet-core/js/types/EmptyObjectType.js';
+import { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
 import IEmitter from '../../../../../axon/js/IEmitter.js';
 
-type SelfOptions = EmptyObjectType;
+type SelfOptions = EmptySelfOptions;
 export type ContinuousPropertySoundGeneratorTestNodeOptions = SelfOptions & VBoxOptions;
 
 class ContinuousPropertySoundGeneratorTestNode extends VBox {
