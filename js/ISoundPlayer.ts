@@ -7,9 +7,9 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-interface ISoundPlayer {
+type ISoundPlayer = {
   play: () => void;
   stop: () => void;
-}
+};
 
 export default ISoundPlayer;
