@@ -24,7 +24,7 @@ const audioContextStateChangeMonitor = {
   /**
    * add a listener that will be fired on state changes for the provided audio context
    */
-  addStateChangeListener( audioContext: AudioContext, listener: AudioContextStateChangeListener ) {
+  addStateChangeListener( audioContext: AudioContext, listener: AudioContextStateChangeListener ): void {
 
     // Find the audio context in the list of those being monitored, or add it if not found.
     let audioContextIndex = monitoredAudioContexts.indexOf( audioContext );
@@ -55,7 +55,7 @@ const audioContextStateChangeMonitor = {
   /**
    * remove the state change listener for the specified audio context
    */
-  removeStateChangeListener( audioContext: AudioContext, listener: AudioContextStateChangeListener ) {
+  removeStateChangeListener( audioContext: AudioContext, listener: AudioContextStateChangeListener ): void {
 
     // remove the listener for the listener array, checking for various problems along the way
     const audioContextIndex = monitoredAudioContexts.indexOf( audioContext );
