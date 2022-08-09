@@ -14,7 +14,7 @@ import SoundGenerator, { SoundGeneratorOptions } from '../../../tambo/js/sound-g
 import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import ISoundPlayer from '../ISoundPlayer.js';
-import IReadOnlyProperty from '../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 
 type SelfOptions = {
 
@@ -46,7 +46,7 @@ class SoundClipChord extends SoundGenerator implements ISoundPlayer {
   private readonly playbackSoundClips: SoundClip[];
 
   // flag indicating whether this is currently playing
-  public readonly isPlayingProperty: IReadOnlyProperty<boolean>;
+  public readonly isPlayingProperty: TReadOnlyProperty<boolean>;
 
   public constructor( sound: WrappedAudioBuffer, providedOptions?: SoundClipChordOptions ) {
 

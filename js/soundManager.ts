@@ -26,7 +26,7 @@ import SoundLevelEnum from './SoundLevelEnum.js';
 import tambo from './tambo.js';
 import SoundGenerator from './sound-generators/SoundGenerator.js';
 import optionize from '../../phet-core/js/optionize.js';
-import IReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/TReadOnlyProperty.js';
 import Multilink from '../../axon/js/Multilink.js';
 
 // options that can be used when adding a sound generator that can control some aspects of its behavior
@@ -140,11 +140,11 @@ class SoundManager extends PhetioObject {
   /**
    * Initialize the sonification manager. This function must be invoked before any sound generators can be added.
    */
-  public initialize( simConstructionCompleteProperty: IReadOnlyProperty<boolean>,
-                     audioEnabledProperty: IReadOnlyProperty<boolean>,
-                     simVisibleProperty: IReadOnlyProperty<boolean>,
-                     simActiveProperty: IReadOnlyProperty<boolean>,
-                     simSettingPhetioStateProperty: IReadOnlyProperty<boolean>,
+  public initialize( simConstructionCompleteProperty: TReadOnlyProperty<boolean>,
+                     audioEnabledProperty: TReadOnlyProperty<boolean>,
+                     simVisibleProperty: TReadOnlyProperty<boolean>,
+                     simActiveProperty: TReadOnlyProperty<boolean>,
+                     simSettingPhetioStateProperty: TReadOnlyProperty<boolean>,
                      providedOptions?: SoundGeneratorInitializationOptions ): void {
 
     assert && assert( !this.initialized, 'can\'t initialize the sound manager more than once' );

@@ -17,12 +17,12 @@ import soundConstants from '../soundConstants.js';
 import tambo from '../tambo.js';
 import Property from '../../../axon/js/Property.js';
 import IProperty from '../../../axon/js/IProperty.js';
-import IReadOnlyProperty from '../../../axon/js/IReadOnlyProperty.js';
+import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
-let notSettingPhetioStateProperty: IReadOnlyProperty<boolean>;
+let notSettingPhetioStateProperty: TReadOnlyProperty<boolean>;
 
 export type SoundGeneratorOptions = {
 
@@ -41,7 +41,7 @@ export type SoundGeneratorOptions = {
 
   // An initial set of Properties that will be hooked to this sound generator's enabled state, all of which must be true
   // for sound to be produced.  More of these properties can be added after construction via methods if needed.
-  enableControlProperties?: IReadOnlyProperty<boolean>[];
+  enableControlProperties?: TReadOnlyProperty<boolean>[];
 
   // Audio nodes that will be connected in the specified order between the bufferSource and localGainNode, used to
   // insert things like filters, compressors, etc.
@@ -62,7 +62,7 @@ abstract class SoundGenerator {
 
   // A set of boolean Properties that collectively control whether the sound generator is enabled.  All of these must be
   // true in order for the sound generator to be "fully enabled", meaning that it will produce sound.
-  protected enableControlProperties: ObservableArray<IReadOnlyProperty<boolean>>;
+  protected enableControlProperties: ObservableArray<TReadOnlyProperty<boolean>>;
 
   // A Property that tracks whether this sound generator is fully enabled, meaning that all the enable control
   // Properties are in a state indicating that sound can be produced.  This should only be updated in the listener
@@ -119,7 +119,7 @@ abstract class SoundGenerator {
     // Listen for new enable control Properties and hook them up as they arrive.
     this.enableControlProperties.addItemAddedListener( addedItem => {
       addedItem.link( updateFullyEnabledState );
-      const checkAndRemove = ( removedItem: IReadOnlyProperty<boolean> ) => {
+      const checkAndRemove = ( removedItem: TReadOnlyProperty<boolean> ) => {
         if ( removedItem === addedItem ) {
           removedItem.unlink( updateFullyEnabledState );
           this.enableControlProperties.removeItemRemovedListener( checkAndRemove );
@@ -294,7 +294,7 @@ abstract class SoundGenerator {
   /**
    * Add a Property to the list of those used to control the enabled state of this sound generator.
    */
-  public addEnableControlProperty( enableControlProperty: IReadOnlyProperty<boolean> ): void {
+  public addEnableControlProperty( enableControlProperty: TReadOnlyProperty<boolean> ): void {
     this.enableControlProperties.push( enableControlProperty );
   }
 
