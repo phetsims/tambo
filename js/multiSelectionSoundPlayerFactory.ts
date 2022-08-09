@@ -17,7 +17,7 @@ import radioButtonV2_mp3 from '../sounds/radioButtonV2_mp3.js';
 import SoundClip from './sound-generators/SoundClip.js';
 import soundManager from './soundManager.js';
 import tambo from './tambo.js';
-import ISoundPlayer from './ISoundPlayer.js';
+import TSoundPlayer from './TSoundPlayer.js';
 
 class MultiSelectionSoundPlayerFactory {
 
@@ -25,7 +25,7 @@ class MultiSelectionSoundPlayerFactory {
   private _basisSoundClip: SoundClip | null;
 
   // instances of sound players, indexed by position in the group, created as needed
-  private readonly soundPlayers: ISoundPlayer[];
+  private readonly soundPlayers: TSoundPlayer[];
 
   public constructor() {
     this._basisSoundClip = null;
@@ -53,7 +53,7 @@ class MultiSelectionSoundPlayerFactory {
    * provided parameter.
    * @param positionIndex - the position within the radio button group, combo box, or whatever
    */
-  public getSelectionSoundPlayer( positionIndex: number ): ISoundPlayer {
+  public getSelectionSoundPlayer( positionIndex: number ): TSoundPlayer {
 
     if ( !this.soundPlayers[ positionIndex ] ) {
 

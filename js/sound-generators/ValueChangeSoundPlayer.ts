@@ -21,7 +21,7 @@ import Utils from '../../../dot/js/Utils.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
 import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
-import ISoundPlayer from '../ISoundPlayer.js';
+import TSoundPlayer from '../TSoundPlayer.js';
 import phetAudioContext from '../phetAudioContext.js';
 import generalBoundaryBoopSoundPlayer from '../shared-sound-players/generalBoundaryBoopSoundPlayer.js';
 import generalSoftClickSoundPlayer from '../shared-sound-players/generalSoftClickSoundPlayer.js';
@@ -58,10 +58,10 @@ const NO_PLAYBACK_RATE_CHANGE = ( value: number ) => 1;
 export type ValueChangeSoundPlayerOptions = {
 
   // The sound player for movement in the middle of the range in the up direction.
-  middleMovingUpSoundPlayer?: ISoundPlayer | SoundClip;
+  middleMovingUpSoundPlayer?: TSoundPlayer | SoundClip;
 
   // The sound player for movement in the middle of the range in the down direction.
-  middleMovingDownSoundPlayer?: ISoundPlayer | SoundClip;
+  middleMovingDownSoundPlayer?: TSoundPlayer | SoundClip;
 
   // Functions that, if provided, will alter the playback rates of the middle sounds based on the provided value.
   middleMovingUpPlaybackRateMapper?: ( value: number ) => number;
@@ -90,10 +90,10 @@ export type ValueChangeSoundPlayerOptions = {
   constrainValue?: ( n: number ) => number;
 
   // The sound player that is used to indicate the minimum value.
-  minSoundPlayer?: ISoundPlayer;
+  minSoundPlayer?: TSoundPlayer;
 
   // The sound player that is used to indicate the maximum value.
-  maxSoundPlayer?: ISoundPlayer;
+  maxSoundPlayer?: TSoundPlayer;
 
   // The minimum amount of time that must pass after a middle sound is played before another can be played.  This is
   // helpful when a lot of value changes can occur rapidly and thus create an overwhelming amount of sound.
@@ -109,10 +109,10 @@ class ValueChangeSoundPlayer {
   private readonly valueRange: Range;
 
   // sound player for movement in the middle of the range (i.e. not at min or max) and moving up
-  private readonly middleMovingUpSoundPlayer: ISoundPlayer | SoundClip;
+  private readonly middleMovingUpSoundPlayer: TSoundPlayer | SoundClip;
 
   // sound player for movement in the middle of the range (i.e. not at min or max) and moving down
-  private readonly middleMovingDownSoundPlayer: ISoundPlayer | SoundClip;
+  private readonly middleMovingDownSoundPlayer: TSoundPlayer | SoundClip;
 
   // playback rate mapper for middle sounds and upward value changes
   private readonly middleMovingUpPlaybackRateMapper: ( value: number ) => number;
@@ -121,10 +121,10 @@ class ValueChangeSoundPlayer {
   private readonly middleMovingDownPlaybackRateMapper: ( value: number ) => number;
 
   // sound player for min values
-  private readonly minSoundPlayer: ISoundPlayer;
+  private readonly minSoundPlayer: TSoundPlayer;
 
   // sound player for max values
-  private readonly maxSoundPlayer: ISoundPlayer;
+  private readonly maxSoundPlayer: TSoundPlayer;
 
   // min time between playing one middle sound and the next
   private readonly minimumInterMiddleSoundTime: number;

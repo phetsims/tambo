@@ -13,7 +13,7 @@ import SoundClip, { SoundClipOptions } from '../../../tambo/js/sound-generators/
 import SoundGenerator, { SoundGeneratorOptions } from '../../../tambo/js/sound-generators/SoundGenerator.js';
 import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import ISoundPlayer from '../ISoundPlayer.js';
+import TSoundPlayer from '../TSoundPlayer.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 
 type SelfOptions = {
@@ -34,7 +34,7 @@ type SelfOptions = {
 
 export type SoundClipChordOptions = SelfOptions & SoundGeneratorOptions;
 
-class SoundClipChord extends SoundGenerator implements ISoundPlayer {
+class SoundClipChord extends SoundGenerator implements TSoundPlayer {
 
   // whether to play the chord as an arpeggio
   private readonly arpeggiate: boolean;
@@ -91,7 +91,7 @@ class SoundClipChord extends SoundGenerator implements ISoundPlayer {
   }
 
   /**
-   * Stop the chord if it's playing.  This is mostly here to complete the ISoundPlayer interface.
+   * Stop the chord if it's playing.  This is mostly here to complete the TSoundPlayer interface.
    */
   public stop(): void {
     this.playbackSoundClips.forEach( soundClip => {
