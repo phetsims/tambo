@@ -95,13 +95,6 @@ abstract class SoundGenerator {
       enabledDuringPhetioStateSetting: false
     }, providedOptions );
 
-    options.enableControlProperties.forEach( enableControlProperty => {
-      assert && assert(
-        typeof enableControlProperty.value === 'boolean',
-        'incorrect type for enable control property'
-      );
-    } );
-
     this.audioContext = options.audioContext;
     this._outputLevel = options.initialOutputLevel;
     this.connectionList = [];
