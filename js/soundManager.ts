@@ -624,7 +624,7 @@ class SoundManager extends PhetioObject {
     const startTime = Date.now();
 
     // closure that will be invoked multiple times to log the changing values
-    function logGain() {
+    function logGain(): void {
       const now = Date.now();
       const timeInMilliseconds = now - startTime;
       console.log( `Time (ms): ${Utils.toFixed( timeInMilliseconds, 2 )}, Gain Value: ${gainNode.gain.value}` );

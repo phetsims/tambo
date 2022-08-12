@@ -36,7 +36,7 @@ const simOptions: SimOptions = {
 };
 
 // helper function to create screen icons that aren't too bland
-function createScreenIcon( color1: TColor, color2: TColor, gradientType: string ) {
+function createScreenIcon( color1: TColor, color2: TColor, gradientType: string ): Rectangle {
 
   let colorGradient;
   if ( gradientType === 'radial' ) {

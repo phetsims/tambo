@@ -104,7 +104,7 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
       spacing: 7
     } );
 
-    function addSoundGenerators( numberToAdd: number ) {
+    function addSoundGenerators( numberToAdd: number ): void {
       _.times( numberToAdd, () => {
         const soundGenerator = SOUND_GENERATOR_INFO.get( selectedSoundGeneratorTypeProperty.value )!.createSoundGenerator();
         soundManager.addSoundGenerator( soundGenerator );
