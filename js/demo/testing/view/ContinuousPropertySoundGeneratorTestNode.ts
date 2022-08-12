@@ -24,7 +24,7 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import WrappedAudioBuffer from '../../../WrappedAudioBuffer.js';
 import { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
-import IEmitter from '../../../../../axon/js/IEmitter.js';
+import TEmitter from '../../../../../axon/js/TEmitter.js';
 
 type SelfOptions = EmptySelfOptions;
 export type ContinuousPropertySoundGeneratorTestNodeOptions = SelfOptions & VBoxOptions;
@@ -34,7 +34,7 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
   // dispose function
   private readonly disposeContinuousPropertySoundGeneratorTestNode: () => void;
 
-  public constructor( stepEmitter: IEmitter<[ number ]>, providedOptions?: ContinuousPropertySoundGeneratorTestNodeOptions ) {
+  public constructor( stepEmitter: TEmitter<[ number ]>, providedOptions?: ContinuousPropertySoundGeneratorTestNodeOptions ) {
 
     // keep track of listeners added to the step emitter so that they can be disposed
     const stepListeners: ( ( dt: number ) => void )[] = [];
