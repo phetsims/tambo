@@ -5,11 +5,13 @@
  */
 /* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
+import TReadOnlyProperty from '../../axon/js/TReadOnlyProperty.js';
 import tambo from './tambo.js';
 
 type StringsType = {
   'tambo': {
     'title': string;
+    'titleProperty': TReadOnlyProperty<string>;
   }
 };
 
