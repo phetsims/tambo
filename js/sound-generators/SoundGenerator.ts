@@ -16,7 +16,7 @@ import phetAudioContext from '../phetAudioContext.js';
 import soundConstants from '../soundConstants.js';
 import tambo from '../tambo.js';
 import Property from '../../../axon/js/Property.js';
-import IProperty from '../../../axon/js/IProperty.js';
+import TProperty from '../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 
 // constants
@@ -105,7 +105,7 @@ abstract class SoundGenerator {
     const updateFullyEnabledState = () => {
       this.fullyEnabledProperty.value = _.every(
         this.enableControlProperties,
-        ( enableControlProperty: IProperty<boolean> ) => enableControlProperty.value
+        ( enableControlProperty: TProperty<boolean> ) => enableControlProperty.value
       );
     };
 
@@ -294,7 +294,7 @@ abstract class SoundGenerator {
   /**
    * Remove a Property from the list of those used to control the enabled state of this sound generator.
    */
-  public removeEnableControlProperty( enableControlProperty: IProperty<boolean> ): void {
+  public removeEnableControlProperty( enableControlProperty: TProperty<boolean> ): void {
     this.enableControlProperties.remove( enableControlProperty );
   }
 
