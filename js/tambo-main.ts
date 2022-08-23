@@ -9,7 +9,7 @@ import Screen from '../../joist/js/Screen.js';
 import ScreenIcon from '../../joist/js/ScreenIcon.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
-import { TColor, LinearGradient, RadialGradient, Rectangle } from '../../scenery/js/imports.js';
+import { LinearGradient, RadialGradient, Rectangle, TColor } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import SimLikeComponentsModel from './demo/sim-like-components/model/SimLikeComponentsModel.js';
 import SimLikeComponentsScreenView from './demo/sim-like-components/view/SimLikeComponentsScreenView.js';
@@ -19,6 +19,7 @@ import TestingScreenView from './demo/testing/view/TestingScreenView.js';
 import UIComponentsModel from './demo/ui-components/model/UIComponentsModel.js';
 import UIComponentsScreenView from './demo/ui-components/view/UIComponentsScreenView.js';
 import tamboStrings from './tamboStrings.js';
+import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 
 // constants
 const SOUND_OPTIONS_DIALOG_CONTENT = new SoundOptionsDialogContent();
@@ -32,7 +33,13 @@ const simOptions: SimOptions = {
     leadDesign: 'John Blanco'
   },
   hasKeyboardHelpContent: true,
-  createOptionsDialogContent: () => SOUND_OPTIONS_DIALOG_CONTENT
+  preferencesModel: new PreferencesModel( {
+    generalOptions: {
+      customPreferences: [ {
+        createContent: () => SOUND_OPTIONS_DIALOG_CONTENT
+      } ]
+    }
+  } )
 };
 
 // helper function to create screen icons that aren't too bland
