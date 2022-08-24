@@ -61,7 +61,7 @@ class BallNode extends Circle {
     const bounceListener = ( bounceSurface: string ) => {
       if ( bounceSurface === 'left-wall' || bounceSurface === 'right-wall' ) {
 
-        // play the sound that was selected via the options dialog
+        // play the sound that was selected via the preferences control
         this.wallContactSoundClips[ phet.tambo.soundIndexForWallBounceProperty.value ].play();
       }
       else if ( bounceSurface === 'floor' || bounceSurface === 'ceiling' ) {
