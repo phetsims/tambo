@@ -46,7 +46,7 @@ is necessary to know what the user was doing that triggered the need for sound g
 generation will need to be inside the view element so that the code has access to all the needed information.  An
 example where this often comes up is if different behavior is needed when a value was changed via keyboard interaction
 versus mouse or touch interaction.
-- [ ] Decide whether a "Sound Options" dialog is needed to allow designers to compare different sound design ideas in
+- [ ] Decide whether a "Sound Options" content is needed to allow designers to compare different sound design ideas in
 context.  This has been found to be very useful when iterating on a sound design.  There is more information on this in
 the User Guide, and [an example in the Tambo demo]
 (https://github.com/phetsims/tambo/blob/master/js/demo/AudioCustomPreferencesContent.js).

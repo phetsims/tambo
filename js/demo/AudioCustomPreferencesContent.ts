@@ -3,8 +3,7 @@
 /**
  * AudioCustomPreferencesContent is intended as an example of a node that can serve as the content the Preferences
  * dialog that enables the user to select between different candidate sounds that are under consideration for use in a
- * sound design. In this demo, they get added to the "General" tab because the "Audio" tab has many contents so it makes
- * sense
+ * sound design.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

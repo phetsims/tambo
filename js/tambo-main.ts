@@ -36,6 +36,9 @@ const simOptions: SimOptions = {
   preferencesModel: new PreferencesModel( {
     generalOptions: {
       customPreferences: [ {
+
+        // In this demo they get added to the "General" tab since there are lots of contents already in the Audio tab.
+        // For development purposes there is more space for custom controls in the "General" tab.
         createContent: () => SOUND_OPTIONS_DIALOG_CONTENT
       } ]
     }
