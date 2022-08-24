@@ -9,13 +9,10 @@
  */
 
 import NumberProperty from '../../../axon/js/NumberProperty.js';
-import PhetFont from '../../../scenery-phet/js/PhetFont.js';
+import PreferencesDialog from '../../../joist/js/preferences/PreferencesDialog.js';
 import { Node, Text } from '../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../sun/js/AquaRadioButtonGroup.js';
 import tambo from '../tambo.js';
-
-// constants
-const TEXT_OPTIONS = { font: new PhetFont( 24 ) };
 
 class SoundOptionsDialogContent extends Node {
 
@@ -27,15 +24,15 @@ class SoundOptionsDialogContent extends Node {
     const items = [
       {
         value: 0,
-        node: new Text( '1st option', TEXT_OPTIONS )
+        node: new Text( '1st option', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
       },
       {
         value: 1,
-        node: new Text( '2nd option', TEXT_OPTIONS )
+        node: new Text( '2nd option', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
       },
       {
         value: 2,
-        node: new Text( '3rd option', TEXT_OPTIONS )
+        node: new Text( '3rd option', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
       }
     ];
 
