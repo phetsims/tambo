@@ -1,9 +1,10 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
 /**
- * SoundOptionsDialogContent is intended as an example of a node that can serve as the content for an options dialog,
- * and that enables the user to select between different candidate sounds that are under consideration for use in a
- * sound design.
+ * AudioCustomPreferencesContent is intended as an example of a node that can serve as the content the Preferences
+ * dialog that enables the user to select between different candidate sounds that are under consideration for use in a
+ * sound design. In this demo, they get added to the "General" tab because the "Audio" tab has many contents so it makes
+ * sense
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -14,7 +15,7 @@ import { Node, Text } from '../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../sun/js/AquaRadioButtonGroup.js';
 import tambo from '../tambo.js';
 
-class SoundOptionsDialogContent extends Node {
+class AudioCustomPreferencesContent extends Node {
 
   public constructor() {
 
@@ -45,6 +46,6 @@ class SoundOptionsDialogContent extends Node {
   }
 }
 
-tambo.register( 'SoundOptionsDialogContent', SoundOptionsDialogContent );
+tambo.register( 'AudioCustomPreferencesContent', AudioCustomPreferencesContent );
 
-export default SoundOptionsDialogContent;
+export default AudioCustomPreferencesContent;

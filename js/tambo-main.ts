@@ -13,7 +13,7 @@ import { LinearGradient, RadialGradient, Rectangle, TColor } from '../../scenery
 import Tandem from '../../tandem/js/Tandem.js';
 import SimLikeComponentsModel from './demo/sim-like-components/model/SimLikeComponentsModel.js';
 import SimLikeComponentsScreenView from './demo/sim-like-components/view/SimLikeComponentsScreenView.js';
-import SoundOptionsDialogContent from './demo/SoundOptionsDialogContent.js';
+import AudioCustomPreferencesContent from './demo/AudioCustomPreferencesContent.js';
 import TamboKeyboardHelpContent from './demo/TamboKeyboardHelpContent.js';
 import TestingScreenView from './demo/testing/view/TestingScreenView.js';
 import UIComponentsModel from './demo/ui-components/model/UIComponentsModel.js';
@@ -22,7 +22,7 @@ import tamboStrings from './tamboStrings.js';
 import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 
 // constants
-const SOUND_OPTIONS_DIALOG_CONTENT = new SoundOptionsDialogContent();
+const SOUND_OPTIONS_DIALOG_CONTENT = new AudioCustomPreferencesContent();
 
 class Model {
   public step(): void { /* no stepping here */ }

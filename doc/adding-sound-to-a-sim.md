@@ -49,7 +49,7 @@ versus mouse or touch interaction.
 - [ ] Decide whether a "Sound Options" dialog is needed to allow designers to compare different sound design ideas in
 context.  This has been found to be very useful when iterating on a sound design.  There is more information on this in
 the User Guide, and [an example in the Tambo demo]
-(https://github.com/phetsims/tambo/blob/master/js/demo/SoundOptionsDialogContent.js).
+(https://github.com/phetsims/tambo/blob/master/js/demo/AudioCustomPreferencesContent.js).
 - [ ] Add sim-specific sound generation.  See previously sonified simulations for examples on how to do this, but the
 general idea is to create sound generators and hook them up to the model and/or view elements that they are meant to
 sonify, all based on the sound design document.  One of the most common ways to add sound is to use pre-recorded bits
