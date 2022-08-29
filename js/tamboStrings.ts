@@ -11,7 +11,7 @@ import tambo from './tambo.js';
 type StringsType = {
   'tambo': {
     'title': string;
-    'titleProperty': TReadOnlyProperty<string>;
+    'titleStringProperty': TReadOnlyProperty<string>;
   }
 };
 
