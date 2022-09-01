@@ -34,7 +34,7 @@ const simOptions: SimOptions = {
   },
   hasKeyboardHelpContent: true,
   preferencesModel: new PreferencesModel( {
-    generalOptions: {
+    simulationOptions: {
       customPreferences: [ {
 
         // In this demo they get added to the "General" tab since there are lots of contents already in the Audio tab.
