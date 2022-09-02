@@ -77,7 +77,7 @@ function createScreenIcon( color1: TColor, color2: TColor, gradientType: string 
 const keyboardHelpNode = new TamboKeyboardHelpContent();
 
 simLauncher.launch( () => {
-  new Sim( tamboStrings.tambo.title, [
+  new Sim( tamboStrings.tambo.titleStringProperty, [
 
     // sim-like components screen
     new Screen(
