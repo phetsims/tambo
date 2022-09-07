@@ -15,8 +15,8 @@ type StringsType = {
   }
 };
 
-const tamboStrings = getStringModule( 'TAMBO' ) as StringsType;
+const TamboStrings = getStringModule( 'TAMBO' ) as StringsType;
 
-tambo.register( 'tamboStrings', tamboStrings );
+tambo.register( 'TamboStrings', TamboStrings );
 
-export default tamboStrings;
+export default TamboStrings;

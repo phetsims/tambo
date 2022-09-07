@@ -18,7 +18,7 @@ import TamboKeyboardHelpContent from './demo/TamboKeyboardHelpContent.js';
 import TestingScreenView from './demo/testing/view/TestingScreenView.js';
 import UIComponentsModel from './demo/ui-components/model/UIComponentsModel.js';
 import UIComponentsScreenView from './demo/ui-components/view/UIComponentsScreenView.js';
-import tamboStrings from './tamboStrings.js';
+import TamboStrings from './TamboStrings.js';
 import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 
 // constants
@@ -77,7 +77,7 @@ function createScreenIcon( color1: TColor, color2: TColor, gradientType: string 
 const keyboardHelpNode = new TamboKeyboardHelpContent();
 
 simLauncher.launch( () => {
-  new Sim( tamboStrings.tambo.titleStringProperty, [
+  new Sim( TamboStrings.tambo.titleStringProperty, [
 
     // sim-like components screen
     new Screen(
