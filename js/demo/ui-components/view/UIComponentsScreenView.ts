@@ -42,21 +42,6 @@ class UIComponentsScreenView extends DemosScreenView {
 
   public constructor( model: UIComponentsModel ) {
 
-    const radioButtonItems = [
-      {
-        node: new Text( 'One Thing', { font: LABEL_FONT } ),
-        value: 0
-      },
-      {
-        node: new Text( 'Another Thing', { font: LABEL_FONT } ),
-        value: 1
-      },
-      {
-        node: new Text( 'An Entirely Different Thing', { font: LABEL_FONT } ),
-        value: 2
-      }
-    ];
-
     const demos = [
       {
         label: 'ABSwitch',
@@ -135,16 +120,32 @@ class UIComponentsScreenView extends DemosScreenView {
       },
       {
         label: 'AquaRadioButtonGroup',
-        createNode: ( layoutBounds: Bounds2 ) => new AquaRadioButtonGroup(
-          new NumberProperty( 0 ),
-          radioButtonItems,
-          {
-            orientation: 'vertical',
-            align: 'left',
-            spacing: 10,
-            center: layoutBounds.center
-          }
-        )
+        createNode: ( layoutBounds: Bounds2 ) => {
+          const radioButtonItems = [
+            {
+              node: new Text( 'One Thing', { font: LABEL_FONT } ),
+              value: 0
+            },
+            {
+              node: new Text( 'Another Thing', { font: LABEL_FONT } ),
+              value: 1
+            },
+            {
+              node: new Text( 'An Entirely Different Thing', { font: LABEL_FONT } ),
+              value: 2
+            }
+          ];
+          return new AquaRadioButtonGroup(
+            new NumberProperty( 0 ),
+            radioButtonItems,
+            {
+              orientation: 'vertical',
+              align: 'left',
+              spacing: 10,
+              center: layoutBounds.center
+            }
+          );
+        }
       },
       {
         label: 'TimeControlNode',
