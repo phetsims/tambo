@@ -84,7 +84,7 @@ simLauncher.launch( () => {
       ( () => new SimLikeComponentsModel() ),
       ( model => new SimLikeComponentsScreenView( model ) ),
       {
-        name: 'Sim-Like Components',
+        name: new Property( 'Sim-Like Components' ),
         backgroundColorProperty: new Property( '#f3fff3' ),
         homeScreenIcon: new ScreenIcon( createScreenIcon( '#a31515', '#b75e2a', 'radial' ), {
           maxIconWidthProportion: 1,
@@ -100,7 +100,7 @@ simLauncher.launch( () => {
       ( () => new UIComponentsModel() ),
       ( model => new UIComponentsScreenView( model ) ),
       {
-        name: 'UI Components',
+        name: new Property( 'UI Components' ),
         backgroundColorProperty: new Property( '#fff5ba' ),
         homeScreenIcon: new ScreenIcon( createScreenIcon( '#71ddbf', '#8d49e5', 'linear' ), {
           maxIconWidthProportion: 1,
@@ -116,7 +116,7 @@ simLauncher.launch( () => {
       ( () => new Model() ), // no model needed, return a stub
       ( () => new TestingScreenView() ),
       {
-        name: 'Testing',
+        name: new Property( 'Testing' ),
         backgroundColorProperty: new Property( '#F0F8FF' ),
         homeScreenIcon: new ScreenIcon( createScreenIcon( '#ADFF2F', '#FFDAB9', 'radial' ), {
           maxIconWidthProportion: 1,
