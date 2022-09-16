@@ -114,11 +114,13 @@ class SoundManager extends PhetioObject {
 
     this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.supportsSound, {
       tandem: tandem.createTandem( 'enabledProperty' ),
+      phetioState: false, // This is a preference, global sound control is handled by the audioManager
       phetioDocumentation: 'Determines whether sound is enabled.'
     } );
 
     this.extraSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.extraSoundInitiallyEnabled, {
       tandem: tandem.createTandem( 'extraSoundEnabledProperty' ),
+      phetioState: false, // This is a preference, global sound control is handled by the audioManager
       phetioDocumentation: 'Determines whether extra sound is enabled. Extra sound is additional sounds that ' +
                            'can serve to improve the learning experience for individuals with visual disabilities. ' +
                            'Note that not all simulations that support sound also support extra sound. Also note ' +
