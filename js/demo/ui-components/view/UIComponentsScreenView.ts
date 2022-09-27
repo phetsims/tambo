@@ -34,6 +34,7 @@ import OnOffSwitch from '../../../../../sun/js/OnOffSwitch.js';
 import grabSoundPlayer from '../../../shared-sound-players/grabSoundPlayer.js';
 import releaseSoundPlayer from '../../../shared-sound-players/releaseSoundPlayer.js';
 import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 20 );
@@ -123,15 +124,15 @@ class UIComponentsScreenView extends DemosScreenView {
         createNode: ( layoutBounds: Bounds2 ) => {
           const radioButtonItems = [
             {
-              node: new Text( 'One Thing', { font: LABEL_FONT } ),
+              createNode: ( tandem: Tandem ) => new Text( 'One Thing', { font: LABEL_FONT } ),
               value: 0
             },
             {
-              node: new Text( 'Another Thing', { font: LABEL_FONT } ),
+              createNode: ( tandem: Tandem ) => new Text( 'Another Thing', { font: LABEL_FONT } ),
               value: 1
             },
             {
-              node: new Text( 'An Entirely Different Thing', { font: LABEL_FONT } ),
+              createNode: ( tandem: Tandem ) => new Text( 'An Entirely Different Thing', { font: LABEL_FONT } ),
               value: 2
             }
           ];

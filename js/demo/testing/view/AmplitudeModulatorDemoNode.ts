@@ -14,6 +14,7 @@ import { HBox, Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports
 import AquaRadioButtonGroup, { AquaRadioButtonGroupItem } from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemo from '../model/AmplitudeModulatorDemo.js';
@@ -30,19 +31,19 @@ class AmplitudeModulatorDemoNode extends VBox {
 
     const soundSourceRadioButtonItems = [
       {
-        node: new Text( 'None', { font: LABEL_FONT } ),
+        createNode: ( tandem: Tandem ) => new Text( 'None', { font: LABEL_FONT } ),
         value: 0
       },
       {
-        node: new Text( 'Sound 1', { font: LABEL_FONT } ),
+        createNode: ( tandem: Tandem ) => new Text( 'Sound 1', { font: LABEL_FONT } ),
         value: 1
       },
       {
-        node: new Text( 'Sound 2', { font: LABEL_FONT } ),
+        createNode: ( tandem: Tandem ) => new Text( 'Sound 2', { font: LABEL_FONT } ),
         value: 2
       },
       {
-        node: new Text( 'Sound 3', { font: LABEL_FONT } ),
+        createNode: ( tandem: Tandem ) => new Text( 'Sound 3', { font: LABEL_FONT } ),
         value: 3
       }
     ];
@@ -89,19 +90,19 @@ class AmplitudeModulatorDemoNode extends VBox {
     // waveform type selector
     const waveformRadioButtonItems: AquaRadioButtonGroupItem<OscillatorType>[] = [
       {
-        node: new Text( 'Sine', { font: LABEL_FONT } ),
+        createNode: ( tandem: Tandem ) => new Text( 'Sine', { font: LABEL_FONT } ),
         value: 'sine'
       },
       {
-        node: new Text( 'Square', { font: LABEL_FONT } ),
+        createNode: ( tandem: Tandem ) => new Text( 'Square', { font: LABEL_FONT } ),
         value: 'square'
       },
       {
-        node: new Text( 'Triangle', { font: LABEL_FONT } ),
+        createNode: ( tandem: Tandem ) => new Text( 'Triangle', { font: LABEL_FONT } ),
         value: 'triangle'
       },
       {
-        node: new Text( 'Sawtooth', { font: LABEL_FONT } ),
+        createNode: ( tandem: Tandem ) => new Text( 'Sawtooth', { font: LABEL_FONT } ),
         value: 'sawtooth'
       }
     ];

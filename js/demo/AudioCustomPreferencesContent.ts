@@ -12,6 +12,7 @@ import NumberProperty from '../../../axon/js/NumberProperty.js';
 import PreferencesDialog from '../../../joist/js/preferences/PreferencesDialog.js';
 import { Node, Text } from '../../../scenery/js/imports.js';
 import AquaRadioButtonGroup from '../../../sun/js/AquaRadioButtonGroup.js';
+import Tandem from '../../../tandem/js/Tandem.js';
 import tambo from '../tambo.js';
 
 class AudioCustomPreferencesContent extends Node {
@@ -24,15 +25,15 @@ class AudioCustomPreferencesContent extends Node {
     const items = [
       {
         value: 0,
-        node: new Text( '1st option', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
+        createNode: ( tandem: Tandem ) => new Text( '1st option', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
       },
       {
         value: 1,
-        node: new Text( '2nd option', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
+        createNode: ( tandem: Tandem ) => new Text( '2nd option', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
       },
       {
         value: 2,
-        node: new Text( '3rd option', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
+        createNode: ( tandem: Tandem ) => new Text( '3rd option', PreferencesDialog.PANEL_SECTION_CONTENT_OPTIONS )
       }
     ];
 
