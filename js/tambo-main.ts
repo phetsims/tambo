@@ -25,7 +25,7 @@ import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 const SOUND_OPTIONS_DIALOG_CONTENT = new AudioCustomPreferencesContent();
 
 class Model {
-  public step(): void { /* no stepping here */ }
+  public reset(): void { /* nothing to do */ }
 }
 
 const simOptions: SimOptions = {

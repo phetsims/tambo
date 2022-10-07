@@ -36,8 +36,6 @@ class UIComponentsModel {
     this.onOffSwitchProperty.reset();
     this.resetInProgressProperty.value = false;
   }
-
-  public step(): void { /* no stepping here */ }
 }
 
 tambo.register( 'UIComponentsModel', UIComponentsModel );
