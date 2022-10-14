@@ -234,37 +234,40 @@ abstract class SoundGenerator {
    */
   public setOutputLevel( outputLevel: number, timeConstant: number = DEFAULT_TIME_CONSTANT ): void {
 
-    const now = this.audioContext.currentTime;
-
-    // If this is indeed a change, cancel any scheduled changes from previous actions that might still be in progress.
+    // Ignore attempts to set the output level to the same value.
     if ( outputLevel !== this._outputLevel ) {
-      this.masterGainNode.gain.cancelScheduledValues( now );
-    }
+      const now = this.audioContext.currentTime;
 
-    // Set local copy of output level.
-    this._outputLevel = outputLevel;
+      // The output level should take effect immediately if this sound generator is fully enabled.  Otherwise, the value
+      // is saved and restored the next time the sound generator transitions to fully enabled.
+      if ( this.fullyEnabledProperty.value ) {
 
-    // Set the output level on the gain node.  A different method is used for instant changes.
-    if ( timeConstant === 0 ) {
-      if ( outputLevel === 0 || this.fullyEnabledProperty.value ) {
+        // Cancel any gain transitions that are currently in progress.
         this.masterGainNode.gain.cancelScheduledValues( now );
-        this.masterGainNode.gain.setValueAtTime( outputLevel, now );
-      }
-    }
-    else if ( this.fullyEnabledProperty.value ) {
 
-      // The setTargetAtTime method doesn't seem to work if the audio context isn't running, and the event doesn't seem
-      // to be scheduled - it's just ignored.  So, if the audio context isn't running, use an alternative approach.  See
-      // https://github.com/phetsims/tambo/issues/74.
-      if ( this.audioContext.state === 'running' ) {
-        this.masterGainNode.gain.setTargetAtTime( outputLevel, now, timeConstant );
+        // Set the output level on the gain node.  A different method is used for instant changes.
+        if ( timeConstant === 0 ) {
+          this.masterGainNode.gain.setValueAtTime( outputLevel, now );
+        }
+        else {
+
+          // The setTargetAtTime method doesn't seem to work if the audio context isn't running, and the event doesn't
+          // seem to be scheduled - it's just ignored.  So, if the audio context isn't running, use an alternative
+          // approach.  See https://github.com/phetsims/tambo/issues/74.
+          if ( this.audioContext.state === 'running' ) {
+            this.masterGainNode.gain.setTargetAtTime( outputLevel, now, timeConstant );
+          }
+          else {
+            this.masterGainNode.gain.linearRampToValueAtTime(
+              outputLevel,
+              now + soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME
+            );
+          }
+        }
       }
-      else {
-        this.masterGainNode.gain.linearRampToValueAtTime(
-          outputLevel,
-          now + soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME
-        );
-      }
+
+      // Set local copy of output level.
+      this._outputLevel = outputLevel;
     }
   }
 
