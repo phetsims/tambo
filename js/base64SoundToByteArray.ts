@@ -10,7 +10,7 @@
  */
 const base64SoundToByteArray = ( audioContext: AudioContext, base64Sound: string ): Uint8Array => {
   const soundData = base64Sound.replace( new RegExp( '^.*,' ), '' ); // remove the mime header
-  const byteChars = atob( soundData ); // eslint-disable-line no-undef
+  const byteChars = atob( soundData );
   const byteArray = new Uint8Array( byteChars.length );
   for ( let j = 0; j < byteArray.length; j++ ) {
 
