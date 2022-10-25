@@ -74,8 +74,6 @@ function createScreenIcon( color1: TColor, color2: TColor, gradientType: string 
   );
 }
 
-const keyboardHelpNode = new TamboKeyboardHelpContent();
-
 simLauncher.launch( () => {
   new Sim( TamboStrings.tambo.titleStringProperty, [
 
@@ -90,7 +88,7 @@ simLauncher.launch( () => {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        createKeyboardHelpNode: () => keyboardHelpNode,
+        createKeyboardHelpNode: () => new TamboKeyboardHelpContent(),
         tandem: Tandem.OPT_OUT
       }
     ),
@@ -106,7 +104,7 @@ simLauncher.launch( () => {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        createKeyboardHelpNode: () => keyboardHelpNode,
+        createKeyboardHelpNode: () => new TamboKeyboardHelpContent(),
         tandem: Tandem.OPT_OUT
       }
     ),
@@ -122,7 +120,7 @@ simLauncher.launch( () => {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        createKeyboardHelpNode: () => keyboardHelpNode,
+        createKeyboardHelpNode: () => new TamboKeyboardHelpContent(),
         tandem: Tandem.OPT_OUT
       }
     )
