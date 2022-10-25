@@ -90,7 +90,7 @@ simLauncher.launch( () => {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        keyboardHelpNode: keyboardHelpNode,
+        createKeyboardHelpNode: () => keyboardHelpNode,
         tandem: Tandem.OPT_OUT
       }
     ),
@@ -106,7 +106,7 @@ simLauncher.launch( () => {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        keyboardHelpNode: keyboardHelpNode,
+        createKeyboardHelpNode: () => keyboardHelpNode,
         tandem: Tandem.OPT_OUT
       }
     ),
@@ -122,7 +122,7 @@ simLauncher.launch( () => {
           maxIconWidthProportion: 1,
           maxIconHeightProportion: 1
         } ),
-        keyboardHelpNode: keyboardHelpNode,
+        createKeyboardHelpNode: () => keyboardHelpNode,
         tandem: Tandem.OPT_OUT
       }
     )
