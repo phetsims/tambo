@@ -32,7 +32,6 @@ const simOptions: SimOptions = {
   credits: {
     leadDesign: 'John Blanco'
   },
-  hasKeyboardHelpContent: true,
   preferencesModel: new PreferencesModel( {
     simulationOptions: {
       customPreferences: [ {
