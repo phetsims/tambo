@@ -10,7 +10,6 @@ import tambo from './tambo.js';
 
 type StringsType = {
   'tambo': {
-    'title': string;
     'titleStringProperty': LinkableProperty<string>;
   }
 };
