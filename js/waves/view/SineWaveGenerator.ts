@@ -1,36 +1,45 @@
 // Copyright 2019-2022, University of Colorado Boulder
-// @ts-nocheck
+
 /**
  * Plays a sine wave using an Oscillator Node
  *
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
+import ReadOnlyProperty from '../../../../axon/js/ReadOnlyProperty.js';
 import LinearFunction from '../../../../dot/js/LinearFunction.js';
-import merge from '../../../../phet-core/js/merge.js';
-import SoundGenerator from '../../../../tambo/js/sound-generators/SoundGenerator.js';
+import optionize from '../../../../phet-core/js/optionize.js';
+import SoundGenerator, { SoundGeneratorOptions } from '../../../../tambo/js/sound-generators/SoundGenerator.js';
 import soundConstants from '../../../../tambo/js/soundConstants.js';
-import WaveInterferenceConstants from '../../common/WaveInterferenceConstants.js';
-import waveInterference from '../../waveInterference.js';
+import tambo from '../../tambo.js';
 
 // For the sound scene, map the amplitude to the output level for the "Play Tone"
 const mapAmplitudeToOutputLevel = new LinearFunction(
-  WaveInterferenceConstants.AMPLITUDE_RANGE.min,
-  WaveInterferenceConstants.AMPLITUDE_RANGE.max,
+  0,
+  10,
   0,
   0.3 // Max output level
 );
 
+type SelfOptions = {
+  initialOutputLevel?: number;
+  oscillatorType?: OscillatorType;
+};
+
+type WaveGeneratorOptions = SelfOptions & SoundGeneratorOptions;
+
 class SineWaveGenerator extends SoundGenerator {
 
-  public constructor( frequencyProperty, amplitudeProperty, options ) {
-    options = merge( {
+  // {OscillatorNode|null} created when sound begins and nullified when sound ends, see #373
+  private oscillator: OscillatorNode | null;
+
+  public constructor( frequencyProperty: ReadOnlyProperty<number>, amplitudeProperty: ReadOnlyProperty<number>, providedOptions?: WaveGeneratorOptions ) {
+    const options = optionize<WaveGeneratorOptions, SelfOptions, SoundGeneratorOptions>()( {
       initialOutputLevel: 0, // Starts silent, see elsewhere in this file for where the outputLevel is set as a function of amplitude
       oscillatorType: 'sine'
-    }, options );
+    }, providedOptions );
     super( options );
 
-    // @private {OscillatorNode|null} created when sound begins and nullified when sound ends, see #373
     this.oscillator = null;
     const updateFrequency = () => {
       const value = frequencyProperty.value * 1000; // convert frequency in mHz to Hz
@@ -59,5 +68,5 @@ class SineWaveGenerator extends SoundGenerator {
   }
 }
 
-waveInterference.register( 'SineWaveGenerator', SineWaveGenerator );
+tambo.register( 'SineWaveGenerator', SineWaveGenerator );
 export default SineWaveGenerator;
