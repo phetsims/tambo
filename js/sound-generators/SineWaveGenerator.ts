@@ -6,12 +6,12 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import ReadOnlyProperty from '../../../../axon/js/ReadOnlyProperty.js';
-import LinearFunction from '../../../../dot/js/LinearFunction.js';
-import optionize from '../../../../phet-core/js/optionize.js';
-import SoundGenerator, { SoundGeneratorOptions } from '../../../../tambo/js/sound-generators/SoundGenerator.js';
-import soundConstants from '../../../../tambo/js/soundConstants.js';
-import tambo from '../../tambo.js';
+import ReadOnlyProperty from '../../../axon/js/ReadOnlyProperty.js';
+import LinearFunction from '../../../dot/js/LinearFunction.js';
+import optionize from '../../../phet-core/js/optionize.js';
+import SoundGenerator, { SoundGeneratorOptions } from '../../../tambo/js/sound-generators/SoundGenerator.js';
+import soundConstants from '../../../tambo/js/soundConstants.js';
+import tambo from '../tambo.js';
 
 // For the sound scene, map the amplitude to the output level for the "Play Tone"
 const mapAmplitudeToOutputLevel = new LinearFunction(
