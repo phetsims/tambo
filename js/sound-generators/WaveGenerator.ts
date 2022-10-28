@@ -28,7 +28,7 @@ type SelfOptions = {
 
 type WaveGeneratorOptions = SelfOptions & SoundGeneratorOptions;
 
-class SineWaveGenerator extends SoundGenerator {
+class WaveGenerator extends SoundGenerator {
 
   // {OscillatorNode|null} created when sound begins and nullified when sound ends, see #373
   private oscillator: OscillatorNode | null;
@@ -68,5 +68,5 @@ class SineWaveGenerator extends SoundGenerator {
   }
 }
 
-tambo.register( 'SineWaveGenerator', SineWaveGenerator );
-export default SineWaveGenerator;
+tambo.register( 'WaveGenerator', WaveGenerator );
+export default WaveGenerator;
