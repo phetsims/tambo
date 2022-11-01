@@ -28,6 +28,7 @@ import SoundGenerator from './sound-generators/SoundGenerator.js';
 import optionize from '../../phet-core/js/optionize.js';
 import TReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/TReadOnlyProperty.js';
 import Multilink from '../../axon/js/Multilink.js';
+import arrayRemove from '../../phet-core/js/arrayRemove.js';
 
 // options that can be used when adding a sound generator that can control some aspects of its behavior
 export type SoundGeneratorAddOptions = {
@@ -429,6 +430,13 @@ class SoundManager extends PhetioObject {
     // assertion because the sound manager may not be initialized in cases where the sound is not enabled for the
     // simulation, but this method can still end up being invoked.
     if ( !this.initialized ) {
+
+      const toRemove = this.soundGeneratorsAwaitingAdd.filter( s => s.soundGenerator === soundGenerator );
+      while ( toRemove.length > 0 ) {
+        arrayRemove( this.soundGeneratorsAwaitingAdd, toRemove[ 0 ] );
+        toRemove.shift();
+      }
+
       console.warn( 'an attempt was made to remove a sound generator from an uninitialized sound manager, ignoring' );
       return;
     }
