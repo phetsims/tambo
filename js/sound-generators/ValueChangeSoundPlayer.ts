@@ -9,9 +9,9 @@
  *
  * Because the sounds should only be produced when users directly change a value, and not in side-effect-ish situations
  * (such as a reset), this class does not monitor a Property.  Instead, it provides methods that can be used to evaluate
- * changes in a value and potentially play sounds, and it is the client's responsibility to know the situations in which
- * these methods should be called.  Often these methods will be called in drag handlers and other code that handles user
- * input.
+ * changes in a value and potentially play sounds (or not, if the change doesn't warrant sound generation), and it is
+ * the client's responsibility to know the situations in which these methods should be called.  Often these methods will
+ * be called in drag handlers and other code that handles user input.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */
@@ -53,7 +53,7 @@ const DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER = new SoundClipPlayer( generalSoft
 const DEFAULT_VALUE_CONSTRAINT = ( value: number ) => Utils.roundToInterval( value, 0.000000001 );
 
 // A "no-op" function for mapping pitch values.  Always returns one, which signifies no change to the playback rate.
-const NO_PLAYBACK_RATE_CHANGE = ( value: number ) => 1;
+const NO_PLAYBACK_RATE_CHANGE = () => 1;
 
 export type ValueChangeSoundPlayerOptions = {
 
@@ -279,7 +279,7 @@ class ValueChangeSoundPlayer {
   }
 
   /**
-   * Map the provided value a quantized range that can then be used to determine if a threshold has been crossed.
+   * Map the provided value to a quantized range that can then be used to determine if a threshold has been crossed.
    */
   private mapValueToQuantizedRange( value: number ): Range {
     const valueProportion = ( value - this.valueRange.min ) / this.valueRange.getLength();
@@ -292,7 +292,7 @@ class ValueChangeSoundPlayer {
   }
 
   /**
-   * Static instance that makes no sound.  This is generally used as an option value to turn off sound generation.
+   * A static instance that makes no sound.  This is generally used as an option value to turn off sound generation.
    */
   public static NO_SOUND = new ValueChangeSoundPlayer( new Range( 0, 1 ), {
     middleMovingUpSoundPlayer: nullSoundPlayer,
