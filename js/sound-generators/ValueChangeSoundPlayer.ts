@@ -294,7 +294,7 @@ class ValueChangeSoundPlayer {
   /**
    * A static instance that makes no sound.  This is generally used as an option value to turn off sound generation.
    */
-  public static NO_SOUND = new ValueChangeSoundPlayer( new Range( 0, 1 ), {
+  public static readonly NO_SOUND = new ValueChangeSoundPlayer( new Range( 0, 1 ), {
     middleMovingUpSoundPlayer: nullSoundPlayer,
     minSoundPlayer: nullSoundPlayer,
     maxSoundPlayer: nullSoundPlayer
