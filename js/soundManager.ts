@@ -29,6 +29,10 @@ import optionize from '../../phet-core/js/optionize.js';
 import TReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/TReadOnlyProperty.js';
 import Multilink from '../../axon/js/Multilink.js';
 import arrayRemove from '../../phet-core/js/arrayRemove.js';
+import createObservableArray, { ObservableArray } from '../../axon/js/createObservableArray.js';
+
+// constants
+const AUDIO_DUCKING_LEVEL = 0.15; // gain value to use for the ducking gain node when ducking is active
 
 // options that can be used when adding a sound generator that can control some aspects of its behavior
 export type SoundGeneratorAddOptions = {
@@ -92,8 +96,11 @@ class SoundManager extends PhetioObject {
   // initialization, see the usage of options.categories in the initialize function for more information.
   private readonly gainNodesForCategories: Map<string, GainNode>;
 
-  // flag that tracks whether the sonification manager has been initialized
-  private initialized: boolean;
+  // an array of properties where, if any of these are true, overall output level is "ducked" (i.e. reduced)
+  private readonly duckingProperties: ObservableArray<TReadOnlyProperty<boolean>>;
+
+  // flag that tracks whether the sonification manager has been initialized, should never be set outside this file
+  public initialized: boolean;
 
   // sound generators that are queued up if attempts are made to add them before initialization has occurred
   private readonly soundGeneratorsAwaitingAdd: SoundGeneratorAwaitingAdd[];
@@ -103,6 +110,7 @@ class SoundManager extends PhetioObject {
   private convolver: ConvolverNode | null;
   private reverbGainNode: GainNode | null;
   private dryGainNode: GainNode | null;
+  private duckingGainNode: GainNode | null;
 
   public constructor( tandem: Tandem ) {
 
@@ -132,9 +140,11 @@ class SoundManager extends PhetioObject {
     this._masterOutputLevel = 1;
     this._reverbLevel = DEFAULT_REVERB_LEVEL;
     this.gainNodesForCategories = new Map<string, GainNode>();
+    this.duckingProperties = createObservableArray();
     this.initialized = false;
     this.soundGeneratorsAwaitingAdd = [];
     this.masterGainNode = null;
+    this.duckingGainNode = null;
     this.convolver = null;
     this.reverbGainNode = null;
     this.dryGainNode = null;
@@ -173,9 +183,14 @@ class SoundManager extends PhetioObject {
     dynamicsCompressor.release.setValueAtTime( 0.25, now );
     dynamicsCompressor.connect( phetAudioContext.destination );
 
+    // Create the ducking gain node, which is used to reduce the overall sound output level temporarily in certain
+    // situations, such as when the voicing feature is actively producing speech.
+    this.duckingGainNode = phetAudioContext.createGain();
+    this.duckingGainNode.connect( dynamicsCompressor );
+
     // Create the master gain node for all sounds managed by this sonification manager.
     this.masterGainNode = phetAudioContext.createGain();
-    this.masterGainNode.connect( dynamicsCompressor );
+    this.masterGainNode.connect( this.duckingGainNode );
 
     // Set up a convolver node, which will be used to create the reverb effect.
     this.convolver = phetAudioContext.createConvolver();
@@ -211,8 +226,8 @@ class SoundManager extends PhetioObject {
       this.gainNodesForCategories.set( categoryName, gainNode );
     } );
 
-    // Hook up a listener that turns down the gain if sonification is disabled or if the sim isn't visible or isn't
-    // active.
+    // Hook up a listener that turns down the master gain if sonification is disabled or if the sim isn't visible or
+    // isn't active.
     Multilink.multilink(
       [
         this.enabledProperty,
@@ -234,6 +249,39 @@ class SoundManager extends PhetioObject {
         );
       }
     );
+
+    // Define a listener that will be used to duck (reduce the level) sound generation, generally so that other things,
+    // such as voicing, don't have to compete with it to be heard.
+    const updateDuckingState = () => {
+
+      // Make sure the ducking gain node exists.
+      assert && assert( this.duckingGainNode, 'ducking listener fired before gain node created' );
+
+      // Reduce the property array to a single boolean value.  If any of the Properties indicate that ducking should be
+      // happening, this will be true.
+      const duckOutput = this.duckingProperties.reduce(
+        ( valueSoFar, currentProperty ) => valueSoFar || currentProperty.value,
+        false
+      );
+
+      // Duck or don't.
+      const now = phetAudioContext.currentTime;
+      this.duckingGainNode?.gain.cancelScheduledValues( now );
+      const timeConstant = 0.05; // empirically determine to change the volume at a reasonable rate
+      this.duckingGainNode?.gain.setTargetAtTime( duckOutput ? AUDIO_DUCKING_LEVEL : 1, now, timeConstant );
+    };
+
+    // Handle the adding and removal of ducking Properties.
+    this.duckingProperties.addItemAddedListener( addedDuckingProperty => {
+      addedDuckingProperty.link( updateDuckingState );
+      const checkAndRemove = ( removedDuckingProperty: TReadOnlyProperty<boolean> ) => {
+        if ( removedDuckingProperty === addedDuckingProperty ) {
+          removedDuckingProperty.unlink( updateDuckingState );
+          this.duckingProperties.removeItemRemovedListener( checkAndRemove );
+        }
+      };
+      this.duckingProperties.addItemRemovedListener( checkAndRemove );
+    } );
 
     //------------------------------------------------------------------------------------------------------------------
     // Handle the audio context state, both when changes occur and when it is initially muted due to the autoplay
@@ -541,6 +589,23 @@ class SoundManager extends PhetioObject {
     if ( gainNode ) {
       gainNode.gain.setValueAtTime( outputLevel, phetAudioContext.currentTime );
     }
+  }
+
+  /**
+   * Add a ducking Property.  When any of the ducking Properties are true, the output level will be "ducked", meaning
+   * that it will be reduced.
+   */
+  public addDuckingProperty( duckingProperty: TReadOnlyProperty<boolean> ): void {
+    this.duckingProperties.add( duckingProperty );
+  }
+
+
+  /**
+   * Remove a ducking Property that had been previously added.
+   */
+  public removeDuckingProperty( duckingProperty: TReadOnlyProperty<boolean> ): void {
+    assert && assert( this.duckingProperties.includes( duckingProperty ), 'ducking Property not present' );
+    this.duckingProperties.remove( duckingProperty );
   }
 
   /**
