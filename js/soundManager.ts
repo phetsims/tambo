@@ -415,7 +415,7 @@ class SoundManager extends PhetioObject {
     // If a view node was specified, create and pass in a boolean Property that is true only when the node is displayed.
     if ( options.associatedViewNode ) {
       soundGenerator.addEnableControlProperty(
-        // @ts-ignore TODO - remove this ts-ignore DisplayedProperty is ported to TS, see https://github.com/phetsims/tambo/issues/160
+        // @ts-expect-error TODO - remove this ts-expect-error DisplayedProperty is ported to TS, see https://github.com/phetsims/tambo/issues/160
         new DisplayedProperty( options.associatedViewNode )
       );
     }

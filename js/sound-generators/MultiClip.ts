@@ -152,7 +152,7 @@ class MultiClip<T> extends SoundGenerator {
         }
         audioContextStateChangeMonitor.removeStateChangeListener(
           this.audioContext,
-          // @ts-ignore
+          // @ts-expect-error
           this.audioContextStateChangeListener
         );
         this.audioContextStateChangeListener = null;
