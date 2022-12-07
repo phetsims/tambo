@@ -16,7 +16,7 @@ if ( window.AudioContext ) {
   phetAudioContext = new window.AudioContext();
 }
 else if ( ( window as IntentionalAny ).webkitAudioContext ) {
-  phetAudioContext = new ( ( window as IntentionalAny ).webkitAudioContext )(); // eslint-disable-line
+  phetAudioContext = new ( ( window as IntentionalAny ).webkitAudioContext )(); // eslint-disable-line new-cap
 }
 else {
 
