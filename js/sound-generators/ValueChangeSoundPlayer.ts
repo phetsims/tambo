@@ -174,14 +174,12 @@ class ValueChangeSoundPlayer {
     // are set in a compatible way.
     assert && assert(
       options.middleMovingUpPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
-      // @ts-expect-error
-      options.middleMovingUpSoundPlayer.setPlaybackRate,
+      options.middleMovingUpSoundPlayer.hasOwnProperty( 'setPlaybackRate' ),
       'a sound player that supports playback rate changes is required when a playback rate mapper is used'
     );
     assert && assert(
       options.middleMovingDownPlaybackRateMapper === NO_PLAYBACK_RATE_CHANGE ||
-      // @ts-expect-error
-      options.middleMovingDownSoundPlayer.setPlaybackRate,
+      options.middleMovingDownSoundPlayer.hasOwnProperty( 'setPlaybackRate' ),
       'a sound player that supports playback rate changes is required when a playback rate mapper is used'
     );
 
