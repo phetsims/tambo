@@ -22,12 +22,10 @@
     "simFeatures": {
       "supportsSound": true,
       "supportsExtraSound": true,
-      "supportsInteractiveDescription": true
-    },
-    "supportsOutputJS": true,
-    "simFeatures": {
+      "supportsInteractiveDescription": true,
       "supportsDynamicLocale": true
-    }
+    },
+    "supportsOutputJS": true
   },
   "eslintConfig": {
     "extends": "../chipper/eslint/sim_eslintrc.js"
