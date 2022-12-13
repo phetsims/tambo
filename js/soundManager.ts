@@ -250,28 +250,36 @@ class SoundManager extends PhetioObject {
       }
     );
 
-    // Define a listener that will be used to duck (reduce the level) sound generation, generally so that other things,
-    // such as voicing, don't have to compete with it to be heard.
+    const duckMainOutputLevelProperty = new BooleanProperty( false );
+
+    // Define a listener that will update the state of the collective ducking Property that indicates whether ducking
+    // (overall volume reduction to prevent overlap with other sounds) should be active or inactive.
     const updateDuckingState = () => {
 
-      // Make sure the ducking gain node exists.
-      assert && assert( this.duckingGainNode, 'ducking listener fired before gain node created' );
-
-      // Reduce the property array to a single boolean value.  If any of the Properties indicate that ducking should be
-      // happening, this will be true.
-      const duckOutput = this.duckingProperties.reduce(
+      // Reduce the array of individual ducking Properties array to a single boolean value.
+      duckMainOutputLevelProperty.value = this.duckingProperties.reduce(
         ( valueSoFar, currentProperty ) => valueSoFar || currentProperty.value,
         false
       );
+    };
+
+    // Implement ducking of the main output.
+    duckMainOutputLevelProperty.lazyLink( duckOutput => {
+
+      // State checking - make sure the ducking gain node exists.
+      assert && assert( this.duckingGainNode, 'ducking listener fired, but no ducking gain node exists' );
+
+      // Use time constant values that will turn down the output level faster than it will turn it up.  This sounds
+      // better, since it prevents overlap with the voice.
+      const timeConstant = duckOutput ? 0.05 : 0.5;
 
       // Duck or don't.
       const now = phetAudioContext.currentTime;
       this.duckingGainNode?.gain.cancelScheduledValues( now );
-      const timeConstant = 0.05; // empirically determine to change the volume at a reasonable rate
       this.duckingGainNode?.gain.setTargetAtTime( duckOutput ? AUDIO_DUCKING_LEVEL : 1, now, timeConstant );
-    };
+    } );
 
-    // Handle the adding and removal of ducking Properties.
+    // Handle the adding and removal of individual ducking Properties.
     this.duckingProperties.addItemAddedListener( addedDuckingProperty => {
       addedDuckingProperty.link( updateDuckingState );
       const checkAndRemove = ( removedDuckingProperty: TReadOnlyProperty<boolean> ) => {
