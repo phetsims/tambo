@@ -47,9 +47,8 @@ const DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER = new SoundClipPlayer( generalSoft
   soundManagerOptions: { categoryName: 'user-interface' }
 } );
 
-// Define a default constraint function.  During the development of this class, it was found to be needed to do some
-// constraining of the values by default to avoid problems with floating point errors.  The interval value used here is
-// somewhat arbitrary, but was found to work in all the test cases at the time.
+// Define a default constraint function.  See the docs for the associated option for more info.  The interval value used
+// here was empirically determined.
 const DEFAULT_VALUE_CONSTRAINT = ( value: number ) => Utils.roundToInterval( value, 0.000000001 );
 
 // A "no-op" function for mapping pitch values.  Always returns one, which signifies no change to the playback rate.
@@ -84,9 +83,9 @@ export type ValueChangeSoundPlayerOptions = {
 
   // This function is used to constrain the values used for thresholds and value comparisons.  Without this, there can
   // sometimes be cases where slight value differences, such as those caused by floating point inaccuracies, can cause
-  // sounds not to be generated when they should.  Use _.identity for a "no-op" if needed.  This is used for multiple
-  // values, but is called "constrainValue" rather than "constrainValues" to match the pre-existing option name in the
-  // Slider class.  See https://github.com/phetsims/sun/issues/697#issuecomment-1066850181.
+  // sounds not to be generated when they should.  Use _.identity for a "no-op" if no constraint is needed.  This is
+  // used for multiple values, but is called "constrainValue" rather than "constrainValues" to match the pre-existing
+  // option name in the Slider class.  See https://github.com/phetsims/sun/issues/697#issuecomment-1066850181.
   constrainValue?: ( n: number ) => number;
 
   // The sound player that is used to indicate the minimum value.
@@ -218,16 +217,44 @@ class ValueChangeSoundPlayer {
    * has been reached or crossed and the new value is not at the min or max, no sound will be played.
    */
   public playSoundIfThresholdReached( newValue: number, oldValue: number ): void {
+
     if ( newValue !== oldValue ) {
 
       const constrainedNewValue = this.constrainValue( newValue );
       const constrainedOldValue = this.constrainValue( oldValue );
-      const newValueQuantizedRange = this.mapValueToQuantizedRange( constrainedNewValue );
-      const oldValueQuantizedRange = this.mapValueToQuantizedRange( constrainedOldValue );
-      if ( newValueQuantizedRange.min !== oldValueQuantizedRange.min ||
-           constrainedNewValue === newValueQuantizedRange.min && constrainedOldValue !== oldValueQuantizedRange.min ||
-           constrainedNewValue === newValueQuantizedRange.max && constrainedOldValue !== oldValueQuantizedRange.max ) {
 
+      const oldValueSurroundingThresholds = this.getSurroundingThresholds( constrainedOldValue );
+      const newValueSurroundingThresholds = this.getSurroundingThresholds( constrainedNewValue );
+
+      const thresholdCrossed = ( oldValueSurroundingThresholds.length === 1 &&
+                                 newValueSurroundingThresholds.length === 1 &&
+                                 Math.abs( oldValueSurroundingThresholds[ 0 ] - newValueSurroundingThresholds[ 0 ] ) > this.interThresholdDistance
+                               ) ||
+                               ( oldValueSurroundingThresholds.length === 1 &&
+                                 newValueSurroundingThresholds.length === 2 &&
+                                 oldValueSurroundingThresholds[ 0 ] !== newValueSurroundingThresholds[ 0 ] &&
+                                 oldValueSurroundingThresholds[ 0 ] !== newValueSurroundingThresholds[ 1 ]
+                               ) ||
+                               (
+                                 oldValueSurroundingThresholds.length === 2 &&
+                                 newValueSurroundingThresholds.length === 1 &&
+                                 newValueSurroundingThresholds[ 0 ] !== oldValueSurroundingThresholds[ 0 ] &&
+                                 newValueSurroundingThresholds[ 0 ] !== oldValueSurroundingThresholds[ 1 ]
+                               ) ||
+                               (
+                                 oldValueSurroundingThresholds.length === 2 &&
+                                 newValueSurroundingThresholds.length === 2 &&
+                                 newValueSurroundingThresholds[ 0 ] !== oldValueSurroundingThresholds[ 0 ]
+                               );
+      const thresholdReached = newValueSurroundingThresholds.length === 1 &&
+                               ( oldValueSurroundingThresholds.length === 2 ||
+                                 oldValueSurroundingThresholds[ 0 ] !== newValueSurroundingThresholds[ 0 ] );
+
+      if ( thresholdCrossed ||
+           thresholdReached ||
+           constrainedNewValue === this.valueRange.min ||
+           constrainedNewValue === this.valueRange.max
+      ) {
         this.playSoundForValueChange( newValue, oldValue );
       }
     }
@@ -279,16 +306,49 @@ class ValueChangeSoundPlayer {
   }
 
   /**
-   * Map the provided value to a quantized range that can then be used to determine if a threshold has been crossed.
+   * Get an array that contains the next lowest and next highest thresholds for the provided value.  If the provided
+   * value is exactly equal to a threshold, only the single threshold value is returned in the array.
    */
-  private mapValueToQuantizedRange( value: number ): Range {
-    const valueProportion = ( value - this.valueRange.min ) / this.valueRange.getLength();
-    const numberOfRanges = Math.ceil( this.valueRange.getLength() / this.interThresholdDistance );
-    const rangeNumber = Math.min( Math.floor( valueProportion * numberOfRanges ), numberOfRanges - 1 );
-    return new Range(
-      this.valueRange.min + rangeNumber * this.interThresholdDistance,
-      Math.min( this.valueRange.min + ( rangeNumber + 1 ) * this.interThresholdDistance, this.valueRange.max )
+  private getSurroundingThresholds( value: number ): number[] {
+
+    // A note to future maintainers: JavaScript's floating point implementation was causing all manner of problems with
+    // this method.  For instance, when the inter-threshold distance was 0.1 and the provided value was 0.3, JS says
+    // that 0.3/0.1 is 2.9999999999999996, so it was tricky to tell that the value was at a threshold and not below it.
+    // Therefore, the code below does rounding to intervals that were empirically determined to correct for the floating
+    // point problems.  This worked in all test cases, but may not stand the test of time if some unusual slider
+    // configurations are needed.  One idea might be to make the rounding interval for this calculation an option to the
+    // class, but that felt like overkill at the time of this writing.
+    const roundingInterval = 1E-7;
+
+    const segment = Math.floor(
+      Utils.roundToInterval( ( value - this.valueRange.min ) / this.interThresholdDistance, roundingInterval )
     );
+
+    const lowerThreshold = Utils.roundToInterval(
+      segment * this.interThresholdDistance + this.valueRange.min,
+      roundingInterval
+    );
+    const thresholdArray = [ lowerThreshold ];
+    if ( lowerThreshold !== value ) {
+
+      // The provided value wasn't exactly at a threshold.  Since the preceding calculation provided the lower
+      // threshold, add the upper one now.
+      const upperThreshold = Math.min(
+        Utils.roundToInterval( lowerThreshold + this.interThresholdDistance, roundingInterval ),
+        this.valueRange.max
+      );
+
+      // This may seem like an odd test, so here's the story: There are some rare but possible cases where the
+      // calculation above doesn't actually yield a higher value due to floating point errors.  When testing in Dec
+      // 2022, this was only seen on the Wave Packet Center slider in Fourier Making Waves.  So, only add the upper
+      // threshold if it's actually higher than the lower one.  If the upper threshold isn't added, this essentially
+      // says that the lower threshold was an exact match for one of the crossing thresholds, which is approximately
+      // true and has worked fine in all test cases thus far.
+      if ( upperThreshold > lowerThreshold ) {
+        thresholdArray.push( upperThreshold );
+      }
+    }
+    return thresholdArray;
   }
 
   /**

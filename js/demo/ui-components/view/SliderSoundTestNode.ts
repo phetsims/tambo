@@ -22,6 +22,8 @@ import Utils from '../../../../../dot/js/Utils.js';
 import { Font, HBox, Text, VBox } from '../../../../../scenery/js/imports.js';
 import SliderPitchChangeSoundGenerator from './SliderPitchChangeSoundGenerator.js';
 
+const PITCH_CHANGE_SLIDER_VALUE_RANGE = new Range( 1, 10 );
+
 class SliderSoundTestNode extends HBox {
 
   public constructor( labelFont: Font, center: Vector2 ) {
@@ -80,10 +82,10 @@ class SliderSoundTestNode extends HBox {
 
         // slider with a sound generator that changes the middle pitches
         new Text( 'Custom Sounds - Pitch Changes', { font: labelFont } ),
-        new HSlider( new NumberProperty( 0 ), new Range( 1, 10 ), {
+        new HSlider( new NumberProperty( 0 ), PITCH_CHANGE_SLIDER_VALUE_RANGE, {
           thumbFill: '#993366',
           thumbFillHighlighted: '#CC6699',
-          soundGenerator: new SliderPitchChangeSoundGenerator( new Range( 1, 10 ) )
+          soundGenerator: new SliderPitchChangeSoundGenerator( PITCH_CHANGE_SLIDER_VALUE_RANGE )
         } )
       ],
       spacing: 20
