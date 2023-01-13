@@ -167,9 +167,9 @@ class UIComponentsScreenView extends DemosScreenView {
       {
         label: 'ComboBox',
         createNode: ( layoutBounds: Bounds2 ) => new ComboBox( new NumberProperty( 0 ), [
-          { value: 0, createNode: tandem => new Text( 'Rainbows', { font: LABEL_FONT } ) },
-          { value: 1, createNode: tandem => new Text( 'Unicorns', { font: LABEL_FONT } ) },
-          { value: 2, createNode: tandem => new Text( 'Butterflies', { font: LABEL_FONT } ) }
+          { value: 0, createNode: () => new Text( 'Rainbows', { font: LABEL_FONT } ) },
+          { value: 1, createNode: () => new Text( 'Unicorns', { font: LABEL_FONT } ) },
+          { value: 2, createNode: () => new Text( 'Butterflies', { font: LABEL_FONT } ) }
         ], this, { center: layoutBounds.center } )
       },
       {

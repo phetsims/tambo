@@ -89,7 +89,7 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
     SOUND_GENERATOR_INFO.forEach( ( soundGenerator, soundGeneratorKey ) => {
       comboBoxItems.push( {
         value: soundGeneratorKey,
-        createNode: tandem => new Text( soundGenerator.comboBoxItemName, { font: COMBO_BOX_FONT } )
+        createNode: () => new Text( soundGenerator.comboBoxItemName, { font: COMBO_BOX_FONT } )
       } );
     } );
     const selectedSoundGeneratorTypeProperty = new Property( comboBoxItems[ 0 ].value );
