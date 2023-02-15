@@ -8,9 +8,10 @@
  */
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
+import TModel from '../../../../../joist/js/TModel.js';
 import tambo from '../../../tambo.js';
 
-class UIComponentsModel {
+class UIComponentsModel implements TModel {
 
   // property used by the AB switches in the demo
   public readonly abSwitch1Property: BooleanProperty = new BooleanProperty( false );

@@ -20,11 +20,12 @@ import UIComponentsModel from './demo/ui-components/model/UIComponentsModel.js';
 import UIComponentsScreenView from './demo/ui-components/view/UIComponentsScreenView.js';
 import TamboStrings from './TamboStrings.js';
 import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
+import TModel from '../../joist/js/TModel.js';
 
 // constants
 const SOUND_OPTIONS_DIALOG_CONTENT = new AudioCustomPreferencesContent();
 
-class Model {
+class Model implements TModel {
   public reset(): void { /* nothing to do */ }
 }
 

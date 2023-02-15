@@ -9,10 +9,11 @@
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import TModel from '../../../../../joist/js/TModel.js';
 import tambo from '../../../tambo.js';
 import BoxOfBalls from './BoxOfBalls.js';
 
-class SimLikeComponentsModel {
+class SimLikeComponentsModel implements TModel {
 
   // a box containing bouncing balls
   public readonly boxOfBalls: BoxOfBalls;
