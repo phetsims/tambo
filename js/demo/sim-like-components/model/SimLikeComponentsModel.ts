@@ -1,4 +1,4 @@
-// Copyright 2018-2022, University of Colorado Boulder
+// Copyright 2018-2023, University of Colorado Boulder
 
 /**
  * SimLikeComponentsModel is a model that exists only for the purposes of demonstrating sonification, particularly how
