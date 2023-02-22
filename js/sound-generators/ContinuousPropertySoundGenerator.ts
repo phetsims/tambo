@@ -134,7 +134,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
   }
 
   /**
-   * Step this sound generator, used for fading out the sound in the absence change.
+   * Step this sound generator, used for fading out the sound in the absence of change.
    * @param dt - change in time (i.e. delta time) in seconds
    */
   public step( dt: number ): void {
