@@ -1,4 +1,4 @@
-// Copyright 2019-2022, University of Colorado Boulder
+// Copyright 2019-2023, University of Colorado Boulder
 
 /**
  * ContinuousPropertySoundGenerator is a sound generator that alters the playback rate of a sound clip based on the
