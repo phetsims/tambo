@@ -124,7 +124,7 @@ class SoundManager extends PhetioObject {
     this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.supportsSound, {
       tandem: tandem.createTandem( 'enabledProperty' ),
       phetioState: false, // This is a preference, global sound control is handled by the audioManager
-      phetioDocumentation: 'Determines whether sound is enabled.'
+      phetioDocumentation: 'Determines whether sound is enabled. Supported only if this sim supportsSound=true.'
     } );
 
     this.extraSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.extraSoundInitiallyEnabled, {
