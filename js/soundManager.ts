@@ -744,6 +744,6 @@ class SoundManager extends PhetioObject {
   }
 }
 
-const soundManager = new SoundManager( Tandem.GENERAL_VIEW.createTandem( 'soundManager' ) );
+const soundManager = new SoundManager( Tandem.GENERAL_VIEW_AUDIO.createTandem( 'soundManager' ) );
 tambo.register( 'soundManager', soundManager );
 export default soundManager;
