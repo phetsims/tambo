@@ -1,4 +1,4 @@
-// Copyright 2018-2022, University of Colorado Boulder
+// Copyright 2018-2023, University of Colorado Boulder
 
 /**
  * A singleton object that registers sound generators, connects them to the audio output, and provides a number of
