@@ -185,7 +185,7 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
 
     // update the total added indicator when the total changes, also the state of the "Remove All" button
     soundGenerators.lengthProperty.link( numSGs => {
-      totalAddedIndicator.text = StringUtils.fillIn( TOTAL_ADDED_TEMPLATE, {
+      totalAddedIndicator.string = StringUtils.fillIn( TOTAL_ADDED_TEMPLATE, {
         numSoundGenerators: numSGs
       } );
       testLastAddedSGButton.enabled = numSGs > 0;
