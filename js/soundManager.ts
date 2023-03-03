@@ -112,7 +112,7 @@ class SoundManager extends PhetioObject {
   private dryGainNode: GainNode | null;
   private duckingGainNode: GainNode | null;
 
-  public constructor( tandem: Tandem ) {
+  public constructor( tandem: Tandem = Tandem.OPTIONAL ) {
 
     super( {
       tandem: tandem,
@@ -744,6 +744,6 @@ class SoundManager extends PhetioObject {
   }
 }
 
-const soundManager = new SoundManager( Tandem.GENERAL_VIEW_AUDIO.createTandem( 'soundManager' ) );
+const soundManager = new SoundManager();
 tambo.register( 'soundManager', soundManager );
 export default soundManager;
