@@ -112,6 +112,8 @@ class SoundManager extends PhetioObject {
   private dryGainNode: GainNode | null;
   private duckingGainNode: GainNode | null;
 
+  private readonly displayedPropertyMap = new Map<SoundGenerator, DisplayedProperty>();
+
   public constructor( tandem: Tandem = Tandem.OPTIONAL ) {
 
     super( {
@@ -470,9 +472,10 @@ class SoundManager extends PhetioObject {
 
     // If a view node was specified, create and pass in a boolean Property that is true only when the node is displayed.
     if ( options.associatedViewNode ) {
-      soundGenerator.addEnableControlProperty(
-        new DisplayedProperty( options.associatedViewNode )
-      );
+      const displayedProperty = new DisplayedProperty( options.associatedViewNode );
+      soundGenerator.addEnableControlProperty( displayedProperty );
+
+      this.displayedPropertyMap.set( soundGenerator, displayedProperty );
     }
   }
 
@@ -526,6 +529,12 @@ class SoundManager extends PhetioObject {
     // Remove the sound generator from the list.
     if ( soundGeneratorInfo ) {
       this.soundGeneratorInfoArray.splice( this.soundGeneratorInfoArray.indexOf( soundGeneratorInfo ), 1 );
+    }
+
+    // Clean up created DisplayedProperties that were created for the associated soundGenerator
+    if ( this.displayedPropertyMap.has( soundGenerator ) ) {
+      this.displayedPropertyMap.get( soundGenerator )!.dispose();
+      this.displayedPropertyMap.delete( soundGenerator );
     }
   }
 
