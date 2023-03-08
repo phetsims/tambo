@@ -116,7 +116,7 @@ class ValueChangeSoundPlayer {
   // playback rate mapper for middle sounds and upward value changes
   private readonly middleMovingUpPlaybackRateMapper: ( value: number ) => number;
 
-  // playback rate mapper for middle sounds and upward value changes
+  // playback rate mapper for middle sounds and downward value changes
   private readonly middleMovingDownPlaybackRateMapper: ( value: number ) => number;
 
   // sound player for min values
