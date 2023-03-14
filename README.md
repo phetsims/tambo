@@ -13,3 +13,6 @@ how to test and build the sims, as well as other important information.
 
 ### License
 See the [license](LICENSE)
+
+### Contributing
+If you would like to contribute to this repo, please read our [contributing guidelines](https://github.com/phetsims/community/blob/master/CONTRIBUTING.md).
