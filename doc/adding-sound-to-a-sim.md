@@ -68,7 +68,7 @@ tambo demo and/or other sims to see examples of how it is generally used.
  https://github.com/phetsims/molecules-and-light/issues/233#issuecomment-610655745
 - [ ] Finalize the names of all sound files that have been added and get uncompressed versions of them and add them to
  the `assets` directory.  Make sure the names match, e.g. `bonk.mp3` in the `sounds` directory and `bonk.wav` in the
- `assets` directory.
+ `assets` directory. Also make sure these names match the names in the sound design document.
 - [ ] If a Preferences dialog was added or if content was added to an existing Preferences dialog to support comparitive
  evaluation of sounds, remove said content
 - [ ] If there were individuals who were *only* involved in the sound design and thus not already on the `team` or
