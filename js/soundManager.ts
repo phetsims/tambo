@@ -490,12 +490,12 @@ class SoundManager extends PhetioObject {
     if ( !this.initialized ) {
 
       const toRemove = this.soundGeneratorsAwaitingAdd.filter( s => s.soundGenerator === soundGenerator );
+      assert && assert( toRemove.length > 0, 'unable to remove sound generator - not found' );
       while ( toRemove.length > 0 ) {
         arrayRemove( this.soundGeneratorsAwaitingAdd, toRemove[ 0 ] );
         toRemove.shift();
       }
 
-      console.warn( 'an attempt was made to remove a sound generator from an uninitialized sound manager, ignoring' );
       return;
     }
 
