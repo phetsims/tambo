@@ -54,6 +54,11 @@ const DEFAULT_VALUE_CONSTRAINT = ( value: number ) => Utils.roundToInterval( val
 // A "no-op" function for mapping pitch values.  Always returns one, which signifies no change to the playback rate.
 const NO_PLAYBACK_RATE_CHANGE = () => 1;
 
+// A function for a stubbed sound player, see usage.
+const STUB_SOUND_PLAYER_FUNCTION = (): void => {
+  assert && assert( false, 'Code error: This is a stubbed function and should never be invoked.' );
+};
+
 export type ValueChangeSoundPlayerOptions = {
 
   // The sound player for movement in the middle of the range in the up direction.
@@ -119,10 +124,9 @@ class ValueChangeSoundPlayer {
   // playback rate mapper for middle sounds and downward value changes
   private readonly middleMovingDownPlaybackRateMapper: ( value: number ) => number;
 
-  // sound player for min values
+  // Sound players for the min and max values.  If nothing is provided a default will be used.  If the flag
+  // USE_MIDDLE_SOUND is provided, the sound player for the middle range will be used.
   private readonly minSoundPlayer: TSoundPlayer;
-
-  // sound player for max values
   private readonly maxSoundPlayer: TSoundPlayer;
 
   // min time between playing one middle sound and the next
@@ -268,10 +272,10 @@ class ValueChangeSoundPlayer {
     if ( constrainedNewValue !== constrainedOldValue ||
          ( oldValue !== newValue && ( newValue === this.valueRange.min || newValue === this.valueRange.max ) ) ) {
 
-      if ( newValue === this.valueRange.min ) {
+      if ( newValue === this.valueRange.min && this.minSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND ) {
         this.minSoundPlayer.play();
       }
-      else if ( newValue === this.valueRange.max ) {
+      else if ( newValue === this.valueRange.max && this.maxSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND ) {
         this.maxSoundPlayer.play();
       }
       else {
@@ -357,6 +361,15 @@ class ValueChangeSoundPlayer {
     minSoundPlayer: nullSoundPlayer,
     maxSoundPlayer: nullSoundPlayer
   } );
+
+  /**
+   * A static TSoundPlayer instance that is intended to be used as a flag for the min and max sound players to
+   * indicate that the middle sound player should be used.
+   */
+  public static readonly USE_MIDDLE_SOUND: TSoundPlayer = {
+    play: STUB_SOUND_PLAYER_FUNCTION,
+    stop: STUB_SOUND_PLAYER_FUNCTION
+  };
 }
 
 tambo.register( 'ValueChangeSoundPlayer', ValueChangeSoundPlayer );
