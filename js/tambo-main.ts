@@ -82,7 +82,7 @@ simLauncher.launch( () => {
       ( () => new SimLikeComponentsModel() ),
       ( model => new SimLikeComponentsScreenView( model ) ),
       {
-        name: new Property( 'Sim-Like Components' ),
+        name: TamboStrings.screen.simLikeComponentsStringProperty,
         backgroundColorProperty: new Property( '#f3fff3' ),
         homeScreenIcon: new ScreenIcon( createScreenIcon( '#a31515', '#b75e2a', 'radial' ), {
           maxIconWidthProportion: 1,
@@ -98,7 +98,7 @@ simLauncher.launch( () => {
       ( () => new UIComponentsModel() ),
       ( model => new UIComponentsScreenView( model ) ),
       {
-        name: new Property( 'UI Components' ),
+        name: TamboStrings.screen.uiComponentsStringProperty,
         backgroundColorProperty: new Property( '#fff5ba' ),
         homeScreenIcon: new ScreenIcon( createScreenIcon( '#71ddbf', '#8d49e5', 'linear' ), {
           maxIconWidthProportion: 1,
@@ -114,7 +114,7 @@ simLauncher.launch( () => {
       ( () => new Model() ), // no model needed, return a stub
       ( () => new TestingScreenView() ),
       {
-        name: new Property( 'Testing' ),
+        name: TamboStrings.screen.testingStringProperty,
         backgroundColorProperty: new Property( '#F0F8FF' ),
         homeScreenIcon: new ScreenIcon( createScreenIcon( '#ADFF2F', '#FFDAB9', 'radial' ), {
           maxIconWidthProportion: 1,

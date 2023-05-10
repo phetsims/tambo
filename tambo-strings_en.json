@@ -1,5 +1,14 @@
 {
   "tambo.title": {
     "value": "Tambo Demo"
+  },
+  "screen.simLikeComponents": {
+    "value": "Sim-Like Components"
+  },
+  "screen.uiComponents": {
+    "value": "UI Components"
+  },
+  "screen.testing": {
+    "value": "Testing"
   }
 }

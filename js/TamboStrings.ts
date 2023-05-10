@@ -11,6 +11,11 @@ import tambo from './tambo.js';
 type StringsType = {
   'tambo': {
     'titleStringProperty': LinkableProperty<string>;
+  };
+  'screen': {
+    'simLikeComponentsStringProperty': LinkableProperty<string>;
+    'uiComponentsStringProperty': LinkableProperty<string>;
+    'testingStringProperty': LinkableProperty<string>;
   }
 };
 
