@@ -52,18 +52,23 @@ Before using this for the first time, it is highly recommended that a developer 
   (https://github.com/phetsims/tambo/blob/master/js/demo/AudioCustomPreferencesContent.js).
 - [ ] Add sim-specific sound generation. See previously sonified simulations for examples on how to do this, but the
   general idea is to create sound generators and hook them up to the model and/or view elements that they are meant to
-  sonify, all based on the sound design document. One of the most common ways to add sound is to use pre-recorded bits
-  of sound. The type in tambo that supports this is called `SoundClip`, please search for usages of this type in the
-  tambo demo and/or other sims to see examples of how it is generally used.
+  sonify, all based on the sound design document.
+  - One of the most common ways to add sound is to use pre-recorded bits
+    of sound. The type in tambo that supports this is called `SoundClip`, please search for usages of this type in the
+    tambo demo and/or other sims to see examples of how it is generally used.
+  - It is preferable to wire up sound and sonification to view-listeners (like user input events) rather than model
+    Properties. PhET-iO makes this even more important. Please
+    see [The PhET-iO Technical Guide](https://github.com/phetsims/phet-io/blob/master/doc/phet-io-instrumentation-technical-guide.md)
+    for more details.
 - [ ] Iterate on the sound design. Regular meetings and good note taking (generally in GitHub issues) have been found
   to be quite helpful for this. This is basically like the implementation process for all other portions of the sim, and
   involves publishing dev versions, getting feedback, refining the sim, rinse, and repeat. One observation: It seems to
   be more difficult for people to imagine how they will like a sound in context than a visual design element, so be
   prepared for a lot of iteration, and use the 'Options' dialog if and when it can help.
-- [ ] Once all of the sounds have been finalized, do a "mix" step where the primary sound designer goes through the
+- [ ] Once all the sounds have been finalized, do a "mix" step where the primary sound designer goes through the
   sim and sets the volume level for all sim-specific sounds. Create a separate sub-issue for this.
 - [ ] Once the sound design is thought to be complete, or nearly complete, publish a dev version and create a checklist
-  of all of the sound designers and other stakeholders in the original sound design GitHub issue and ask them to either
+  of all the sound designers and other stakeholders in the original sound design GitHub issue and ask them to either
   approve of the implementation or log their objections. Example:
   https://github.com/phetsims/molecules-and-light/issues/233#issuecomment-610655745
 - [ ] Finalize the names of all sound files that have been added and get uncompressed versions of them and add them to
