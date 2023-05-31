@@ -18,6 +18,7 @@ import tambo from '../tambo.js';
 import Property from '../../../axon/js/Property.js';
 import TProperty from '../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
@@ -169,6 +170,7 @@ abstract class SoundGenerator {
       this.soundSourceDestination = audioNode;
     }
 
+    // TODO: simplify this in https://github.com/phetsims/tandem/issues/294
     if ( Tandem.PHET_IO_ENABLED && !options.enabledDuringPhetioStateSetting ) {
       if ( Tandem.launched ) {
         assert && assert( notSettingPhetioStateProperty, 'Should exist after launch' );
@@ -186,7 +188,7 @@ abstract class SoundGenerator {
           if ( !notSettingPhetioStateProperty ) {
 
             // Store this for later instantiations of SoundGenerator
-            notSettingPhetioStateProperty = DerivedProperty.not( phet.phetio.phetioEngine.phetioStateEngine.isSettingStateProperty );
+            notSettingPhetioStateProperty = DerivedProperty.not( isSettingPhetioStateProperty );
           }
           this.addEnableControlProperty( notSettingPhetioStateProperty );
         } );
