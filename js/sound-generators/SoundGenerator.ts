@@ -1,4 +1,4 @@
-// Copyright 2018-2022, University of Colorado Boulder
+// Copyright 2018-2023, University of Colorado Boulder
 
 /**
  * SoundGenerator is an abstract base class for Web-Audio-based sound-producing elements that work in conjunction with
