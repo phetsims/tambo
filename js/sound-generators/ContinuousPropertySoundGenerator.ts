@@ -12,13 +12,13 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import NumberProperty from '../../../axon/js/NumberProperty.js';
 import tambo from '../tambo.js';
 import SoundClip, { SoundClipOptions } from './SoundClip.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import Range from '../../../dot/js/Range.js';
+import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 
 type SelfOptions = {
 
@@ -69,10 +69,10 @@ class ContinuousPropertySoundGenerator extends SoundClip {
    * @param range - the range of values that the provided property can take on
    * @param [providedOptions]
    */
-  public constructor( property: NumberProperty,
-               sound: WrappedAudioBuffer,
-               range: Range,
-               providedOptions?: ContinuousPropertySoundGeneratorOptions ) {
+  public constructor( property: TReadOnlyProperty<number>,
+                      sound: WrappedAudioBuffer,
+                      range: Range,
+                      providedOptions?: ContinuousPropertySoundGeneratorOptions ) {
 
     assert && assert(
       !providedOptions || !providedOptions.loop,
