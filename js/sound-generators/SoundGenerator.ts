@@ -23,7 +23,7 @@ import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStat
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
 
-let notSettingPhetioStateProperty: TReadOnlyProperty<boolean>;
+const notSettingPhetioStateProperty = DerivedProperty.not( isSettingPhetioStateProperty );
 
 export type SoundGeneratorOptions = {
 
@@ -170,29 +170,9 @@ abstract class SoundGenerator {
       this.soundSourceDestination = audioNode;
     }
 
-    // TODO: simplify this in https://github.com/phetsims/tandem/issues/294
+    // Make sure that this sound never plays when setting PhET-iO state
     if ( Tandem.PHET_IO_ENABLED && !options.enabledDuringPhetioStateSetting ) {
-      if ( Tandem.launched ) {
-        assert && assert( notSettingPhetioStateProperty, 'Should exist after launch' );
-
-        // If this SoundGenerator is being constructed after PhET-iO has been started, add an enable-control Property to
-        // prevent sound during the setting of PhET-iO state.
-        this.addEnableControlProperty( notSettingPhetioStateProperty );
-      }
-      else {
-
-        // If this SoundGenerator is being constructed before PhET-iO is fully set up, add a listener, called once
-        // PhET-iO is ready, to then add an enable-control Property that will prevent sound during the setting of
-        // PhET-iO state.
-        Tandem.addLaunchListener( () => {
-          if ( !notSettingPhetioStateProperty ) {
-
-            // Store this for later instantiations of SoundGenerator
-            notSettingPhetioStateProperty = DerivedProperty.not( isSettingPhetioStateProperty );
-          }
-          this.addEnableControlProperty( notSettingPhetioStateProperty );
-        } );
-      }
+      this.addEnableControlProperty( notSettingPhetioStateProperty );
     }
 
     this.disposeSoundGenerator = () => {
