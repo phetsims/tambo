@@ -5,17 +5,17 @@
  */
 /* eslint-disable */
 import getStringModule from '../../chipper/js/getStringModule.js';
-import LinkableProperty from '../../axon/js/LinkableProperty.js';
+import type LocalizedStringProperty from '../../chipper/js/LocalizedStringProperty.js';
 import tambo from './tambo.js';
 
 type StringsType = {
   'tambo': {
-    'titleStringProperty': LinkableProperty<string>;
+    'titleStringProperty': LocalizedStringProperty;
   };
   'screen': {
-    'simLikeComponentsStringProperty': LinkableProperty<string>;
-    'uiComponentsStringProperty': LinkableProperty<string>;
-    'testingStringProperty': LinkableProperty<string>;
+    'simLikeComponentsStringProperty': LocalizedStringProperty;
+    'uiComponentsStringProperty': LocalizedStringProperty;
+    'testingStringProperty': LocalizedStringProperty;
   }
 };
 
