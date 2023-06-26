@@ -114,7 +114,7 @@ class SoundManager extends PhetioObject {
 
   private readonly displayedPropertyMap = new Map<SoundGenerator, DisplayedProperty>();
 
-  public constructor( tandem: Tandem = Tandem.OPTIONAL ) {
+  public constructor( tandem?: Tandem ) {
 
     super( {
       tandem: tandem,
@@ -124,13 +124,13 @@ class SoundManager extends PhetioObject {
     } );
 
     this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.supportsSound, {
-      tandem: tandem.createTandem( 'enabledProperty' ),
+      tandem: tandem?.createTandem( 'enabledProperty' ),
       phetioState: false, // This is a preference, global sound control is handled by the audioManager
       phetioDocumentation: 'Determines whether sound is enabled. Supported only if this sim supportsSound=true.'
     } );
 
     this.extraSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.extraSoundInitiallyEnabled, {
-      tandem: tandem.createTandem( 'extraSoundEnabledProperty' ),
+      tandem: tandem?.createTandem( 'extraSoundEnabledProperty' ),
       phetioState: false, // This is a preference, global sound control is handled by the audioManager
       phetioDocumentation: 'Determines whether extra sound is enabled. Extra sound is additional sounds that ' +
                            'can serve to improve the learning experience for individuals with visual disabilities. ' +
