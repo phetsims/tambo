@@ -19,6 +19,7 @@ import Property from '../../../axon/js/Property.js';
 import TProperty from '../../../axon/js/TProperty.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
+import Disposable from '../../../axon/js/Disposable.js';
 
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
@@ -53,7 +54,7 @@ export type SoundGeneratorOptions = {
   enabledDuringPhetioStateSetting?: boolean;
 };
 
-abstract class SoundGenerator {
+abstract class SoundGenerator extends Disposable {
 
   protected audioContext: AudioContext;
   private _outputLevel: number;
@@ -82,10 +83,9 @@ abstract class SoundGenerator {
   // audio nodes were provided upon construction, this will be the master gain node.
   protected soundSourceDestination: AudioNode;
 
-  // internally used disposal function
-  private readonly disposeSoundGenerator: () => void;
-
   protected constructor( providedOptions?: SoundGeneratorOptions ) {
+
+    super();
 
     const options = optionize<SoundGeneratorOptions, SoundGeneratorOptions>()( {
       initialOutputLevel: 1,
@@ -175,11 +175,12 @@ abstract class SoundGenerator {
       this.addEnableControlProperty( notSettingPhetioStateProperty );
     }
 
-    this.disposeSoundGenerator = () => {
+    // Clean up memory references when this object is disposed to avoid memory leaks.
+    this.disposeEmitter.addListener( () => {
 
       // Clearing this observable array should cause the Properties within it to be unlinked.
       this.enableControlProperties.clear();
-    };
+    } );
   }
 
   /**
@@ -293,10 +294,6 @@ abstract class SoundGenerator {
 
   public get fullyEnabled(): boolean {
     return this.fullyEnabledProperty.value;
-  }
-
-  public dispose(): void {
-    this.disposeSoundGenerator();
   }
 }
 

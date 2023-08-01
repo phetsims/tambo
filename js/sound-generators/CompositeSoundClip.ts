@@ -53,6 +53,7 @@ class CompositeSoundClip extends SoundGenerator {
 
   public override dispose(): void {
     this.soundClips.forEach( soundClip => soundClip.dispose() );
+    super.dispose();
   }
 
   public get isPlaying(): boolean {

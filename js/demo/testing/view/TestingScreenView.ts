@@ -167,7 +167,7 @@ class BasicAndExtraSoundTestNode extends VBox {
       soundManager.removeSoundGenerator( loonCallSoundClip );
       loonCallSoundClip.dispose();
       soundManager.removeSoundGenerator( rhodesChordSoundClip );
-      loonCallSoundClip.dispose();
+      rhodesChordSoundClip.dispose();
     };
   }
 
