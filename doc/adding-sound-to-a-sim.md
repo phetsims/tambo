@@ -10,11 +10,11 @@ Before using this for the first time, it is highly recommended that a developer 
 - [ ] Create an issue for adding sound to the simulation, use the title "Implement sound design". Here
   is [an example GitHub issue](https://github.com/phetsims/faradays-law/issues/161).
 - [ ] Figure out if it's okay to turn sound on for the simulation. This will hinge upon whether there will need to be
-  releases made off of master before the sound implementation is complete. Generally you'll want to turn sound on, but
+  releases made off of main before the sound implementation is complete. Generally you'll want to turn sound on, but
   in cases where that isn't possible, skip the two sub-steps below, and the query parameters `supportsSound` and
   `supportsExtraSound` can be used to turn sound on for testing during development.
   - [ ] Turn on sound by adding the `supportsSound: true` key-value pair to the `phet` sub-object in the package.json
-    file for this simulation. See https://github.com/phetsims/friction/blob/master/package.json. This portion will look
+    file for this simulation. See https://github.com/phetsims/friction/blob/main/package.json. This portion will look
     something like this:
     ```
     {
@@ -30,7 +30,7 @@ Before using this for the first time, it is highly recommended that a developer 
     ```
   - [ ] If the sound design includes extra sound, turn this on by adding the `supportsExtraSound: true` key-value
     pair to the `phet` sub-object in the package.json file for this simulation. The main effect that this is has is to
-    add the 'Extra Sound' item to the PhET menu. See https://github.com/phetsims/friction/blob/master/package.json.
+    add the 'Extra Sound' item to the PhET menu. See https://github.com/phetsims/friction/blob/main/package.json.
   - [ ] Run `grunt update` to get the updated configuration into the HTML file.
 - [ ] Explicitly turn *off* sound for any common UI components that now produce sounds that are not needed, if there are
   any. This is done by looking at the options and setting any sound players to `SoundPlayer.NO_SOUND`. Search through
@@ -49,7 +49,7 @@ Before using this for the first time, it is highly recommended that a developer 
 - [ ] Decide whether a "Sound Options" content is needed to allow designers to compare different sound design ideas in
   context. This has been found to be very useful when iterating on a sound design. There is more information on this in
   the User Guide, and [an example in the Tambo demo]
-  (https://github.com/phetsims/tambo/blob/master/js/demo/AudioCustomPreferencesContent.js).
+  (https://github.com/phetsims/tambo/blob/main/js/demo/AudioCustomPreferencesContent.js).
 - [ ] Add sim-specific sound generation. See previously sonified simulations for examples on how to do this, but the
   general idea is to create sound generators and hook them up to the model and/or view elements that they are meant to
   sonify, all based on the sound design document.
@@ -58,7 +58,7 @@ Before using this for the first time, it is highly recommended that a developer 
     tambo demo and/or other sims to see examples of how it is generally used.
   - It is preferable to wire up sound and sonification to view-listeners (like user input events) rather than model
     Properties. PhET-iO makes this even more important. Please
-    see [The PhET-iO Technical Guide](https://github.com/phetsims/phet-io/blob/master/doc/phet-io-instrumentation-technical-guide.md)
+    see [The PhET-iO Technical Guide](https://github.com/phetsims/phet-io/blob/main/doc/phet-io-instrumentation-technical-guide.md)
     for more details.
 - [ ] Iterate on the sound design. Regular meetings and good note taking (generally in GitHub issues) have been found
   to be quite helpful for this. This is basically like the implementation process for all other portions of the sim, and

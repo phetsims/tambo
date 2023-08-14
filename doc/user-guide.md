@@ -11,7 +11,7 @@ use it without needing to dig too deeply into the specific web standards on whic
 This document covers the terminology, general design, philosophy, history, and usage of this library.  Its intended
 audience is software developers that are endeavoring to add sound to simulations that are being built using PhET's
 software infrastructure and need to understand some of the background behind this library in order to use it
-effectively.  There is a [companion checklist document](https://github.com/phetsims/tambo/blob/master/doc/adding-sound-to-a-sim.md)
+effectively.  There is a [companion checklist document](https://github.com/phetsims/tambo/blob/main/doc/adding-sound-to-a-sim.md)
 that lists the steps for adding sound to a PhET simulation in a compact, linear form.  That document should be used each 
 time sound is added to, or included in, a simulation.  This one probably only needs to be read once and referenced
 thereafter.  
@@ -60,7 +60,7 @@ When the more elaborate sound designs were started, we started prototyping them 
 the state of the simulation and produced sounds in response, but didn't make any changes to the primary simulation code
 base.  This worked well for a while, but ran into some issues as PhET-iO evolved.  In 
 https://github.com/phetsims/phet-io-wrapper-sonification/issues/84, it was decided that further sound design prototyping
-would be done on master, with the sounds hidden behind a query parameter until they were finalized and ready to be
+would be done on main, with the sounds hidden behind a query parameter until they were finalized and ready to be
 deployed.
 
 ## Core Concepts
