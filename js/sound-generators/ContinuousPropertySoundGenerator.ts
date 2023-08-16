@@ -19,6 +19,7 @@ import optionize from '../../../phet-core/js/optionize.js';
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import Range from '../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 
 type SelfOptions = {
 
@@ -114,7 +115,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
 
         this.setPlaybackRate( playbackRate );
         this.setOutputLevel( this.nonFadedOutputLevel );
-        if ( !this.isPlaying ) {
+        if ( !this.isPlaying && !isSettingPhetioStateProperty.value ) {
           this.play();
         }
 
