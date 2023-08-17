@@ -112,7 +112,8 @@ class SoundManager extends PhetioObject {
   private dryGainNode: GainNode | null;
   private duckingGainNode: GainNode | null;
 
-  private readonly displayedPropertyMap = new Map<SoundGenerator, DisplayedProperty>();
+  // a Map object that keeps track of DisplayedProperty instances that can be associated with the sound generator
+  private readonly viewNodeDisplayedPropertyMap = new Map<SoundGenerator, DisplayedProperty>();
 
   public constructor( tandem?: Tandem ) {
 
@@ -472,10 +473,11 @@ class SoundManager extends PhetioObject {
 
     // If a view node was specified, create and pass in a boolean Property that is true only when the node is displayed.
     if ( options.associatedViewNode ) {
-      const displayedProperty = new DisplayedProperty( options.associatedViewNode );
-      soundGenerator.addEnableControlProperty( displayedProperty );
+      const viewNodeDisplayedProperty = new DisplayedProperty( options.associatedViewNode );
+      soundGenerator.addEnableControlProperty( viewNodeDisplayedProperty );
 
-      this.displayedPropertyMap.set( soundGenerator, displayedProperty );
+      // Keep track of this DisplayedProperty instance so that it can be disposed if the sound generator is disposed.
+      this.viewNodeDisplayedPropertyMap.set( soundGenerator, viewNodeDisplayedProperty );
     }
   }
 
@@ -532,9 +534,9 @@ class SoundManager extends PhetioObject {
     }
 
     // Clean up created DisplayedProperties that were created for the associated soundGenerator
-    if ( this.displayedPropertyMap.has( soundGenerator ) ) {
-      this.displayedPropertyMap.get( soundGenerator )!.dispose();
-      this.displayedPropertyMap.delete( soundGenerator );
+    if ( this.viewNodeDisplayedPropertyMap.has( soundGenerator ) ) {
+      this.viewNodeDisplayedPropertyMap.get( soundGenerator )!.dispose();
+      this.viewNodeDisplayedPropertyMap.delete( soundGenerator );
     }
   }
 
