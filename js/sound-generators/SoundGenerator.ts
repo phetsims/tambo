@@ -76,11 +76,11 @@ abstract class SoundGenerator extends Disposable {
   // affect this, see fullyEnabledProperty.
   public readonly locallyEnabledProperty: Property<boolean>;
 
-  // master gain control that will be used to control the volume of the sound
+  // main gain control that will be used to control the volume of the sound
   protected mainGainNode: GainNode;
 
   // The audio node to which the sound sources will connect, analogous to AudioContext.destination.  If no additional
-  // audio nodes were provided upon construction, this will be the master gain node.
+  // audio nodes were provided upon construction, this will be the main gain node.
   protected soundSourceDestination: AudioNode;
 
   protected constructor( providedOptions?: SoundGeneratorOptions ) {
@@ -138,7 +138,7 @@ abstract class SoundGenerator extends Disposable {
       this.audioContext.currentTime
     );
 
-    // If the option specifies immediate connection, connect the master gain node to the audio context destination.
+    // If the option specifies immediate connection, connect the main gain node to the audio context destination.
     if ( options.connectImmediately ) {
       this.mainGainNode.connect( this.audioContext.destination );
     }

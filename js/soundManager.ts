@@ -3,8 +3,8 @@
 /**
  * A singleton object that registers sound generators, connects them to the audio output, and provides a number of
  * related services, such as:
- *  - master enable/disable
- *  - master gain control
+ *  - main enable/disable
+ *  - main gain control
  *  - enable/disable of sounds based on visibility of an associated Scenery node
  *  - enable/disable of sounds based on their assigned sonification level (e.g. "basic" or "extra")
  *  - gain control for sounds based on their assigned category, e.g. UI versus sim-specific sounds
@@ -86,8 +86,8 @@ class SoundManager extends PhetioObject {
   // an array where the sound generators are stored along with information about how to manage them
   private readonly soundGeneratorInfoArray: SoundGeneratorInfo[];
 
-  // output level for the master gain node when sonification is enabled
-  private _masterOutputLevel: number;
+  // output level for the main gain node when sonification is enabled
+  private _mainOutputLevel: number;
 
   // reverb level, needed because some browsers don't support reading of gain values, see methods for more info
   private _reverbLevel: number;
@@ -139,7 +139,7 @@ class SoundManager extends PhetioObject {
     } );
 
     this.soundGeneratorInfoArray = [];
-    this._masterOutputLevel = 1;
+    this._mainOutputLevel = 1;
     this._reverbLevel = DEFAULT_REVERB_LEVEL;
     this.gainNodesForCategories = new Map<string, GainNode>();
     this.duckingProperties = createObservableArray();
@@ -190,7 +190,7 @@ class SoundManager extends PhetioObject {
     this.duckingGainNode = phetAudioContext.createGain();
     this.duckingGainNode.connect( dynamicsCompressor );
 
-    // Create the master gain node for all sounds managed by this sonification manager.
+    // Create the main gain node for all sounds managed by this sonification manager.
     this.mainGainNode = phetAudioContext.createGain();
     this.mainGainNode.connect( this.duckingGainNode );
 
@@ -228,7 +228,7 @@ class SoundManager extends PhetioObject {
       this.gainNodesForCategories.set( categoryName, gainNode );
     } );
 
-    // Hook up a listener that turns down the master gain if sonification is disabled or if the sim isn't visible or
+    // Hook up a listener that turns down the main gain if sonification is disabled or if the sim isn't visible or
     // isn't active.
     Multilink.multilink(
       [
@@ -242,7 +242,7 @@ class SoundManager extends PhetioObject {
       ( enabled, audioEnabled, simInitComplete, simVisible, simActive, simSettingPhetioState ) => {
 
         const fullyEnabled = enabled && audioEnabled && simInitComplete && simVisible && simActive && !simSettingPhetioState;
-        const gain = fullyEnabled ? this._masterOutputLevel : 0;
+        const gain = fullyEnabled ? this._mainOutputLevel : 0;
 
         // Set the gain, but somewhat gradually in order to avoid rapid transients, which can sound like clicks.
         this.mainGainNode!.gain.linearRampToValueAtTime(
@@ -539,22 +539,22 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * Set the master output level for sounds.
+   * Set the main output level for sounds.
    * @param level - valid values from 0 (min) through 1 (max)
    */
-  public setMasterOutputLevel( level: number ): void {
+  public setMainOutputLevel( level: number ): void {
 
     // Check if initialization has been done.  This is not an assertion because the sound manager may not be
     // initialized if sound is not enabled for the sim.
     if ( !this.initialized ) {
-      console.warn( 'an attempt was made to set the master output level on an uninitialized sound manager, ignoring' );
+      console.warn( 'an attempt was made to set the main output level on an uninitialized sound manager, ignoring' );
       return;
     }
 
     // range check
     assert && assert( level >= 0 && level <= 1, `output level value out of range: ${level}` );
 
-    this._masterOutputLevel = level;
+    this._mainOutputLevel = level;
     if ( this.enabledProperty.value ) {
       this.mainGainNode!.gain.linearRampToValueAtTime(
         level,
@@ -563,19 +563,19 @@ class SoundManager extends PhetioObject {
     }
   }
 
-  public set masterOutputLevel( outputLevel ) {
-    this.setMasterOutputLevel( outputLevel );
+  public set mainOutputLevel( outputLevel ) {
+    this.setMainOutputLevel( outputLevel );
   }
 
-  public get masterOutputLevel() {
-    return this.getMasterOutputLevel();
+  public get mainOutputLevel() {
+    return this.getMainOutputLevel();
   }
 
   /**
    * Get the current output level setting.
    */
-  public getMasterOutputLevel(): number {
-    return this._masterOutputLevel;
+  public getMainOutputLevel(): number {
+    return this._mainOutputLevel;
   }
 
 
@@ -733,10 +733,10 @@ class SoundManager extends PhetioObject {
   }
 
   /**
-   * Log the value of the master gain as it changes, used primarily for debug.
+   * Log the value of the main gain as it changes, used primarily for debug.
    * @param duration - in seconds
    */
-  public logMasterGain( duration: number ): void {
+  public logMainGain( duration: number ): void {
     if ( this.mainGainNode ) {
       this.logGain( this.mainGainNode, duration );
     }
