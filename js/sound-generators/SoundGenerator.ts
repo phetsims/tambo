@@ -77,7 +77,7 @@ abstract class SoundGenerator extends Disposable {
   public readonly locallyEnabledProperty: Property<boolean>;
 
   // master gain control that will be used to control the volume of the sound
-  protected masterGainNode: GainNode;
+  protected mainGainNode: GainNode;
 
   // The audio node to which the sound sources will connect, analogous to AudioContext.destination.  If no additional
   // audio nodes were provided upon construction, this will be the master gain node.
@@ -132,15 +132,15 @@ abstract class SoundGenerator extends Disposable {
     // Add the local Property to the list of enable controls.
     this.addEnableControlProperty( this.locallyEnabledProperty );
 
-    this.masterGainNode = this.audioContext.createGain();
-    this.masterGainNode.gain.setValueAtTime(
+    this.mainGainNode = this.audioContext.createGain();
+    this.mainGainNode.gain.setValueAtTime(
       this._outputLevel,
       this.audioContext.currentTime
     );
 
     // If the option specifies immediate connection, connect the master gain node to the audio context destination.
     if ( options.connectImmediately ) {
-      this.masterGainNode.connect( this.audioContext.destination );
+      this.mainGainNode.connect( this.audioContext.destination );
     }
 
     // Turn down the gain to zero when not fully enabled and up to the current output level when becoming fully enabled.
@@ -152,16 +152,16 @@ abstract class SoundGenerator extends Disposable {
 
       // For the linear ramp to work consistently on all browsers, the gain must be explicitly set to what it is
       // supposed to be before making any changes.  Otherwise, it may extrapolate from the most recent previous event.
-      this.masterGainNode.gain.setValueAtTime( previousGainSetting, now );
+      this.mainGainNode.gain.setValueAtTime( previousGainSetting, now );
 
       // Ramp the gain to the new level.
-      this.masterGainNode.gain.linearRampToValueAtTime(
+      this.mainGainNode.gain.linearRampToValueAtTime(
         newGainSetting,
         this.audioContext.currentTime + soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME
       );
     } );
 
-    this.soundSourceDestination = this.masterGainNode;
+    this.soundSourceDestination = this.mainGainNode;
 
     // Insert any additional audio nodes into the signal chain by iterating backwards through the provided list.
     for ( let i = options.additionalAudioNodes.length - 1; i >= 0; i-- ) {
@@ -187,7 +187,7 @@ abstract class SoundGenerator extends Disposable {
    * Connect the sound generator to an audio parameter.
    */
   public connect( audioParam: AudioParam | AudioNode ): void {
-    this.masterGainNode.connect( audioParam as AudioParam );
+    this.mainGainNode.connect( audioParam as AudioParam );
 
     // Track this sound generator's connections.  This is necessary because Web Audio doesn't support checking which
     // nodes are connected to which, and we need this information when disconnecting.
@@ -198,7 +198,7 @@ abstract class SoundGenerator extends Disposable {
    * Disconnect the sound generator from an audio parameter.
    */
   public disconnect( audioParam: AudioParam | AudioNode ): void {
-    this.masterGainNode.disconnect( audioParam as AudioNode );
+    this.mainGainNode.disconnect( audioParam as AudioNode );
     this.connectionList = _.without( this.connectionList, audioParam );
   }
 
@@ -226,11 +226,11 @@ abstract class SoundGenerator extends Disposable {
       if ( this.fullyEnabledProperty.value ) {
 
         // Cancel any gain transitions that are currently in progress.
-        this.masterGainNode.gain.cancelScheduledValues( now );
+        this.mainGainNode.gain.cancelScheduledValues( now );
 
         // Set the output level on the gain node.  A different method is used for instant changes.
         if ( timeConstant === 0 ) {
-          this.masterGainNode.gain.setValueAtTime( outputLevel, now );
+          this.mainGainNode.gain.setValueAtTime( outputLevel, now );
         }
         else {
 
@@ -238,10 +238,10 @@ abstract class SoundGenerator extends Disposable {
           // seem to be scheduled - it's just ignored.  So, if the audio context isn't running, use an alternative
           // approach.  See https://github.com/phetsims/tambo/issues/74.
           if ( this.audioContext.state === 'running' ) {
-            this.masterGainNode.gain.setTargetAtTime( outputLevel, now, timeConstant );
+            this.mainGainNode.gain.setTargetAtTime( outputLevel, now, timeConstant );
           }
           else {
-            this.masterGainNode.gain.linearRampToValueAtTime(
+            this.mainGainNode.gain.linearRampToValueAtTime(
               outputLevel,
               now + soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME
             );

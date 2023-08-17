@@ -106,7 +106,7 @@ class SoundManager extends PhetioObject {
   private readonly soundGeneratorsAwaitingAdd: SoundGeneratorAwaitingAdd[];
 
   // audio nodes that are used in the signal chain between sound generators and the audio context destination
-  private masterGainNode: GainNode | null;
+  private mainGainNode: GainNode | null;
   private convolver: ConvolverNode | null;
   private reverbGainNode: GainNode | null;
   private dryGainNode: GainNode | null;
@@ -145,7 +145,7 @@ class SoundManager extends PhetioObject {
     this.duckingProperties = createObservableArray();
     this.initialized = false;
     this.soundGeneratorsAwaitingAdd = [];
-    this.masterGainNode = null;
+    this.mainGainNode = null;
     this.duckingGainNode = null;
     this.convolver = null;
     this.reverbGainNode = null;
@@ -191,8 +191,8 @@ class SoundManager extends PhetioObject {
     this.duckingGainNode.connect( dynamicsCompressor );
 
     // Create the master gain node for all sounds managed by this sonification manager.
-    this.masterGainNode = phetAudioContext.createGain();
-    this.masterGainNode.connect( this.duckingGainNode );
+    this.mainGainNode = phetAudioContext.createGain();
+    this.mainGainNode.connect( this.duckingGainNode );
 
     // Set up a convolver node, which will be used to create the reverb effect.
     this.convolver = phetAudioContext.createConvolver();
@@ -206,7 +206,7 @@ class SoundManager extends PhetioObject {
 
     // gain node that will control the reverb level
     this.reverbGainNode = phetAudioContext.createGain();
-    this.reverbGainNode.connect( this.masterGainNode );
+    this.reverbGainNode.connect( this.mainGainNode );
     this.reverbGainNode.gain.setValueAtTime( this._reverbLevel, phetAudioContext.currentTime );
     this.convolver.connect( this.reverbGainNode );
 
@@ -217,7 +217,7 @@ class SoundManager extends PhetioObject {
       1 - this._reverbLevel,
       phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
     );
-    this.dryGainNode.connect( this.masterGainNode );
+    this.dryGainNode.connect( this.mainGainNode );
 
     // Create and hook up gain nodes for each of the defined categories.
     assert && assert( this.convolver !== null && this.dryGainNode !== null, 'some audio nodes have not been initialized' );
@@ -245,7 +245,7 @@ class SoundManager extends PhetioObject {
         const gain = fullyEnabled ? this._masterOutputLevel : 0;
 
         // Set the gain, but somewhat gradually in order to avoid rapid transients, which can sound like clicks.
-        this.masterGainNode!.gain.linearRampToValueAtTime(
+        this.mainGainNode!.gain.linearRampToValueAtTime(
           gain,
           phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
         );
@@ -556,7 +556,7 @@ class SoundManager extends PhetioObject {
 
     this._masterOutputLevel = level;
     if ( this.enabledProperty.value ) {
-      this.masterGainNode!.gain.linearRampToValueAtTime(
+      this.mainGainNode!.gain.linearRampToValueAtTime(
         level,
         phetAudioContext.currentTime + LINEAR_GAIN_CHANGE_TIME
       );
@@ -737,8 +737,8 @@ class SoundManager extends PhetioObject {
    * @param duration - in seconds
    */
   public logMasterGain( duration: number ): void {
-    if ( this.masterGainNode ) {
-      this.logGain( this.masterGainNode, duration );
+    if ( this.mainGainNode ) {
+      this.logGain( this.mainGainNode, duration );
     }
   }
 

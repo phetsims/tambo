@@ -56,7 +56,7 @@ class OscillatorSoundGenerator extends SoundGenerator {
       this.oscillatorNode = phetAudioContext.createOscillator();
       this.oscillatorNode.type = this.waveformType;
       this.oscillatorNode.frequency.setValueAtTime( this.frequency, phetAudioContext.currentTime );
-      this.oscillatorNode.connect( this.masterGainNode );
+      this.oscillatorNode.connect( this.mainGainNode );
       this.oscillatorNode.start();
     }
   }
