@@ -273,7 +273,7 @@ class SoundClip extends SoundGenerator {
    * Set the playback rate.  Based on the way this SoundClip was created, this may or may not affect in-progress sounds.
    */
   public setPlaybackRate( playbackRate: number, timeConstant: number = DEFAULT_TC ): void {
-    assert && assert( playbackRate > 0 );
+    assert && assert( playbackRate > 0, 'invalid playback rate: ' + playbackRate );
     if ( this.rateChangesAffectPlayingSounds ) {
       const now = this.audioContext.currentTime;
       this.activeBufferSources.forEach( bufferSource => {
