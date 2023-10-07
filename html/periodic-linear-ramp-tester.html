@@ -103,8 +103,8 @@
   }
 
   // hook up a listener to the button that will play a sound
-  var button = document.getElementById( 'startStopButton' );
-  button.addEventListener( 'click', function() {
+  const button = document.getElementById( 'startStopButton' );
+  button.addEventListener( 'click', ()=> {
 
     if ( playing ) {
       stopOscillator();

@@ -53,13 +53,13 @@
     logMessage( 'when oscillator started, gainNode.gain.value = ' + gainNode.gain.value );
 
     // read and log the gain again after a delay
-    window.setTimeout( function() {
+    window.setTimeout( () => {
       logMessage( 'after delay, gainNode.gain.value = ' + gainNode.gain.value );
     }, 1000 );
   }
 
   // hook up a listener to the button that will play a sound
-  goButton.addEventListener( "click", function() {
+  goButton.addEventListener( 'click', () => {
 
     clearLog();
 
