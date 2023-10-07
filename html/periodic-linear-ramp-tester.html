@@ -32,7 +32,7 @@
   let timerInterval;
 
   // get a reference to the text area where the logging will occur
-  var logArea = document.getElementById( 'log' );
+  const logArea = document.getElementById( 'log' );
 
   // function to log a message
   function logMessage( message ) {
@@ -104,7 +104,7 @@
 
   // hook up a listener to the button that will play a sound
   var button = document.getElementById( 'startStopButton' );
-  button.addEventListener( "click", function() {
+  button.addEventListener( 'click', function() {
 
     if ( playing ) {
       stopOscillator();
