@@ -20,6 +20,7 @@ import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import Range from '../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
+import soundConstants from '../soundConstants.js';
 
 type SelfOptions = {
 
@@ -44,6 +45,10 @@ type SelfOptions = {
   // If provided, this is used to prevent sound from being played during a reset, since the value of the provided
   // Property will often change then, and sound generation may not be desired.
   resetInProgressProperty?: BooleanProperty | null;
+
+  // If true, we will stop() when the sound is disabled. The stop uses the DEFAULT_LINEAR_GAIN_CHANGE_TIME as its delay
+  // to match the fullyEnabledProperty link logic in SoundGenerator.
+  stopOnDisabled?: boolean;
 };
 export type ContinuousPropertySoundGeneratorOptions = SelfOptions & SoundClipOptions;
 
@@ -89,7 +94,8 @@ class ContinuousPropertySoundGenerator extends SoundClip {
       delayBeforeStop: 0.1,
       playbackRateSpanOctaves: 2,
       playbackRateCenterOffset: 0,
-      resetInProgressProperty: null
+      resetInProgressProperty: null,
+      stopOnDisabled: false
     }, providedOptions );
 
     super( sound, options );
@@ -124,6 +130,12 @@ class ContinuousPropertySoundGenerator extends SoundClip {
       }
     };
     property.lazyLink( listener );
+
+    if ( options.stopOnDisabled ) {
+      this.fullyEnabledProperty.lazyLink( enabled => {
+        !enabled && this.stop( soundConstants.DEFAULT_LINEAR_GAIN_CHANGE_TIME );
+      } );
+    }
 
     // dispose function
     this.disposeContinuousPropertySoundGenerator = () => property.unlink( listener );
