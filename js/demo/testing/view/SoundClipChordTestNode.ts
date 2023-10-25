@@ -3,7 +3,7 @@
 /**
  * Test and demo of the SoundClipChord.
  *
- * @author Michael Kauzamann (PhET Interactive Simulations)
+ * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
