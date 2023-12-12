@@ -38,6 +38,7 @@ Before using this for the first time, it is highly recommended that a developer 
   the code base for example usages.
 - [ ] Add any behavior for any common-UI sound generation that is different from the default behavior. This is done by
   creating a `SoundPlayer` (often a `SoundClip` instance) and passing it in as an option for the sound player.
+  See [Adding sound to common code](./adding-sound-to-common-code.md) if sound is not yet supported. 
 - [ ] Decide whether to have a separate "sound view" or to use the existing `ScreenView` files. Both approaches have
   been used, and both are legit, and it probably depends on how much sound generation is needed and whether adding it
   all to the `ScreenView` file(s) is likely to make the file too large and/or difficult to maintain. As of this writing,
