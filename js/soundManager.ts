@@ -11,6 +11,8 @@
  *  - a shared reverb unit to add some spatialization and make all sounds seem to originate with the same space
  *
  *  The singleton object must be initialized before sound generators can be added.
+ *
+ *  @author John Blanco (PhET Interactive Simulations)
  */
 
 import BooleanProperty from '../../axon/js/BooleanProperty.js';

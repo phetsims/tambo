@@ -2,6 +2,8 @@
 
 /**
  * main file for the tambo library demo and test harness
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Property from '../../axon/js/Property.js';

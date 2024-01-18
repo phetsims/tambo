@@ -2,6 +2,8 @@
 
 /**
  * a Scenery node that represents a ball in the view
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Vector2 from '../../../../../dot/js/Vector2.js';

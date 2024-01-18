@@ -2,6 +2,8 @@
 
 /**
  * BoxOfBalls is a model of a box containing moving balls that bounce off the walls.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import createObservableArray, { ObservableArray } from '../../../../../axon/js/createObservableArray.js';

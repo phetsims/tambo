@@ -2,6 +2,8 @@
 
 /**
  * simple model of a ball
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import Emitter from '../../../../../axon/js/Emitter.js';

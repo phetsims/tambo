@@ -2,6 +2,8 @@
 
 /**
  * a singleton object with functions for analyzing and manipulating sound data
+ *
+ * @author John Blanco (PhET Interactive Simulations)
  */
 
 import tambo from './tambo.js';
