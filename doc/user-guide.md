@@ -186,6 +186,15 @@ support, then perhaps elevate the priority of https://github.com/phetsims/sun/is
 are still cases where sonification or sound based on Properties is valuable, required, and preferred. Use your
 best judgment!
 
+### Sounds that play when reaching the edge of a space
+
+With regard to keyboard interaction, when hitting the "boundary" or "edge" of a space, either 2d or 1d, it is best to
+give a small edge "boop", like `generalBoundaryBoopSoundPlayer`. It is a PhET convention that this repeats each time the
+user moves in the edge direction, even if the value doesn't change because they are already at the edge. For example
+Center and Variability's soccer ball GroupSortInteraction or the hands in Ratio and Proportion. Other sims do not follow
+this precedent, like Fourier Making Waves sliders, but in general there should be a good reason not to follow this
+design.
+
 # A Word About Browser Autoplay Policies
 
 TODO: Fill this in.
