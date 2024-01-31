@@ -170,7 +170,21 @@ tambo generator and selecting "Options" from the PhET menu.
 
 TODO: Fill this in.
 
-+ Properties wired up to trigger sounds.
+### Is it better to wire up sounds based on input events or Property changes?
+
+In general, it is easiest and best to update based on input. This helps prevent sound from playing when we don't want it
+to. Here are some cases that may be challenging when sound plays from Properties instead of input events:
+
+* When the internal model of a sim changes without user input.
+* During reset: reset all, scene reset, or individual Property reset. Even though the reset all button is set up to
+  silence sounds, there can still be a tail on longer sounds that can last longer than the reset firing.
+* During PhET-iO state setting. This operation acts almost entirely on Properties, and can change the sim in ways
+  that are not possible in PhET brand interactions.
+
+As a result, it is best to listener to input directly. If you find that a common code component doesn't allow for this
+support, then perhaps elevate the priority of https://github.com/phetsims/sun/issues/701. Note that there
+are still cases where sonification or sound based on Properties is valuable, required, and preferred. Use your
+best judgment!
 
 # A Word About Browser Autoplay Policies
 
