@@ -4,7 +4,7 @@
  * ContinuousPropertySoundGenerator is a sound generator that alters the playback rate of a sound clip based on the
  * value of a continuous numerical Property.  It is specifically designed to work with sound clips and does not support
  * other types of sound production, such as oscillators.  It is implemented such that the sound fades in when changes
- * occur in the Property's value and fades out out when the value doesn't change for some (configurable) amount of time.
+ * occur in the Property's value and fades out when the value doesn't change for some (configurable) amount of time.
  * This was generalized from GRAVITY_FORCE_LAB_BASICS/ForceSoundGenerator, see
  * https://github.com/phetsims/tambo/issues/76.
  *
