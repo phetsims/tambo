@@ -126,13 +126,13 @@ class SoundManager extends PhetioObject {
                            'its children can be ignored.'
     } );
 
-    this.enabledProperty = new BooleanProperty( phet.chipper.queryParameters.supportsSound, {
+    this.enabledProperty = new BooleanProperty( phet?.chipper?.queryParameters?.supportsSound || false, {
       tandem: tandem?.createTandem( 'enabledProperty' ),
       phetioState: false, // This is a preference, global sound control is handled by the audioManager
       phetioDocumentation: 'Determines whether sound is enabled. Supported only if this sim supportsSound=true.'
     } );
 
-    this.extraSoundEnabledProperty = new BooleanProperty( phet.chipper.queryParameters.extraSoundInitiallyEnabled, {
+    this.extraSoundEnabledProperty = new BooleanProperty( phet?.chipper?.queryParameters?.extraSoundInitiallyEnabled || false, {
       tandem: tandem?.createTandem( 'extraSoundEnabledProperty' ),
       phetioState: false, // This is a preference, global sound control is handled by the audioManager
       phetioDocumentation: 'Determines whether extra sound is enabled. Extra sound is additional sounds that ' +
