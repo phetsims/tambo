@@ -29,6 +29,7 @@ import nullSoundPlayer from '../shared-sound-players/nullSoundPlayer.js';
 import tambo from '../tambo.js';
 import SoundClip from './SoundClip.js';
 import SoundClipPlayer from './SoundClipPlayer.js';
+import { Disposable, DisposableOptions, TinyProperty, TReadOnlyProperty } from '../../../axon/js/imports.js';
 
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary
@@ -59,7 +60,7 @@ const STUB_SOUND_PLAYER_FUNCTION = (): void => {
   assert && assert( false, 'Code error: This is a stubbed function and should never be invoked.' );
 };
 
-export type ValueChangeSoundPlayerOptions = {
+type SelfOptions = {
 
   // The sound player for movement in the middle of the range in the up direction.
   middleMovingUpSoundPlayer?: TSoundPlayer | SoundClip;
@@ -104,13 +105,15 @@ export type ValueChangeSoundPlayerOptions = {
   minimumInterMiddleSoundTime?: number;
 };
 
-class ValueChangeSoundPlayer {
+export type ValueChangeSoundPlayerOptions = SelfOptions & DisposableOptions;
+
+class ValueChangeSoundPlayer extends Disposable {
 
   // The distance between the threshold values at which sounds will be played.
-  private readonly interThresholdDistance: number;
+  private interThresholdDistance: number = DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS;
 
   // range of values that this should expect to handle
-  private readonly valueRange: Range;
+  private readonly valueRangeProperty: TReadOnlyProperty<Range>;
 
   // sound player for movement in the middle of the range (i.e. not at min or max) and moving up
   private readonly middleMovingUpSoundPlayer: TSoundPlayer | SoundClip;
@@ -142,9 +145,9 @@ class ValueChangeSoundPlayer {
    * @param valueRange - the range of values expected and over which sounds will be played
    * @param [providedOptions]
    */
-  public constructor( valueRange: Range, providedOptions?: ValueChangeSoundPlayerOptions ) {
+  public constructor( valueRange: Range | TReadOnlyProperty<Range>, providedOptions?: ValueChangeSoundPlayerOptions ) {
 
-    const options = optionize<ValueChangeSoundPlayerOptions>()( {
+    const options = optionize<ValueChangeSoundPlayerOptions, SelfOptions, DisposableOptions>()( {
       middleMovingUpSoundPlayer: generalSoftClickSoundPlayer,
       middleMovingDownSoundPlayer: DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER,
       middleMovingUpPlaybackRateMapper: NO_PLAYBACK_RATE_CHANGE,
@@ -191,18 +194,9 @@ class ValueChangeSoundPlayer {
       options.numberOfMiddleThresholds = DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS;
     }
 
-    if ( options.numberOfMiddleThresholds !== null ) {
-      this.interThresholdDistance = valueRange.getLength() / ( options.numberOfMiddleThresholds + 1 );
-    }
-    else if ( options.interThresholdDelta !== null ) {
-      this.interThresholdDistance = options.interThresholdDelta;
-    }
-    else {
-      assert && assert( false, 'should never get here, it is a logic error if we do' );
-      this.interThresholdDistance = valueRange.getLength() / 2; // avoid uninitialized compile-time error
-    }
+    super( options );
 
-    this.valueRange = valueRange;
+    this.valueRangeProperty = valueRange instanceof Range ? new TinyProperty( valueRange ) : valueRange;
     this.middleMovingUpSoundPlayer = options.middleMovingUpSoundPlayer;
     this.middleMovingDownSoundPlayer = options.middleMovingDownSoundPlayer;
     this.middleMovingUpPlaybackRateMapper = options.middleMovingUpPlaybackRateMapper;
@@ -212,6 +206,25 @@ class ValueChangeSoundPlayer {
     this.minimumInterMiddleSoundTime = options.minimumInterMiddleSoundTime;
     this.timeOfMostRecentMiddleSound = 0;
     this.constrainValue = options.constrainValue;
+
+    // No need to dispose. Sound generators do not get disposed.
+    const rangeChangeListener = ( valueRange: Range ) => {
+      if ( options.numberOfMiddleThresholds !== null ) {
+        this.interThresholdDistance = valueRange.getLength() / ( options.numberOfMiddleThresholds + 1 );
+      }
+      else if ( options.interThresholdDelta !== null ) {
+        this.interThresholdDistance = options.interThresholdDelta;
+      }
+      else {
+        assert && assert( false, 'should never get here, it is a logic error if we do' );
+        this.interThresholdDistance = valueRange.getLength() / 2; // avoid uninitialized compile-time error
+      }
+    };
+    this.valueRangeProperty.link( rangeChangeListener );
+
+    this.disposeEmitter.addListener( () => {
+      this.valueRangeProperty.unlink( rangeChangeListener );
+    } );
   }
 
   /**
@@ -254,8 +267,8 @@ class ValueChangeSoundPlayer {
 
       if ( thresholdCrossed ||
            thresholdReached ||
-           constrainedNewValue === this.valueRange.min ||
-           constrainedNewValue === this.valueRange.max
+           constrainedNewValue === this.valueRangeProperty.value.min ||
+           constrainedNewValue === this.valueRangeProperty.value.max
       ) {
         this.playSoundForValueChange( newValue, oldValue );
       }
@@ -270,12 +283,15 @@ class ValueChangeSoundPlayer {
     const constrainedNewValue = this.constrainValue( newValue );
     const constrainedOldValue = this.constrainValue( oldValue );
     if ( constrainedNewValue !== constrainedOldValue ||
-         ( oldValue !== newValue && ( newValue === this.valueRange.min || newValue === this.valueRange.max ) ) ) {
+         ( oldValue !== newValue && ( newValue === this.valueRangeProperty.value.min ||
+                                      newValue === this.valueRangeProperty.value.max ) ) ) {
 
-      if ( newValue === this.valueRange.min && this.minSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND ) {
+      if ( newValue === this.valueRangeProperty.value.min &&
+           this.minSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND ) {
         this.minSoundPlayer.play();
       }
-      else if ( newValue === this.valueRange.max && this.maxSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND ) {
+      else if ( newValue === this.valueRangeProperty.value.max &&
+                this.maxSoundPlayer !== ValueChangeSoundPlayer.USE_MIDDLE_SOUND ) {
         this.maxSoundPlayer.play();
       }
       else {
@@ -323,11 +339,12 @@ class ValueChangeSoundPlayer {
     const roundingInterval = 1E-7;
 
     const segment = Math.floor(
-      Utils.roundToInterval( ( value - this.valueRange.min ) / this.interThresholdDistance, roundingInterval )
+      Utils.roundToInterval( ( value - this.valueRangeProperty.value.min ) / this.interThresholdDistance,
+        roundingInterval )
     );
 
     const lowerThreshold = Utils.roundToInterval(
-      segment * this.interThresholdDistance + this.valueRange.min,
+      segment * this.interThresholdDistance + this.valueRangeProperty.value.min,
       roundingInterval
     );
     const thresholdArray = [ lowerThreshold ];
@@ -337,7 +354,7 @@ class ValueChangeSoundPlayer {
       // threshold, add the upper one now.
       const upperThreshold = Math.min(
         Utils.roundToInterval( lowerThreshold + this.interThresholdDistance, roundingInterval ),
-        this.valueRange.max
+        this.valueRangeProperty.value.max
       );
 
       // This may seem like an odd test, so here's the story: There are some rare but possible cases where the
