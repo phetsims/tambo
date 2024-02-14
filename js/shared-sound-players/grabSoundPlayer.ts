@@ -1,4 +1,4 @@
-// Copyright 2019-2022, University of Colorado Boulder
+// Copyright 2019-2024, University of Colorado Boulder
 
 /**
  * shared sound generator for picking something up, uses the singleton pattern

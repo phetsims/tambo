@@ -1,4 +1,4 @@
-// Copyright 2022-2023, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * ValueChangeSoundPlayer plays sounds based on changes to a numerical value.  It was initially created for supporting
