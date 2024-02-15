@@ -45,8 +45,8 @@ class ContinuousPropertySoundClipTestNode extends VBox {
       const range = new Range( 1, 10 );
       const continuousPropertySoundClip = new ContinuousPropertySoundClip(
         numberProperty,
-        sound,
-        range
+        range,
+        sound
       );
       soundManager.addSoundGenerator( continuousPropertySoundClip );
       const isOscillatingProperty = new BooleanProperty( false );

@@ -69,14 +69,14 @@ class ContinuousPropertySoundClip extends SoundClip {
 
   /**
    * @param property
-   * @param sound - returned by the import directive, should be optimized for good continuous looping, which
-   * may require it to be a .wav file, since .mp3 files generally have a bit of silence at the beginning.
    * @param range - the range of values that the provided property can take on
+   * @param sound - returned by the import directive, should be optimized for good continuous looping, which
+   *   may require it to be a .wav file, since .mp3 files generally have a bit of silence at the beginning.
    * @param [providedOptions]
    */
   public constructor( property: TReadOnlyProperty<number>,
-                      sound: WrappedAudioBuffer,
                       range: Range,
+                      sound: WrappedAudioBuffer,
                       providedOptions?: ContinuousPropertySoundClipOptions ) {
 
     assert && assert(
