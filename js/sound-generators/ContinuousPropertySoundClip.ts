@@ -1,7 +1,7 @@
 // Copyright 2019-2024, University of Colorado Boulder
 
 /**
- * ContinuousPropertySoundGenerator is a sound generator that alters the playback rate of a sound clip based on the
+ * ContinuousPropertySoundClip is a sound generator that alters the playback rate of a sound clip based on the
  * value of a continuous numerical Property.  It is specifically designed to work with sound clips and does not support
  * other types of sound production, such as oscillators.  It is implemented such that the sound fades in when changes
  * occur in the Property's value and fades out when the value doesn't change for some (configurable) amount of time.
@@ -49,9 +49,9 @@ type SelfOptions = {
   // to match the fullyEnabledProperty link logic in SoundGenerator.
   stopOnDisabled?: boolean;
 };
-export type ContinuousPropertySoundGeneratorOptions = SelfOptions & SoundClipOptions;
+export type ContinuousPropertySoundClipOptions = SelfOptions & SoundClipOptions;
 
-class ContinuousPropertySoundGenerator extends SoundClip {
+class ContinuousPropertySoundClip extends SoundClip {
 
   // duration of inactivity fade out
   private readonly fadeTime: number;
@@ -65,7 +65,7 @@ class ContinuousPropertySoundGenerator extends SoundClip {
   // countdown time used for fade out
   private remainingFadeTime: number;
 
-  private readonly disposeContinuousPropertySoundGenerator: () => void;
+  private readonly disposeContinuousPropertySoundClip: () => void;
 
   /**
    * @param property
@@ -77,14 +77,14 @@ class ContinuousPropertySoundGenerator extends SoundClip {
   public constructor( property: TReadOnlyProperty<number>,
                       sound: WrappedAudioBuffer,
                       range: Range,
-                      providedOptions?: ContinuousPropertySoundGeneratorOptions ) {
+                      providedOptions?: ContinuousPropertySoundClipOptions ) {
 
     assert && assert(
       !providedOptions || !providedOptions.loop,
-      'loop option should be supplied by ContinuousPropertySoundGenerator'
+      'loop option should be supplied by ContinuousPropertySoundClip'
     );
 
-    const options = optionize<ContinuousPropertySoundGeneratorOptions, SelfOptions, SoundClipOptions>()( {
+    const options = optionize<ContinuousPropertySoundClipOptions, SelfOptions, SoundClipOptions>()( {
       initialOutputLevel: 0.7,
       loop: true,
       trimSilence: true,
@@ -138,11 +138,11 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     }
 
     // dispose function
-    this.disposeContinuousPropertySoundGenerator = () => property.unlink( listener );
+    this.disposeContinuousPropertySoundClip = () => property.unlink( listener );
   }
 
   public override dispose(): void {
-    this.disposeContinuousPropertySoundGenerator();
+    this.disposeContinuousPropertySoundClip();
     super.dispose();
   }
 
@@ -177,6 +177,6 @@ class ContinuousPropertySoundGenerator extends SoundClip {
   }
 }
 
-tambo.register( 'ContinuousPropertySoundGenerator', ContinuousPropertySoundGenerator );
+tambo.register( 'ContinuousPropertySoundClip', ContinuousPropertySoundClip );
 
-export default ContinuousPropertySoundGenerator;
+export default ContinuousPropertySoundClip;

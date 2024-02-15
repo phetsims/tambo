@@ -31,7 +31,7 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
 import CompositeSoundClipTestNode from './CompositeSoundClipTestNode.js';
-import ContinuousPropertySoundGeneratorTestNode from './ContinuousPropertySoundGeneratorTestNode.js';
+import ContinuousPropertySoundClipTestNode from './ContinuousPropertySoundClipTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
 import SoundClipChordTestNode from './SoundClipChordTestNode.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
@@ -73,8 +73,8 @@ class TestingScreenView extends DemosScreenView {
         } )
       },
       {
-        label: 'ContinuousPropertySoundGeneratorTest',
-        createNode: ( layoutBounds: Bounds2 ) => new ContinuousPropertySoundGeneratorTestNode( this.stepEmitter, {
+        label: 'ContinuousPropertySoundClipTest',
+        createNode: ( layoutBounds: Bounds2 ) => new ContinuousPropertySoundClipTestNode( this.stepEmitter, {
           center: layoutBounds.center
         } )
       },

@@ -31,7 +31,7 @@ import './shared-sound-players/toggleOffSoundPlayer.js';
 import './shared-sound-players/toggleOnSoundPlayer.js';
 
 import './sound-generators/CompositeSoundClip.js';
-import './sound-generators/ContinuousPropertySoundGenerator.js';
+import './sound-generators/ContinuousPropertySoundClip.js';
 import './sound-generators/DiscreteSoundGenerator.js';
 import './sound-generators/MultiClip.js';
 import './sound-generators/NoiseGenerator.js';

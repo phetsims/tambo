@@ -1,7 +1,7 @@
 // Copyright 2020-2022, University of Colorado Boulder
 
 /**
- * Test and demo of the ContinuousPropertySoundGenerator.
+ * Test and demo of the ContinuousPropertySoundClip.
  *
  * @author Sam Reid (PhET Interactive Simulations)
  * @author John Blanco (PhET Interactive Simulations)
@@ -19,7 +19,7 @@ import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220H
 import stringsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/stringsLoopMiddleCOscilloscope_mp3.js';
 import windsLoopC3Oscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopC3Oscilloscope_mp3.js';
 import windsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopMiddleCOscilloscope_mp3.js';
-import ContinuousPropertySoundGenerator from '../../../sound-generators/ContinuousPropertySoundGenerator.js';
+import ContinuousPropertySoundClip from '../../../sound-generators/ContinuousPropertySoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import WrappedAudioBuffer from '../../../WrappedAudioBuffer.js';
@@ -27,35 +27,35 @@ import { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
 import TEmitter from '../../../../../axon/js/TEmitter.js';
 
 type SelfOptions = EmptySelfOptions;
-export type ContinuousPropertySoundGeneratorTestNodeOptions = SelfOptions & VBoxOptions;
+export type ContinuousPropertySoundClipTestNodeOptions = SelfOptions & VBoxOptions;
 
-class ContinuousPropertySoundGeneratorTestNode extends VBox {
+class ContinuousPropertySoundClipTestNode extends VBox {
 
   // dispose function
-  private readonly disposeContinuousPropertySoundGeneratorTestNode: () => void;
+  private readonly disposeContinuousPropertySoundClipTestNode: () => void;
 
-  public constructor( stepEmitter: TEmitter<[ number ]>, providedOptions?: ContinuousPropertySoundGeneratorTestNodeOptions ) {
+  public constructor( stepEmitter: TEmitter<[ number ]>, providedOptions?: ContinuousPropertySoundClipTestNodeOptions ) {
 
     // keep track of listeners added to the step emitter so that they can be disposed
     const stepListeners: ( ( dt: number ) => void )[] = [];
 
-    // creates a panel that demonstrates a ContinuousPropertySoundGenerator
+    // creates a panel that demonstrates a ContinuousPropertySoundClip
     const createTester = ( sound: WrappedAudioBuffer, max: number ) => {
       const numberProperty = new NumberProperty( 5 );
       const range = new Range( 1, 10 );
-      const continuousPropertySoundGenerator = new ContinuousPropertySoundGenerator(
+      const continuousPropertySoundClip = new ContinuousPropertySoundClip(
         numberProperty,
         sound,
         range
       );
-      soundManager.addSoundGenerator( continuousPropertySoundGenerator );
+      soundManager.addSoundGenerator( continuousPropertySoundClip );
       const isOscillatingProperty = new BooleanProperty( false );
       let phase = 0;
       const stepListener = ( dt: number ) => {
         if ( isOscillatingProperty.value ) {
           numberProperty.value = ( max * Math.sin( Date.now() / 1000 - phase ) + 1 ) * ( range.max - range.min ) / 2 + range.min;
         }
-        continuousPropertySoundGenerator.step( dt );
+        continuousPropertySoundClip.step( dt );
       };
       stepEmitter.addListener( stepListener );
       stepListeners.push( stepListener );
@@ -86,7 +86,7 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
     }, providedOptions ) );
 
     // define dispose function for memory cleanup
-    this.disposeContinuousPropertySoundGeneratorTestNode = () => {
+    this.disposeContinuousPropertySoundClipTestNode = () => {
       stepListeners.forEach( listener => {
         stepEmitter.removeListener( listener );
       } );
@@ -97,10 +97,10 @@ class ContinuousPropertySoundGeneratorTestNode extends VBox {
    * Release references to avoid memory leaks.
    */
   public override dispose(): void {
-    this.disposeContinuousPropertySoundGeneratorTestNode();
+    this.disposeContinuousPropertySoundClipTestNode();
     super.dispose();
   }
 }
 
-tambo.register( 'ContinuousPropertySoundGeneratorTestNode', ContinuousPropertySoundGeneratorTestNode );
-export default ContinuousPropertySoundGeneratorTestNode;
+tambo.register( 'ContinuousPropertySoundClipTestNode', ContinuousPropertySoundClipTestNode );
+export default ContinuousPropertySoundClipTestNode;
