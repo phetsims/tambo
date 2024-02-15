@@ -207,7 +207,6 @@ class ValueChangeSoundPlayer extends Disposable {
     this.timeOfMostRecentMiddleSound = 0;
     this.constrainValue = options.constrainValue;
 
-    // No need to dispose. Sound generators do not get disposed.
     const rangeChangeListener = ( valueRange: Range ) => {
       if ( options.numberOfMiddleThresholds !== null ) {
         this.interThresholdDistance = valueRange.getLength() / ( options.numberOfMiddleThresholds + 1 );
