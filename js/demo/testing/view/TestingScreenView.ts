@@ -16,7 +16,7 @@ import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Image, Node, NodeOptions, Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
-import DemosScreenView, { SunDemo } from '../../../../../sun/js/demo/DemosScreenView.js';
+import DemosScreenView, { DemoItemData } from '../../../../../sun/js/demo/DemosScreenView.js';
 import Panel from '../../../../../sun/js/Panel.js';
 import lightning_png from '../../../../images/lightning_png.js';
 import checkboxChecked_mp3 from '../../../../sounds/checkboxChecked_mp3.js';
@@ -38,6 +38,7 @@ import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import { TimerListener } from '../../../../../axon/js/Timer.js';
 import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
 import TEmitter from '../../../../../axon/js/TEmitter.js';
+import tamboQueryParameters from '../../tamboQueryParameters.js';
 
 // constants
 const CHECKBOX_SIZE = 16;
@@ -52,8 +53,13 @@ class TestingScreenView extends DemosScreenView {
 
     const resetInProgressProperty = new BooleanProperty( false );
 
+    // step emitter, needed by some of the demos
+    const stepEmitter = new Emitter<[ number ]>( {
+      parameters: [ { valueType: 'number' } ]
+    } );
+
     // demo items, selected via the combo box in the parent class
-    const demos: SunDemo[] = [
+    const demos: DemoItemData[] = [
       {
         label: 'AmplitudeModulatorTest',
         createNode: ( layoutBounds: Bounds2 ) => new AmplitudeModulatorDemoNode( {
@@ -74,7 +80,7 @@ class TestingScreenView extends DemosScreenView {
       },
       {
         label: 'ContinuousPropertySoundClipTest',
-        createNode: ( layoutBounds: Bounds2 ) => new ContinuousPropertySoundClipTestNode( this.stepEmitter, {
+        createNode: ( layoutBounds: Bounds2 ) => new ContinuousPropertySoundClipTestNode( stepEmitter, {
           center: layoutBounds.center
         } )
       },
@@ -104,12 +110,11 @@ class TestingScreenView extends DemosScreenView {
       }
     ];
 
-    super( demos );
-
-    // step emitter, needed by some of the demos
-    this.stepEmitter = new Emitter( {
-      parameters: [ { valueType: 'number' } ]
+    super( demos, {
+      selectedDemoLabel: tamboQueryParameters.component
     } );
+
+    this.stepEmitter = stepEmitter;
 
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
