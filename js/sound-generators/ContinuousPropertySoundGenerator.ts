@@ -8,6 +8,10 @@
  * This was generalized from GRAVITY_FORCE_LAB_BASICS/ForceSoundGenerator, see
  * https://github.com/phetsims/tambo/issues/76.
  *
+ * NOTE: This SoundClip is inherently tied to a Properties changes instead of user input. This can lead to undesirable
+ * situations where this can play based on internal model changes and not from user interaction (the best example of this
+ * is during reset). Please make sure to use `enableControlProperties` to silence sound during these cases (like model reset!)
+ *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Sam Reid (PhET Interactive Simulations)
  */
@@ -20,7 +24,6 @@ import Range from '../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 import soundConstants from '../soundConstants.js';
-import { DerivedProperty, TinyProperty } from '../../../axon/js/imports.js';
 
 type SelfOptions = {
 
@@ -41,10 +44,6 @@ type SelfOptions = {
   // This offset is added to the calculated playback rate, so a value of 1 would move the range up an octave, -1 would
   // move it down an octave, 0.5 would move it up a perfect fifth, etc.
   playbackRateCenterOffset?: number;
-
-  // If provided, this is used to prevent sound from being played during a reset, since the value of the provided
-  // Property will often change then, and sound generation may not be desired.
-  resetInProgressProperty?: TReadOnlyProperty<boolean>;
 
   // If true, we will stop() when the sound is disabled. The stop uses the DEFAULT_LINEAR_GAIN_CHANGE_TIME as its delay
   // to match the fullyEnabledProperty link logic in SoundGenerator.
@@ -95,11 +94,8 @@ class ContinuousPropertySoundGenerator extends SoundClip {
       playbackRateSpanOctaves: 2,
       playbackRateCenterOffset: 0,
       enableControlProperties: [],
-      resetInProgressProperty: new TinyProperty( false ),
       stopOnDisabled: false
     }, providedOptions );
-
-    options.enableControlProperties.push( DerivedProperty.not( options.resetInProgressProperty ) );
 
     super( sound, options );
 
