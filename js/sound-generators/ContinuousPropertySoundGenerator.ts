@@ -16,11 +16,11 @@ import tambo from '../tambo.js';
 import SoundClip, { SoundClipOptions } from './SoundClip.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import optionize from '../../../phet-core/js/optionize.js';
-import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import Range from '../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 import soundConstants from '../soundConstants.js';
+import { DerivedProperty, TinyProperty } from '../../../axon/js/imports.js';
 
 type SelfOptions = {
 
@@ -44,7 +44,7 @@ type SelfOptions = {
 
   // If provided, this is used to prevent sound from being played during a reset, since the value of the provided
   // Property will often change then, and sound generation may not be desired.
-  resetInProgressProperty?: BooleanProperty | null;
+  resetInProgressProperty?: TReadOnlyProperty<boolean>;
 
   // If true, we will stop() when the sound is disabled. The stop uses the DEFAULT_LINEAR_GAIN_CHANGE_TIME as its delay
   // to match the fullyEnabledProperty link logic in SoundGenerator.
@@ -94,9 +94,12 @@ class ContinuousPropertySoundGenerator extends SoundClip {
       delayBeforeStop: 0.1,
       playbackRateSpanOctaves: 2,
       playbackRateCenterOffset: 0,
-      resetInProgressProperty: null,
+      enableControlProperties: [],
+      resetInProgressProperty: new TinyProperty( false ),
       stopOnDisabled: false
     }, providedOptions );
+
+    options.enableControlProperties.push( DerivedProperty.not( options.resetInProgressProperty ) );
 
     super( sound, options );
 
@@ -111,8 +114,9 @@ class ContinuousPropertySoundGenerator extends SoundClip {
     // function for starting the sound or adjusting the volume
     const listener = ( value: number ) => {
 
-      // Update the sound generation when the value changes.
-      if ( !options.resetInProgressProperty || !options.resetInProgressProperty.value ) {
+      // Update the sound generation when the value changes, but only if we enabled. This prevents the play() from
+      // occurring at all.
+      if ( this.fullyEnabled ) {
 
         // calculate the playback rate
         const normalizedValue = Math.log( value / range.min ) / Math.log( range.max / range.min );
