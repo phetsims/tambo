@@ -79,6 +79,8 @@ class ContinuousPropertySoundClip extends SoundClip {
                       sound: WrappedAudioBuffer,
                       providedOptions?: ContinuousPropertySoundClipOptions ) {
 
+    //TODO https://github.com/phetsims/tambo/issues/188 Support range.min === 0
+    assert && assert( range.min !== 0, 'range.min of 0 will result in divide-by-zero error' );
     assert && assert(
       !providedOptions || !providedOptions.loop,
       'loop option should be supplied by ContinuousPropertySoundClip'
