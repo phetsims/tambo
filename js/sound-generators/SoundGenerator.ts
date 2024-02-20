@@ -210,10 +210,16 @@ abstract class SoundGenerator extends Disposable {
   }
 
   /**
-   * Set the output level of the sound generator.
-   * @param outputLevel - generally between 0 and 1, but can be larger than 1 if necessary to amplify a small
-   *                      signal, and can be negative to invert the phase
-   * @param [timeConstant] - time constant for change, longer values mean slower transitions, in seconds
+   * Sets the output level of the sound generator.
+   *
+   * @param outputLevel - generally between 0 and 1, but can be larger than 1 if necessary to amplify a small signal,
+   *   and can be negative to invert the phase.
+   * @param [timeConstant] - time constant for output level change, longer values mean slower transitions, in seconds.
+   *   Note that timeConstant is NOT a fade time. It's an exponential approach to the target output level, and the argument to
+   *   setTargetAtTime, documented at https://developer.mozilla.org/en-US/docs/Web/API/AudioParam/setTargetAtTime#timeconstant
+   *   The document has this suggestion for choosing the value for timeConstant: "Depending on your use case, getting
+   *   95% toward the target value may already be enough; in that case, you could set timeConstant to one third of the
+   *   desired duration."
    */
   public setOutputLevel( outputLevel: number, timeConstant: number = DEFAULT_TIME_CONSTANT ): void {
 
