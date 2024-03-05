@@ -29,7 +29,9 @@ import nullSoundPlayer from '../shared-sound-players/nullSoundPlayer.js';
 import tambo from '../tambo.js';
 import SoundClip from './SoundClip.js';
 import SoundClipPlayer from './SoundClipPlayer.js';
-import { Disposable, DisposableOptions, TinyProperty, TReadOnlyProperty } from '../../../axon/js/imports.js';
+import Disposable, { DisposableOptions } from '../../../axon/js/Disposable.js';
+import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import TinyProperty from '../../../axon/js/TinyProperty.js';
 
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary
