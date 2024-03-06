@@ -24,7 +24,7 @@ import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import WrappedAudioBuffer from '../../../WrappedAudioBuffer.js';
 import { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
-import TEmitter from '../../../../../axon/js/TEmitter.js';
+import { TReadOnlyEmitter } from '../../../../../axon/js/TEmitter.js';
 
 type SelfOptions = EmptySelfOptions;
 export type ContinuousPropertySoundClipTestNodeOptions = SelfOptions & VBoxOptions;
@@ -34,7 +34,7 @@ class ContinuousPropertySoundClipTestNode extends VBox {
   // dispose function
   private readonly disposeContinuousPropertySoundClipTestNode: () => void;
 
-  public constructor( stepEmitter: TEmitter<[ number ]>, providedOptions?: ContinuousPropertySoundClipTestNodeOptions ) {
+  public constructor( stepEmitter: TReadOnlyEmitter<[ number ]>, providedOptions?: ContinuousPropertySoundClipTestNodeOptions ) {
 
     // keep track of listeners added to the step emitter so that they can be disposed
     const stepListeners: ( ( dt: number ) => void )[] = [];
