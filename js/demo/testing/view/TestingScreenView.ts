@@ -38,7 +38,6 @@ import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import { TimerListener } from '../../../../../axon/js/Timer.js';
 import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
 import TEmitter from '../../../../../axon/js/TEmitter.js';
-import tamboQueryParameters from '../../tamboQueryParameters.js';
 
 // constants
 const CHECKBOX_SIZE = 16;
@@ -110,9 +109,7 @@ class TestingScreenView extends DemosScreenView {
       }
     ];
 
-    super( demos, {
-      selectedDemoLabel: tamboQueryParameters.component
-    } );
+    super( demos );
 
     this.stepEmitter = stepEmitter;
 

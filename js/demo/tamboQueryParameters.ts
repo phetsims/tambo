@@ -11,14 +11,7 @@ import tambo from '../tambo.js';
 const NUMBER_OF_GAME_LEVELS = 5;
 export { NUMBER_OF_GAME_LEVELS };
 
-const tamboQueryParameters = QueryStringMachine.getAll( {
-
-  // initial selection on the Components screen, values are the same as the labels on combo box items
-  component: {
-    type: 'string',
-    defaultValue: null
-  }
-} );
+const tamboQueryParameters = QueryStringMachine.getAll( {} );
 
 tambo.register( 'tamboQueryParameters', tamboQueryParameters );
 export default tamboQueryParameters;
