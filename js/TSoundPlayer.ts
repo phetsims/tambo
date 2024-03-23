@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 /**
  * TSoundPlayer defines a simple interface that can be used to support polymorphism when defining options and other
