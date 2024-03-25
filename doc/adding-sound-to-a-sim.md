@@ -2,7 +2,8 @@
 
 This checklist is intended to guide developers through the process of adding sound to a simulation. It is written at a
 fairly high level, and assumes certain knowledge of how the tambo library works and of PhET's development processes.
-Before using this for the first time, it is highly recommended that a developer reads through the Users Guide.
+Before using this for the first time, it is highly recommended that a developer reads through the [User Guide for the
+Tambo Sound Library](https://github.com/phetsims/tambo/blob/main/doc/user-guide.md).
 
 - [ ] Create a sound design document and work with the sound designer(s) to get to the point where enough has been
   worked out that it becomes desirable to start prototyping. For an example, please see
