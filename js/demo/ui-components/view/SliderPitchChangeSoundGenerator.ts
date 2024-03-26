@@ -14,7 +14,6 @@ import Range from '../../../../../dot/js/Range.js';
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-
 class SliderPitchChangeSoundGenerator extends ValueChangeSoundPlayer {
 
   /**
