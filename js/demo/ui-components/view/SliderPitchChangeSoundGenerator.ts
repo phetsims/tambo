@@ -1,4 +1,4 @@
-// Copyright 2022, University of Colorado Boulder
+// Copyright 2022-2024, University of Colorado Boulder
 
 import ValueChangeSoundPlayer from '../../../sound-generators/ValueChangeSoundPlayer.js';
 import tambo from '../../../tambo.js';
