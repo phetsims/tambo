@@ -7,6 +7,7 @@
  */
 
 import tambo from './tambo.js';
+import soundConstants from './soundConstants.js';
 
 // a type that contains information about where the audible sounds begin and end within an audio buffer
 type SoundBounds = {
@@ -19,6 +20,17 @@ type SoundBounds = {
 // number of different encodings.  It may need to be refined over time as we add new sounds.  Or it may work perfectly
 // forever (one can only hope).  See https://github.com/phetsims/tambo/issues/35.
 const AUDIO_DATA_THRESHOLD = 0.05;
+
+// A set of multipliers that can be used as playback rates to create a major scale.
+const MAJOR_SCALE_MULTIPLIERS = [
+  1,
+  Math.pow( soundConstants.TWELFTH_ROOT_OF_TWO, 2 ),
+  Math.pow( soundConstants.TWELFTH_ROOT_OF_TWO, 4 ),
+  Math.pow( soundConstants.TWELFTH_ROOT_OF_TWO, 5 ),
+  Math.pow( soundConstants.TWELFTH_ROOT_OF_TWO, 7 ),
+  Math.pow( soundConstants.TWELFTH_ROOT_OF_TWO, 9 ),
+  Math.pow( soundConstants.TWELFTH_ROOT_OF_TWO, 11 )
+];
 
 /**
  * sound utility object definition
@@ -58,6 +70,19 @@ const SoundUtils = {
       soundStart: _.min( soundStartIndexes )! / sampleRate,
       soundEnd: _.max( soundEndIndexes )! / sampleRate
     };
+  },
+
+  /**
+   * Get a playback rate that can be used to compose a major scale from a pitched sound based on an index.  For example,
+   * if a sound is pitched at middle C, providing a value of 1 to this function and then using this for the playback
+   * rate, the sound would be pitched at the D just above middle C.  Negative values are allowed.  Basically it's like
+   * mapping a major scale to a number line.
+   */
+  getMajorScalePlaybackRate: ( index: number ): number => {
+    const moddedIndex = index % 7;
+    const octave = Math.floor( index / 7 );
+    const octaveMultiplier = Math.pow( 2, octave );
+    return octaveMultiplier * MAJOR_SCALE_MULTIPLIERS[ moddedIndex ];
   }
 };
 
@@ -112,7 +137,7 @@ const findSoundStartIndex = ( soundData: Float32Array, length: number, threshold
  */
 const findSoundEndIndex = ( soundData: Float32Array, length: number, threshold: number ): number => {
 
-  // work backwards from the end of the data to find the first negative occurance of the threshold
+  // work backwards from the end of the data to find the first negative occurrence of the threshold
   let endThresholdIndex = length - 1;
   let found = false;
   let dataIndex;
