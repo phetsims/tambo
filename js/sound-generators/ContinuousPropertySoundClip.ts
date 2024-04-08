@@ -27,9 +27,6 @@ import soundConstants from '../soundConstants.js';
 
 type SelfOptions = {
 
-  // number of octaves that the playback rate will span, larger numbers increase pitch range
-  playbackRateSpanOctaves?: number;
-
   // time to wait before starting fade out if no activity, in seconds
   fadeStartDelay?: number;
 
@@ -39,11 +36,17 @@ type SelfOptions = {
   // amount of time in seconds from full fade to stop of sound, done to avoid sonic glitches
   delayBeforeStop?: number;
 
-  // Center offset of playback rate, positive numbers move the pitch range up, negative numbers move it down, and a
-  // value of zero indicates no offset, so the pitch range will center around the inherent pitch of the source loop.
-  // This offset is added to the calculated playback rate, so a value of 1 would move the range up an octave, -1 would
-  // move it down an octave, 0.5 would move it up a perfect fifth, etc.
-  playbackRateCenterOffset?: number;
+  // This option defines the range of playback rates used when mapping the provided Property value to a pitch.  A value
+  // of 1 indicates the nominal playback rate, 0.5 is half speed (an octave lower), 2 is double speed (an octave
+  // higher).  So, a range of 1 to 2 would go from the nominal playback rate of the sound to one octave higher.  Values
+  // of 0 or less are invalid.
+  playbackRateRange?: Range;
+
+  // The exponent used when mapping a normalized value to a playback rate.  See code for exactly how this is used, but
+  // the basic idea is that a value of 1 (the default) should be used for a linear mapping across the range, a value
+  // above 1 for smaller changes at the lower portion of the range and greater changes towards the top, and a value
+  // below 1 for greater changes in the lower portion of the range and smaller changes towards the top.
+  normalizationMappingExponent?: number;
 
   // If true, we will stop() when the sound is disabled. The stop uses the DEFAULT_LINEAR_GAIN_CHANGE_TIME as its delay
   // to match the fullyEnabledProperty link logic in SoundGenerator.
@@ -79,8 +82,6 @@ class ContinuousPropertySoundClip extends SoundClip {
                       sound: WrappedAudioBuffer,
                       providedOptions?: ContinuousPropertySoundClipOptions ) {
 
-    //TODO https://github.com/phetsims/tambo/issues/188 Support range.min === 0
-    assert && assert( range.min !== 0, 'range.min of 0 will result in divide-by-zero error' );
     assert && assert(
       !providedOptions || !providedOptions.loop,
       'loop option should be supplied by ContinuousPropertySoundClip'
@@ -93,8 +94,8 @@ class ContinuousPropertySoundClip extends SoundClip {
       fadeStartDelay: 0.2,
       fadeTime: 0.15,
       delayBeforeStop: 0.1,
-      playbackRateSpanOctaves: 2,
-      playbackRateCenterOffset: 0,
+      playbackRateRange: new Range( 0.5, 2 ), // 2 octaves, one below and one above the provided sound's inherent pitch
+      normalizationMappingExponent: 1, // linear mapping by default
       enableControlProperties: [],
       stopOnDisabled: false
     }, providedOptions );
@@ -116,11 +117,14 @@ class ContinuousPropertySoundClip extends SoundClip {
       // occurring at all.
       if ( this.fullyEnabled ) {
 
-        // calculate the playback rate
-        const normalizedValue = Math.log( value / range.min ) / Math.log( range.max / range.min );
-        const playbackRate = Math.pow( 2, ( normalizedValue - 0.5 ) * options.playbackRateSpanOctaves ) +
-                             options.playbackRateCenterOffset;
+        // Calculate the playback rate.  This is done by first normalizing the value over the provided range, then
+        // mapping that value using an exponential function that can be used to create a non-linear mapping to emphasize
+        // certain portions of the range.
+        const normalizedValue = range.getNormalizedValue( value );
+        const mappedNormalizedValueNew = Math.pow( normalizedValue, options.normalizationMappingExponent );
+        const playbackRate = options.playbackRateRange.expandNormalizedValue( mappedNormalizedValueNew );
 
+        // Update the parameters of the sound clip based on the new value.
         this.setPlaybackRate( playbackRate );
         this.setOutputLevel( this.nonFadedOutputLevel );
         if ( !this.isPlaying && !isSettingPhetioStateProperty.value ) {
