@@ -50,8 +50,6 @@ class TestingScreenView extends DemosScreenView {
 
   public constructor() {
 
-    const resetInProgressProperty = new BooleanProperty( false );
-
     // step emitter, needed by some of the demos
     const stepEmitter = new Emitter<[ number ]>( {
       parameters: [ { valueType: 'number' } ]
@@ -97,7 +95,7 @@ class TestingScreenView extends DemosScreenView {
       },
       {
         label: 'LongSoundTest',
-        createNode: ( layoutBounds: Bounds2 ) => new LongSoundTestPanel( resetInProgressProperty, {
+        createNode: ( layoutBounds: Bounds2 ) => new LongSoundTestPanel( {
           center: layoutBounds.center
         } )
       },
@@ -116,11 +114,7 @@ class TestingScreenView extends DemosScreenView {
     // add the reset all button
     const resetAllButton = new ResetAllButton( {
       right: this.layoutBounds.maxX - 25,
-      bottom: this.layoutBounds.maxY - 25,
-      listener: () => {
-        resetInProgressProperty.set( true );
-        resetInProgressProperty.set( false );
-      }
+      bottom: this.layoutBounds.maxY - 25
     } );
     this.addChild( resetAllButton );
   }
@@ -262,7 +256,7 @@ class LongSoundTestPanel extends Node {
 
   private readonly disposeLongSoundTestPanel: () => void;
 
-  public constructor( resetInProgressProperty: BooleanProperty, options: NodeOptions ) {
+  public constructor( options: NodeOptions ) {
 
     // internal state variables
     const lightningBoltVisibleProperty = new BooleanProperty( false );
@@ -291,7 +285,7 @@ class LongSoundTestPanel extends Node {
 
     // sound generator for thunder
     const thunderSoundClip = new SoundClip( thunder_mp3, {
-      enableControlProperties: [ DerivedProperty.not( resetInProgressProperty ) ],
+      enableControlProperties: [ DerivedProperty.not( ResetAllButton.isResettingAllProperty ) ],
       initiateWhenDisabled: true
     } );
     soundManager.addSoundGenerator( thunderSoundClip, { associatedViewNode: fireLightningButton } );
@@ -346,11 +340,11 @@ class LongSoundTestPanel extends Node {
     const resetHandler = () => {
       stepTimer.clearTimeout( timeoutFiredListener );
     };
-    resetInProgressProperty.link( resetHandler );
+    ResetAllButton.isResettingAllProperty.link( resetHandler );
 
     // dispose function
     this.disposeLongSoundTestPanel = () => {
-      resetInProgressProperty.unlink( resetHandler );
+      ResetAllButton.isResettingAllProperty.unlink( resetHandler );
       soundManager.removeSoundGenerator( thunderSoundClip );
       lightningBoltVisibleTimeout && stepTimer.clearTimeout( lightningBoltVisibleTimeout );
     };
