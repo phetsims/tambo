@@ -70,14 +70,10 @@ class SimLikeComponentsScreenView extends ScreenView {
       model.boxOfBalls.balls.addItemRemovedListener( removalListener );
     } );
 
-    // create an inverted version of the reset-in-progress Property, used to mute sounds during reset
-    const resetNotInProgressProperty = new DerivedProperty(
-      [ model.resetInProgressProperty ],
-      resetInProgress => !resetInProgress
-    );
-
     // generate sound when balls are added or removed
-    const pitchedPopGenerator = new PitchedPopGenerator( { enableControlProperties: [ resetNotInProgressProperty ] } );
+    const pitchedPopGenerator = new PitchedPopGenerator( {
+      enableControlProperties: [ DerivedProperty.not( ResetAllButton.isResettingAllProperty ) ]
+    } );
     soundManager.addSoundGenerator( pitchedPopGenerator );
     model.boxOfBalls.balls.lengthProperty.lazyLink( numBalls => {
       pitchedPopGenerator.playPop( numBalls / MAX_BALLS );
