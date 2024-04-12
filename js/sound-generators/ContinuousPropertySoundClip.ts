@@ -24,6 +24,8 @@ import Range from '../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 import soundConstants from '../soundConstants.js';
+import DerivedProperty from '../../../axon/js/DerivedProperty.js';
+import ResetAllButton from '../../../scenery-phet/js/buttons/ResetAllButton.js';
 
 type SelfOptions = {
 
@@ -96,8 +98,10 @@ class ContinuousPropertySoundClip extends SoundClip {
       delayBeforeStop: 0.1,
       playbackRateRange: new Range( 0.5, 2 ), // 2 octaves, one below and one above the provided sound's inherent pitch
       normalizationMappingExponent: 1, // linear mapping by default
-      enableControlProperties: [],
-      stopOnDisabled: false
+      stopOnDisabled: false,
+
+      // By default, sound production is disabled during "reset all" operations.
+      enableControlProperties: [ DerivedProperty.not( ResetAllButton.isResettingAllProperty ) ]
     }, providedOptions );
 
     super( sound, options );

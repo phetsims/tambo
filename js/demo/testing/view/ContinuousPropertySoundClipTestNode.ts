@@ -43,11 +43,7 @@ class ContinuousPropertySoundClipTestNode extends VBox {
     const createTester = ( sound: WrappedAudioBuffer, max: number ) => {
       const numberProperty = new NumberProperty( 5 );
       const range = new Range( 1, 10 );
-      const continuousPropertySoundClip = new ContinuousPropertySoundClip(
-        numberProperty,
-        range,
-        sound
-      );
+      const continuousPropertySoundClip = new ContinuousPropertySoundClip( numberProperty, range, sound );
       soundManager.addSoundGenerator( continuousPropertySoundClip );
       const isOscillatingProperty = new BooleanProperty( false );
       let phase = 0;
