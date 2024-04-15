@@ -67,7 +67,7 @@ class NoiseGenerator extends SoundGenerator {
   private readonly noiseSourceConnectionPoint: AudioNode;
 
   // flag that indicates whether the noise is playing
-  private isPlaying: boolean;
+  private _isPlaying: boolean;
 
   // time at which a play request occurred that couldn't be performed and was subsequently deferred
   private timeOfDeferredStartRequest: number;
@@ -222,13 +222,13 @@ class NoiseGenerator extends SoundGenerator {
     }
 
     this.noiseSourceConnectionPoint = nextOutputToConnect;
-    this.isPlaying = false;
+    this._isPlaying = false;
     this.timeOfDeferredStartRequest = Number.NEGATIVE_INFINITY;
 
     // define the listener for audio context state transitions
     this.audioContextStateChangeListener = state => {
 
-      if ( state === 'running' && this.isPlaying ) {
+      if ( state === 'running' && this._isPlaying ) {
 
         this.start();
 
@@ -242,6 +242,13 @@ class NoiseGenerator extends SoundGenerator {
   }
 
   /**
+   * Get a value that indicates whether noise is currently being played.
+   */
+  public get isPlaying(): boolean {
+    return this._isPlaying;
+  }
+
+  /**
    * Start the noise source.
    * @param [delay] - optional delay for when to start the noise source, in seconds
    */
@@ -252,7 +259,7 @@ class NoiseGenerator extends SoundGenerator {
       const now = this.audioContext.currentTime;
 
       // only do something if not already playing, otherwise ignore this request
-      if ( !this.isPlaying ) {
+      if ( !this._isPlaying ) {
         this.noiseSource = this.audioContext.createBufferSource();
         this.noiseSource.buffer = this.noiseBuffer;
         this.noiseSource.loop = true;
@@ -274,7 +281,7 @@ class NoiseGenerator extends SoundGenerator {
     }
 
     // set the flag even if the start is deferred, since it is used to decide whether to do a deferred start
-    this.isPlaying = true;
+    this._isPlaying = true;
   }
 
   /**
@@ -284,11 +291,11 @@ class NoiseGenerator extends SoundGenerator {
   public stop( time = 0 ): void {
 
     // only stop if playing, otherwise ignore
-    if ( this.isPlaying && this.noiseSource ) {
+    if ( this._isPlaying && this.noiseSource ) {
       this.noiseSource.stop( time );
       this.noiseSource = null;
     }
-    this.isPlaying = false;
+    this._isPlaying = false;
   }
 
   /**
@@ -323,8 +330,7 @@ class NoiseGenerator extends SoundGenerator {
   /**
    * set the Q value for the band pass filter, assumes that noise generator was created with this filter enabled
    */
-  public setBandpassFilterCenterFrequency( frequency: number, timeConstant: number ): void {
-    timeConstant = timeConstant || PARAMETER_CHANGE_TIME_CONSTANT;
+  public setBandpassFilterCenterFrequency( frequency: number, timeConstant = PARAMETER_CHANGE_TIME_CONSTANT ): void {
     if ( this.bandPassFilter !== null ) {
       this.bandPassFilter.frequency.setTargetAtTime( frequency, this.audioContext.currentTime, timeConstant );
     }
