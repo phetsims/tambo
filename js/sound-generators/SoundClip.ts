@@ -153,10 +153,20 @@ class SoundClip extends SoundGenerator {
       }
     };
 
-    // listen to the Property that indicates whether we are fully enabled and stop one-shot sounds when it goes false
+    // Listen to the Property that indicates whether we are fully enabled and stop one-shot sounds when it goes false.
     this.fullyEnabledProperty.lazyLink( fullyEnabled => {
       if ( !this.loop && !fullyEnabled ) {
         this.stop();
+      }
+    } );
+
+    // Clean up memory references when this object is disposed to avoid memory leaks.
+    this.disposeEmitter.addListener( () => {
+      if ( audioContextStateChangeMonitor.hasListener( this.audioContext, this.audioContextStateChangeListener ) ) {
+        audioContextStateChangeMonitor.removeStateChangeListener(
+          this.audioContext,
+          this.audioContextStateChangeListener
+        );
       }
     } );
   }
