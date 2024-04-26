@@ -47,11 +47,10 @@ class ContinuousPropertySoundClipTestNode extends VBox {
       soundManager.addSoundGenerator( continuousPropertySoundClip );
       const isOscillatingProperty = new BooleanProperty( false );
       let phase = 0;
-      const stepListener = ( dt: number ) => {
+      const stepListener = () => {
         if ( isOscillatingProperty.value ) {
           numberProperty.value = ( max * Math.sin( Date.now() / 1000 - phase ) + 1 ) * ( range.max - range.min ) / 2 + range.min;
         }
-        continuousPropertySoundClip.step( dt );
       };
       stepEmitter.addListener( stepListener );
       stepListeners.push( stepListener );

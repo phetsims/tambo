@@ -26,6 +26,8 @@ import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStat
 import soundConstants from '../soundConstants.js';
 import DerivedProperty from '../../../axon/js/DerivedProperty.js';
 import ResetAllButton from '../../../scenery-phet/js/buttons/ResetAllButton.js';
+import { TReadOnlyEmitter } from '../../../axon/js/TEmitter.js';
+import stepTimer from '../../../axon/js/stepTimer.js';
 
 type SelfOptions = {
 
@@ -53,6 +55,11 @@ type SelfOptions = {
   // If true, we will stop() when the sound is disabled. The stop uses the DEFAULT_LINEAR_GAIN_CHANGE_TIME as its delay
   // to match the fullyEnabledProperty link logic in SoundGenerator.
   stopOnDisabled?: boolean;
+
+  // An emitter that can be provided to step the time-driven behavior of this sound generator.  By default, this uses
+  // the globally available stepTimer instance.  If set to null, nothing will be hooked up, and it will be up to the
+  // client to step the instance directly.
+  stepEmitter?: TReadOnlyEmitter<[ number ]> | null;
 };
 export type ContinuousPropertySoundClipOptions = SelfOptions & SoundClipOptions;
 
@@ -69,8 +76,6 @@ class ContinuousPropertySoundClip extends SoundClip {
 
   // countdown time used for fade out
   private remainingFadeTime: number;
-
-  private readonly disposeContinuousPropertySoundClip: () => void;
 
   /**
    * @param property
@@ -99,6 +104,7 @@ class ContinuousPropertySoundClip extends SoundClip {
       playbackRateRange: new Range( 0.5, 2 ), // 2 octaves, one below and one above the provided sound's inherent pitch
       normalizationMappingExponent: 1, // linear mapping by default
       stopOnDisabled: false,
+      stepEmitter: stepTimer,
 
       // By default, sound production is disabled during "reset all" operations.
       enableControlProperties: [ DerivedProperty.not( ResetAllButton.isResettingAllProperty ) ]
@@ -140,6 +146,7 @@ class ContinuousPropertySoundClip extends SoundClip {
       }
     };
     property.lazyLink( listener );
+    this.disposeEmitter.addListener( () => property.unlink( listener ) );
 
     if ( options.stopOnDisabled ) {
       this.fullyEnabledProperty.lazyLink( enabled => {
@@ -147,13 +154,14 @@ class ContinuousPropertySoundClip extends SoundClip {
       } );
     }
 
-    // dispose function
-    this.disposeContinuousPropertySoundClip = () => property.unlink( listener );
-  }
+    // Hook up the time-driven behavior.
+    if ( options.stepEmitter ) {
+      const stepEmitterListener = ( dt: number ) => this.step( dt );
+      options.stepEmitter.addListener( stepEmitterListener );
 
-  public override dispose(): void {
-    this.disposeContinuousPropertySoundClip();
-    super.dispose();
+      // Remove step emitter listener on disposal.
+      this.disposeEmitter.addListener( () => options.stepEmitter?.removeListener( stepEmitterListener ) );
+    }
   }
 
   /**
