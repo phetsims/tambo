@@ -4,6 +4,8 @@
  * @author Jonathan Olson <jonathan.olson@colorado.edu>
  */
 
+console.log( 'main???????????????????' );
+
 import tambo from './tambo.js';
 
 import './shared-sound-players/accordionBoxClosedSoundPlayer.js';
@@ -21,7 +23,7 @@ import './shared-sound-players/pauseSoundPlayer.js';
 import './shared-sound-players/playSoundPlayer.js';
 import './shared-sound-players/pushButtonSoundPlayer.js';
 import './shared-sound-players/releaseSoundPlayer.js';
-import './shared-sound-players/resetAllSoundPlayer.js';
+import './shared-sound-players/getResetAllSoundPlayer.js';
 import './shared-sound-players/softClickSoundPlayer.js';
 import './shared-sound-players/stepBackwardSoundPlayer.js';
 import './shared-sound-players/stepForwardSoundPlayer.js';

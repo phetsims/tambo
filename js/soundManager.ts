@@ -17,7 +17,7 @@
 
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
 import Utils from '../../dot/js/Utils.js';
-import { Display, DisplayedProperty, Node } from '../../scenery/js/imports.js';
+import { Display } from '../../scenery/js/imports.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import emptyApartmentBedroom06Resampled_mp3 from '../sounds/emptyApartmentBedroom06Resampled_mp3.js';
@@ -39,15 +39,6 @@ const AUDIO_DUCKING_LEVEL = 0.15; // gain value to use for the ducking gain node
 // options that can be used when adding a sound generator that can control some aspects of its behavior
 export type SoundGeneratorAddOptions = {
 
-  // The 'sonification level' is used to determine whether a given sound should be enabled given the setting of the
-  // sonification level parameter for the sim.
-  sonificationLevel?: SoundLevelEnum;
-
-  // The associated view node is a Scenery node that, if provided, must be visible in the display for the sound
-  // generator to be enabled.  This is generally used only for sounds that can play for long durations, such as a
-  // looping sound clip, that should be stopped when the associated visual representation is hidden.
-  associatedViewNode?: Node | null;
-
   // category name for this sound
   categoryName?: string | null;
 };
@@ -56,12 +47,6 @@ export type SoundGeneratorAddOptions = {
 type SoundGeneratorAwaitingAdd = {
   soundGenerator: SoundGenerator;
   soundGeneratorAddOptions: SoundGeneratorAddOptions;
-};
-
-// sound generator with its sonification level
-type SoundGeneratorInfo = {
-  soundGenerator: SoundGenerator;
-  sonificationLevel: SoundLevelEnum;
 };
 
 type SoundGeneratorInitializationOptions = {
@@ -85,8 +70,8 @@ class SoundManager extends PhetioObject {
   // enabled state for extra sounds
   public readonly extraSoundEnabledProperty: BooleanProperty;
 
-  // an array where the sound generators are stored along with information about how to manage them
-  private readonly soundGeneratorInfoArray: SoundGeneratorInfo[];
+  // an array where the sound generators are stored
+  private readonly soundGenerators: SoundGenerator[];
 
   // output level for the main gain node when sonification is enabled
   private _mainOutputLevel: number;
@@ -114,9 +99,6 @@ class SoundManager extends PhetioObject {
   private dryGainNode: GainNode | null;
   private duckingGainNode: GainNode | null;
 
-  // a Map object that keeps track of DisplayedProperty instances that can be associated with the sound generator
-  private readonly viewNodeDisplayedPropertyMap = new Map<SoundGenerator, DisplayedProperty>();
-
   public constructor( tandem?: Tandem ) {
 
     super( {
@@ -141,7 +123,7 @@ class SoundManager extends PhetioObject {
                            'that the value is irrelevant when enabledProperty is false.'
     } );
 
-    this.soundGeneratorInfoArray = [];
+    this.soundGenerators = [];
     this._mainOutputLevel = 1;
     this._reverbLevel = DEFAULT_REVERB_LEVEL;
     this.gainNodesForCategories = new Map<string, GainNode>();
@@ -398,10 +380,7 @@ class SoundManager extends PhetioObject {
    * Returns true if the specified soundGenerator has been previously added to the soundManager.
    */
   public hasSoundGenerator( soundGenerator: SoundGenerator ): boolean {
-    return _.some(
-      this.soundGeneratorInfoArray,
-      soundGeneratorInfo => soundGeneratorInfo.soundGenerator === soundGenerator
-    );
+    return this.soundGenerators.includes( soundGenerator );
   }
 
   /**
@@ -434,16 +413,8 @@ class SoundManager extends PhetioObject {
 
     // default options
     const options = optionize<SoundGeneratorAddOptions, SoundGeneratorAddOptions>()( {
-      sonificationLevel: SoundLevelEnum.BASIC,
-      associatedViewNode: null,
       categoryName: null
     }, providedOptions );
-
-    // option validation
-    assert && assert(
-      _.includes( _.values( SoundLevelEnum ), options.sonificationLevel ),
-      `invalid value for sonification level: ${options.sonificationLevel}`
-    );
 
     // Connect the sound generator to an output path.
     if ( options.categoryName === null ) {
@@ -458,29 +429,8 @@ class SoundManager extends PhetioObject {
       soundGenerator.connect( this.gainNodesForCategories.get( options.categoryName )! );
     }
 
-    // Keep a record of the sound generator along with additional information about it.
-    const soundGeneratorInfo = {
-      soundGenerator: soundGenerator,
-      sonificationLevel: options.sonificationLevel
-    };
-    this.soundGeneratorInfoArray.push( soundGeneratorInfo );
-
-    // Add the global enable Property to the list of Properties that enable this sound generator.
-    soundGenerator.addEnableControlProperty( this.enabledProperty );
-
-    // If this sound generator is only enabled in extra mode, add the extra mode Property as an enable-control.
-    if ( options.sonificationLevel === SoundLevelEnum.EXTRA ) {
-      soundGenerator.addEnableControlProperty( this.extraSoundEnabledProperty );
-    }
-
-    // If a view node was specified, create and pass in a boolean Property that is true only when the node is displayed.
-    if ( options.associatedViewNode ) {
-      const viewNodeDisplayedProperty = new DisplayedProperty( options.associatedViewNode );
-      soundGenerator.addEnableControlProperty( viewNodeDisplayedProperty );
-
-      // Keep track of this DisplayedProperty instance so that it can be disposed if the sound generator is disposed.
-      this.viewNodeDisplayedPropertyMap.set( soundGenerator, viewNodeDisplayedProperty );
-    }
+    // Add this sound generator to our list.
+    this.soundGenerators.push( soundGenerator );
   }
 
   /**
@@ -503,21 +453,10 @@ class SoundManager extends PhetioObject {
       return;
     }
 
-    // find the info object for this sound generator
-    let soundGeneratorInfo = null;
-    for ( let i = 0; i < this.soundGeneratorInfoArray.length; i++ ) {
-      if ( this.soundGeneratorInfoArray[ i ].soundGenerator === soundGenerator ) {
+    // Make sure it is actually present on the list.
+    assert && assert( this.soundGenerators.includes( soundGenerator ), 'unable to remove sound generator - not found' );
 
-        // found it
-        soundGeneratorInfo = this.soundGeneratorInfoArray[ i ];
-        break;
-      }
-    }
-
-    // make sure it is actually present on the list
-    assert && assert( soundGeneratorInfo, 'unable to remove sound generator - not found' );
-
-    // disconnect the sound generator from any audio nodes to which it may be connected
+    // Disconnect the sound generator from any audio nodes to which it may be connected.
     if ( soundGenerator.isConnectedTo( this.convolver! ) ) {
       soundGenerator.disconnect( this.convolver! );
     }
@@ -531,15 +470,7 @@ class SoundManager extends PhetioObject {
     } );
 
     // Remove the sound generator from the list.
-    if ( soundGeneratorInfo ) {
-      this.soundGeneratorInfoArray.splice( this.soundGeneratorInfoArray.indexOf( soundGeneratorInfo ), 1 );
-    }
-
-    // Clean up created DisplayedProperties that were created for the associated soundGenerator
-    if ( this.viewNodeDisplayedPropertyMap.has( soundGenerator ) ) {
-      this.viewNodeDisplayedPropertyMap.get( soundGenerator )!.dispose();
-      this.viewNodeDisplayedPropertyMap.delete( soundGenerator );
-    }
+    this.soundGenerators.splice( this.soundGenerators.indexOf( soundGenerator ), 1 );
   }
 
   /**

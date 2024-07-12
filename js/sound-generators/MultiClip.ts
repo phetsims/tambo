@@ -105,7 +105,7 @@ class MultiClip<T> extends SoundGenerator {
         this.localGainNode.gain.cancelScheduledValues( now );
         this.localGainNode.gain.setValueAtTime( 1, now );
 
-        // create an audio buffer source node and connect it to the previously data in the audio buffer
+        // create an audio buffer source node and connect it to the previously decoded data in the audio buffer
         const bufferSource = this.audioContext.createBufferSource();
         bufferSource.buffer = wrappedAudioBuffer!.audioBufferProperty.value;
         bufferSource.playbackRate.setValueAtTime( this.playbackRate, this.audioContext.currentTime );

@@ -129,19 +129,10 @@ required different behavior based upon whether the user was moving the ruler via
 Since the model position would have no information about how the position was being changed, the sound generation code
 had to go into the view code where that information was available.
 
-One common pattern that occurs fairly frequently is that a sound needs to be generated any time the value of a model
-property changes **except** if the change occurred as the result of a reset, since otherwise there could be a barrage of
-sounds every time the reset button was pressed (and in case you're wonder, yes, we did run into this a bunch in early
-sound design prototypes). In support of this and other similar cases, sound generators can be constructed with an array
-of `enableControlProperties` that will prevent sound generation from being initiated when any of the enclosed values
-are `false`. This is often used in conjunction with an inverted reset-in-progress property to prevent sound generation
-during a reset. It generally looks something like this:
-
-```js
-soundManager.addSoundGenerator( new myCoolSoundGenerator( model.sonifiedThingProperty, {
-  enableControlProperties: [ DerivedProperty.not( model.resetInProgressProperty ) ]
-} ) );
-```
+Sounds - at least those that extend the SoundGenerator base class, which pretty much all of them do - are generally
+prevented from triggering during a reset, since we usually want the only sound heard at that time to be the "earcon"
+associated with the Reset All button.  There is an option that can be set to allow a sound to be produced during reset
+if needed.
 
 ## Overriding Default Sound Generation in Common UI Components
 

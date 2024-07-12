@@ -227,6 +227,7 @@ const sharedSoundPlayerInfoMap: Map<SharedSoundPlayerName, SoundClipPlayerInfo> 
         soundClipPlayerOptions: {
           soundClipOptions: {
             initialOutputLevel: 0.39,
+            enabledDuringReset: true,
             enabledDuringPhetioStateSetting: true
           },
           soundManagerOptions: { categoryName: 'user-interface' }

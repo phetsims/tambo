@@ -7,7 +7,6 @@
  */
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
-import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
 import Emitter from '../../../../../axon/js/Emitter.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
 import merge from '../../../../../phet-core/js/merge.js';
@@ -136,8 +135,8 @@ class BasicAndExtraSoundTestNode extends VBox {
     // sound clips to be played
     const loonCallSoundClip = new SoundClip( loonCall_mp3 );
     soundManager.addSoundGenerator( loonCallSoundClip );
-    const rhodesChordSoundClip = new SoundClip( rhodesChord_mp3 );
-    soundManager.addSoundGenerator( rhodesChordSoundClip, { sonificationLevel: SoundLevelEnum.EXTRA } );
+    const rhodesChordSoundClip = new SoundClip( rhodesChord_mp3, { sonificationLevel: SoundLevelEnum.EXTRA } );
+    soundManager.addSoundGenerator( rhodesChordSoundClip );
 
     // add a button to play a basic-mode sound
     const playBasicSoundButton = new TextPushButton( 'Play Basic-Level Sound', {
@@ -275,7 +274,8 @@ class LongSoundTestPanel extends Node {
         assert && assert( lightningBoltVisibleTimeout === null, 'timer should not be running when this fires' );
         lightningBoltVisibleProperty.value = true;
         lightningBoltVisibleTimeout = stepTimer.setTimeout( timeoutFiredListener, LIGHTNING_SHOWN_TIME * 1000 );
-      }
+      },
+      soundPlayer: nullSoundPlayer
     } );
 
     // disable the button while lightning is visible
@@ -283,12 +283,15 @@ class LongSoundTestPanel extends Node {
       fireLightningButton.enabled = !lightningBoltVisible;
     } );
 
+    const thunderSoundEnabledProperty = new BooleanProperty( true );
+
     // sound generator for thunder
     const thunderSoundClip = new SoundClip( thunder_mp3, {
-      enableControlProperties: [ DerivedProperty.not( ResetAllButton.isResettingAllProperty ) ],
-      initiateWhenDisabled: true
+      enabledProperty: thunderSoundEnabledProperty,
+      initiateWhenDisabled: true,
+      associatedViewNode: fireLightningButton
     } );
-    soundManager.addSoundGenerator( thunderSoundClip, { associatedViewNode: fireLightningButton } );
+    soundManager.addSoundGenerator( thunderSoundClip );
     lightningBoltVisibleProperty.link( visible => {
       if ( visible ) {
         thunderSoundClip.play();
@@ -296,7 +299,11 @@ class LongSoundTestPanel extends Node {
     } );
 
     // check box that controls whether the thunderSoundClip sound is locally enabled
-    const thunderEnabledCheckbox = new Checkbox( thunderSoundClip.locallyEnabledProperty, new Text( 'Enabled', { font: FONT } ), { boxWidth: CHECKBOX_SIZE } );
+    const thunderEnabledCheckbox = new Checkbox(
+      thunderSoundEnabledProperty,
+      new Text( 'Enabled', { font: FONT } ),
+      { boxWidth: CHECKBOX_SIZE }
+    );
 
     // check box that controls whether the thunderSoundClip sound can be initiated when disabled
     const initiateThunderWhenDisabledProperty = new BooleanProperty( thunderSoundClip.initiateWhenDisabled );

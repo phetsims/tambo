@@ -39,7 +39,7 @@ class AmplitudeModulatorDemo extends SoundGenerator {
     // hook each of the loops to the amplitude modulator
     soundLoops.forEach( soundLoop => { soundLoop.connect( this.amplitudeModulator.getConnectionPoint() ); } );
 
-    // Play and stop the loops based on the selection property's value.  An sound source index of 0 indicates that no
+    // Play and stop the loops based on the selection property's value.  A sound source index of 0 indicates that no
     // sound should be played, values above zero are decremented by one and then used as an index into the array of
     // sound loops.
     sourceSoundIndexProperty.link( soundSourceIndex => {

@@ -6,7 +6,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import DerivedProperty from '../../../../../axon/js/DerivedProperty.js';
 import Property from '../../../../../axon/js/Property.js';
 import Dimension2 from '../../../../../dot/js/Dimension2.js';
 import Range from '../../../../../dot/js/Range.js';
@@ -25,6 +24,7 @@ import BallNode from './BallNode.js';
 import SimLikeComponentsModel from '../model/SimLikeComponentsModel.js';
 import Ball from '../model/Ball.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
+import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
 
 // constants
 const MAX_BALLS = 8;
@@ -71,9 +71,7 @@ class SimLikeComponentsScreenView extends ScreenView {
     } );
 
     // generate sound when balls are added or removed
-    const pitchedPopGenerator = new PitchedPopGenerator( {
-      enableControlProperties: [ DerivedProperty.not( ResetAllButton.isResettingAllProperty ) ]
-    } );
+    const pitchedPopGenerator = new PitchedPopGenerator();
     soundManager.addSoundGenerator( pitchedPopGenerator );
     model.boxOfBalls.balls.lengthProperty.lazyLink( numBalls => {
       pitchedPopGenerator.playPop( numBalls / MAX_BALLS );
@@ -114,7 +112,8 @@ class SimLikeComponentsScreenView extends ScreenView {
         arrowButtonStroke: 'blue',
         arrowButtonLineWidth: 0.2,
         centerX: ballsMovingSwitch.centerX,
-        top: ballsMovingSwitch.bottom + 25
+        top: ballsMovingSwitch.bottom + 25,
+        arrowsSoundPlayer: nullSoundPlayer
       } );
     this.addChild( ballCountSpinner );
 

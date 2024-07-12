@@ -8,10 +8,6 @@
  * This was generalized from GRAVITY_FORCE_LAB_BASICS/ForceSoundGenerator, see
  * https://github.com/phetsims/tambo/issues/76.
  *
- * NOTE: This SoundClip is inherently tied to a Properties changes instead of user input. This can lead to undesirable
- * situations where this can play based on internal model changes and not from user interaction (the best example of this
- * is during reset). Please make sure to use `enableControlProperties` to silence sound during these cases (like model reset!)
- *
  * @author John Blanco (PhET Interactive Simulations)
  * @author Sam Reid (PhET Interactive Simulations)
  */
@@ -24,8 +20,6 @@ import Range from '../../../dot/js/Range.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 import soundConstants from '../soundConstants.js';
-import DerivedProperty from '../../../axon/js/DerivedProperty.js';
-import ResetAllButton from '../../../scenery-phet/js/buttons/ResetAllButton.js';
 import { TReadOnlyEmitter } from '../../../axon/js/TEmitter.js';
 import stepTimer from '../../../axon/js/stepTimer.js';
 
@@ -104,10 +98,7 @@ class ContinuousPropertySoundClip extends SoundClip {
       playbackRateRange: new Range( 0.5, 2 ), // 2 octaves, one below and one above the provided sound's inherent pitch
       normalizationMappingExponent: 1, // linear mapping by default
       stopOnDisabled: false,
-      stepEmitter: stepTimer,
-
-      // By default, sound production is disabled during "reset all" operations.
-      enableControlProperties: [ DerivedProperty.not( ResetAllButton.isResettingAllProperty ) ]
+      stepEmitter: stepTimer
     }, providedOptions );
 
     super( sound, options );
