@@ -15,7 +15,7 @@ import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
 import CompositeSoundClip from '../../../sound-generators/CompositeSoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
-import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
+import nullSoundPlayer from '../../../nullSoundPlayer.js';
 
 class CompositeSoundClipTestNode extends VBox {
 

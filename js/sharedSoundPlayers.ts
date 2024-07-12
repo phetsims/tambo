@@ -3,8 +3,10 @@
 /**
  * This singleton is used to get instances of shared sound players.  The most common use case for shared sound players
  * is in common UI components that may have multiple instances within a sim, such as checkboxes and buttons. Sharing the
- * sound players between these instances reduces memory consumption and load time versus creating separate instances
- * everywhere.  It also keeps the sound generation consistent.
+ * sound players between these instances reduces memory consumption and load time versus creating separate instances.
+ * It also keeps the sound experience consistent.
+ *
+ * These shared sound players are automatically added to the soundManager so there is no need for clients to do so.
  *
  * @author John Blanco (PhET Interactive Simulations)
  */

@@ -35,7 +35,7 @@ import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGen
 import SoundClipChordTestNode from './SoundClipChordTestNode.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import { TimerListener } from '../../../../../axon/js/Timer.js';
-import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
+import nullSoundPlayer from '../../../nullSoundPlayer.js';
 import TEmitter from '../../../../../axon/js/TEmitter.js';
 
 // constants

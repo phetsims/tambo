@@ -31,10 +31,9 @@ import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Property from '../../../../../axon/js/Property.js';
 import ABSwitch from '../../../../../sun/js/ABSwitch.js';
 import OnOffSwitch from '../../../../../sun/js/OnOffSwitch.js';
-import grabSoundPlayer from '../../../shared-sound-players/grabSoundPlayer.js';
-import releaseSoundPlayer from '../../../shared-sound-players/releaseSoundPlayer.js';
-import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
+import nullSoundPlayer from '../../../nullSoundPlayer.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
+import sharedSoundPlayers from '../../../sharedSoundPlayers.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 20 );
@@ -67,8 +66,8 @@ class UIComponentsScreenView extends DemosScreenView {
               {
                 center: layoutBounds.center,
                 toggleSwitchOptions: {
-                  switchToLeftSoundPlayer: grabSoundPlayer,
-                  switchToRightSoundPlayer: releaseSoundPlayer
+                  switchToLeftSoundPlayer: sharedSoundPlayers.get( 'grab' ),
+                  switchToRightSoundPlayer: sharedSoundPlayers.get( 'release' )
                 }
               }
             ),

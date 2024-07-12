@@ -23,15 +23,14 @@ import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
 import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
 import TSoundPlayer from '../TSoundPlayer.js';
 import phetAudioContext from '../phetAudioContext.js';
-import generalBoundaryBoopSoundPlayer from '../shared-sound-players/generalBoundaryBoopSoundPlayer.js';
-import generalSoftClickSoundPlayer from '../shared-sound-players/generalSoftClickSoundPlayer.js';
-import nullSoundPlayer from '../shared-sound-players/nullSoundPlayer.js';
+import nullSoundPlayer from '../nullSoundPlayer.js';
 import tambo from '../tambo.js';
 import SoundClip from './SoundClip.js';
 import SoundClipPlayer from './SoundClipPlayer.js';
 import Disposable, { DisposableOptions } from '../../../axon/js/Disposable.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import TinyProperty from '../../../axon/js/TinyProperty.js';
+import sharedSoundPlayers from '../sharedSoundPlayers.js';
 
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary
@@ -150,7 +149,7 @@ class ValueChangeSoundPlayer extends Disposable {
   public constructor( valueRange: Range | TReadOnlyProperty<Range>, providedOptions?: ValueChangeSoundPlayerOptions ) {
 
     const options = optionize<ValueChangeSoundPlayerOptions, SelfOptions, DisposableOptions>()( {
-      middleMovingUpSoundPlayer: generalSoftClickSoundPlayer,
+      middleMovingUpSoundPlayer: sharedSoundPlayers.get( 'generalSoftClick' ),
       middleMovingDownSoundPlayer: DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER,
       middleMovingUpPlaybackRateMapper: NO_PLAYBACK_RATE_CHANGE,
       middleMovingDownPlaybackRateMapper: NO_PLAYBACK_RATE_CHANGE,
@@ -158,7 +157,7 @@ class ValueChangeSoundPlayer extends Disposable {
       interThresholdDelta: null,
       constrainValue: DEFAULT_VALUE_CONSTRAINT,
       minSoundPlayer: DEFAULT_MIN_SOUND_PLAYER,
-      maxSoundPlayer: generalBoundaryBoopSoundPlayer,
+      maxSoundPlayer: sharedSoundPlayers.get( 'generalBoundaryBoop' ),
       minimumInterMiddleSoundTime: 0.035 // empirically determined
     }, providedOptions );
 
@@ -307,7 +306,7 @@ class ValueChangeSoundPlayer extends Disposable {
             soundPlayer = this.middleMovingUpSoundPlayer;
           }
           else {
-            playbackRateMapper = this.middleMovingUpPlaybackRateMapper;
+            playbackRateMapper = this.middleMovingDownPlaybackRateMapper;
             soundPlayer = this.middleMovingDownSoundPlayer;
           }
 

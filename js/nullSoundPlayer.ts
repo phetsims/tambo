@@ -7,8 +7,8 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import tambo from '../tambo.js';
-import TSoundPlayer from '../TSoundPlayer.js';
+import tambo from './tambo.js';
+import TSoundPlayer from './TSoundPlayer.js';
 
 class NullSoundPlayer implements TSoundPlayer {
 

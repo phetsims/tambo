@@ -24,7 +24,7 @@ import BallNode from './BallNode.js';
 import SimLikeComponentsModel from '../model/SimLikeComponentsModel.js';
 import Ball from '../model/Ball.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
-import nullSoundPlayer from '../../../shared-sound-players/nullSoundPlayer.js';
+import nullSoundPlayer from '../../../nullSoundPlayer.js';
 
 // constants
 const MAX_BALLS = 8;
