@@ -78,11 +78,11 @@ const DEFAULT_SOUND_CLIP_PLAYER_INFO: SoundClipPlayerInfo = {
   soundClipPlayerOptions: DEFAULT_SOUND_CLIP_PLAYER_OPTIONS
 };
 const DEFAULTS_WITH_OUTPUT_LEVEL = ( outputLevel: number ): SoundClipPlayerOptions => {
-  return combineOptions<SoundClipPlayerOptions>( {
+  return combineOptions<SoundClipPlayerOptions>( {}, DEFAULT_SOUND_CLIP_PLAYER_OPTIONS, {
     soundClipOptions: {
       initialOutputLevel: outputLevel
     }
-  }, DEFAULT_SOUND_CLIP_PLAYER_OPTIONS );
+  } );
 };
 
 // Map of shared sound player names to SoundClipPlayer instances.  This is initially unpopulated, and the instances are
