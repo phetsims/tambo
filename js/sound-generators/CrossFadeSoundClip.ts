@@ -11,51 +11,73 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
+import optionize from '../../../phet-core/js/optionize.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 import TSoundPlayer from '../TSoundPlayer.js';
 import SoundClip from './SoundClip.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import tambo from '../tambo.js';
+import NumberProperty from '../../../axon/js/NumberProperty.js';
 
-type SelfOptions = EmptySelfOptions;
+type SelfOptions = {
+
+  // The amount of cross-fade from 0 to 1.  Can be provided, will be created locally if not supplied.
+  crossFadeProperty?: NumberProperty | null;
+
+  // Initial value of the cross-fade.  This is only used if the crossFadeProperty is not provided.  Valid values are
+  // from 0 to 1 inclusive.
+  initialCrossFadeValue?: number;
+};
 type CrossFadeSoundClipOptions = SoundGeneratorOptions & SelfOptions;
 
 class CrossFadeSoundClip extends SoundGenerator implements TSoundPlayer {
 
+  public readonly crossFadeProperty: NumberProperty;
   private readonly soundClipA: SoundClip;
   private readonly soundClipB: SoundClip;
 
   /**
-   * @param wrappedAudioBufferA - audio buffer for sound A
-   * @param wrappedAudioBufferB - audio buffer for sound A
-   * @param crossFade - a number from 0 to 1, inclusive, where 0 indicates 100% sound A, 1 is 100% sound B, and other
-   *                    values are proportionately in between
-   * @param providedOptions
+   * @param audioBufferA - audio buffer for sound A
+   * @param audioBufferB - audio buffer for sound A
+   * @param [providedOptions]
    */
-  public constructor( wrappedAudioBufferA: WrappedAudioBuffer,
-                      wrappedAudioBufferB: WrappedAudioBuffer,
-                      crossFade: number,
+  public constructor( audioBufferA: WrappedAudioBuffer,
+                      audioBufferB: WrappedAudioBuffer,
                       providedOptions?: CrossFadeSoundClipOptions ) {
 
-    assert && assert( crossFade >= 0 && crossFade <= 1, 'crossFade must be between 0 and 1 (inclusive)' );
-
     const options = optionize<CrossFadeSoundClipOptions, SelfOptions, SoundGeneratorOptions>()( {
-      initialOutputLevel: 0.2
+      crossFadeProperty: null,
+      initialCrossFadeValue: 0
     }, providedOptions );
+
+    assert && assert(
+    options.initialCrossFadeValue >= 0 && options.initialCrossFadeValue <= 1,
+      'initialCrossFadeValue must be between 0 and 1 (inclusive)'
+    );
 
     super( options );
 
-    this.soundClipA = new SoundClip( wrappedAudioBufferA, {
-      initialOutputLevel: 1 - crossFade,
+    this.crossFadeProperty = options.crossFadeProperty || new NumberProperty( options.initialCrossFadeValue );
+    this.soundClipA = new SoundClip( audioBufferA, {
       rateChangesAffectPlayingSounds: false
     } );
     this.soundClipA.connect( this.soundSourceDestination );
-    this.soundClipB = new SoundClip( wrappedAudioBufferB, {
-      initialOutputLevel: crossFade,
+    this.soundClipB = new SoundClip( audioBufferB, {
       rateChangesAffectPlayingSounds: false
     } );
     this.soundClipB.connect( this.soundSourceDestination );
+
+    // Adjust the volume levels of the individual clips as the cross-fade values changes.
+    this.crossFadeProperty.link( crossFade => {
+
+      // range check
+      assert && assert( crossFade >= 0 && crossFade <= 1, 'out of range cross fade value' );
+
+      // A simple linear cross-fade algorithm is used here, which was deemed adequate for the use cases supported as of
+      // the time of this writing.  If needed, other algorithms could be created and supplied as an option.
+      this.soundClipA.outputLevel = 1 - crossFade;
+      this.soundClipB.outputLevel = crossFade;
+    } );
   }
 
   public play(): void {
@@ -72,7 +94,6 @@ class CrossFadeSoundClip extends SoundGenerator implements TSoundPlayer {
     this.soundClipA.setPlaybackRate( playbackRate );
     this.soundClipB.setPlaybackRate( playbackRate );
   }
-
 }
 
 tambo.register( 'CrossFadeSoundClip', CrossFadeSoundClip );
