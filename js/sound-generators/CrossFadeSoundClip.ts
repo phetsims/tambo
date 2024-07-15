@@ -1,19 +1,22 @@
 // Copyright 2024, University of Colorado Boulder
 
+/**
+ * CrossFadeSoundClip is a sound generator that combines two sound clips and allows the user to set the relative mix -
+ * aka fade - between them.  This can be useful in situations where there are a number of similar UI elements that need
+ * to have similar but somewhat distinct interaction sounds.
+ *
+ * This was created specifically for the needs of the "Mean: Share and Balance" simulation, and there is at least one
+ * example of how it was intended to be used in that sim.
+ *
+ * @author John Blanco (PhET Interactive Simulations)
+ */
+
 import optionize, { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 import TSoundPlayer from '../TSoundPlayer.js';
 import SoundClip from './SoundClip.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import tambo from '../tambo.js';
-
-/**
- * CrossFadeSoundClip is a sound generator that combines two sound clips and allows the user to set the relative mix -
- * aka fade - between them.  This was created specifically for the needs of the Mean: Share and Balance simulation, and
- * has not been generalized for other uses.
- *
- * @author John Blanco (PhET Interactive Simulations)
- */
 
 type SelfOptions = EmptySelfOptions;
 type CrossFadeSoundClipOptions = SoundGeneratorOptions & SelfOptions;
