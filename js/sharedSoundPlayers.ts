@@ -8,6 +8,11 @@
  *
  * These shared sound players are automatically added to the soundManager so there is no need for clients to do so.
  *
+ * Because these shared sound players are created on the first `get` for a particular one, instances should be gotten
+ * well before they need to be played, generally during construction of the view or model element that will need it.
+ * Waiting to get an instance until it needs to be played could result in a delayed or muffled first sound being
+ * produced.
+ *
  * @author John Blanco (PhET Interactive Simulations)
  */
 
