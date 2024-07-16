@@ -38,7 +38,7 @@ class CrossFadeSoundClip extends SoundGenerator implements TSoundPlayer {
 
   /**
    * @param audioBufferA - audio buffer for sound A
-   * @param audioBufferB - audio buffer for sound A
+   * @param audioBufferB - audio buffer for sound B
    * @param [providedOptions]
    */
   public constructor( audioBufferA: WrappedAudioBuffer,
