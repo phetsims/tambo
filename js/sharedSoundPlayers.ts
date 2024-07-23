@@ -40,6 +40,7 @@ import stepBack_mp3 from '../sounds/stepBack_mp3.js';
 import stepForward_mp3 from '../sounds/stepForward_mp3.js';
 import switchToLeft_mp3 from '../sounds/switchToLeft_mp3.js';
 import switchToRight_mp3 from '../sounds/switchToRight_mp3.js';
+import TSoundPlayer from './TSoundPlayer.js';
 
 // A list of all the available shared sound players as a string union type.  Use these values to get a shared player.
 export type SharedSoundPlayerName =
@@ -105,7 +106,7 @@ const sharedSoundPlayers = {
    * Get the shared sound player for the specified name.  If this shared sound player has not yet been requested, create
    * it, otherwise return the previously created instance.
    */
-  get( sharedSoundPlayerName: SharedSoundPlayerName ): SoundClipPlayer {
+  get( sharedSoundPlayerName: SharedSoundPlayerName ): TSoundPlayer {
 
     // If it doesn't exist, create it and add it to the set of instances.
     if ( !sharedSoundPlayerInstanceMap.has( sharedSoundPlayerName ) ) {

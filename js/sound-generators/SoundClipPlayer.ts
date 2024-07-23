@@ -21,13 +21,14 @@ import tambo from '../tambo.js';
 import SoundClip, { SoundClipOptions } from './SoundClip.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import optionize from '../../../phet-core/js/optionize.js';
+import TSoundPlayer from '../TSoundPlayer.js';
 
 export type SoundClipPlayerOptions = {
   soundClipOptions?: SoundClipOptions;
   soundManagerOptions?: SoundGeneratorAddOptions;
 };
 
-class SoundClipPlayer {
+class SoundClipPlayer implements TSoundPlayer {
 
   private readonly _soundClip: SoundClip;
 
@@ -60,15 +61,6 @@ class SoundClipPlayer {
    */
   public stop(): void {
     this._soundClip.stop();
-  }
-
-  /**
-   * Get the sound clip that is wrapped by this player.  USE THIS METHOD CAREFULLY, IF AT ALL.  This class is intended
-   * primarily for use in singletons that play a sound.  If the underlying sound clip is manipulated, it will change for
-   * all users, so this method should be used with caution and clear intention.
-   */
-  public getSoundClip(): SoundClip {
-    return this._soundClip;
   }
 }
 
