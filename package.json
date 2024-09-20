@@ -41,7 +41,7 @@
         ],
         "parserOptions": {
           "project": [
-            "../tambo/tsconfig.json"
+            "../chipper/tsconfig/eslint-all/tsconfig.json"
           ]
         }
       }
