@@ -6,9 +6,9 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import tambo from './tambo.js';
 import Range from '../../dot/js/Range.js';
 import optionize from '../../phet-core/js/optionize.js';
+import tambo from './tambo.js';
 
 export type BinMapperOptions = {
 

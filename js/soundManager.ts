@@ -16,22 +16,22 @@
  */
 
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
+import createObservableArray, { ObservableArray } from '../../axon/js/createObservableArray.js';
+import Multilink from '../../axon/js/Multilink.js';
+import TReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/TReadOnlyProperty.js';
 import Utils from '../../dot/js/Utils.js';
+import arrayRemove from '../../phet-core/js/arrayRemove.js';
+import optionize from '../../phet-core/js/optionize.js';
 import { Display } from '../../scenery/js/imports.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import emptyApartmentBedroom06Resampled_mp3 from '../sounds/emptyApartmentBedroom06Resampled_mp3.js';
 import audioContextStateChangeMonitor from './audioContextStateChangeMonitor.js';
 import phetAudioContext from './phetAudioContext.js';
+import SoundGenerator from './sound-generators/SoundGenerator.js';
 import soundConstants from './soundConstants.js';
 import SoundLevelEnum from './SoundLevelEnum.js';
 import tambo from './tambo.js';
-import SoundGenerator from './sound-generators/SoundGenerator.js';
-import optionize from '../../phet-core/js/optionize.js';
-import TReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/TReadOnlyProperty.js';
-import Multilink from '../../axon/js/Multilink.js';
-import arrayRemove from '../../phet-core/js/arrayRemove.js';
-import createObservableArray, { ObservableArray } from '../../axon/js/createObservableArray.js';
 
 // constants
 const AUDIO_DUCKING_LEVEL = 0.15; // gain value to use for the ducking gain node when ducking is active

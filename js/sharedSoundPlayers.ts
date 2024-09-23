@@ -16,31 +16,31 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import resetAll_mp3 from '../sounds/resetAll_mp3.js';
-import SoundClipPlayer, { SoundClipPlayerOptions } from './sound-generators/SoundClipPlayer.js';
-import tambo from './tambo.js';
-import WrappedAudioBuffer from './WrappedAudioBuffer.js';
 import { combineOptions } from '../../phet-core/js/optionize.js';
 import accordionBoxClose_mp3 from '../sounds/accordionBoxClose_mp3.js';
 import accordionBoxOpen_mp3 from '../sounds/accordionBoxOpen_mp3.js';
 import boundaryReached_mp3 from '../sounds/boundaryReached_mp3.js';
 import checkboxChecked_mp3 from '../sounds/checkboxChecked_mp3.js';
 import checkboxUnchecked_mp3 from '../sounds/checkboxUnchecked_mp3.js';
+import click_mp3 from '../sounds/click_mp3.js';
 import generalBoundaryBoop_mp3 from '../sounds/generalBoundaryBoop_mp3.js';
+import generalButton_mp3 from '../sounds/generalButton_mp3.js';
 import generalClose_mp3 from '../sounds/generalClose_mp3.js';
 import generalOpen_mp3 from '../sounds/generalOpen_mp3.js';
 import generalSoftClick_mp3 from '../sounds/generalSoftClick_mp3.js';
 import grab_mp3 from '../sounds/grab_mp3.js';
 import pause_mp3 from '../sounds/pause_mp3.js';
 import playPause_mp3 from '../sounds/playPause_mp3.js';
-import generalButton_mp3 from '../sounds/generalButton_mp3.js';
 import release_mp3 from '../sounds/release_mp3.js';
-import click_mp3 from '../sounds/click_mp3.js';
+import resetAll_mp3 from '../sounds/resetAll_mp3.js';
 import stepBack_mp3 from '../sounds/stepBack_mp3.js';
 import stepForward_mp3 from '../sounds/stepForward_mp3.js';
 import switchToLeft_mp3 from '../sounds/switchToLeft_mp3.js';
 import switchToRight_mp3 from '../sounds/switchToRight_mp3.js';
+import SoundClipPlayer, { SoundClipPlayerOptions } from './sound-generators/SoundClipPlayer.js';
+import tambo from './tambo.js';
 import TSoundPlayer from './TSoundPlayer.js';
+import WrappedAudioBuffer from './WrappedAudioBuffer.js';
 
 // A list of all the available shared sound players as a string union type.  Use these values to get a shared player.
 export type SharedSoundPlayerName =

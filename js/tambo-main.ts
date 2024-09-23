@@ -7,22 +7,22 @@
  */
 
 import Property from '../../axon/js/Property.js';
+import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
 import Screen from '../../joist/js/Screen.js';
 import ScreenIcon from '../../joist/js/ScreenIcon.js';
 import Sim, { SimOptions } from '../../joist/js/Sim.js';
 import simLauncher from '../../joist/js/simLauncher.js';
+import TModel from '../../joist/js/TModel.js';
 import { LinearGradient, RadialGradient, Rectangle, TColor } from '../../scenery/js/imports.js';
 import Tandem from '../../tandem/js/Tandem.js';
+import AudioCustomPreferencesContent from './demo/AudioCustomPreferencesContent.js';
 import SimLikeComponentsModel from './demo/sim-like-components/model/SimLikeComponentsModel.js';
 import SimLikeComponentsScreenView from './demo/sim-like-components/view/SimLikeComponentsScreenView.js';
-import AudioCustomPreferencesContent from './demo/AudioCustomPreferencesContent.js';
 import TamboKeyboardHelpContent from './demo/TamboKeyboardHelpContent.js';
 import TestingScreenView from './demo/testing/view/TestingScreenView.js';
 import UIComponentsModel from './demo/ui-components/model/UIComponentsModel.js';
 import UIComponentsScreenView from './demo/ui-components/view/UIComponentsScreenView.js';
 import TamboStrings from './TamboStrings.js';
-import PreferencesModel from '../../joist/js/preferences/PreferencesModel.js';
-import TModel from '../../joist/js/TModel.js';
 
 // constants
 const SOUND_OPTIONS_DIALOG_CONTENT = new AudioCustomPreferencesContent();

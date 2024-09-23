@@ -6,8 +6,8 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import tambo from './tambo.js';
 import soundConstants from './soundConstants.js';
+import tambo from './tambo.js';
 
 // a type that contains information about where the audible sounds begin and end within an audio buffer
 type SoundBounds = {

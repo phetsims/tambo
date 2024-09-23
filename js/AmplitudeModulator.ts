@@ -8,13 +8,13 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import NumberProperty from '../../axon/js/NumberProperty.js';
 import EnabledComponent, { EnabledComponentOptions } from '../../axon/js/EnabledComponent.js';
+import NumberProperty from '../../axon/js/NumberProperty.js';
+import Property from '../../axon/js/Property.js';
+import optionize from '../../phet-core/js/optionize.js';
+import StrictOmit from '../../phet-core/js/types/StrictOmit.js';
 import phetAudioContext from './phetAudioContext.js';
 import tambo from './tambo.js';
-import optionize from '../../phet-core/js/optionize.js';
-import Property from '../../axon/js/Property.js';
-import StrictOmit from '../../phet-core/js/types/StrictOmit.js';
 
 type SelfOptions = {
 
