@@ -1,4 +1,4 @@
-// Copyright 2020-2022, University of Colorado Boulder
+// Copyright 2020-2024, University of Colorado Boulder
 
 /**
  * AmplitudeModulator instances can be used to create low-frequency amplitude oscillation effects on a loop, oscillator,
