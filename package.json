@@ -31,8 +31,5 @@
       "TAMBO/screen.uiComponents",
       "TAMBO/screen.testing"
     ]
-  },
-  "eslintConfig": {
-    "extends": "../chipper/eslint/sim_eslintrc.js"
   }
 }
