@@ -7,14 +7,14 @@
  */
 
 import DerivedProperty from '../../../axon/js/DerivedProperty.js';
+import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import merge from '../../../phet-core/js/merge.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import SoundClip, { SoundClipOptions } from '../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator, { SoundGeneratorOptions } from '../../../tambo/js/sound-generators/SoundGenerator.js';
 import tambo from '../tambo.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import TSoundPlayer from '../TSoundPlayer.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 
 type SelfOptions = {
 

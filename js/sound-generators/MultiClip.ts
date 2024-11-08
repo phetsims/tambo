@@ -15,11 +15,11 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import optionize from '../../../phet-core/js/optionize.js';
 import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
 import tambo from '../tambo.js';
-import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import optionize from '../../../phet-core/js/optionize.js';
+import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 
 type SelfOptions = {
   initialPlaybackRate?: number;

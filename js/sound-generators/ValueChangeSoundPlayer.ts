@@ -16,21 +16,21 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import Disposable, { DisposableOptions } from '../../../axon/js/Disposable.js';
+import TinyProperty from '../../../axon/js/TinyProperty.js';
+import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../dot/js/Range.js';
 import Utils from '../../../dot/js/Utils.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
 import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
-import TSoundPlayer from '../TSoundPlayer.js';
-import phetAudioContext from '../phetAudioContext.js';
 import nullSoundPlayer from '../nullSoundPlayer.js';
+import phetAudioContext from '../phetAudioContext.js';
+import sharedSoundPlayers from '../sharedSoundPlayers.js';
 import tambo from '../tambo.js';
+import TSoundPlayer from '../TSoundPlayer.js';
 import SoundClip from './SoundClip.js';
 import SoundClipPlayer from './SoundClipPlayer.js';
-import Disposable, { DisposableOptions } from '../../../axon/js/Disposable.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
-import TinyProperty from '../../../axon/js/TinyProperty.js';
-import sharedSoundPlayers from '../sharedSoundPlayers.js';
 
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary

@@ -1,11 +1,11 @@
 // Copyright 2022-2024, University of Colorado Boulder
 
-import ValueChangeSoundPlayer from '../../../sound-generators/ValueChangeSoundPlayer.js';
-import tambo from '../../../tambo.js';
-import SoundClip from '../../../sound-generators/SoundClip.js';
-import brightMarimbaShort_mp3 from '../../../../sounds/brightMarimbaShort_mp3.js';
-import soundManager from '../../../soundManager.js';
 import Range from '../../../../../dot/js/Range.js';
+import brightMarimbaShort_mp3 from '../../../../sounds/brightMarimbaShort_mp3.js';
+import SoundClip from '../../../sound-generators/SoundClip.js';
+import ValueChangeSoundPlayer from '../../../sound-generators/ValueChangeSoundPlayer.js';
+import soundManager from '../../../soundManager.js';
+import tambo from '../../../tambo.js';
 
 /**
  * SliderPitchChangeSoundGenerator is intended as a demonstration of a ValueChangeSoundPlayer that changes the pitch

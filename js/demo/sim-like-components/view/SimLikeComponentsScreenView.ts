@@ -17,14 +17,14 @@ import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { Path, Text } from '../../../../../scenery/js/imports.js';
 import ABSwitch from '../../../../../sun/js/ABSwitch.js';
 import NumberSpinner from '../../../../../sun/js/NumberSpinner.js';
+import Tandem from '../../../../../tandem/js/Tandem.js';
+import nullSoundPlayer from '../../../nullSoundPlayer.js';
 import PitchedPopGenerator from '../../../sound-generators/PitchedPopGenerator.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
-import BallNode from './BallNode.js';
-import SimLikeComponentsModel from '../model/SimLikeComponentsModel.js';
 import Ball from '../model/Ball.js';
-import Tandem from '../../../../../tandem/js/Tandem.js';
-import nullSoundPlayer from '../../../nullSoundPlayer.js';
+import SimLikeComponentsModel from '../model/SimLikeComponentsModel.js';
+import BallNode from './BallNode.js';
 
 // constants
 const MAX_BALLS = 8;

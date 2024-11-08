@@ -21,9 +21,9 @@ import birdCall_mp3 from '../../../../sounds/demo-and-test/birdCall_mp3.js';
 import cricketsLoop_mp3 from '../../../../sounds/demo-and-test/cricketsLoop_mp3.js';
 import PitchedPopGenerator from '../../../sound-generators/PitchedPopGenerator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
+import SoundGenerator from '../../../sound-generators/SoundGenerator.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
-import SoundGenerator from '../../../sound-generators/SoundGenerator.js';
 
 type SelfOptions = EmptySelfOptions;
 export type RemoveAndDisposeSoundGeneratorsTestPanelOptions = SelfOptions & PanelOptions;

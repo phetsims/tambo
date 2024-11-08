@@ -9,6 +9,9 @@
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import Emitter from '../../../../../axon/js/Emitter.js';
 import stepTimer from '../../../../../axon/js/stepTimer.js';
+import TEmitter from '../../../../../axon/js/TEmitter.js';
+import { TimerListener } from '../../../../../axon/js/Timer.js';
+import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
@@ -23,6 +26,7 @@ import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
 import rhodesChord_mp3 from '../../../../sounds/demo-and-test/rhodesChord_mp3.js';
 import thunder_mp3 from '../../../../sounds/demo-and-test/thunder_mp3.js';
 import emptyApartmentBedroom06Resampled_mp3 from '../../../../sounds/emptyApartmentBedroom06Resampled_mp3.js';
+import nullSoundPlayer from '../../../nullSoundPlayer.js';
 import phetAudioContext from '../../../phetAudioContext.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
@@ -33,10 +37,6 @@ import CompositeSoundClipTestNode from './CompositeSoundClipTestNode.js';
 import ContinuousPropertySoundClipTestNode from './ContinuousPropertySoundClipTestNode.js';
 import RemoveAndDisposeSoundGeneratorsTestPanel from './RemoveAndDisposeSoundGeneratorsTestPanel.js';
 import SoundClipChordTestNode from './SoundClipChordTestNode.js';
-import Bounds2 from '../../../../../dot/js/Bounds2.js';
-import { TimerListener } from '../../../../../axon/js/Timer.js';
-import nullSoundPlayer from '../../../nullSoundPlayer.js';
-import TEmitter from '../../../../../axon/js/TEmitter.js';
 
 // constants
 const CHECKBOX_SIZE = 16;

@@ -8,14 +8,14 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220Hz_mp3.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import windsLoopC3Oscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopC3Oscilloscope_mp3.js';
 import windsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopMiddleCOscilloscope_mp3.js';
+import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220Hz_mp3.js';
 import AmplitudeModulator from '../../../AmplitudeModulator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundGenerator, { SoundGeneratorOptions } from '../../../sound-generators/SoundGenerator.js';
 import tambo from '../../../tambo.js';
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 
 class AmplitudeModulatorDemo extends SoundGenerator {
 

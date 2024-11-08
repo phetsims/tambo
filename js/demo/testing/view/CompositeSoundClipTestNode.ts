@@ -12,10 +12,10 @@ import { VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
 import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
+import nullSoundPlayer from '../../../nullSoundPlayer.js';
 import CompositeSoundClip from '../../../sound-generators/CompositeSoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
-import nullSoundPlayer from '../../../nullSoundPlayer.js';
 
 class CompositeSoundClipTestNode extends VBox {
 

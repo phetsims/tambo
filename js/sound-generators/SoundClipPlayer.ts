@@ -16,12 +16,12 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
+import optionize from '../../../phet-core/js/optionize.js';
 import soundManager, { SoundGeneratorAddOptions } from '../soundManager.js';
 import tambo from '../tambo.js';
-import SoundClip, { SoundClipOptions } from './SoundClip.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import optionize from '../../../phet-core/js/optionize.js';
 import TSoundPlayer from '../TSoundPlayer.js';
+import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
+import SoundClip, { SoundClipOptions } from './SoundClip.js';
 
 export type SoundClipPlayerOptions = {
   soundClipOptions?: SoundClipOptions;

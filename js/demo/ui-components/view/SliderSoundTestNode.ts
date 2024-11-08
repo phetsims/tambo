@@ -7,19 +7,19 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import ValueChangeSoundPlayer from '../../../sound-generators/ValueChangeSoundPlayer.js';
-import tambo from '../../../tambo.js';
-import brightMarimbaShort_mp3 from '../../../../sounds/brightMarimbaShort_mp3.js';
+import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import Range from '../../../../../dot/js/Range.js';
-import SoundClipPlayer from '../../../sound-generators/SoundClipPlayer.js';
-import birdCall_mp3 from '../../../../sounds/demo-and-test/birdCall_mp3.js';
-import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
+import Utils from '../../../../../dot/js/Utils.js';
+import Vector2 from '../../../../../dot/js/Vector2.js';
+import { Font, HBox, Text, VBox } from '../../../../../scenery/js/imports.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
 import VSlider from '../../../../../sun/js/VSlider.js';
-import Vector2 from '../../../../../dot/js/Vector2.js';
-import NumberProperty from '../../../../../axon/js/NumberProperty.js';
-import Utils from '../../../../../dot/js/Utils.js';
-import { Font, HBox, Text, VBox } from '../../../../../scenery/js/imports.js';
+import brightMarimbaShort_mp3 from '../../../../sounds/brightMarimbaShort_mp3.js';
+import birdCall_mp3 from '../../../../sounds/demo-and-test/birdCall_mp3.js';
+import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
+import SoundClipPlayer from '../../../sound-generators/SoundClipPlayer.js';
+import ValueChangeSoundPlayer from '../../../sound-generators/ValueChangeSoundPlayer.js';
+import tambo from '../../../tambo.js';
 import SliderPitchChangeSoundGenerator from './SliderPitchChangeSoundGenerator.js';
 
 const PITCH_CHANGE_SLIDER_VALUE_RANGE = new Range( 1, 10 );

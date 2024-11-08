@@ -12,16 +12,16 @@
  * @author Sam Reid (PhET Interactive Simulations)
  */
 
-import tambo from '../tambo.js';
-import SoundClip, { SoundClipOptions } from './SoundClip.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import Range from '../../../dot/js/Range.js';
+import stepTimer from '../../../axon/js/stepTimer.js';
+import { TReadOnlyEmitter } from '../../../axon/js/TEmitter.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import Range from '../../../dot/js/Range.js';
+import optionize from '../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 import soundConstants from '../soundConstants.js';
-import { TReadOnlyEmitter } from '../../../axon/js/TEmitter.js';
-import stepTimer from '../../../axon/js/stepTimer.js';
+import tambo from '../tambo.js';
+import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
+import SoundClip, { SoundClipOptions } from './SoundClip.js';
 
 type SelfOptions = {
 

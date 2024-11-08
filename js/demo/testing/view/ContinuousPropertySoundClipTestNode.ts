@@ -9,22 +9,22 @@
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import { TReadOnlyEmitter } from '../../../../../axon/js/TEmitter.js';
 import Range from '../../../../../dot/js/Range.js';
 import merge from '../../../../../phet-core/js/merge.js';
+import { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
 import NumberControl from '../../../../../scenery-phet/js/NumberControl.js';
 import { Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import Panel from '../../../../../sun/js/Panel.js';
-import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220Hz_mp3.js';
 import stringsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/stringsLoopMiddleCOscilloscope_mp3.js';
 import windsLoopC3Oscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopC3Oscilloscope_mp3.js';
 import windsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/windsLoopMiddleCOscilloscope_mp3.js';
+import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220Hz_mp3.js';
 import ContinuousPropertySoundClip from '../../../sound-generators/ContinuousPropertySoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
 import WrappedAudioBuffer from '../../../WrappedAudioBuffer.js';
-import { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
-import { TReadOnlyEmitter } from '../../../../../axon/js/TEmitter.js';
 
 type SelfOptions = EmptySelfOptions;
 export type ContinuousPropertySoundClipTestNodeOptions = SelfOptions & VBoxOptions;

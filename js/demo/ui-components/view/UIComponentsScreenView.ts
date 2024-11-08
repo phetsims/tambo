@@ -9,13 +9,15 @@
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
+import Property from '../../../../../axon/js/Property.js';
+import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import Range from '../../../../../dot/js/Range.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
 import NumberControl from '../../../../../scenery-phet/js/NumberControl.js';
-import NumberPicker from '../../../../../sun/js/NumberPicker.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../../scenery-phet/js/TimeControlNode.js';
 import { Image, Text, VBox } from '../../../../../scenery/js/imports.js';
+import ABSwitch from '../../../../../sun/js/ABSwitch.js';
 import AccordionBox from '../../../../../sun/js/AccordionBox.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';
 import BooleanRectangularToggleButton from '../../../../../sun/js/buttons/BooleanRectangularToggleButton.js';
@@ -23,17 +25,15 @@ import RectangularPushButton from '../../../../../sun/js/buttons/RectangularPush
 import Checkbox from '../../../../../sun/js/Checkbox.js';
 import ComboBox from '../../../../../sun/js/ComboBox.js';
 import DemosScreenView from '../../../../../sun/js/demo/DemosScreenView.js';
-import accordion_png from '../../../../images/accordion_png.js';
-import tambo from '../../../tambo.js';
-import SliderSoundTestNode from './SliderSoundTestNode.js';
-import UIComponentsModel from '../model/UIComponentsModel.js';
-import Bounds2 from '../../../../../dot/js/Bounds2.js';
-import Property from '../../../../../axon/js/Property.js';
-import ABSwitch from '../../../../../sun/js/ABSwitch.js';
+import NumberPicker from '../../../../../sun/js/NumberPicker.js';
 import OnOffSwitch from '../../../../../sun/js/OnOffSwitch.js';
-import nullSoundPlayer from '../../../nullSoundPlayer.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
+import accordion_png from '../../../../images/accordion_png.js';
+import nullSoundPlayer from '../../../nullSoundPlayer.js';
 import sharedSoundPlayers from '../../../sharedSoundPlayers.js';
+import tambo from '../../../tambo.js';
+import UIComponentsModel from '../model/UIComponentsModel.js';
+import SliderSoundTestNode from './SliderSoundTestNode.js';
 
 // constants
 const LABEL_FONT = new PhetFont( 20 );

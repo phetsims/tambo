@@ -7,11 +7,11 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 import tambo from '../tambo.js';
+import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import SoundClip, { SoundClipOptions } from './SoundClip.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
-import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
 
 export type SoundAndOptions = {
   sound: WrappedAudioBuffer;

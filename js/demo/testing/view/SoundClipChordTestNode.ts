@@ -6,6 +6,7 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
@@ -13,7 +14,6 @@ import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
 import SoundClipChord from '../../../sound-generators/SoundClipChord.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
-import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
 
 type SelfOptions = EmptySelfOptions;
 export type SoundClipChordTestNodeOptions = SelfOptions & VBoxOptions;

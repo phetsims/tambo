@@ -7,14 +7,14 @@
  */
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
+import Property from '../../../axon/js/Property.js';
+import optionize from '../../../phet-core/js/optionize.js';
 import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
 import soundConstants from '../soundConstants.js';
 import SoundUtils from '../SoundUtils.js';
 import tambo from '../tambo.js';
-import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
-import optionize from '../../../phet-core/js/optionize.js';
-import Property from '../../../axon/js/Property.js';
+import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 
 type SelfOptions = {
 
