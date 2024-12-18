@@ -28,7 +28,7 @@ import Tandem from '../../tandem/js/Tandem.js';
 import emptyApartmentBedroom06Resampled_mp3 from '../sounds/emptyApartmentBedroom06Resampled_mp3.js';
 import audioContextStateChangeMonitor from './audioContextStateChangeMonitor.js';
 import phetAudioContext from './phetAudioContext.js';
-import SoundGenerator from './sound-generators/SoundGenerator.js';
+import type SoundGenerator from './sound-generators/SoundGenerator.js';
 import soundConstants from './soundConstants.js';
 import SoundLevelEnum from './SoundLevelEnum.js';
 import tambo from './tambo.js';
