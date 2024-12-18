@@ -14,6 +14,7 @@ import { TimerListener } from '../../../../../axon/js/Timer.js';
 import Bounds2 from '../../../../../dot/js/Bounds2.js';
 import merge from '../../../../../phet-core/js/merge.js';
 import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButton.js';
+import isResettingAllProperty from '../../../../../scenery-phet/js/isResettingAllProperty.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import { HBox, Image, Node, NodeOptions, Text, VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
@@ -347,11 +348,11 @@ class LongSoundTestPanel extends Node {
     const resetHandler = () => {
       stepTimer.clearTimeout( timeoutFiredListener );
     };
-    ResetAllButton.isResettingAllProperty.link( resetHandler );
+    isResettingAllProperty.link( resetHandler );
 
     // dispose function
     this.disposeLongSoundTestPanel = () => {
-      ResetAllButton.isResettingAllProperty.unlink( resetHandler );
+      isResettingAllProperty.unlink( resetHandler );
       soundManager.removeSoundGenerator( thunderSoundClip );
       lightningBoltVisibleTimeout && stepTimer.clearTimeout( lightningBoltVisibleTimeout );
     };

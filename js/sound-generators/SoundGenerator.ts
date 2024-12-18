@@ -12,7 +12,6 @@ import DerivedProperty from '../../../axon/js/DerivedProperty.js';
 import EnabledComponent, { EnabledComponentOptions } from '../../../axon/js/EnabledComponent.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import optionize from '../../../phet-core/js/optionize.js';
-import ResetAllButton from '../../../scenery-phet/js/buttons/ResetAllButton.js';
 import { DisplayedProperty, Node } from '../../../scenery/js/imports.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 import phetAudioContext from '../phetAudioContext.js';
@@ -20,6 +19,7 @@ import soundConstants from '../soundConstants.js';
 import SoundLevelEnum from '../SoundLevelEnum.js';
 import soundManager from '../soundManager.js';
 import tambo from '../tambo.js';
+import isResettingAllProperty from '../../../scenery-phet/js/isResettingAllProperty.js';
 
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
@@ -117,7 +117,7 @@ abstract class SoundGenerator extends EnabledComponent {
       [
         soundManager.enabledProperty,
         this.enabledProperty,
-        ResetAllButton.isResettingAllProperty,
+        isResettingAllProperty,
         viewNodeDisplayedProperty,
         soundManager.extraSoundEnabledProperty,
         isSettingPhetioStateProperty
