@@ -22,7 +22,7 @@ import TReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/TReadOnly
 import Utils from '../../dot/js/Utils.js';
 import arrayRemove from '../../phet-core/js/arrayRemove.js';
 import optionize from '../../phet-core/js/optionize.js';
-import DisplayGlobals from '../../scenery/js/display/DisplayGlobals.js';
+import { DisplayGlobals } from '../../scenery/js/imports.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import emptyApartmentBedroom06Resampled_mp3 from '../sounds/emptyApartmentBedroom06Resampled_mp3.js';
