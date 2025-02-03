@@ -22,7 +22,7 @@ import TReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/TReadOnly
 import Utils from '../../dot/js/Utils.js';
 import arrayRemove from '../../phet-core/js/arrayRemove.js';
 import optionize from '../../phet-core/js/optionize.js';
-import { Display } from '../../scenery/js/imports.js';
+import DisplayGlobals from '../../scenery/js/display/DisplayGlobals.js';
 import PhetioObject from '../../tandem/js/PhetioObject.js';
 import Tandem from '../../tandem/js/Tandem.js';
 import emptyApartmentBedroom06Resampled_mp3 from '../sounds/emptyApartmentBedroom06Resampled_mp3.js';
@@ -288,8 +288,8 @@ class SoundManager extends PhetioObject {
     // function to remove the user interaction listeners, used to avoid code duplication
     const removeUserInteractionListeners = () => {
       window.removeEventListener( 'touchstart', resumeAudioContext, false );
-      if ( Display.userGestureEmitter.hasListener( resumeAudioContext ) ) {
-        Display.userGestureEmitter.removeListener( resumeAudioContext );
+      if ( DisplayGlobals.userGestureEmitter.hasListener( resumeAudioContext ) ) {
+        DisplayGlobals.userGestureEmitter.removeListener( resumeAudioContext );
       }
     };
 
@@ -323,7 +323,7 @@ class SoundManager extends PhetioObject {
     window.addEventListener( 'touchstart', resumeAudioContext, false );
 
     // listen for other user gesture events
-    Display.userGestureEmitter.addListener( resumeAudioContext );
+    DisplayGlobals.userGestureEmitter.addListener( resumeAudioContext );
 
     // During testing, several use cases were found where the audio context state changes to something other than the
     // "running" state while the sim is in use (generally either "suspended" or "interrupted", depending on the
@@ -353,8 +353,8 @@ class SoundManager extends PhetioObject {
         window.addEventListener( 'touchstart', resumeAudioContext, false );
 
         // Listen also for other user gesture events that can be used to resume the audio context.
-        if ( !Display.userGestureEmitter.hasListener( resumeAudioContext ) ) {
-          Display.userGestureEmitter.addListener( resumeAudioContext );
+        if ( !DisplayGlobals.userGestureEmitter.hasListener( resumeAudioContext ) ) {
+          DisplayGlobals.userGestureEmitter.addListener( resumeAudioContext );
         }
       }
       else {
