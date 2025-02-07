@@ -16,7 +16,9 @@ import ResetAllButton from '../../../../../scenery-phet/js/buttons/ResetAllButto
 import NumberControl from '../../../../../scenery-phet/js/NumberControl.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
 import TimeControlNode from '../../../../../scenery-phet/js/TimeControlNode.js';
-import { Image, Text, VBox } from '../../../../../scenery/js/imports.js';
+import VBox from '../../../../../scenery/js/layout/nodes/VBox.js';
+import Image from '../../../../../scenery/js/nodes/Image.js';
+import Text from '../../../../../scenery/js/nodes/Text.js';
 import ABSwitch from '../../../../../sun/js/ABSwitch.js';
 import AccordionBox from '../../../../../sun/js/AccordionBox.js';
 import AquaRadioButtonGroup from '../../../../../sun/js/AquaRadioButtonGroup.js';

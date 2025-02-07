@@ -8,7 +8,7 @@
 
 import optionize, { EmptySelfOptions } from '../../../../../phet-core/js/optionize.js';
 import PhetFont from '../../../../../scenery-phet/js/PhetFont.js';
-import { VBox, VBoxOptions } from '../../../../../scenery/js/imports.js';
+import VBox, { VBoxOptions } from '../../../../../scenery/js/layout/nodes/VBox.js';
 import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
 import SoundClipChord from '../../../sound-generators/SoundClipChord.js';

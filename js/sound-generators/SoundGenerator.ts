@@ -12,14 +12,15 @@ import DerivedProperty from '../../../axon/js/DerivedProperty.js';
 import EnabledComponent, { EnabledComponentOptions } from '../../../axon/js/EnabledComponent.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import optionize from '../../../phet-core/js/optionize.js';
-import { DisplayedProperty, Node } from '../../../scenery/js/imports.js';
+import isResettingAllProperty from '../../../scenery-phet/js/isResettingAllProperty.js';
+import Node from '../../../scenery/js/nodes/Node.js';
+import DisplayedProperty from '../../../scenery/js/util/DisplayedProperty.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 import phetAudioContext from '../phetAudioContext.js';
 import soundConstants from '../soundConstants.js';
 import SoundLevelEnum from '../SoundLevelEnum.js';
 import soundManager from '../soundManager.js';
 import tambo from '../tambo.js';
-import isResettingAllProperty from '../../../scenery-phet/js/isResettingAllProperty.js';
 
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;

@@ -10,7 +10,8 @@
 
 import NumberProperty from '../../../axon/js/NumberProperty.js';
 import PreferencesDialog from '../../../joist/js/preferences/PreferencesDialog.js';
-import { Node, Text } from '../../../scenery/js/imports.js';
+import Node from '../../../scenery/js/nodes/Node.js';
+import Text from '../../../scenery/js/nodes/Text.js';
 import AquaRadioButtonGroup from '../../../sun/js/AquaRadioButtonGroup.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import tambo from '../tambo.js';

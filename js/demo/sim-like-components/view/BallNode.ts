@@ -8,7 +8,7 @@
 
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import ModelViewTransform2 from '../../../../../phetcommon/js/view/ModelViewTransform2.js';
-import { Circle } from '../../../../../scenery/js/imports.js';
+import Circle from '../../../../../scenery/js/nodes/Circle.js';
 import boundaryReached_mp3 from '../../../../sounds/boundaryReached_mp3.js';
 import ceilingFloorContact_mp3 from '../../../../sounds/ceilingFloorContact_mp3.js';
 import wallContact_mp3 from '../../../../sounds/wallContact_mp3.js';
