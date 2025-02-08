@@ -1,4 +1,4 @@
-// Copyright 2020-2022, University of Colorado Boulder
+// Copyright 2020-2025, University of Colorado Boulder
 
 /**
  * AudioCustomPreferencesContent is intended as an example of a node that can serve as the content the Preferences
