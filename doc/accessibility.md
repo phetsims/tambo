@@ -19,7 +19,7 @@ here is an excerpt from the Greenhouse Effect strings file greenhouse-effect-str
       "value": "Observation Window"
     },
     "energyBalance": {
-      "helpText": {
+      "accessibleHelpText": {
         "value": "Measure incoming and outgoing energy at top of atmosphere."
       }
     },
