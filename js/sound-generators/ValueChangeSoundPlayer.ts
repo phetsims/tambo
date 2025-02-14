@@ -20,7 +20,7 @@ import Disposable, { DisposableOptions } from '../../../axon/js/Disposable.js';
 import TinyProperty from '../../../axon/js/TinyProperty.js';
 import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../dot/js/Range.js';
-import Utils from '../../../dot/js/Utils.js';
+import { roundToInterval } from '../../../dot/js/util/roundToInterval.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import generalBoundaryBoop_mp3 from '../../sounds/generalBoundaryBoop_mp3.js';
 import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
@@ -51,7 +51,7 @@ const DEFAULT_MIDDLE_MOVING_DOWN_SOUND_PLAYER = new SoundClipPlayer( generalSoft
 
 // Define a default constraint function.  See the docs for the associated option for more info.  The interval value used
 // here was empirically determined.
-const DEFAULT_VALUE_CONSTRAINT = ( value: number ) => Utils.roundToInterval( value, 0.000000001 );
+const DEFAULT_VALUE_CONSTRAINT = ( value: number ) => roundToInterval( value, 0.000000001 );
 
 // A "no-op" function for mapping pitch values.  Always returns one, which signifies no change to the playback rate.
 const NO_PLAYBACK_RATE_CHANGE = () => 1;
@@ -339,11 +339,11 @@ class ValueChangeSoundPlayer extends Disposable {
     const roundingInterval = 1E-7;
 
     const segment = Math.floor(
-      Utils.roundToInterval( ( value - this.valueRangeProperty.value.min ) / this.interThresholdDistance,
+      roundToInterval( ( value - this.valueRangeProperty.value.min ) / this.interThresholdDistance,
         roundingInterval )
     );
 
-    const lowerThreshold = Utils.roundToInterval(
+    const lowerThreshold = roundToInterval(
       segment * this.interThresholdDistance + this.valueRangeProperty.value.min,
       roundingInterval
     );
@@ -353,7 +353,7 @@ class ValueChangeSoundPlayer extends Disposable {
       // The provided value wasn't exactly at a threshold.  Since the preceding calculation provided the lower
       // threshold, add the upper one now.
       const upperThreshold = Math.min(
-        Utils.roundToInterval( lowerThreshold + this.interThresholdDistance, roundingInterval ),
+        roundToInterval( lowerThreshold + this.interThresholdDistance, roundingInterval ),
         this.valueRangeProperty.value.max
       );
 

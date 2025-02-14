@@ -19,7 +19,7 @@ import BooleanProperty from '../../axon/js/BooleanProperty.js';
 import createObservableArray, { ObservableArray } from '../../axon/js/createObservableArray.js';
 import Multilink from '../../axon/js/Multilink.js';
 import TReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/TReadOnlyProperty.js';
-import Utils from '../../dot/js/Utils.js';
+import { toFixed } from '../../dot/js/util/toFixed.js';
 import arrayRemove from '../../phet-core/js/arrayRemove.js';
 import optionize from '../../phet-core/js/optionize.js';
 import DisplayGlobals from '../../scenery/js/display/DisplayGlobals.js';
@@ -653,7 +653,7 @@ class SoundManager extends PhetioObject {
     function logGain(): void {
       const now = Date.now();
       const timeInMilliseconds = now - startTime;
-      console.log( `Time (ms): ${Utils.toFixed( timeInMilliseconds, 2 )}, Gain Value: ${gainNode.gain.value}` );
+      console.log( `Time (ms): ${toFixed( timeInMilliseconds, 2 )}, Gain Value: ${gainNode.gain.value}` );
       if ( now - startTime < ( duration * 1000 ) ) {
         window.requestAnimationFrame( logGain );
       }
