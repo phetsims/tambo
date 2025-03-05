@@ -23,6 +23,7 @@ import boundaryReached_mp3 from '../sounds/boundaryReached_mp3.js';
 import checkboxChecked_mp3 from '../sounds/checkboxChecked_mp3.js';
 import checkboxUnchecked_mp3 from '../sounds/checkboxUnchecked_mp3.js';
 import click_mp3 from '../sounds/click_mp3.js';
+import erase_mp3 from '../sounds/erase_mp3.js';
 import generalBoundaryBoop_mp3 from '../sounds/generalBoundaryBoop_mp3.js';
 import generalButton_mp3 from '../sounds/generalButton_mp3.js';
 import generalClose_mp3 from '../sounds/generalClose_mp3.js';
@@ -49,6 +50,7 @@ export type SharedSoundPlayerName =
   'boundaryReached' |
   'checkboxChecked' |
   'checkboxUnchecked' |
+  'erase' |
   'generalBoundaryBoop' |
   'generalClose' |
   'generalOpen' |
@@ -163,6 +165,13 @@ const sharedSoundPlayerInfoMap: Map<SharedSoundPlayerName, SoundClipPlayerInfo> 
       {
         wrappedAudioBuffer: checkboxUnchecked_mp3,
         soundClipPlayerOptions: DEFAULT_SOUND_CLIP_PLAYER_OPTIONS
+      }
+    ],
+    [
+      'erase',
+      {
+        wrappedAudioBuffer: erase_mp3,
+        soundClipPlayerOptions: DEFAULTS_WITH_OUTPUT_LEVEL( 0.22 )
       }
     ],
     [
