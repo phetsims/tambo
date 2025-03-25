@@ -6,6 +6,7 @@
  * @author Michael Kauzmann (PhET Interactive Simulations)
  */
 
+import { QueryStringMachine } from '../../../query-string-machine/js/QueryStringMachineModule.js';
 import tambo from '../tambo.js';
 
 const NUMBER_OF_GAME_LEVELS = 5;
