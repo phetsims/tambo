@@ -1,4 +1,4 @@
-// Copyright 2022-2024, University of Colorado Boulder
+// Copyright 2022-2025, University of Colorado Boulder
 
 /**
  * SliderPitchChangeSoundGenerator is intended as a demonstration of a ValueChangeSoundPlayer that changes the pitch
