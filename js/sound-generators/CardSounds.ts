@@ -6,6 +6,7 @@
 
 import BooleanProperty from '../../../axon/js/BooleanProperty.js';
 import dotRandom from '../../../dot/js/dotRandom.js';
+import affirm from '../../../perennial-alias/js/browser-and-node/affirm.js';
 import cardMovement1_mp3 from '../../sounds/cardMovement1_mp3.js';
 import cardMovement2_mp3 from '../../sounds/cardMovement2_mp3.js';
 import cardMovement3_mp3 from '../../sounds/cardMovement3_mp3.js';
@@ -39,8 +40,13 @@ export default class CardSounds {
   public static readonly PLAYBACK_RATE = 1.5;
 
   public static playCardMovementSound( directionToPlay: 'left' | 'right' | 'both' ): void {
+
+    // Help protect JavaScript call sites, which do not have type checking.
+    affirm( directionToPlay === 'left' || directionToPlay === 'right' || directionToPlay === 'both', `Invalid directionToPlay: ${directionToPlay}` );
+
     const availableSoundClips = cardMovementSoundClips.filter( clip => !clip.isPlayingProperty.value );
 
+    // Don't interrupt sounds that are already playing
     if ( ( directionToPlay === 'left' || directionToPlay === 'right' || directionToPlay === 'both' ) && availableSoundClips.length > 0 ) {
 
       const randomClip = availableSoundClips[ dotRandom.nextInt( availableSoundClips.length ) ];
