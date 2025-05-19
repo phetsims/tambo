@@ -45,7 +45,7 @@ Here are some terms that were essentially invented in the process of creating th
   its sound by invoking its `play` method.
 - Sound Clip: A sound generator that is based on a pre-recorded bit of audio.
 - Multi-Clip: A sound generator that can play one of several pre-recorded audio snippets in response to some event
-- Common UI Sound: A sound that is played by default by a common user interface component, such as a checkbox or a push
+- Common UI Sounds: A sound that is played by default by a common user interface component, such as a checkbox or a push
   button
 
 ## Background and History
