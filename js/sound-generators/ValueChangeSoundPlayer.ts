@@ -32,6 +32,11 @@ import TSoundPlayer from '../TSoundPlayer.js';
 import SoundClip from './SoundClip.js';
 import SoundClipPlayer from './SoundClipPlayer.js';
 
+export type ChangeSoundPlayer = {
+  play: ( newValue?: number, oldValue?: number ) => void;
+  stop: () => void;
+};
+
 // constants
 const DEFAULT_NUMBER_OF_MIDDLE_THRESHOLDS = 5; // fairly arbitrary
 const DEFAULT_MIN_SOUND_PLAYER = new SoundClipPlayer( generalBoundaryBoop_mp3, {
@@ -64,10 +69,10 @@ const STUB_SOUND_PLAYER_FUNCTION = (): void => {
 type SelfOptions = {
 
   // The sound player for movement in the middle of the range in the up direction.
-  middleMovingUpSoundPlayer?: TSoundPlayer | SoundClip;
+  middleMovingUpSoundPlayer?: ChangeSoundPlayer | SoundClip;
 
   // The sound player for movement in the middle of the range in the down direction.
-  middleMovingDownSoundPlayer?: TSoundPlayer | SoundClip;
+  middleMovingDownSoundPlayer?: ChangeSoundPlayer | SoundClip;
 
   // Functions that, if provided, will alter the playback rates of the middle sounds based on the provided value.
   middleMovingUpPlaybackRateMapper?: ( value: number ) => number;
@@ -117,10 +122,10 @@ class ValueChangeSoundPlayer extends Disposable {
   private readonly valueRangeProperty: TReadOnlyProperty<Range>;
 
   // sound player for movement in the middle of the range (i.e. not at min or max) and moving up
-  private readonly middleMovingUpSoundPlayer: TSoundPlayer | SoundClip;
+  private readonly middleMovingUpSoundPlayer: ChangeSoundPlayer | SoundClip;
 
   // sound player for movement in the middle of the range (i.e. not at min or max) and moving down
-  private readonly middleMovingDownSoundPlayer: TSoundPlayer | SoundClip;
+  private readonly middleMovingDownSoundPlayer: ChangeSoundPlayer | SoundClip;
 
   // playback rate mapper for middle sounds and upward value changes
   private readonly middleMovingUpPlaybackRateMapper: ( value: number ) => number;
@@ -316,7 +321,7 @@ class ValueChangeSoundPlayer extends Disposable {
             // the assertion checks that occur during construction.
             ( soundPlayer as SoundClip ).setPlaybackRate( playbackRateMapper( newValue ) );
           }
-          soundPlayer.play();
+          soundPlayer.play( newValue, oldValue );
           this.timeOfMostRecentMiddleSound = now;
         }
       }
