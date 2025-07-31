@@ -109,9 +109,11 @@ class SimLikeComponentsScreenView extends ScreenView {
           }
         },
         arrowsPosition: 'bothBottom',
-        arrowButtonFill: 'lightblue',
-        arrowButtonStroke: 'blue',
-        arrowButtonLineWidth: 0.2,
+        arrowButtonOptions: {
+          baseColor: 'lightblue',
+          stroke: 'blue',
+          lineWidth: 0.2
+        },
         centerX: ballsMovingSwitch.centerX,
         top: ballsMovingSwitch.bottom + 25,
         arrowsSoundPlayer: nullSoundPlayer
