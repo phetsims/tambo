@@ -29,6 +29,7 @@ import generalButton_mp3 from '../sounds/generalButton_mp3.js';
 import generalClose_mp3 from '../sounds/generalClose_mp3.js';
 import generalOpen_mp3 from '../sounds/generalOpen_mp3.js';
 import generalSoftClick_mp3 from '../sounds/generalSoftClick_mp3.js';
+import goBack_mp3 from '../sounds/goBack_mp3.js';
 import grab_mp3 from '../sounds/grab_mp3.js';
 import pause_mp3 from '../sounds/pause_mp3.js';
 import playPause_mp3 from '../sounds/playPause_mp3.js';
@@ -55,6 +56,7 @@ export type SharedSoundPlayerName =
   'generalClose' |
   'generalOpen' |
   'generalSoftClick' |
+  'goBack' |
   'grab' |
   'pause' |
   'play' |
@@ -94,7 +96,7 @@ const DEFAULTS_WITH_OUTPUT_LEVEL = ( outputLevel: number ): SoundClipPlayerOptio
 };
 
 // Map of shared sound player names to SoundClipPlayer instances.  This is initially unpopulated, and the instances are
-// created the first time they are requested, which is generally during sim construction time.
+// created the first time they are requested in order to minimize resource usage.
 const sharedSoundPlayerInstanceMap: Map<SharedSoundPlayerName, SoundClipPlayer> =
   new Map<SharedSoundPlayerName, SoundClipPlayer>();
 
@@ -129,7 +131,10 @@ const sharedSoundPlayers = {
   }
 };
 
-// Map of shared sound player names to the parameters needed to create them.
+// Map of shared sound player names to the parameters needed to create them.  These are listed in alphabetical order
+// for easy lookup and maintenance.  Please keep them that way.  The output levels are chosen based on comparisons with
+// other UI sounds and are intended to keep the sound experience consistent across the sim.  They can be adjusted if
+// needed, but such changes should be done with care.
 const sharedSoundPlayerInfoMap: Map<SharedSoundPlayerName, SoundClipPlayerInfo> =
   new Map<SharedSoundPlayerName, SoundClipPlayerInfo>( [
     [
@@ -200,6 +205,13 @@ const sharedSoundPlayerInfoMap: Map<SharedSoundPlayerName, SoundClipPlayerInfo> 
       {
         wrappedAudioBuffer: generalSoftClick_mp3,
         soundClipPlayerOptions: DEFAULTS_WITH_OUTPUT_LEVEL( 0.2 )
+      }
+    ],
+    [
+      'goBack',
+      {
+        wrappedAudioBuffer: goBack_mp3,
+        soundClipPlayerOptions: DEFAULTS_WITH_OUTPUT_LEVEL( 0.35 )
       }
     ],
     [
