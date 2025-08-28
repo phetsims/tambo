@@ -18,7 +18,7 @@
 
 import Disposable, { DisposableOptions } from '../../../axon/js/Disposable.js';
 import TinyProperty from '../../../axon/js/TinyProperty.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../dot/js/Range.js';
 import { roundToInterval } from '../../../dot/js/util/roundToInterval.js';
 import optionize from '../../../phet-core/js/optionize.js';

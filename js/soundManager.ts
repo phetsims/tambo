@@ -18,7 +18,7 @@
 import BooleanProperty from '../../axon/js/BooleanProperty.js';
 import createObservableArray, { ObservableArray } from '../../axon/js/createObservableArray.js';
 import Multilink from '../../axon/js/Multilink.js';
-import TReadOnlyProperty, { PropertyLinkListener } from '../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty, PropertyLinkListener } from '../../axon/js/TReadOnlyProperty.js';
 import { toFixed } from '../../dot/js/util/toFixed.js';
 import arrayRemove from '../../phet-core/js/arrayRemove.js';
 import optionize from '../../phet-core/js/optionize.js';

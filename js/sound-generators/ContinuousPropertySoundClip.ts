@@ -14,7 +14,7 @@
 
 import stepTimer from '../../../axon/js/stepTimer.js';
 import { TReadOnlyEmitter } from '../../../axon/js/TEmitter.js';
-import TReadOnlyProperty from '../../../axon/js/TReadOnlyProperty.js';
+import { TReadOnlyProperty } from '../../../axon/js/TReadOnlyProperty.js';
 import Range from '../../../dot/js/Range.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
