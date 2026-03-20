@@ -11,7 +11,6 @@ import dotRandom from '../../../../../dot/js/dotRandom.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import Shape from '../../../../../kite/js/Shape.js';
 import Color from '../../../../../scenery/js/util/Color.js';
-import tambo from '../../../tambo.js';
 import Ball from './Ball.js';
 
 // constants
@@ -111,7 +110,5 @@ class BoxOfBalls {
     this.balls.reset();
   }
 }
-
-tambo.register( 'BoxOfBalls', BoxOfBalls );
 
 export default BoxOfBalls;

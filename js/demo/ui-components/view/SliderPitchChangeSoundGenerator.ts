@@ -12,7 +12,6 @@ import brightMarimbaShort_mp3 from '../../../../sounds/brightMarimbaShort_mp3.js
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import ValueChangeSoundPlayer from '../../../sound-generators/ValueChangeSoundPlayer.js';
 import soundManager from '../../../soundManager.js';
-import tambo from '../../../tambo.js';
 
 class SliderPitchChangeSoundGenerator extends ValueChangeSoundPlayer {
 
@@ -41,7 +40,5 @@ class SliderPitchChangeSoundGenerator extends ValueChangeSoundPlayer {
     } );
   }
 }
-
-tambo.register( 'SliderPitchChangeSoundGenerator', SliderPitchChangeSoundGenerator );
 
 export default SliderPitchChangeSoundGenerator;

@@ -24,7 +24,6 @@ import windsLoopMiddleCOscilloscope_mp3 from '../../../../sounds/demo-and-test/w
 import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220Hz_mp3.js';
 import ContinuousPropertySoundClip from '../../../sound-generators/ContinuousPropertySoundClip.js';
 import soundManager from '../../../soundManager.js';
-import tambo from '../../../tambo.js';
 import WrappedAudioBuffer from '../../../WrappedAudioBuffer.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -98,5 +97,4 @@ class ContinuousPropertySoundClipTestNode extends VBox {
   }
 }
 
-tambo.register( 'ContinuousPropertySoundClipTestNode', ContinuousPropertySoundClipTestNode );
 export default ContinuousPropertySoundClipTestNode;

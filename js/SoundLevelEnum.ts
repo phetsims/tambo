@@ -8,7 +8,6 @@
 
 import Enumeration from '../../phet-core/js/Enumeration.js';
 import EnumerationValue from '../../phet-core/js/EnumerationValue.js';
-import tambo from './tambo.js';
 
 class SoundScope extends EnumerationValue {
   public static readonly BASIC = new SoundScope();
@@ -20,5 +19,4 @@ class SoundScope extends EnumerationValue {
   } );
 }
 
-tambo.register( 'SoundScope', SoundScope );
 export default SoundScope;

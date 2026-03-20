@@ -22,7 +22,6 @@ import Tandem from '../../../../../tandem/js/Tandem.js';
 import nullSoundPlayer from '../../../nullSoundPlayer.js';
 import PitchedPopGenerator from '../../../sound-generators/PitchedPopGenerator.js';
 import soundManager from '../../../soundManager.js';
-import tambo from '../../../tambo.js';
 import Ball from '../model/Ball.js';
 import SimLikeComponentsModel from '../model/SimLikeComponentsModel.js';
 import BallNode from './BallNode.js';
@@ -129,7 +128,5 @@ class SimLikeComponentsScreenView extends ScreenView {
     this.addChild( resetAllButton );
   }
 }
-
-tambo.register( 'SimLikeComponentsScreenView', SimLikeComponentsScreenView );
 
 export default SimLikeComponentsScreenView;

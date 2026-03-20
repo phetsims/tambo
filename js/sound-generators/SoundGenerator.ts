@@ -20,7 +20,6 @@ import phetAudioContext from '../phetAudioContext.js';
 import soundConstants from '../soundConstants.js';
 import SoundLevelEnum from '../SoundLevelEnum.js';
 import soundManager from '../soundManager.js';
-import tambo from '../tambo.js';
 
 // constants
 const DEFAULT_TIME_CONSTANT = soundConstants.DEFAULT_PARAM_CHANGE_TIME_CONSTANT;
@@ -265,7 +264,5 @@ abstract class SoundGenerator extends EnabledComponent {
     return this.fullyEnabledProperty.value;
   }
 }
-
-tambo.register( 'SoundGenerator', SoundGenerator );
 
 export default SoundGenerator;

@@ -14,7 +14,6 @@ import Range from '../../../dot/js/Range.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import brightMarimba_mp3 from '../../sounds/brightMarimba_mp3.js';
 import BinMapper from '../BinMapper.js';
-import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import SoundClip, { SoundClipOptions } from './SoundClip.js';
 
@@ -106,7 +105,5 @@ class DiscreteSoundGenerator extends SoundClip {
   }
 
 }
-
-tambo.register( 'DiscreteSoundGenerator', DiscreteSoundGenerator );
 
 export default DiscreteSoundGenerator;

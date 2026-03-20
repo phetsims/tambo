@@ -7,7 +7,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import tambo from './tambo.js';
 import TSoundPlayer from './TSoundPlayer.js';
 
 class NullSoundPlayer implements TSoundPlayer {
@@ -23,7 +22,5 @@ class NullSoundPlayer implements TSoundPlayer {
 
 // Create the singleton instance.
 const nullSoundPlayer = new NullSoundPlayer();
-
-tambo.register( 'nullSoundPlayer', nullSoundPlayer );
 
 export default nullSoundPlayer;

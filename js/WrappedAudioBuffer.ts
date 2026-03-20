@@ -10,7 +10,6 @@
  */
 
 import TinyProperty from '../../axon/js/TinyProperty.js';
-import tambo from './tambo.js';
 
 class WrappedAudioBuffer {
 
@@ -29,5 +28,4 @@ class WrappedAudioBuffer {
   }
 }
 
-tambo.register( 'WrappedAudioBuffer', WrappedAudioBuffer );
 export default WrappedAudioBuffer;

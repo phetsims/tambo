@@ -9,14 +9,11 @@
 
 import BasicActionsKeyboardHelpSection from '../../../scenery-phet/js/keyboard/help/BasicActionsKeyboardHelpSection.js';
 import HBox from '../../../scenery/js/layout/nodes/HBox.js';
-import tambo from '../tambo.js';
 
 class TamboKeyboardHelpContent extends HBox {
   public constructor() {
     super( { children: [ new BasicActionsKeyboardHelpSection() ], align: 'top', spacing: 30 } );
   }
 }
-
-tambo.register( 'TamboKeyboardHelpContent', TamboKeyboardHelpContent );
 
 export default TamboKeyboardHelpContent;

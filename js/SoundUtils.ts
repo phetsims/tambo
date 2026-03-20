@@ -7,7 +7,6 @@
  */
 
 import soundConstants from './soundConstants.js';
-import tambo from './tambo.js';
 
 // a type that contains information about where the audible sounds begin and end within an audio buffer
 type SoundBounds = {
@@ -168,7 +167,5 @@ const findSoundEndIndex = ( soundData: Float32Array, length: number, threshold: 
 
   return soundEndIndex;
 };
-
-tambo.register( 'SoundUtils', SoundUtils );
 
 export default SoundUtils;

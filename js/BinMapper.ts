@@ -8,7 +8,6 @@
 
 import Range from '../../dot/js/Range.js';
 import optionize from '../../phet-core/js/optionize.js';
-import tambo from './tambo.js';
 
 export type BinMapperOptions = {
 
@@ -54,7 +53,5 @@ class BinMapper {
     return Math.min( Math.floor( proportion * this.numBins ), this.numBins - 1 );
   }
 }
-
-tambo.register( 'BinMapper', BinMapper );
 
 export default BinMapper;

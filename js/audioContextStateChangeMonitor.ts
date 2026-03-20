@@ -8,8 +8,6 @@
  * @author John Blanco (PhET Interactive Simulations)
  */
 
-import tambo from './tambo.js';
-
 // type definition for audio context state change listeners
 type AudioContextStateChangeListener = ( ( state: AudioContextState ) => void );
 
@@ -83,7 +81,5 @@ const audioContextStateChangeMonitor = {
     return found;
   }
 };
-
-tambo.register( 'audioContextStateChangeMonitor', audioContextStateChangeMonitor );
 
 export default audioContextStateChangeMonitor;

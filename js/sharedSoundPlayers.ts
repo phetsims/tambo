@@ -40,7 +40,6 @@ import stepForward_mp3 from '../sounds/stepForward_mp3.js';
 import switchToLeft_mp3 from '../sounds/switchToLeft_mp3.js';
 import switchToRight_mp3 from '../sounds/switchToRight_mp3.js';
 import SoundClipPlayer, { SoundClipPlayerOptions } from './sound-generators/SoundClipPlayer.js';
-import tambo from './tambo.js';
 import TSoundPlayer from './TSoundPlayer.js';
 import WrappedAudioBuffer from './WrappedAudioBuffer.js';
 
@@ -314,5 +313,4 @@ const sharedSoundPlayerInfoMap: Map<SharedSoundPlayerName, SoundClipPlayerInfo> 
     ]
   ] );
 
-tambo.register( 'sharedSoundPlayers', sharedSoundPlayers );
 export default sharedSoundPlayers;

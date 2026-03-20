@@ -36,7 +36,6 @@ import phetAudioContext from '../../../phetAudioContext.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundLevelEnum from '../../../SoundLevelEnum.js';
 import soundManager from '../../../soundManager.js';
-import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemoNode from './AmplitudeModulatorDemoNode.js';
 import CompositeSoundClipTestNode from './CompositeSoundClipTestNode.js';
 import ContinuousPropertySoundClipTestNode from './ContinuousPropertySoundClipTestNode.js';
@@ -370,7 +369,5 @@ class LongSoundTestPanel extends Node {
     super.dispose();
   }
 }
-
-tambo.register( 'TestingScreenView', TestingScreenView );
 
 export default TestingScreenView;

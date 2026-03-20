@@ -10,7 +10,6 @@ import dotRandom from '../../../dot/js/dotRandom.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
 import soundConstants from '../soundConstants.js';
-import tambo from '../tambo.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 
 type SelfOptions = {
@@ -336,7 +335,5 @@ class NoiseGenerator extends SoundGenerator {
     }
   }
 }
-
-tambo.register( 'NoiseGenerator', NoiseGenerator );
 
 export default NoiseGenerator;

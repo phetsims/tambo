@@ -12,7 +12,6 @@ import merge from '../../../phet-core/js/merge.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import SoundClip, { SoundClipOptions } from '../../../tambo/js/sound-generators/SoundClip.js';
 import SoundGenerator, { SoundGeneratorOptions } from '../../../tambo/js/sound-generators/SoundGenerator.js';
-import tambo from '../tambo.js';
 import TSoundPlayer from '../TSoundPlayer.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 
@@ -109,5 +108,4 @@ class SoundClipChord extends SoundGenerator implements TSoundPlayer {
   }
 }
 
-tambo.register( 'SoundClipChord', SoundClipChord );
 export default SoundClipChord;

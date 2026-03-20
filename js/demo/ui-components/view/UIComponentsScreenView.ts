@@ -33,7 +33,6 @@ import Tandem from '../../../../../tandem/js/Tandem.js';
 import accordion_png from '../../../../images/accordion_png.js';
 import nullSoundPlayer from '../../../nullSoundPlayer.js';
 import sharedSoundPlayers from '../../../sharedSoundPlayers.js';
-import tambo from '../../../tambo.js';
 import UIComponentsModel from '../model/UIComponentsModel.js';
 import SliderSoundTestNode from './SliderSoundTestNode.js';
 
@@ -239,5 +238,4 @@ class UIComponentsScreenView extends DemosScreenView {
   }
 }
 
-tambo.register( 'UIComponentsScreenView', UIComponentsScreenView );
 export default UIComponentsScreenView;

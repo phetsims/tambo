@@ -6,8 +6,6 @@
  * @author John Blanco
  */
 
-import tambo from './tambo.js';
-
 // instance definition
 const soundConstants = {
 
@@ -27,6 +25,5 @@ const soundConstants = {
 };
 
 // register for phet-io
-tambo.register( 'soundConstants', soundConstants );
 
 export default soundConstants;

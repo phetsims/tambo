@@ -8,7 +8,6 @@
  */
 
 import IntentionalAny from '../../phet-core/js/types/IntentionalAny.js';
-import tambo from './tambo.js';
 
 // create a Web Audio context
 let phetAudioContext: AudioContext;
@@ -27,6 +26,5 @@ else {
 }
 
 // register for phet-io
-tambo.register( 'phetAudioContext', phetAudioContext );
 
 export default phetAudioContext;

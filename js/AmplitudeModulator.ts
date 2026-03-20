@@ -14,7 +14,6 @@ import Property from '../../axon/js/Property.js';
 import optionize from '../../phet-core/js/optionize.js';
 import StrictOmit from '../../phet-core/js/types/StrictOmit.js';
 import phetAudioContext from './phetAudioContext.js';
-import tambo from './tambo.js';
 
 type SelfOptions = {
 
@@ -166,7 +165,5 @@ class AmplitudeModulator extends EnabledComponent {
     this.modulatedGainNode.connect( destination as AudioNode );
   }
 }
-
-tambo.register( 'AmplitudeModulator', AmplitudeModulator );
 
 export default AmplitudeModulator;

@@ -8,7 +8,6 @@
 
 import Property from '../../../axon/js/Property.js';
 import optionize from '../../../phet-core/js/optionize.js';
-import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import MultiClip, { MultiClipOptions } from './MultiClip.js';
 
@@ -59,7 +58,5 @@ class PropertyMultiClip<T> extends MultiClip<T> {
     this.disposePropertyMultiClip();
   }
 }
-
-tambo.register( 'PropertyMultiClip', PropertyMultiClip );
 
 export default PropertyMultiClip;

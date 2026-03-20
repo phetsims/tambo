@@ -16,7 +16,6 @@
 import radioButtonV2_mp3 from '../sounds/radioButtonV2_mp3.js';
 import SoundClip from './sound-generators/SoundClip.js';
 import soundManager from './soundManager.js';
-import tambo from './tambo.js';
 import TSoundPlayer from './TSoundPlayer.js';
 
 class MultiSelectionSoundPlayerFactory {
@@ -99,5 +98,4 @@ class FixedSpeedSoundClipPlayer {
 }
 
 const multiSelectionSoundPlayerFactory = new MultiSelectionSoundPlayerFactory();
-tambo.register( 'multiSelectionSoundPlayerFactory', multiSelectionSoundPlayerFactory );
 export default multiSelectionSoundPlayerFactory;

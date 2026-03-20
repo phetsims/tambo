@@ -17,7 +17,6 @@
 
 import optionize from '../../../phet-core/js/optionize.js';
 import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
-import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 
@@ -190,5 +189,4 @@ class MultiClip<T> extends SoundGenerator {
   }
 }
 
-tambo.register( 'MultiClip', MultiClip );
 export default MultiClip;

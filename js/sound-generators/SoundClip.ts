@@ -12,7 +12,6 @@ import optionize from '../../../phet-core/js/optionize.js';
 import audioContextStateChangeMonitor from '../audioContextStateChangeMonitor.js';
 import soundConstants from '../soundConstants.js';
 import SoundUtils from '../SoundUtils.js';
-import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 
@@ -325,7 +324,5 @@ class SoundClip extends SoundGenerator {
     return this.activeBufferSources.length;
   }
 }
-
-tambo.register( 'SoundClip', SoundClip );
 
 export default SoundClip;

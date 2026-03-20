@@ -19,7 +19,6 @@ import Range from '../../../dot/js/Range.js';
 import optionize from '../../../phet-core/js/optionize.js';
 import isSettingPhetioStateProperty from '../../../tandem/js/isSettingPhetioStateProperty.js';
 import soundConstants from '../soundConstants.js';
-import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import SoundClip, { SoundClipOptions } from './SoundClip.js';
 
@@ -185,7 +184,5 @@ class ContinuousPropertySoundClip extends SoundClip {
     this.remainingFadeTime = 0;
   }
 }
-
-tambo.register( 'ContinuousPropertySoundClip', ContinuousPropertySoundClip );
 
 export default ContinuousPropertySoundClip;

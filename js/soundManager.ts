@@ -31,7 +31,6 @@ import phetAudioContext from './phetAudioContext.js';
 import type SoundGenerator from './sound-generators/SoundGenerator.js';
 import soundConstants from './soundConstants.js';
 import SoundLevelEnum from './SoundLevelEnum.js';
-import tambo from './tambo.js';
 
 // constants
 const AUDIO_DUCKING_LEVEL = 0.15; // gain value to use for the ducking gain node when ducking is active
@@ -689,5 +688,4 @@ class SoundManager extends PhetioObject {
 }
 
 const soundManager = new SoundManager();
-tambo.register( 'soundManager', soundManager );
 export default soundManager;

@@ -18,7 +18,6 @@ import Checkbox from '../../../../../sun/js/Checkbox.js';
 import HSlider from '../../../../../sun/js/HSlider.js';
 import Tandem from '../../../../../tandem/js/Tandem.js';
 import soundManager from '../../../soundManager.js';
-import tambo from '../../../tambo.js';
 import AmplitudeModulatorDemo from '../model/AmplitudeModulatorDemo.js';
 
 type SelfOptions = EmptySelfOptions;
@@ -129,5 +128,4 @@ class AmplitudeModulatorDemoNode extends VBox {
   }
 }
 
-tambo.register( 'AmplitudeModulatorDemoNode', AmplitudeModulatorDemoNode );
 export default AmplitudeModulatorDemoNode;

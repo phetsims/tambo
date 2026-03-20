@@ -15,7 +15,6 @@ import saturatedSineLoop220Hz_mp3 from '../../../../sounds/saturatedSineLoop220H
 import AmplitudeModulator from '../../../AmplitudeModulator.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundGenerator, { SoundGeneratorOptions } from '../../../sound-generators/SoundGenerator.js';
-import tambo from '../../../tambo.js';
 
 class AmplitudeModulatorDemo extends SoundGenerator {
 
@@ -65,5 +64,4 @@ class AmplitudeModulatorDemo extends SoundGenerator {
   }
 }
 
-tambo.register( 'AmplitudeModulatorDemo', AmplitudeModulatorDemo );
 export default AmplitudeModulatorDemo;

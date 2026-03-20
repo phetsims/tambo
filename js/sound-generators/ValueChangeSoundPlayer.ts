@@ -27,7 +27,6 @@ import generalSoftClick_mp3 from '../../sounds/generalSoftClick_mp3.js';
 import nullSoundPlayer from '../nullSoundPlayer.js';
 import phetAudioContext from '../phetAudioContext.js';
 import sharedSoundPlayers from '../sharedSoundPlayers.js';
-import tambo from '../tambo.js';
 import TSoundPlayer from '../TSoundPlayer.js';
 import SoundClip from './SoundClip.js';
 import SoundClipPlayer from './SoundClipPlayer.js';
@@ -393,7 +392,5 @@ class ValueChangeSoundPlayer extends Disposable {
     stop: STUB_SOUND_PLAYER_FUNCTION
   };
 }
-
-tambo.register( 'ValueChangeSoundPlayer', ValueChangeSoundPlayer );
 
 export default ValueChangeSoundPlayer;

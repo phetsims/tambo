@@ -9,7 +9,6 @@
 
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import TModel from '../../../../../joist/js/TModel.js';
-import tambo from '../../../tambo.js';
 
 class UIComponentsModel implements TModel {
 
@@ -38,7 +37,5 @@ class UIComponentsModel implements TModel {
     this.resetInProgressProperty.value = false;
   }
 }
-
-tambo.register( 'UIComponentsModel', UIComponentsModel );
 
 export default UIComponentsModel;

@@ -11,7 +11,6 @@ import TEmitter from '../../../../../axon/js/TEmitter.js';
 import Vector2 from '../../../../../dot/js/Vector2.js';
 import Vector2Property from '../../../../../dot/js/Vector2Property.js';
 import Color from '../../../../../scenery/js/util/Color.js';
-import tambo from '../../../tambo.js';
 
 class Ball {
   public readonly radius: number;
@@ -57,7 +56,5 @@ class Ball {
     this.velocityProperty.reset();
   }
 }
-
-tambo.register( 'Ball', Ball );
 
 export default Ball;

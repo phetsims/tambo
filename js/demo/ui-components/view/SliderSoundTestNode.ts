@@ -22,7 +22,6 @@ import birdCall_mp3 from '../../../../sounds/demo-and-test/birdCall_mp3.js';
 import loonCall_mp3 from '../../../../sounds/demo-and-test/loonCall_mp3.js';
 import SoundClipPlayer from '../../../sound-generators/SoundClipPlayer.js';
 import ValueChangeSoundPlayer from '../../../sound-generators/ValueChangeSoundPlayer.js';
-import tambo from '../../../tambo.js';
 import SliderPitchChangeSoundGenerator from './SliderPitchChangeSoundGenerator.js';
 
 const PITCH_CHANGE_SLIDER_VALUE_RANGE = new Range( 1, 10 );
@@ -121,7 +120,5 @@ class SliderSoundTestNode extends HBox {
     } );
   }
 }
-
-tambo.register( 'SliderSoundTestNode', SliderSoundTestNode );
 
 export default SliderSoundTestNode;

@@ -9,7 +9,6 @@
 
 import optionize from '../../../phet-core/js/optionize.js';
 import phetAudioContext from '../phetAudioContext.js';
-import tambo from '../tambo.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 
 type SelfOptions = {
@@ -81,7 +80,5 @@ class OscillatorSoundGenerator extends SoundGenerator {
     }
   }
 }
-
-tambo.register( 'OscillatorSoundGenerator', OscillatorSoundGenerator );
 
 export default OscillatorSoundGenerator;

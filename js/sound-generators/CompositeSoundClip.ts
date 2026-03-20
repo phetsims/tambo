@@ -8,7 +8,6 @@
  */
 
 import { EmptySelfOptions } from '../../../phet-core/js/optionize.js';
-import tambo from '../tambo.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import SoundClip, { SoundClipOptions } from './SoundClip.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
@@ -64,7 +63,5 @@ class CompositeSoundClip extends SoundGenerator {
     this.soundClips.forEach( soundClip => soundClip.setOutputLevel( outputLevel, timeConstant ) );
   }
 }
-
-tambo.register( 'CompositeSoundClip', CompositeSoundClip );
 
 export default CompositeSoundClip;

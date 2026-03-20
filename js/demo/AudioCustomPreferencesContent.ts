@@ -14,7 +14,6 @@ import Node from '../../../scenery/js/nodes/Node.js';
 import Text from '../../../scenery/js/nodes/Text.js';
 import AquaRadioButtonGroup from '../../../sun/js/AquaRadioButtonGroup.js';
 import Tandem from '../../../tandem/js/Tandem.js';
-import tambo from '../tambo.js';
 
 // global property that specifies which sound to use when balls bounce on the walls of the box (but not the ceiling)
 export const soundIndexForWallBounceProperty = new NumberProperty( 0 );
@@ -46,7 +45,5 @@ class AudioCustomPreferencesContent extends Node {
     super( { children: [ radioButtonGroup ] } );
   }
 }
-
-tambo.register( 'AudioCustomPreferencesContent', AudioCustomPreferencesContent );
 
 export default AudioCustomPreferencesContent;

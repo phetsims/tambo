@@ -24,7 +24,6 @@
 
 import optionize from '../../phet-core/js/optionize.js';
 import phetAudioContext from './phetAudioContext.js';
-import tambo from './tambo.js';
 
 export type PeakDetectorAudioNodeOptions = {
 
@@ -65,5 +64,4 @@ phetAudioContext.audioWorklet.addModule( '../../tambo/js/peak-detector.js' )
     console.warn( `error while loading peak detector worklet, peak detector probably won't work, error: ${err}` );
   } );
 
-tambo.register( 'PeakDetectorAudioNode', PeakDetectorAudioNode );
 export default PeakDetectorAudioNode;

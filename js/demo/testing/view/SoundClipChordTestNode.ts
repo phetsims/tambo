@@ -13,7 +13,6 @@ import TextPushButton from '../../../../../sun/js/buttons/TextPushButton.js';
 import brightMarimba_mp3 from '../../../../sounds/brightMarimba_mp3.js';
 import SoundClipChord from '../../../sound-generators/SoundClipChord.js';
 import soundManager from '../../../soundManager.js';
-import tambo from '../../../tambo.js';
 
 type SelfOptions = EmptySelfOptions;
 export type SoundClipChordTestNodeOptions = SelfOptions & VBoxOptions;
@@ -66,7 +65,5 @@ class SoundClipChordTestNode extends VBox {
     super.dispose();
   }
 }
-
-tambo.register( 'SoundClipChordTestNode', SoundClipChordTestNode );
 
 export default SoundClipChordTestNode;

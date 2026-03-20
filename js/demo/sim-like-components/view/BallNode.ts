@@ -14,7 +14,6 @@ import ceilingFloorContact_mp3 from '../../../../sounds/ceilingFloorContact_mp3.
 import wallContact_mp3 from '../../../../sounds/wallContact_mp3.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
-import tambo from '../../../tambo.js';
 import { soundIndexForWallBounceProperty } from '../../AudioCustomPreferencesContent.js';
 import Ball from '../model/Ball.js';
 
@@ -93,7 +92,5 @@ class BallNode extends Circle {
     super.dispose();
   }
 }
-
-tambo.register( 'BallNode', BallNode );
 
 export default BallNode;

@@ -14,7 +14,6 @@ import cardMovement4_mp3 from '../../sounds/cardMovement4_mp3.js';
 import cardMovement5_mp3 from '../../sounds/cardMovement5_mp3.js';
 import cardMovement6_mp3 from '../../sounds/cardMovement6_mp3.js';
 import soundManager from '../soundManager.js';
-import tambo from '../tambo.js';
 import SoundClip from './SoundClip.js';
 
 const cardMovementSounds = [
@@ -60,5 +59,3 @@ export default class CardSounds {
     }
   }
 }
-
-tambo.register( 'CardSounds', CardSounds );

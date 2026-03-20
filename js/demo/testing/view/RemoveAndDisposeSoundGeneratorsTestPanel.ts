@@ -26,7 +26,6 @@ import PitchedPopGenerator from '../../../sound-generators/PitchedPopGenerator.j
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import SoundGenerator from '../../../sound-generators/SoundGenerator.js';
 import soundManager from '../../../soundManager.js';
-import tambo from '../../../tambo.js';
 
 type SelfOptions = EmptySelfOptions;
 export type RemoveAndDisposeSoundGeneratorsTestPanelOptions = SelfOptions & PanelOptions;
@@ -213,7 +212,5 @@ class RemoveAndDisposeSoundGeneratorsTestPanel extends Panel {
   }
 
 }
-
-tambo.register( 'RemoveAndDisposeSoundGeneratorsTestPanel', RemoveAndDisposeSoundGeneratorsTestPanel );
 
 export default RemoveAndDisposeSoundGeneratorsTestPanel;

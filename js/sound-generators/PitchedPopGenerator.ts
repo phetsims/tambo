@@ -9,7 +9,6 @@
 
 import Range from '../../../dot/js/Range.js';
 import optionize from '../../../phet-core/js/optionize.js';
-import tambo from '../tambo.js';
 import SoundGenerator, { SoundGeneratorOptions } from './SoundGenerator.js';
 
 type SelfOptions = {
@@ -121,7 +120,5 @@ class PitchedPopGenerator extends SoundGenerator {
     soundSource.gainNode.gain.setTargetAtTime( 0, now + duration, ENVELOPE_TIME_CONSTANT );
   }
 }
-
-tambo.register( 'PitchedPopGenerator', PitchedPopGenerator );
 
 export default PitchedPopGenerator;

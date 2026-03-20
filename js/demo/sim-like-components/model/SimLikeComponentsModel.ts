@@ -10,7 +10,6 @@
 import BooleanProperty from '../../../../../axon/js/BooleanProperty.js';
 import NumberProperty from '../../../../../axon/js/NumberProperty.js';
 import TModel from '../../../../../joist/js/TModel.js';
-import tambo from '../../../tambo.js';
 import BoxOfBalls from './BoxOfBalls.js';
 
 class SimLikeComponentsModel implements TModel {
@@ -68,7 +67,5 @@ class SimLikeComponentsModel implements TModel {
     this.resetInProgressProperty.value = false;
   }
 }
-
-tambo.register( 'SimLikeComponentsModel', SimLikeComponentsModel );
 
 export default SimLikeComponentsModel;

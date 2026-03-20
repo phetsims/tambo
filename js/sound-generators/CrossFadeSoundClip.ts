@@ -13,7 +13,6 @@
 
 import NumberProperty from '../../../axon/js/NumberProperty.js';
 import optionize from '../../../phet-core/js/optionize.js';
-import tambo from '../tambo.js';
 import TSoundPlayer from '../TSoundPlayer.js';
 import WrappedAudioBuffer from '../WrappedAudioBuffer.js';
 import SoundClip from './SoundClip.js';
@@ -95,7 +94,5 @@ class CrossFadeSoundClip extends SoundGenerator implements TSoundPlayer {
     this.soundClipB.setPlaybackRate( playbackRate );
   }
 }
-
-tambo.register( 'CrossFadeSoundClip', CrossFadeSoundClip );
 
 export default CrossFadeSoundClip;
