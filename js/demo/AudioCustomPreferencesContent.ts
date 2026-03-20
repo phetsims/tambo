@@ -16,12 +16,12 @@ import AquaRadioButtonGroup from '../../../sun/js/AquaRadioButtonGroup.js';
 import Tandem from '../../../tandem/js/Tandem.js';
 import tambo from '../tambo.js';
 
+// global property that specifies which sound to use when balls bounce on the walls of the box (but not the ceiling)
+export const soundIndexForWallBounceProperty = new NumberProperty( 0 );
+
 class AudioCustomPreferencesContent extends Node {
 
   public constructor() {
-
-    // global property that specifies which sound to use when balls bounce on the walls of the box (but not the ceiling)
-    phet.tambo.soundIndexForWallBounceProperty = new NumberProperty( 0 );
 
     const items = [
       {
@@ -38,7 +38,7 @@ class AudioCustomPreferencesContent extends Node {
       }
     ];
 
-    const radioButtonGroup = new AquaRadioButtonGroup( phet.tambo.soundIndexForWallBounceProperty, items, {
+    const radioButtonGroup = new AquaRadioButtonGroup( soundIndexForWallBounceProperty, items, {
       orientation: 'vertical',
       align: 'left'
     } );

@@ -15,6 +15,7 @@ import wallContact_mp3 from '../../../../sounds/wallContact_mp3.js';
 import SoundClip from '../../../sound-generators/SoundClip.js';
 import soundManager from '../../../soundManager.js';
 import tambo from '../../../tambo.js';
+import { soundIndexForWallBounceProperty } from '../../AudioCustomPreferencesContent.js';
 import Ball from '../model/Ball.js';
 
 // constants
@@ -64,7 +65,7 @@ class BallNode extends Circle {
       if ( bounceSurface === 'left-wall' || bounceSurface === 'right-wall' ) {
 
         // play the sound that was selected via the preferences control
-        this.wallContactSoundClips[ phet.tambo.soundIndexForWallBounceProperty.value ].play();
+        this.wallContactSoundClips[ soundIndexForWallBounceProperty.value ].play();
       }
       else if ( bounceSurface === 'floor' || bounceSurface === 'ceiling' ) {
         this.ceilingFloorContactSoundClip.play();
