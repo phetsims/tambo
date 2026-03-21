@@ -24,4 +24,6 @@ type StringsType = {
 
 const TamboStrings = getStringModule( 'TAMBO' ) as StringsType;
 
+tambo.register( 'TamboStrings', TamboStrings );
+
 export default TamboStrings;
