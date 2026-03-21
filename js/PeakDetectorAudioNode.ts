@@ -1,4 +1,4 @@
-// Copyright 2021-2023, University of Colorado Boulder
+// Copyright 2021-2026, University of Colorado Boulder
 
 /**
  * PeakDetectorAudioNode is a Web Audio node that can be used to detect peak audio output values in an audio signal

@@ -1,4 +1,4 @@
-// Copyright 2019-2022, University of Colorado Boulder
+// Copyright 2019-2026, University of Colorado Boulder
 
 /**
  * The multiSelectionSoundPlayerFactory singleton is used to create a set of sound players that are similar to one

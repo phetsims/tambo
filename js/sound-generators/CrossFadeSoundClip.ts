@@ -1,4 +1,4 @@
-// Copyright 2024, University of Colorado Boulder
+// Copyright 2024-2026, University of Colorado Boulder
 
 /**
  * CrossFadeSoundClip is a sound generator that combines two sound clips and allows the user to set the relative mix -
