@@ -80,7 +80,7 @@ type SelfOptions = {
   // The number of thresholds that, when reached or crossed, will cause a sound to be played when checking value changes
   // against thresholds.  In other words, this is the number of thresholds that exist between the min and max values.
   // This assumes symmetric spacing of the thresholds, and is not compatible with explicitly setting of the 'delta'
-  // value.
+  // value via interThresholdDelta.
   numberOfMiddleThresholds?: number | null;
 
   // The delta value between thresholds that are used to determine when sounds are played.  This is an alternative way
@@ -105,8 +105,8 @@ type SelfOptions = {
   // The sound player that is used to indicate the maximum value.
   maxSoundPlayer?: TSoundPlayer;
 
-  // The minimum amount of time that must pass after a middle sound is played before another can be played.  This is
-  // helpful when a lot of value changes can occur rapidly and thus create an overwhelming amount of sound.
+  // The minimum amount of time (in seconds) that must pass after a middle sound is played before another can be played.
+  // This is helpful when a lot of value changes can occur rapidly and thus create an overwhelming amount of sound.
   minimumInterMiddleSoundTime?: number;
 };
 
